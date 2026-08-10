@@ -1,0 +1,1243 @@
+[
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Zona verde central del parque; tronco retorcido característico"
+    },
+    "imagen": "uploads/01_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Palma canaria / Palma datilera",
+      "cientifico": "Phoenix canariensis"
+    },
+    "descripcion": {
+      "general": "Palma de tronco grueso, marcado con las bases romboidales de hojas caídas (patrón de escamas), y corona densa y amplia.",
+      "hojas": "Frondas pinnadas grandes (hasta 4–5 m), con numerosos foliolos rígidos a ambos lados del raquis"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Zona verde cercana a la caseta de información turística"
+    },
+    "imagen": "uploads/02_Palma_canaria.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de las Islas Canarias; introducida como ornamental en Colombia",
+    "tipo": "palma",
+    "altura": "10 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Punto de referencia paisajística en plazas"
+    ],
+    "impacto": "Sitio de percha y anidación para aves urbanas",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Palma de cera del Quindío",
+      "cientifico": "Ceroxylon quindiuense"
+    },
+    "descripcion": {
+      "general": "Palmera nacional de Colombia. Tronco esbelto, blanco grisáceo, con anillos horizontales marcados; copa pequeña respecto a la altura total.",
+      "hojas": "Pinnadas, de 3 a 5 m, hojuelas linear-lanceoladas verde oscuro en el haz y blanco ceroso en el envés"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Fila de palmas junto al sendero principal"
+    },
+    "imagen": "uploads/03_Palma_de_cera_del_Quindio.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "palma",
+    "altura": "Puede superar los 30 m",
+    "usos": [
+      "Ornamental",
+      "Símbolo nacional",
+      "Obtención histórica de cera para velas",
+      "Hojas usadas en semana santa"
+    ],
+    "impacto": "Hábitat crítico del oso de anteojos y la pava caruncilada; especie sombrilla para la conservación del bosque andino",
+    "estadoConservacion": "vulnerable (según catálogo plantaqr del parque)"
+  },
+  {
+    "nombre": {
+      "comun": "Araucaria / Pino araucaria",
+      "cientifico": "Araucaria sp."
+    },
+    "descripcion": {
+      "general": "Silueta piramidal marcada, con ramas dispuestas en verticilos (anillos regulares) alrededor del tronco, dando un aspecto de plumero escalonado.",
+      "hojas": "Acículas cortas, rígidas y punzantes, agrupadas en penachos densos al final de cada rama"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Junto a la caseta verde de información turística"
+    },
+    "imagen": "uploads/04_Araucaria.jpg",
+    "familia": "Araucariaceae",
+    "origen": "Introducida; cultivada como ornamental en los Andes colombianos",
+    "tipo": "árbol (conífera)",
+    "altura": "8 – 20 m",
+    "usos": [
+      "Ornamental",
+      "Árbol de referencia paisajística"
+    ],
+    "impacto": "Refugio de aves; aporte de sombra en zonas de descanso",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Junto a bancas del parque, forma libre en cúpula"
+    },
+    "imagen": "uploads/05_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Zona central, topiario en forma de sombrilla"
+    },
+    "imagen": "uploads/06_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Junto al andén principal, topiario en niveles escalonados"
+    },
+    "imagen": "uploads/07_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Borde del sendero, topiario esférico"
+    },
+    "imagen": "uploads/08_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Zona verde, ejemplar de forma libre y péndula"
+    },
+    "imagen": "uploads/09_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Esquina del parque, topiario joven en formación"
+    },
+    "imagen": "uploads/10_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Junto a la vía, topiario en forma de campana"
+    },
+    "imagen": "uploads/11_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Ficus / Caucho benjamina",
+      "cientifico": "Ficus benjamina"
+    },
+    "descripcion": {
+      "general": "Tronco corto que se ramifica en numerosas guías desde la base, formando una copa densa y redondeada muy manejada por poda; corteza clara y lisa.",
+      "hojas": "Simples, alternas, ovaladas, de borde entero, verde brillante, algo colgantes"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Terraza empedrada del costado del parque"
+    },
+    "imagen": "uploads/12_Ficus.jpg",
+    "familia": "Moraceae",
+    "origen": "Introducida (nativa de Asia y Australia); muy común como ornamental en Colombia",
+    "tipo": "árbol",
+    "altura": "4 – 8 m (formado por poda)",
+    "usos": [
+      "Ornamental",
+      "Sombra",
+      "Formación de copa decorativa en zonas duras (terrazas, andenes)"
+    ],
+    "impacto": "Sombra urbana; refugio de aves pequeñas",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Zona verde, ejemplar recién podado (restos de poda visibles)"
+    },
+    "imagen": "uploads/13_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Ficus / Caucho benjamina",
+      "cientifico": "Ficus benjamina"
+    },
+    "descripcion": {
+      "general": "Tronco corto que se ramifica en numerosas guías desde la base, formando una copa densa y redondeada muy manejada por poda; corteza clara y lisa.",
+      "hojas": "Simples, alternas, ovaladas, de borde entero, verde brillante, algo colgantes"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Terraza empedrada, vista general del follaje"
+    },
+    "imagen": "uploads/14_Ficus.jpg",
+    "familia": "Moraceae",
+    "origen": "Introducida (nativa de Asia y Australia); muy común como ornamental en Colombia",
+    "tipo": "árbol",
+    "altura": "4 – 8 m (formado por poda)",
+    "usos": [
+      "Ornamental",
+      "Sombra",
+      "Formación de copa decorativa en zonas duras (terrazas, andenes)"
+    ],
+    "impacto": "Sombra urbana; refugio de aves pequeñas",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Duraznillo rojo / Fotinia",
+      "cientifico": "Photinia sp. (posiblemente P. × fraseri)"
+    },
+    "descripcion": {
+      "general": "Arbusto o arbolito cultivado sobre todo por el contraste de color de su follaje nuevo; en el parque hay tanto ejemplares jóvenes como formados en copa cónica.",
+      "hojas": "Simples, alternas, elípticas, borde finamente aserrado; brotes nuevos rojo-bronce que maduran a verde oscuro"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar joven junto a columna de ladrillo"
+    },
+    "imagen": "uploads/15_Duraznillo_rojo.jpg",
+    "familia": "Rosaceae",
+    "origen": "Introducida como ornamental (híbrido de origen asiático, muy cultivado en jardinería)",
+    "tipo": "arbusto / arbolito",
+    "altura": "0.5 – 4 m según edad del ejemplar",
+    "usos": [
+      "Ornamental",
+      "Seto de color",
+      "Punto de contraste en jardines"
+    ],
+    "impacto": "Aporte estético; poco valor de hábitat por tratarse de ejemplares cultivados y podados",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Ciprés",
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)"
+    },
+    "descripcion": {
+      "general": "Conífera de follaje denso y fino. En el parque aparece tanto sin podar, de copa piramidal o redondeada, como trabajada en topiario: esferas, niveles escalonados y formas de campana o sombrilla.",
+      "hojas": "Escamiformes, muy pequeñas, en ramillas aplanadas, verde intenso a verde amarillento"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Zona verde, topiario esférico (segundo ángulo)"
+    },
+    "imagen": "uploads/16_Cipres.jpg",
+    "familia": "Cupressaceae",
+    "origen": "Introducida; muy naturalizada y cultivada en los Andes colombianos",
+    "tipo": "árbol / arbusto según poda",
+    "altura": "1 – 15 m, según el nivel de poda de cada ejemplar",
+    "usos": [
+      "Ornamental",
+      "Cercas vivas",
+      "Arte topiario",
+      "Madera aromática",
+      "Cortavientos"
+    ],
+    "impacto": "Refugio para aves; ayuda a fijar suelo en taludes y bordes de camino",
+    "estadoConservacion": "no amenazada"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Pareja de ejemplares junto al andén principal"
+    },
+    "imagen": "uploads/17_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Araucaria / Pino araucaria",
+      "cientifico": "Araucaria sp."
+    },
+    "descripcion": {
+      "general": "Silueta piramidal marcada, con ramas dispuestas en verticilos (anillos regulares) alrededor del tronco, dando un aspecto de plumero escalonado.",
+      "hojas": "Acículas cortas, rígidas y punzantes, agrupadas en penachos densos al final de cada rama"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Junto a topiario de ciprés, sector central"
+    },
+    "imagen": "uploads/18_Araucaria.jpg",
+    "familia": "Araucariaceae",
+    "origen": "Introducida; cultivada como ornamental en los Andes colombianos",
+    "tipo": "árbol (conífera)",
+    "altura": "8 – 20 m",
+    "usos": [
+      "Ornamental",
+      "Árbol de referencia paisajística"
+    ],
+    "impacto": "Refugio de aves; aporte de sombra en zonas de descanso",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Palma de cera del Quindío",
+      "cientifico": "Ceroxylon quindiuense"
+    },
+    "descripcion": {
+      "general": "Palmera nacional de Colombia. Tronco esbelto, blanco grisáceo, con anillos horizontales marcados; copa pequeña respecto a la altura total.",
+      "hojas": "Pinnadas, de 3 a 5 m, hojuelas linear-lanceoladas verde oscuro en el haz y blanco ceroso en el envés"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Fila de palmas junto al sendero, vista amplia"
+    },
+    "imagen": "uploads/19_Palma_de_cera_del_Quindio.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "palma",
+    "altura": "Puede superar los 30 m",
+    "usos": [
+      "Ornamental",
+      "Símbolo nacional",
+      "Obtención histórica de cera para velas",
+      "Hojas usadas en semana santa"
+    ],
+    "impacto": "Hábitat crítico del oso de anteojos y la pava caruncilada; especie sombrilla para la conservación del bosque andino",
+    "estadoConservacion": "vulnerable (según catálogo plantaqr del parque)"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Pareja de ejemplares, tronco múltiple"
+    },
+    "imagen": "uploads/20_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Palma de cera del Quindío",
+      "cientifico": "Ceroxylon quindiuense"
+    },
+    "descripcion": {
+      "general": "Palmera nacional de Colombia. Tronco esbelto, blanco grisáceo, con anillos horizontales marcados; copa pequeña respecto a la altura total.",
+      "hojas": "Pinnadas, de 3 a 5 m, hojuelas linear-lanceoladas verde oscuro en el haz y blanco ceroso en el envés"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Grupo de palmas sobre la calle frente al parque"
+    },
+    "imagen": "uploads/21_Palma_de_cera_del_Quindio.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "palma",
+    "altura": "Puede superar los 30 m",
+    "usos": [
+      "Ornamental",
+      "Símbolo nacional",
+      "Obtención histórica de cera para velas",
+      "Hojas usadas en semana santa"
+    ],
+    "impacto": "Hábitat crítico del oso de anteojos y la pava caruncilada; especie sombrilla para la conservación del bosque andino",
+    "estadoConservacion": "vulnerable (según catálogo plantaqr del parque)"
+  },
+  {
+    "nombre": {
+      "comun": "Palma de cera del Quindío",
+      "cientifico": "Ceroxylon quindiuense"
+    },
+    "descripcion": {
+      "general": "Palmera nacional de Colombia. Tronco esbelto, blanco grisáceo, con anillos horizontales marcados; copa pequeña respecto a la altura total.",
+      "hojas": "Pinnadas, de 3 a 5 m, hojuelas linear-lanceoladas verde oscuro en el haz y blanco ceroso en el envés"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Vista desde la calle, troncos anillados"
+    },
+    "imagen": "uploads/22_Palma_de_cera_del_Quindio.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "palma",
+    "altura": "Puede superar los 30 m",
+    "usos": [
+      "Ornamental",
+      "Símbolo nacional",
+      "Obtención histórica de cera para velas",
+      "Hojas usadas en semana santa"
+    ],
+    "impacto": "Hábitat crítico del oso de anteojos y la pava caruncilada; especie sombrilla para la conservación del bosque andino",
+    "estadoConservacion": "vulnerable (según catálogo plantaqr del parque)"
+  },
+  {
+    "nombre": {
+      "comun": "Duraznillo rojo / Fotinia",
+      "cientifico": "Photinia sp. (posiblemente P. × fraseri)"
+    },
+    "descripcion": {
+      "general": "Arbusto o arbolito cultivado sobre todo por el contraste de color de su follaje nuevo; en el parque hay tanto ejemplares jóvenes como formados en copa cónica.",
+      "hojas": "Simples, alternas, elípticas, borde finamente aserrado; brotes nuevos rojo-bronce que maduran a verde oscuro"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar adulto en copa cónica"
+    },
+    "imagen": "uploads/23_Duraznillo_rojo.jpg",
+    "familia": "Rosaceae",
+    "origen": "Introducida como ornamental (híbrido de origen asiático, muy cultivado en jardinería)",
+    "tipo": "arbusto / arbolito",
+    "altura": "0.5 – 4 m según edad del ejemplar",
+    "usos": [
+      "Ornamental",
+      "Seto de color",
+      "Punto de contraste en jardines"
+    ],
+    "impacto": "Aporte estético; poco valor de hábitat por tratarse de ejemplares cultivados y podados",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar con araucaria al fondo"
+    },
+    "imagen": "uploads/24_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Araucaria / Pino araucaria",
+      "cientifico": "Araucaria sp."
+    },
+    "descripcion": {
+      "general": "Silueta piramidal marcada, con ramas dispuestas en verticilos (anillos regulares) alrededor del tronco, dando un aspecto de plumero escalonado.",
+      "hojas": "Acículas cortas, rígidas y punzantes, agrupadas en penachos densos al final de cada rama"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Junto a topiario de ciprés en primer plano"
+    },
+    "imagen": "uploads/25_Araucaria.jpg",
+    "familia": "Araucariaceae",
+    "origen": "Introducida; cultivada como ornamental en los Andes colombianos",
+    "tipo": "árbol (conífera)",
+    "altura": "8 – 20 m",
+    "usos": [
+      "Ornamental",
+      "Árbol de referencia paisajística"
+    ],
+    "impacto": "Refugio de aves; aporte de sombra en zonas de descanso",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Duraznillo rojo / Fotinia",
+      "cientifico": "Photinia sp. (posiblemente P. × fraseri)"
+    },
+    "descripcion": {
+      "general": "Arbusto o arbolito cultivado sobre todo por el contraste de color de su follaje nuevo; en el parque hay tanto ejemplares jóvenes como formados en copa cónica.",
+      "hojas": "Simples, alternas, elípticas, borde finamente aserrado; brotes nuevos rojo-bronce que maduran a verde oscuro"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar adulto junto a topiario esférico"
+    },
+    "imagen": "uploads/26_Duraznillo_rojo.jpg",
+    "familia": "Rosaceae",
+    "origen": "Introducida como ornamental (híbrido de origen asiático, muy cultivado en jardinería)",
+    "tipo": "arbusto / arbolito",
+    "altura": "0.5 – 4 m según edad del ejemplar",
+    "usos": [
+      "Ornamental",
+      "Seto de color",
+      "Punto de contraste en jardines"
+    ],
+    "impacto": "Aporte estético; poco valor de hábitat por tratarse de ejemplares cultivados y podados",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Palma de cera del Quindío",
+      "cientifico": "Ceroxylon quindiuense"
+    },
+    "descripcion": {
+      "general": "Palmera nacional de Colombia. Tronco esbelto, blanco grisáceo, con anillos horizontales marcados; copa pequeña respecto a la altura total.",
+      "hojas": "Pinnadas, de 3 a 5 m, hojuelas linear-lanceoladas verde oscuro en el haz y blanco ceroso en el envés"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Vista de las palmas desde la calle principal"
+    },
+    "imagen": "uploads/27_Palma_de_cera_del_Quindio.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "palma",
+    "altura": "Puede superar los 30 m",
+    "usos": [
+      "Ornamental",
+      "Símbolo nacional",
+      "Obtención histórica de cera para velas",
+      "Hojas usadas en semana santa"
+    ],
+    "impacto": "Hábitat crítico del oso de anteojos y la pava caruncilada; especie sombrilla para la conservación del bosque andino",
+    "estadoConservacion": "vulnerable (según catálogo plantaqr del parque)"
+  },
+  {
+    "nombre": {
+      "comun": "No determinado con certeza",
+      "cientifico": "No determinado (posible Guayabo, Níspero de páramo u otro frutal ornamental)"
+    },
+    "descripcion": {
+      "general": "Árbol de copa amplia y follaje verde medio. No fue posible confirmar la especie solo a partir de la fotografía.",
+      "hojas": "Simples, alternas, ovaladas y de borde entero o finamente aserrado, verde medio"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Zona verde cercana a las casetas de información turística"
+    },
+    "imagen": "uploads/28_No_determinado_con_certeza.jpg",
+    "familia": "No determinada",
+    "origen": "No determinado",
+    "tipo": "árbol",
+    "altura": "3 – 9 m aprox. (estimado por comparación con el entorno)",
+    "usos": [
+      "No determinado"
+    ],
+    "impacto": "No determinado",
+    "estadoConservacion": "no determinado"
+  },
+  {
+    "nombre": {
+      "comun": "Duraznillo rojo / Fotinia",
+      "cientifico": "Photinia sp. (posiblemente P. × fraseri)"
+    },
+    "descripcion": {
+      "general": "Arbusto o arbolito cultivado sobre todo por el contraste de color de su follaje nuevo; en el parque hay tanto ejemplares jóvenes como formados en copa cónica.",
+      "hojas": "Simples, alternas, elípticas, borde finamente aserrado; brotes nuevos rojo-bronce que maduran a verde oscuro"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar adulto, follaje bronce característico"
+    },
+    "imagen": "uploads/29_Duraznillo_rojo.jpg",
+    "familia": "Rosaceae",
+    "origen": "Introducida como ornamental (híbrido de origen asiático, muy cultivado en jardinería)",
+    "tipo": "arbusto / arbolito",
+    "altura": "0.5 – 4 m según edad del ejemplar",
+    "usos": [
+      "Ornamental",
+      "Seto de color",
+      "Punto de contraste en jardines"
+    ],
+    "impacto": "Aporte estético; poco valor de hábitat por tratarse de ejemplares cultivados y podados",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Duraznillo rojo / Fotinia",
+      "cientifico": "Photinia sp. (posiblemente P. × fraseri)"
+    },
+    "descripcion": {
+      "general": "Arbusto o arbolito cultivado sobre todo por el contraste de color de su follaje nuevo; en el parque hay tanto ejemplares jóvenes como formados en copa cónica.",
+      "hojas": "Simples, alternas, elípticas, borde finamente aserrado; brotes nuevos rojo-bronce que maduran a verde oscuro"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Cerca del busto conmemorativo del parque"
+    },
+    "imagen": "uploads/30_Duraznillo_rojo.jpg",
+    "familia": "Rosaceae",
+    "origen": "Introducida como ornamental (híbrido de origen asiático, muy cultivado en jardinería)",
+    "tipo": "arbusto / arbolito",
+    "altura": "0.5 – 4 m según edad del ejemplar",
+    "usos": [
+      "Ornamental",
+      "Seto de color",
+      "Punto de contraste en jardines"
+    ],
+    "impacto": "Aporte estético; poco valor de hábitat por tratarse de ejemplares cultivados y podados",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Grupo de ejemplares con palma de cera al fondo"
+    },
+    "imagen": "uploads/31_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Palma de cera del Quindío",
+      "cientifico": "Ceroxylon quindiuense"
+    },
+    "descripcion": {
+      "general": "Palmera nacional de Colombia. Tronco esbelto, blanco grisáceo, con anillos horizontales marcados; copa pequeña respecto a la altura total.",
+      "hojas": "Pinnadas, de 3 a 5 m, hojuelas linear-lanceoladas verde oscuro en el haz y blanco ceroso en el envés"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Trío de palmas junto a topiario en espiral"
+    },
+    "imagen": "uploads/32_Palma_de_cera_del_Quindio.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "palma",
+    "altura": "Puede superar los 30 m",
+    "usos": [
+      "Ornamental",
+      "Símbolo nacional",
+      "Obtención histórica de cera para velas",
+      "Hojas usadas en semana santa"
+    ],
+    "impacto": "Hábitat crítico del oso de anteojos y la pava caruncilada; especie sombrilla para la conservación del bosque andino",
+    "estadoConservacion": "vulnerable (según catálogo plantaqr del parque)"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Vista amplia de la zona verde, varios ejemplares"
+    },
+    "imagen": "uploads/33_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar joven junto a un ejemplar adulto"
+    },
+    "imagen": "uploads/34_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Palma de cera del Quindío",
+      "cientifico": "Ceroxylon quindiuense"
+    },
+    "descripcion": {
+      "general": "Palmera nacional de Colombia. Tronco esbelto, blanco grisáceo, con anillos horizontales marcados; copa pequeña respecto a la altura total.",
+      "hojas": "Pinnadas, de 3 a 5 m, hojuelas linear-lanceoladas verde oscuro en el haz y blanco ceroso en el envés"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Dos palmas junto a la calle frente al parque"
+    },
+    "imagen": "uploads/35_Palma_de_cera_del_Quindio.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "palma",
+    "altura": "Puede superar los 30 m",
+    "usos": [
+      "Ornamental",
+      "Símbolo nacional",
+      "Obtención histórica de cera para velas",
+      "Hojas usadas en semana santa"
+    ],
+    "impacto": "Hábitat crítico del oso de anteojos y la pava caruncilada; especie sombrilla para la conservación del bosque andino",
+    "estadoConservacion": "vulnerable (según catálogo plantaqr del parque)"
+  },
+  {
+    "nombre": {
+      "comun": "Duraznillo rojo / Fotinia",
+      "cientifico": "Photinia sp. (posiblemente P. × fraseri)"
+    },
+    "descripcion": {
+      "general": "Arbusto o arbolito cultivado sobre todo por el contraste de color de su follaje nuevo; en el parque hay tanto ejemplares jóvenes como formados en copa cónica.",
+      "hojas": "Simples, alternas, elípticas, borde finamente aserrado; brotes nuevos rojo-bronce que maduran a verde oscuro"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar adulto junto a poste de luz"
+    },
+    "imagen": "uploads/36_Duraznillo_rojo.jpg",
+    "familia": "Rosaceae",
+    "origen": "Introducida como ornamental (híbrido de origen asiático, muy cultivado en jardinería)",
+    "tipo": "arbusto / arbolito",
+    "altura": "0.5 – 4 m según edad del ejemplar",
+    "usos": [
+      "Ornamental",
+      "Seto de color",
+      "Punto de contraste en jardines"
+    ],
+    "impacto": "Aporte estético; poco valor de hábitat por tratarse de ejemplares cultivados y podados",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Junto al letrero del parque y palma de cera"
+    },
+    "imagen": "uploads/37_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "No determinado con certeza",
+      "cientifico": "No determinado (posible Guayabo, Níspero de páramo u otro frutal ornamental)"
+    },
+    "descripcion": {
+      "general": "Árbol de copa amplia y follaje verde medio. No fue posible confirmar la especie solo a partir de la fotografía.",
+      "hojas": "Simples, alternas, ovaladas y de borde entero o finamente aserrado, verde medio"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar joven, zona verde cercana a la calle"
+    },
+    "imagen": "uploads/38_No_determinado_con_certeza.jpg",
+    "familia": "No determinada",
+    "origen": "No determinado",
+    "tipo": "árbol",
+    "altura": "3 – 9 m aprox. (estimado por comparación con el entorno)",
+    "usos": [
+      "No determinado"
+    ],
+    "impacto": "No determinado",
+    "estadoConservacion": "no determinado"
+  },
+  {
+    "nombre": {
+      "comun": "Arbusto de hoja gris-verde (sin confirmar)",
+      "cientifico": "No determinado (posible Berberis sp. o Cotoneaster sp.)"
+    },
+    "descripcion": {
+      "general": "Arbusto bajo y extendido, de ramas delgadas y follaje denso; se usa como cubresuelo o borde de jardín. No fue posible confirmar el género solo con la fotografía.",
+      "hojas": "Pequeñas, ovaladas, de color verde grisáceo, con brotes nuevos de tono rosado-cobrizo"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Borde de jardín, arbusto bajo cubresuelo"
+    },
+    "imagen": "uploads/39_Arbusto_de_hoja_gris_verde_sin_confirmar.jpg",
+    "familia": "No determinada (posiblemente Berberidaceae o Rosaceae)",
+    "origen": "No determinado; probablemente introducida como ornamental",
+    "tipo": "arbusto bajo",
+    "altura": "0.4 – 0.8 m",
+    "usos": [
+      "Ornamental",
+      "Borde de jardín"
+    ],
+    "impacto": "Aporte estético; poco valor de hábitat por tratarse de un ejemplar cultivado",
+    "estadoConservacion": "no determinado"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Grupo de ejemplares cerca de la heladería"
+    },
+    "imagen": "uploads/40_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Grupo de ejemplares con palmas y montañas al fondo"
+    },
+    "imagen": "uploads/41_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Duraznillo rojo / Fotinia",
+      "cientifico": "Photinia sp. (posiblemente P. × fraseri)"
+    },
+    "descripcion": {
+      "general": "Arbusto o arbolito cultivado sobre todo por el contraste de color de su follaje nuevo; en el parque hay tanto ejemplares jóvenes como formados en copa cónica.",
+      "hojas": "Simples, alternas, elípticas, borde finamente aserrado; brotes nuevos rojo-bronce que maduran a verde oscuro"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar joven junto al hidrante amarillo"
+    },
+    "imagen": "uploads/42_Duraznillo_rojo.jpg",
+    "familia": "Rosaceae",
+    "origen": "Introducida como ornamental (híbrido de origen asiático, muy cultivado en jardinería)",
+    "tipo": "arbusto / arbolito",
+    "altura": "0.5 – 4 m según edad del ejemplar",
+    "usos": [
+      "Ornamental",
+      "Seto de color",
+      "Punto de contraste en jardines"
+    ],
+    "impacto": "Aporte estético; poco valor de hábitat por tratarse de ejemplares cultivados y podados",
+    "estadoConservacion": "no amenazada (cultivada)"
+  },
+  {
+    "nombre": {
+      "comun": "No determinado con certeza",
+      "cientifico": "No determinado (posible Guayabo, Níspero de páramo u otro frutal ornamental)"
+    },
+    "descripcion": {
+      "general": "Árbol de copa amplia y follaje verde medio. No fue posible confirmar la especie solo a partir de la fotografía.",
+      "hojas": "Simples, alternas, ovaladas y de borde entero o finamente aserrado, verde medio"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar joven junto a vivienda del sector"
+    },
+    "imagen": "uploads/43_No_determinado_con_certeza.jpg",
+    "familia": "No determinada",
+    "origen": "No determinado",
+    "tipo": "árbol",
+    "altura": "3 – 9 m aprox. (estimado por comparación con el entorno)",
+    "usos": [
+      "No determinado"
+    ],
+    "impacto": "No determinado",
+    "estadoConservacion": "no determinado"
+  },
+  {
+    "nombre": {
+      "comun": "Arrayán / Mirto andino",
+      "cientifico": "Myrcianthes leucoxyla"
+    },
+    "descripcion": {
+      "general": "Árbol de porte mediano con copa irregular formada por múltiples ramas; corteza grisácea con descamación característica. Especie nativa emblemática de los bosques andinos de Chitagá.",
+      "hojas": "Simples, opuestas, elípticas, 3–7 cm, verde oscuro brillante, aromáticas al estrujarse"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar de copa oscura y redondeada"
+    },
+    "imagen": "uploads/44_Arrayan.jpg",
+    "familia": "Myrtaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "árbol",
+    "altura": "5 – 15 m",
+    "usos": [
+      "Ornamental",
+      "Madera para herramientas y leña",
+      "Medicina tradicional (antiséptico)",
+      "Frutos comestibles para fauna"
+    ],
+    "impacto": "Especie fundamental en bosques andinos; refugio y alimento para aves frugívoras; protege cuencas hidrográficas",
+    "estadoConservacion": "no amenazada, aunque cada vez más escasa en áreas urbanas"
+  },
+  {
+    "nombre": {
+      "comun": "Palma de cera del Quindío",
+      "cientifico": "Ceroxylon quindiuense"
+    },
+    "descripcion": {
+      "general": "Palmera nacional de Colombia. Tronco esbelto, blanco grisáceo, con anillos horizontales marcados; copa pequeña respecto a la altura total.",
+      "hojas": "Pinnadas, de 3 a 5 m, hojuelas linear-lanceoladas verde oscuro en el haz y blanco ceroso en el envés"
+    },
+    "ubicacion": {
+      "latitud": 0,
+      "longitud": 0,
+      "descripcion": "Ejemplar individual junto a las viviendas del sector"
+    },
+    "imagen": "uploads/45_Palma_de_cera_del_Quindio.jpg",
+    "familia": "Arecaceae",
+    "origen": "Nativa de los Andes colombianos",
+    "tipo": "palma",
+    "altura": "Puede superar los 30 m",
+    "usos": [
+      "Ornamental",
+      "Símbolo nacional",
+      "Obtención histórica de cera para velas",
+      "Hojas usadas en semana santa"
+    ],
+    "impacto": "Hábitat crítico del oso de anteojos y la pava caruncilada; especie sombrilla para la conservación del bosque andino",
+    "estadoConservacion": "vulnerable (según catálogo plantaqr del parque)"
+  }
+]
