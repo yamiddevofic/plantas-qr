@@ -56,9 +56,10 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
   }, []);
 
   useEffect(() => {
-    const overflowOriginal = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = overflowOriginal; };
+    const estilos = [document.documentElement, document.body];
+    const previos = estilos.map((el) => el.style.overflow);
+    estilos.forEach((el) => { el.style.overflow = 'hidden'; });
+    return () => estilos.forEach((el, i) => { el.style.overflow = previos[i]; });
   }, []);
 
   useEffect(() => {
