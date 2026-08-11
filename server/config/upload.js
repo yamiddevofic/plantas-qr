@@ -50,23 +50,45 @@ const upload = multer({
 });
 
 const singleOriginal = upload.single.bind(upload);
+const fieldsOriginal = upload.fields.bind(upload);
+
+async function optimizar(req, res, next) {
+  const archivos = req.files || {};
+  try {
+    for (const lista of Object.values(archivos)) {
+      for (const archivo of lista) {
+        const ruta = path.resolve('server/uploads', archivo.filename);
+        await optimizarImagen(ruta);
+        archivo.filename = `${archivo.filename}.webp`;
+        archivo.path = path.join('server', 'uploads', archivo.filename);
+        archivo.mimetype = 'image/webp';
+        archivo.originalname = archivo.originalname.replace(/\.[^/.]+$/, '') + '.webp';
+      }
+    }
+    next();
+  } catch (error) {
+    for (const lista of Object.values(archivos)) {
+      for (const archivo of lista) {
+        await fs.rm(path.resolve('server/uploads', archivo.filename), { force: true });
+      }
+    }
+    next(Object.assign(new Error(`No se pudo optimizar la imagen: ${error.message}`), { status: 400 }));
+  }
+}
 
 upload.single = (field) => (req, res, next) => {
   singleOriginal(field)(req, res, async (err) => {
     if (err) return next(err);
     if (!req.file) return next();
-    try {
-      const ruta = path.resolve('server/uploads', req.file.filename);
-      await optimizarImagen(ruta);
-      req.file.filename = `${req.file.filename}.webp`;
-      req.file.path = path.join('server', 'uploads', req.file.filename);
-      req.file.mimetype = 'image/webp';
-      req.file.originalname = req.file.originalname.replace(/\.[^/.]+$/, '') + '.webp';
-      next();
-    } catch (error) {
-      await fs.rm(path.resolve('server/uploads', req.file.filename), { force: true });
-      next(Object.assign(new Error(`No se pudo optimizar la imagen: ${error.message}`), { status: 400 }));
-    }
+    req.files = { [field]: [req.file] };
+    optimizar(req, res, next);
+  });
+};
+
+upload.fields = (campos) => (req, res, next) => {
+  fieldsOriginal(campos)(req, res, (err) => {
+    if (err) return next(err);
+    optimizar(req, res, next);
   });
 };
 

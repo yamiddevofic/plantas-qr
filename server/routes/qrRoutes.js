@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { generarQR, obtenerQRPorPlanta, verPlantaPorQR, obtenerTodosQR, generarTodosQR } from '../controllers/qrController.js';
+import qrAuth from '../middleware/qrAuth.js';
 
 const router = Router();
 
@@ -9,6 +10,17 @@ const router = Router();
  *   post:
  *     tags: [QR]
  *     summary: Regenerar o crear los códigos QR de todas las plantas
+ *     security:
+ *       - {}
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [password]
+ *             properties:
+ *               password: { type: string, description: 'Contraseña de administrador (ADMIN_PASSWORD)' }
  *     responses:
  *       200:
  *         description: Resumen de la regeneración con los QRs generados
@@ -25,10 +37,14 @@ const router = Router();
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/QR'
+ *       401:
+ *         description: Contraseña incorrecta
+ *       503:
+ *         description: ADMIN_PASSWORD no configurada en el servidor
  *       500:
  *         description: Error al regenerar los QRs
  */
-router.post('/generar-todos', generarTodosQR);
+router.post('/generar-todos', qrAuth, generarTodosQR);
 
 /**
  * @swagger
@@ -61,13 +77,24 @@ router.get('/', obtenerTodosQR);
  *         schema:
  *           type: string
  *         description: ID de la planta
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [password]
+ *             properties:
+ *               password: { type: string, description: 'Contraseña de administrador (ADMIN_PASSWORD)' }
  *     responses:
  *       201:
  *         description: QR generado correctamente
+ *       401:
+ *         description: Contraseña incorrecta
  *       404:
  *         description: Planta no encontrada
  */
-router.post('/generar/:plantaId', generarQR);
+router.post('/generar/:plantaId', qrAuth, generarQR);
 
 /**
  * @swagger

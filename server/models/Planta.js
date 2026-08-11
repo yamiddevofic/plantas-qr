@@ -25,7 +25,7 @@ const plantaSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      enum: ['en peligro', 'vulnerable', 'casi amenazado', 'preocupación menor', 'datos insuficientes', 'extinto en estado silvestre', 'extinto', 'no amenazada', 'no amenazada (cultivada)', 'no amenazada, aunque cada vez más escasa en áreas urbanas', 'vulnerable (según catálogo plantaqr del parque)', 'no determinado'],
+      enum: ['en peligro', 'vulnerable', 'casi amenazado', 'preocupación menor', 'datos insuficientes', 'extinto en estado silvestre', 'extinto', 'no amenazada', 'no amenazada (cultivada)', 'no amenazada, aunque cada vez más escasa en áreas urbanas', 'vulnerable (según catálogo plantaqr del parque)', 'no amenazada / ampliamente distribuida en los Andes', 'preocupación menor (LC)', 'preocupación menor (LC) / Ampliamente cultivada', 'no determinado'],
     },
     ubicacion: {
       latitud: { type: Number, required: true },

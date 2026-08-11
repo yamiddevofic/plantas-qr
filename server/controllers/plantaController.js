@@ -55,12 +55,30 @@ function parsearBody(body) {
   return datos;
 }
 
+function resolverImagenes(datos, archivos) {
+  let conservadas = [];
+  if (Array.isArray(datos.imagenesConservar)) {
+    conservadas = datos.imagenesConservar;
+  } else {
+    try {
+      conservadas = JSON.parse(datos.imagenesConservar ?? '[]');
+    } catch {
+      conservadas = [];
+    }
+  }
+  const nuevas = (archivos?.imagenes || []).map((archivo) => `/uploads/${archivo.filename}`);
+  const lista = [...conservadas, ...nuevas].filter(Boolean);
+  if (archivos?.imagen?.[0]) lista.unshift(`/uploads/${archivos.imagen[0].filename}`);
+  return { imagen: lista[0] || '', imagenes: lista.slice(1) };
+}
+
 export const crearPlanta = async (req, res) => {
   try {
     const datos = parsearBody(req.body);
-    if (req.file) {
-      datos.imagen = `/uploads/${req.file.filename}`;
+    if (req.files) {
+      Object.assign(datos, resolverImagenes(datos, req.files));
     }
+    delete datos.imagenesConservar;
     datos.usos = limpiarUsos(datos.usos);
     const planta = new Planta(datos);
     const guardada = await planta.save();
@@ -141,9 +159,10 @@ export const buscarPorFamilia = async (req, res) => {
 export const actualizarPlanta = async (req, res) => {
   try {
     const datos = parsearBody(req.body);
-    if (req.file) {
-      datos.imagen = `/uploads/${req.file.filename}`;
+    if (req.files) {
+      Object.assign(datos, resolverImagenes(datos, req.files));
     }
+    delete datos.imagenesConservar;
     datos.usos = limpiarUsos(datos.usos);
     const planta = await Planta.findByIdAndUpdate(req.params.id, datos, { new: true, runValidators: true });
     if (!planta) return res.status(404).json({ mensaje: 'Planta no encontrada' });

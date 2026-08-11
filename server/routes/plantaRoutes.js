@@ -61,7 +61,7 @@ const router = Router();
  *       400:
  *         description: Error de validación
  */
-router.post('/', upload.single('imagen'), crearPlanta);
+router.post('/', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imagenes', maxCount: 10 }]), crearPlanta);
 
 /**
  * @swagger
@@ -240,7 +240,7 @@ router.get('/:id', obtenerPlantaPorId);
  *       404:
  *         description: Planta no encontrada
  */
-router.put('/:id', upload.single('imagen'), actualizarPlanta);
+router.put('/:id', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imagenes', maxCount: 10 }]), actualizarPlanta);
 
 /**
  * @swagger
