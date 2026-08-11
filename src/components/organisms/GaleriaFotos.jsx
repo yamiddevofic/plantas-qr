@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 import ImagenPlanta from '../atoms/ImagenPlanta';
 
 const INTERVALO = 4500;
+const UMBRAL_DESLIZAMIENTO = 45;
 
 export default function GaleriaFotos({ imagenes, alt }) {
   const [indice, setIndice] = useState(0);
+  const toqueInicio = useRef(null);
 
   useEffect(() => {
     if (imagenes.length <= 1) return;
@@ -31,9 +33,29 @@ export default function GaleriaFotos({ imagenes, alt }) {
     e.stopPropagation();
     setIndice((i) => (i + 1) % imagenes.length);
   };
+  const alTocar = (e) => {
+    toqueInicio.current = { x: e.clientX, y: e.clientY };
+  };
+  const alSoltar = (e) => {
+    if (!toqueInicio.current) return;
+    const dx = e.clientX - toqueInicio.current.x;
+    const dy = e.clientY - toqueInicio.current.y;
+    toqueInicio.current = null;
+    if (Math.abs(dx) < UMBRAL_DESLIZAMIENTO) return;
+    if (Math.abs(dx) < Math.abs(dy)) return;
+    setIndice((i) =>
+      dx < 0
+        ? (i + 1) % imagenes.length
+        : (i - 1 + imagenes.length) % imagenes.length
+    );
+  };
 
   return (
-    <div className="detalle-image detalle-galeria">
+    <div
+      className="detalle-image detalle-galeria"
+      onPointerDown={alTocar}
+      onPointerUp={alSoltar}
+    >
       {imagenes.map((img, i) => (
         <ImagenPlanta
           key={img}

@@ -12,12 +12,22 @@ export default function MenuLateral({ abierto, onCerrar, children }) {
 
   useEffect(() => {
     if (!abierto) return undefined;
+    const body = document.body;
+    const html = document.documentElement;
+    const prevBody = body.style.overflow;
+    const prevHtml = html.style.overflow;
+    body.style.overflow = 'hidden';
+    html.style.overflow = 'hidden';
     const alTeclado = (e) => {
       if (e.key === 'Escape') onCerrar();
     };
     document.addEventListener('keydown', alTeclado);
     cerrarRef.current?.focus();
-    return () => document.removeEventListener('keydown', alTeclado);
+    return () => {
+      document.removeEventListener('keydown', alTeclado);
+      body.style.overflow = prevBody;
+      html.style.overflow = prevHtml;
+    };
   }, [abierto, onCerrar]);
 
   if (!abierto) return null;

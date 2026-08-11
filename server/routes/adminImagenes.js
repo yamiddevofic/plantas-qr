@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import Planta from '../models/Planta.js';
+import qrAuth from '../middleware/qrAuth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +12,10 @@ const UPLOADS = path.join(__dirname, '..', 'uploads');
 const router = express.Router();
 
 const SOLO_ARCHIVOS = /^[\w\-\.]+$/;
+
+router.post('/depurar-verificar', qrAuth, (_req, res) => {
+  res.json({ ok: true });
+});
 
 async function referencias() {
   const plantas = await Planta.find().lean();
@@ -85,6 +90,7 @@ router.get('/depurar-imagenes', async (_req, res) => {
   .borrar:hover { background: #8f2d24; }
   h2 { font-size: .9rem; margin: 26px 0 12px; }
   .aviso { background: #fff8e6; border: 1px solid #eedfae; color: #6b5410; padding: 10px 14px; border-radius: 10px; font-size: .82rem; margin-bottom: 18px; }
+  .clave { width: 100%; max-width: 320px; padding: 8px 12px; border: 1px solid #d8e4dc; border-radius: 10px; font-size: .85rem; margin-bottom: 20px; box-sizing: border-box; }
 </style>
 </head>
 <body>
@@ -95,6 +101,8 @@ router.get('/depurar-imagenes', async (_req, res) => {
     <span>En uso: ${usadas.length}</span>
     <span>Sin uso: ${sinUsar.length}</span>
   </div>
+  <div class="aviso">Acciones protegidas: ingresa la contraseña de administrador para eliminar archivos.</div>
+  <input id="admin-password" class="clave" type="password" placeholder="Contraseña de administrador" autocomplete="current-password" />
   <h2>Sin referencia en la BD (candidatas a eliminar)</h2>
   <div class="grid">${sinUsar.map(tarjeta).join('') || '<p class="sub">Ninguna.</p>'}</div>
   <h2>En uso por especies</h2>
@@ -102,16 +110,17 @@ router.get('/depurar-imagenes', async (_req, res) => {
   <script>
     async function borrar(nombre) {
       if (!confirm('¿Eliminar ' + nombre + ' del servidor?')) return;
+      const clave = document.getElementById('admin-password').value;
       const res = await fetch('/depurar-imagenes/eliminar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ archivo: nombre }),
+        body: JSON.stringify({ archivo: nombre, password: clave }),
       });
       const data = await res.json();
       if (data.ok) {
         document.querySelector('[data-nombre="' + nombre + '"]')?.remove();
       } else {
-        alert(data.error || 'No se pudo eliminar');
+        alert(data.error || data.mensaje || 'No se pudo eliminar');
       }
     }
   </script>
@@ -119,7 +128,7 @@ router.get('/depurar-imagenes', async (_req, res) => {
 </html>`);
 });
 
-router.post('/depurar-imagenes/eliminar', async (req, res) => {
+router.post('/depurar-imagenes/eliminar', qrAuth, async (req, res) => {
   const { archivo } = req.body || {};
   if (!archivo || !SOLO_ARCHIVOS.test(archivo) || path.basename(archivo) !== archivo) {
     return res.status(400).json({ ok: false, error: 'Nombre de archivo no válido' });
@@ -217,11 +226,15 @@ router.get('/depurar-plantas', async (_req, res) => {
   .estado { font-size: .78rem; margin-left: 8px; }
   .ok { color: #2d6a4f; }
   .err { color: #b03a2e; }
+  .clave { width: 100%; max-width: 360px; padding: 8px 12px; border: 1px solid #d8e4dc; border-radius: 10px; font-size: .85rem; margin-bottom: 20px; box-sizing: border-box; }
+  .aviso { background: #fff8e6; border: 1px solid #eedfae; color: #6b5410; padding: 10px 14px; border-radius: 10px; font-size: .82rem; margin-bottom: 18px; }
 </style>
 </head>
 <body>
   <h1>Editar fotos de cada especie</h1>
   <p class="sub">Asigna qué archivo usa cada planta (la primera foto es la principal de la tarjeta y la ficha). Los cambios se guardan en la BD.</p>
+  <div class="aviso">Acciones protegidas: ingresa la contraseña de administrador antes de guardar cambios.</div>
+  <input id="admin-password" class="clave" type="password" placeholder="Contraseña de administrador" autocomplete="current-password" />
   ${plantas.map(tarjeta).join('')}
   <script>
     const nombreArchivo = (ref) => ref.replace('/uploads/', '');
@@ -246,6 +259,7 @@ router.get('/depurar-plantas', async (_req, res) => {
       const caja = boton.closest('.planta');
       const id = caja.dataset.id;
       const refs = [...caja.querySelectorAll('.foto')].map((f) => f.dataset.ref);
+      const clave = document.getElementById('admin-password').value;
       const estado = caja.querySelector('.estado');
       boton.disabled = true;
       estado.className = 'estado';
@@ -254,14 +268,14 @@ router.get('/depurar-plantas', async (_req, res) => {
         const res = await fetch('/depurar-plantas/guardar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id, refs }),
+          body: JSON.stringify({ id, refs, password: clave }),
         });
         const tipo = (res.headers.get('Content-Type') || '').toLowerCase();
         if (!tipo.includes('application/json')) {
           throw new Error('El servidor respondió con una página en vez de JSON. Reinícialo para que cargue los últimos cambios del modelo (node server/index.js).');
         }
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Error');
+        if (!res.ok) throw new Error(data.error || data.mensaje || 'Error');
         estado.className = 'estado ok';
         estado.textContent = 'Guardado ✓';
       } catch (e) {
@@ -275,7 +289,7 @@ router.get('/depurar-plantas', async (_req, res) => {
 </html>`);
 });
 
-router.post('/depurar-plantas/guardar', async (req, res) => {
+router.post('/depurar-plantas/guardar', qrAuth, async (req, res) => {
   const { id, refs } = req.body || {};
   if (!id || !Array.isArray(refs)) {
     return res.status(400).json({ ok: false, error: 'Datos inválidos' });

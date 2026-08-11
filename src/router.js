@@ -13,5 +13,8 @@ export function useHashRoute() {
   if (match) {
     return { nombre: 'detalle', id: decodeURIComponent(match[1]) };
   }
-  return { nombre: 'listado' };
+  if (hash.startsWith('#/galeria')) {
+    return { nombre: 'galeria' };
+  }
+  return { nombre: 'inicio' };
 }

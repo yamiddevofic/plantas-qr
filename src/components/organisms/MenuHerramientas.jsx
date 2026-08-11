@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import {
   LuCirclePlus,
+  LuHouse,
   LuImage,
   LuImages,
-  LuMapPin,
   LuMoon,
   LuQrCode,
+  LuShieldAlert,
   LuSlidersHorizontal,
   LuSun,
-  LuTreeDeciduous,
 } from 'react-icons/lu';
 import BarraFiltros from './BarraFiltros';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
 import MenuLateral from './MenuLateral';
+import SeccionContacto from '../molecules/SeccionContacto';
 import { useTema } from '../../tema.js';
 
 /**
@@ -30,15 +31,13 @@ export default function MenuHerramientas({
   puedeGenerar,
   onRegenerarTodos,
   onCrear,
+  onEditarImagenes,
+  onArchivos,
+  onVerEstados,
 }) {
-  const [filtrosVisibles, setFiltrosVisibles] = useState(true);
+  const [filtrosVisibles, setFiltrosVisibles] = useState(false);
   const { tema, alternar } = useTema();
   const esOscuro = tema === 'oscuro';
-
-  const irASeccion = (selector) => () => {
-    document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    onCerrar();
-  };
 
   return (
     <>
@@ -74,16 +73,13 @@ export default function MenuHerramientas({
               }}
             />
             <ItemMenu
-              icono={<LuTreeDeciduous aria-hidden="true" />}
-              etiqueta="Catálogo de especies"
-              descripcion="Explorar las plantas del parque"
-              onClick={irASeccion('#catalogo')}
-            />
-            <ItemMenu
-              icono={<LuMapPin aria-hidden="true" />}
-              etiqueta="Conoce el parque"
-              descripcion="Historia, lugares y datos del lugar"
-              onClick={irASeccion('#conoce-parque')}
+              icono={<LuHouse aria-hidden="true" />}
+              etiqueta="Inicio"
+              descripcion="Conoce el parque y el proyecto"
+              onClick={() => {
+                window.location.hash = '#/';
+                onCerrar();
+              }}
             />
           </GrupoMenu>
 
@@ -102,7 +98,7 @@ export default function MenuHerramientas({
               etiqueta="Editar imágenes de especies"
               descripcion="Ver y cambiar las fotos de cada planta"
               onClick={() => {
-                window.open('/depurar-plantas', '_blank', 'noopener');
+                onEditarImagenes();
                 onCerrar();
               }}
             />
@@ -111,7 +107,16 @@ export default function MenuHerramientas({
               etiqueta="Archivos de imágenes"
               descripcion="Ver qué planta usa cada archivo y eliminar los sobrantes"
               onClick={() => {
-                window.open('/depurar-imagenes', '_blank', 'noopener');
+                onArchivos();
+                onCerrar();
+              }}
+            />
+            <ItemMenu
+              icono={<LuShieldAlert aria-hidden="true" />}
+              etiqueta="Estados de conservación"
+              descripcion="Ver la escala de colores usada en las fichas"
+              onClick={() => {
+                onVerEstados?.();
                 onCerrar();
               }}
             />
@@ -137,6 +142,8 @@ export default function MenuHerramientas({
               }}
             />
           </GrupoMenu>
+
+          <SeccionContacto />
         </MenuLateral>
       </div>
     </>

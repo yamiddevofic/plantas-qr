@@ -10,8 +10,25 @@ export const ESTADOS = {
   'no amenazada': 'estado-bien',
   'no amenazada (cultivada)': 'estado-cultivada',
   'no amenazada, aunque cada vez más escasa en áreas urbanas': 'estado-escasa',
+  'no amenazada / ampliamente distribuida en los Andes': 'estado-bien',
+  'preocupación menor (LC)': 'estado-bien',
+  'preocupación menor (LC) / Ampliamente cultivada': 'estado-bien',
   'no determinado': 'estado-info',
 };
+
+/* Escala termómetro de conservación (categorías IUCN) mostrada en la
+   ventana "Estados de conservación" y usada para colorear cada ficha. */
+export const ESCALA_CONSERVACION = [
+  { clase: 'estado-extinto', etiqueta: 'Extinto', descripcion: 'La especie ya no existe en ningún lugar del mundo.' },
+  { clase: 'estado-silvestre', etiqueta: 'Extinto en estado silvestre', descripcion: 'Solo sobrevive en cultivo, cautiverio o fuera de su hábitat natural.' },
+  { clase: 'estado-peligro', etiqueta: 'En peligro', descripcion: 'Riesgo muy alto de desaparecer en estado silvestre.' },
+  { clase: 'estado-vulnerable', etiqueta: 'Vulnerable', descripcion: 'Riesgo alto de desaparecer a mediano plazo.' },
+  { clase: 'estado-amenazado', etiqueta: 'Casi amenazado', descripcion: 'Próxima a convertirse en vulnerable.' },
+  { clase: 'estado-bien', etiqueta: 'Preocupación menor / No amenazada', descripcion: 'Poblaciones estables y ampliamente distribuidas.' },
+  { clase: 'estado-cultivada', etiqueta: 'No amenazada (cultivada)', descripcion: 'Se propaga por cultivo y no depende del medio silvestre.' },
+  { clase: 'estado-escasa', etiqueta: 'Cada vez más escasa', descripcion: 'Aún no está amenazada, pero escasea en zonas urbanas.' },
+  { clase: 'estado-info', etiqueta: 'Datos insuficientes / No determinado', descripcion: 'Falta información para evaluar su estado real.' },
+];
 
 export function estadoClass(estado) {
   return ESTADOS[estado] || 'estado-info';

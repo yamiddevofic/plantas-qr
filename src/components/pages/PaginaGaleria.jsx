@@ -1,22 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchPlantas, fetchQRs, generarTodosQRs } from '../../api';
-import PlantillaListado from '../templates/PlantillaListado';
+import { fetchPlantas, fetchQRs, generarTodosQRs, verificarAdmin } from '../../api';
+import PlantillaGaleria from '../templates/PlantillaGaleria';
 import FormularioPlanta from '../organisms/FormularioPlanta';
+import LeyendaEstados from '../molecules/LeyendaEstados';
 
-export default function PaginaListado() {
+export default function PaginaGaleria() {
   const [plantas, setPlantas] = useState([]);
   const [qrs, setQrs] = useState({});
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [recargar, setRecargar] = useState(0);
   const [qrsGenerando, setQrsGenerando] = useState(false);
-  const [actualizando, setActualizando] = useState(false);
   const [mensajeQR, setMensajeQR] = useState(null);
   const [filtroFamilia, setFiltroFamilia] = useState('');
   const [filtroTipo, setFiltroTipo] = useState('');
   const [formulario, setFormulario] = useState(null);
   const [qrDialogoAbierto, setQrDialogoAbierto] = useState(false);
   const [qrDialogoError, setQrDialogoError] = useState(null);
+  const [puertaAdmin, setPuertaAdmin] = useState(null);
+  const [puertaAdminCargando, setPuertaAdminCargando] = useState(false);
+  const [puertaAdminError, setPuertaAdminError] = useState(null);
+  const [leyendaAbierta, setLeyendaAbierta] = useState(false);
 
   useEffect(() => {
     let cancelado = false;
@@ -46,26 +50,15 @@ export default function PaginaListado() {
     return () => { cancelado = true; };
   }, [recargar]);
 
-  const actualizarCatalogo = async () => {
-    setMensajeQR(null);
-    setActualizando(true);
-    try {
-      const [plantasData, qrsData] = await Promise.all([
-        fetchPlantas(),
-        fetchQRs(),
-      ]);
-      const qrsMap = {};
-      qrsData.forEach((qr) => {
-        qrsMap[qr.plantaId._id || qr.plantaId] = qr;
-      });
-      setPlantas(plantasData);
-      setQrs(qrsMap);
-      setMensajeQR(`Catálogo actualizado (${plantasData.length} especies).`);
-    } catch (e) {
-      setMensajeQR(`Error al actualizar el catálogo: ${e.message}`);
-    }
-    setActualizando(false);
-  };
+  useEffect(() => {
+    const alVisibilizar = () => {
+      if (document.visibilityState === 'visible') {
+        setRecargar((n) => n + 1);
+      }
+    };
+    document.addEventListener('visibilitychange', alVisibilizar);
+    return () => document.removeEventListener('visibilitychange', alVisibilizar);
+  }, []);
 
   const handleQRsRegenerados = async (password) => {
     setQrsGenerando(true);
@@ -96,6 +89,28 @@ export default function PaginaListado() {
 
   const abrirCrear = () => setFormulario({ modo: 'crear', planta: null });
   const cerrarFormulario = () => setFormulario(null);
+
+  const abrirPuerta = (destino) => () => {
+    setPuertaAdminError(null);
+    setPuertaAdmin(destino);
+  };
+  const cerrarPuerta = () => {
+    setPuertaAdmin(null);
+    setPuertaAdminCargando(false);
+    setPuertaAdminError(null);
+  };
+  const confirmarPuerta = async (password) => {
+    setPuertaAdminCargando(true);
+    setPuertaAdminError(null);
+    try {
+      await verificarAdmin(password);
+      window.open(puertaAdmin.url, '_blank', 'noopener');
+      cerrarPuerta();
+    } catch (e) {
+      setPuertaAdminError(e.message);
+    }
+    setPuertaAdminCargando(false);
+  };
 
   const handleGuardado = (plantaGuardada) => {
     setPlantas((prev) => {
@@ -136,7 +151,7 @@ export default function PaginaListado() {
 
   return (
     <>
-      <PlantillaListado
+      <PlantillaGaleria
         cargando={cargando}
         error={error}
         onReintentar={() => setRecargar((n) => n + 1)}
@@ -150,13 +165,13 @@ export default function PaginaListado() {
           activos: filtrosActivos,
           onLimpiar: limpiarFiltros,
         }}
-        contador={{ total: plantas.length, filtrados: plantasFiltradas.length, activos: filtrosActivos }}
         generando={qrsGenerando}
-        actualizando={actualizando}
         puedeGenerar={plantas.length > 0}
         onCrear={abrirCrear}
         onRegenerarTodos={abrirDialogoQR}
-        onActualizar={actualizarCatalogo}
+        onEditarImagenes={abrirPuerta({ url: '/depurar-plantas' })}
+        onArchivos={abrirPuerta({ url: '/depurar-imagenes' })}
+        onVerEstados={() => setLeyendaAbierta(true)}
         mensajeQR={mensajeQR}
         sinResultados={sinResultados}
         plantas={plantasFiltradas}
@@ -168,6 +183,13 @@ export default function PaginaListado() {
           onCerrar: () => setQrDialogoAbierto(false),
           alConfirmar: handleQRsRegenerados,
         }}
+        puertaAdmin={{
+          abierto: Boolean(puertaAdmin),
+          cargando: puertaAdminCargando,
+          error: puertaAdminError,
+          onCerrar: cerrarPuerta,
+          alConfirmar: confirmarPuerta,
+        }}
       />
       {formulario && (
         <FormularioPlanta
@@ -176,6 +198,7 @@ export default function PaginaListado() {
           onGuardado={handleGuardado}
         />
       )}
+      {leyendaAbierta && <LeyendaEstados onCerrar={() => setLeyendaAbierta(false)} />}
     </>
   );
 }

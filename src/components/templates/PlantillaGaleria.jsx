@@ -1,37 +1,57 @@
-import { useState } from 'react';
-import EncabezadoApp from '../organisms/EncabezadoApp';
+import { useEffect, useState } from 'react';
+import { LuImages } from 'react-icons/lu';
 import MenuHerramientas from '../organisms/MenuHerramientas';
-import BarraHerramientas from '../organisms/BarraHerramientas';
 import ListaPlantas from '../organisms/ListaPlantas';
-import SeccionParque from '../organisms/SeccionParque';
 import BuscadorLupa from '../organisms/BuscadorLupa';
 import EstadoBox from '../atoms/EstadoBox';
-import Spinner from '../atoms/Spinner';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
+import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import PiePagina from '../molecules/PiePagina';
 import DialogoPassword from '../molecules/DialogoPassword';
 
-export default function PlantillaListado({
+export default function PlantillaGaleria({
   cargando,
   error,
   onReintentar,
   filtros,
-  contador,
   generando,
-  actualizando,
   puedeGenerar,
   onCrear,
   onRegenerarTodos,
-  onActualizar,
+  onEditarImagenes,
+  onArchivos,
+  onVerEstados,
   mensajeQR,
   sinResultados,
   plantas,
   todasLasPlantas,
   formularioAbierto,
   qrDialogo,
+  puertaAdmin,
 }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [headerOculto, setHeaderOculto] = useState(false);
+
+  useEffect(() => {
+    let previo = window.scrollY;
+    let pendiente = 0;
+    const alScroll = () => {
+      if (pendiente) return;
+      pendiente = requestAnimationFrame(() => {
+        pendiente = 0;
+        const actual = window.scrollY;
+        if (actual > previo + 4 && actual > 80) setHeaderOculto(true);
+        else if (actual < previo - 4) setHeaderOculto(false);
+        previo = actual;
+      });
+    };
+    window.addEventListener('scroll', alScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', alScroll);
+      if (pendiente) cancelAnimationFrame(pendiente);
+    };
+  }, []);
 
   return (
     <div className="app">
@@ -39,18 +59,26 @@ export default function PlantillaListado({
         Saltar al contenido
       </a>
 
-      <EncabezadoApp
-        acciones={
-          <div className="hero-acciones-grupo">
-            <BuscadorLupa plantas={todasLasPlantas} />
-            <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
-          </div>
-        }
-      />
+      <header
+        className={`galeria-header ${headerOculto ? 'galeria-header-oculto' : ''}`.trim()}
+      >
+        <div className="galeria-header-titulo">
+          <LuImages aria-hidden="true" className="galeria-header-icono" />
+          <h1 id="catalogo-titulo" className="galeria-header-texto">
+            Galería de especies
+          </h1>
+        </div>
+        <div className="hero-acciones-grupo">
+          <BuscadorLupa plantas={todasLasPlantas} />
+          <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
+        </div>
+      </header>
 
       <main id="app-main" className="app-main">
         {cargando ? (
-          <Spinner etiqueta="Cargando plantas" />
+          <div className="cargando-central">
+            <ArbolitoLoader etiqueta="Cargando catálogo" />
+          </div>
         ) : error ? (
           <EstadoBox icono="⚠️" titulo="No pudimos cargar el catálogo" texto={error} clase="error-box" alerta>
             <Boton variante="retry" onClick={onReintentar}>
@@ -66,6 +94,9 @@ export default function PlantillaListado({
               generando={generando}
               puedeGenerar={puedeGenerar}
               onCrear={onCrear}
+              onEditarImagenes={onEditarImagenes}
+              onArchivos={onArchivos}
+              onVerEstados={onVerEstados}
               onRegenerarTodos={onRegenerarTodos}
             />
 
@@ -79,32 +110,8 @@ export default function PlantillaListado({
               </p>
             )}
 
-            <SeccionParque
-              especies={contador.total}
-              familias={filtros.familias.length}
-            />
-
-            <div className="catalogo-bar">
-              <BarraHerramientas
-                total={contador.total}
-                filtrados={contador.filtrados}
-                activos={contador.activos}
-                actualizando={actualizando}
-                onActualizar={onActualizar}
-              />
-            </div>
-
             <section id="catalogo" aria-labelledby="catalogo-titulo">
-              <h2 id="catalogo-titulo" className="catalogo-titulo">
-                Galería de especies
-              </h2>
-              {actualizando && (
-                <p className="catalogo-cargando" role="status" aria-live="polite">
-                  <Spinner etiqueta="Actualizando catálogo" />
-                  Actualizando catálogo…
-                </p>
-              )}
-              <div className={`catalogo-contenido ${actualizando ? 'is-actualizando' : ''}`.trim()}>
+              <div className="catalogo-contenido">
               {plantas.length === 0 ? (
                 <EstadoBox
                   icono="🌳"
@@ -153,6 +160,17 @@ export default function PlantillaListado({
           error={qrDialogo.error}
           onCerrar={qrDialogo.onCerrar}
           alConfirmar={qrDialogo.alConfirmar}
+        />
+      )}
+
+      {puertaAdmin.abierto && (
+        <DialogoPassword
+          titulo="Acceso de administrador"
+          descripcion="Verifica tu contraseña antes de ingresar a esta herramienta. Solo quien conoce la contraseña de administrador puede entrar."
+          cargando={puertaAdmin.cargando}
+          error={puertaAdmin.error}
+          onCerrar={puertaAdmin.onCerrar}
+          alConfirmar={puertaAdmin.alConfirmar}
         />
       )}
     </div>

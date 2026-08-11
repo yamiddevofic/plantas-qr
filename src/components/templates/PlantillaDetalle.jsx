@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { LuDownload, LuMoon, LuRefreshCcw, LuSun, LuTreeDeciduous } from 'react-icons/lu';
-import Spinner from '../atoms/Spinner';
+import { LuDownload, LuHouse, LuMoon, LuRefreshCcw, LuShieldAlert, LuSun, LuTreeDeciduous } from 'react-icons/lu';
 import EstadoBox from '../atoms/EstadoBox';
+import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
 import GaleriaFotos from '../organisms/GaleriaFotos';
 import Hero from '../organisms/Hero';
 import MenuLateral from '../organisms/MenuLateral';
+import SeccionContacto from '../molecules/SeccionContacto';
 import BuscadorLupa from '../organisms/BuscadorLupa';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
@@ -14,13 +15,14 @@ import SeccionFicha from '../molecules/SeccionFicha';
 import Hecho from '../molecules/Hecho';
 import PiePagina from '../molecules/PiePagina';
 import DialogoPassword from '../molecules/DialogoPassword';
+import EstadoConservacion from '../molecules/EstadoConservacion';
 import Chip from '../atoms/Chip';
 import { listaImagenes, normalizarUsos } from '../../constantes';
 import { generarQR } from '../../api';
 import { useTema } from '../../tema.js';
 
-export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGenerado }) {
-  const { nombre, familia, origen, altura, descripcion, usos, impacto, ubicacion, ubicaciones, imagen } = planta || {};
+export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGenerado, onVerEstados }) {
+  const { nombre, familia, origen, altura, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion, imagen } = planta || {};
   const lat = Number.isFinite(Number(ubicacion?.latitud)) ? Number(ubicacion.latitud).toFixed(6) : null;
   const lng = Number.isFinite(Number(ubicacion?.longitud)) ? Number(ubicacion.longitud).toFixed(6) : null;
   const usosLista = normalizarUsos(usos);
@@ -49,7 +51,7 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
   }
 
   const irAlCatalogo = () => {
-    window.location.hash = '/';
+    window.location.hash = '#/galeria';
     setMenuAbierto(false);
   };
 
@@ -129,8 +131,17 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
       <MenuLateral abierto={menuAbierto} onCerrar={() => setMenuAbierto(false)}>
         <GrupoMenu titulo="Navegación">
           <ItemMenu
+            icono={<LuHouse aria-hidden="true" />}
+            etiqueta="Inicio"
+            descripcion="Conoce el parque y el proyecto"
+            onClick={() => {
+              window.location.hash = '#/';
+              setMenuAbierto(false);
+            }}
+          />
+          <ItemMenu
             icono={<LuTreeDeciduous aria-hidden="true" />}
-            etiqueta="Catálogo de especies"
+            etiqueta="Galería de especies"
             descripcion="Explorar las plantas del parque"
             onClick={irAlCatalogo}
           />
@@ -142,6 +153,15 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
             descripcion="Actualizar el QR de esta especie (requiere contraseña)"
             onClick={() => {
               setAccionDialogo('regenerar');
+              setMenuAbierto(false);
+            }}
+          />
+          <ItemMenu
+            icono={<LuShieldAlert aria-hidden="true" />}
+            etiqueta="Estados de conservación"
+            descripcion="Ver la escala de colores usada en las fichas"
+            onClick={() => {
+              onVerEstados?.();
               setMenuAbierto(false);
             }}
           />
@@ -159,11 +179,14 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
             onClick={alternar}
           />
         </GrupoMenu>
+        <SeccionContacto />
       </MenuLateral>
 
       <main id="app-main">
         {cargando ? (
-          <div className="app"><Spinner etiqueta="Cargando ficha" /></div>
+          <div className="cargando-ficha">
+            <ArbolitoLoader etiqueta="Cargando ficha" />
+          </div>
         ) : error || !planta ? (
           <div className="app">
             <EstadoBox
@@ -171,7 +194,7 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
               titulo="Esta ficha no está disponible"
               texto={error || 'Puede que la especie haya sido retirada del catálogo.'}
             >
-              <Boton enlace href="#/" variante="primary">
+              <Boton enlace href="#/galeria" variante="primary">
                 Volver al catálogo
               </Boton>
             </EstadoBox>
@@ -209,6 +232,12 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
                   </SeccionFicha>
                 )}
 
+                {estadoConservacion && (
+                  <div className="detalle-estado">
+                    <EstadoConservacion estado={estadoConservacion} />
+                  </div>
+                )}
+
                 {usosLista.length > 0 && (
                   <SeccionFicha id="ficha-usos" titulo="Usos tradicionales">
                     <div className="detalle-usos">
@@ -225,6 +254,9 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
                       <Hecho icono="📏" etiqueta="Altura" valor={altura} />
                       <Hecho icono="📍" etiqueta="Ubicación" valor={ubicacion?.descripcion} />
                       {lat && lng && <Hecho icono="🧭" etiqueta="Coordenadas" valor={`${lat}, ${lng}`} />}
+                      {sitios.length > 0 && (
+                        <Hecho icono="🌳" etiqueta="Individuos en el parque" valor={`${sitios.length} ${sitios.length === 1 ? 'individuo' : 'individuos'}`} />
+                      )}
                     </div>
                     {sitios.length > 1 && (
                       <div className="detalle-ubicaciones">
@@ -268,6 +300,12 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
                   <p className="detalle-qr-nota">
                     El código QR de este árbol enlaza a su ficha para que las
                     visitas lo escaneen y conozcan la especie.
+                    {sitios.length > 0 && (
+                      <>
+                        {' '}Se han registrado {sitios.length} {sitios.length === 1 ? 'individuo' : 'individuos'}
+                        {' '}de esta especie en distintas zonas del parque.
+                      </>
+                    )}
                   </p>
                   {errorQR && <p className="form-error" role="alert" aria-live="assertive">{errorQR}</p>}
                   {exitoQR && <p className="detalle-qr-exito" role="status">{exitoQR}</p>}

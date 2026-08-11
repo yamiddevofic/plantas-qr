@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { crearPlanta, actualizarPlanta, buscarPlanta } from '../../api';
 import { normalizarUsos, PLACEHOLDER } from '../../constantes';
 import CampoFormulario from '../molecules/CampoFormulario';
+import DialogoPassword from '../molecules/DialogoPassword';
 import Boton from '../atoms/Boton';
 
 const TIPOS = ['árbol', 'arbusto', 'hierba', 'piedra', 'planta acuática', 'cactus', 'otro', 'palma', 'árbol (conífera)', 'árbol / arbusto según poda', 'arbusto / arbolito', 'arbusto bajo'];
@@ -53,6 +54,10 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
   const [idBusqueda, setIdBusqueda] = useState(planta?._id || '');
   const [cargandoFicha, setCargandoFicha] = useState(false);
   const [mensajeId, setMensajeId] = useState(null);
+  const [passwordDialogoAbierto, setPasswordDialogoAbierto] = useState(false);
+  const [passwordCargando, setPasswordCargando] = useState(false);
+  const [passwordError, setPasswordError] = useState(null);
+  const datosPendientes = useRef(null);
   const dialogoRef = useRef(null);
 
   const esEdicion = Boolean(plantaEditable);
@@ -207,7 +212,6 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
     e.preventDefault();
     setMensajeError(null);
     if (!validar()) return;
-    setEnviando(true);
     const datos = {
       ...estado,
       usos: estado.usos
@@ -216,15 +220,32 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
         .filter(Boolean),
       imagenFile,
     };
+    datosPendientes.current = datos;
+    setEnviando(true);
+    setPasswordError(null);
+    setPasswordDialogoAbierto(true);
+  }
+
+  async function confirmarGuardado(password) {
+    const datos = datosPendientes.current;
+    setPasswordCargando(true);
+    setPasswordError(null);
     try {
       const guardada = plantaEditable
-        ? await actualizarPlanta(plantaEditable._id, datos)
-        : await crearPlanta(datos);
+        ? await actualizarPlanta(plantaEditable._id, { ...datos, password })
+        : await crearPlanta({ ...datos, password });
+      setPasswordDialogoAbierto(false);
       onGuardado(guardada);
     } catch (error) {
-      setMensajeError(error.message);
-      setEnviando(false);
+      if (/contraseña/i.test(error.message)) {
+        setPasswordError(error.message);
+      } else {
+        setPasswordDialogoAbierto(false);
+        setMensajeError(error.message);
+        setEnviando(false);
+      }
     }
+    setPasswordCargando(false);
   }
 
   return (
@@ -472,11 +493,33 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
               Cancelar
             </Boton>
             <Boton variante="primary" tipo="submit" disabled={enviando}>
-              {enviando ? 'Guardando…' : esEdicion ? 'Guardar cambios' : 'Agregar especie'}
+              {enviando
+                ? 'Verificando…'
+                : esEdicion
+                  ? 'Guardar cambios'
+                  : 'Agregar especie'}
             </Boton>
           </footer>
         </form>
       </div>
+
+      {passwordDialogoAbierto && (
+        <DialogoPassword
+          titulo="Contraseña requerida"
+          descripcion={
+            esEdicion
+              ? 'Para guardar los cambios de esta especie necesitas la contraseña de administrador.'
+              : 'Para registrar esta especie en el catálogo necesitas la contraseña de administrador.'
+          }
+          cargando={passwordCargando}
+          error={passwordError}
+          onCerrar={() => {
+            setPasswordDialogoAbierto(false);
+            setEnviando(false);
+          }}
+          alConfirmar={confirmarGuardado}
+        />
+      )}
     </div>
   );
 }

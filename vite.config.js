@@ -11,6 +11,7 @@ export default defineConfig({
       '/uploads': 'http://localhost:3001',
       '/depurar-plantas': 'http://localhost:3001',
       '/depurar-imagenes': 'http://localhost:3001',
+      '/depurar-verificar': 'http://localhost:3001',
     },
   },
 })

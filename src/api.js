@@ -79,6 +79,7 @@ export function construirFormData(datos) {
   fd.append('ubicacion[latitud]', String(datos.latitud));
   fd.append('ubicacion[longitud]', String(datos.longitud));
   fd.append('ubicacion[descripcion]', datos.ubicacionDescripcion);
+  fd.append('password', datos.password || '');
   if (datos.imagenFile) fd.append('imagen', datos.imagenFile);
   if (Array.isArray(datos.imagenesConservar) && datos.imagenesConservar.length > 0) {
     fd.append('imagenesConservar', JSON.stringify(datos.imagenesConservar));
@@ -98,6 +99,16 @@ export async function crearPlanta(datos) {
 export async function actualizarPlanta(id, datos) {
   const res = await fetch(`${BASE}/plantas/${id}`, { method: 'PUT', body: construirFormData(datos) });
   if (!res.ok) throw new Error(await leerError(res, 'Error al actualizar la planta'));
+  return res.json();
+}
+
+export async function verificarAdmin(password) {
+  const res = await fetch('/depurar-verificar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  });
+  if (!res.ok) throw new Error(await leerError(res, 'Contraseña incorrecta'));
   return res.json();
 }
 

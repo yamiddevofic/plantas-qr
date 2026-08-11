@@ -11,6 +11,7 @@ import {
   eliminarPlanta,
 } from '../controllers/plantaController.js';
 import upload from '../config/upload.js';
+import qrAuth from '../middleware/qrAuth.js';
 
 const router = Router();
 
@@ -61,7 +62,7 @@ const router = Router();
  *       400:
  *         description: Error de validación
  */
-router.post('/', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imagenes', maxCount: 10 }]), crearPlanta);
+router.post('/', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imagenes', maxCount: 10 }]), qrAuth, crearPlanta);
 
 /**
  * @swagger
@@ -240,7 +241,7 @@ router.get('/:id', obtenerPlantaPorId);
  *       404:
  *         description: Planta no encontrada
  */
-router.put('/:id', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imagenes', maxCount: 10 }]), actualizarPlanta);
+router.put('/:id', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imagenes', maxCount: 10 }]), qrAuth, actualizarPlanta);
 
 /**
  * @swagger

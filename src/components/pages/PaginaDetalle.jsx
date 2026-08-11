@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { obtenerPlanta, obtenerQR } from '../../api';
 import PlantillaDetalle from '../templates/PlantillaDetalle';
+import LeyendaEstados from '../molecules/LeyendaEstados';
 
 export default function PaginaDetalle({ plantaId }) {
   const [planta, setPlanta] = useState(null);
   const [qr, setQr] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [leyendaAbierta, setLeyendaAbierta] = useState(false);
 
   useEffect(() => {
     let cancelado = false;
@@ -24,5 +26,17 @@ export default function PaginaDetalle({ plantaId }) {
     return () => { cancelado = true; };
   }, [plantaId]);
 
-  return <PlantillaDetalle cargando={cargando} error={error} planta={planta} qr={qr} onQrGenerado={setQr} />;
+  return (
+    <>
+      <PlantillaDetalle
+        cargando={cargando}
+        error={error}
+        planta={planta}
+        qr={qr}
+        onQrGenerado={setQr}
+        onVerEstados={() => setLeyendaAbierta(true)}
+      />
+      {leyendaAbierta && <LeyendaEstados onCerrar={() => setLeyendaAbierta(false)} />}
+    </>
+  );
 }

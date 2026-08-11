@@ -28,6 +28,7 @@ export default function Hero({
   titulo,
   subtitulo = SUBTITULO_DEFAULT,
   media,
+  badge,
 }) {
   const esHome = variante === VARIANTE_HOME;
   const raiz = esHome ? 'hero' : 'detalle-hero-full';
@@ -43,10 +44,23 @@ export default function Hero({
       {acciones && <div className="hero-acciones">{acciones}</div>}
 
       <div className={contenedorTexto}>
-        {esHome && marca}
-        {corchete && <p className={claseCorchete}>{corchete}</p>}
-        <h1 className={claseTitulo}>{titulo}</h1>
-        {subtitulo && <p className={claseSubtitulo}>{subtitulo}</p>}
+        {esHome ? (
+          <>
+            {marca}
+            {corchete && <p className={claseCorchete}>{corchete}</p>}
+            <h1 className={claseTitulo}>{titulo}</h1>
+            {subtitulo && <p className={claseSubtitulo}>{subtitulo}</p>}
+          </>
+        ) : (
+          <div className="detalle-hero-inner">
+            <div className="detalle-hero-texto-col">
+              {corchete && <p className={claseCorchete}>{corchete}</p>}
+              <h1 className={claseTitulo}>{titulo}</h1>
+              {subtitulo && <p className={claseSubtitulo}>{subtitulo}</p>}
+            </div>
+            {badge && <div className="detalle-hero-badge">{badge}</div>}
+          </div>
+        )}
       </div>
     </header>
   );
@@ -67,4 +81,6 @@ Hero.propTypes = {
   subtitulo: PropTypes.string,
   /** Capa visual para variante="detalle" (p. ej. <GaleriaFotos/>). */
   media: PropTypes.node,
+  /** Contenido adicional (p. ej. estado de conservación) para variante="detalle". */
+  badge: PropTypes.node,
 };

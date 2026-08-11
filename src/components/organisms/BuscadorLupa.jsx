@@ -29,6 +29,20 @@ export default function BuscadorLupa({ plantas }) {
   const [errorCarga, setErrorCarga] = useState(null);
   const inputRef = useRef(null);
 
+  useEffect(() => {
+    if (!abierto) return undefined;
+    const body = document.body;
+    const html = document.documentElement;
+    const prevBody = body.style.overflow;
+    const prevHtml = html.style.overflow;
+    body.style.overflow = 'hidden';
+    html.style.overflow = 'hidden';
+    return () => {
+      body.style.overflow = prevBody;
+      html.style.overflow = prevHtml;
+    };
+  }, [abierto]);
+
   const catalogo = plantas || plantasLocal;
 
   const resultados = useMemo(() => {

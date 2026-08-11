@@ -1,17 +1,19 @@
 import PropTypes from 'prop-types';
 import { LuChevronDown } from 'react-icons/lu';
 import ImagenPlanta from '../atoms/ImagenPlanta';
+import Boton from '../atoms/Boton';
 
 /**
  * Sección "Conoce el parque": presenta el Parque Principal de Chitagá y el
- * proyecto de caracterización e identificación de especies con código QR,
- * como bloques desplegables (acordeón) inicialmente ocultos.
+ * proyecto de caracterización e identificación de especies con código QR.
+ * Por defecto son bloques desplegables (acordeón) ocultos; con `abierto`
+ * se muestran ambos contenidos extendidos (p. ej. en la página "Acerca de").
  */
-export default function SeccionParque({ especies, familias }) {
+export default function SeccionParque({ especies, familias, abierto = false }) {
   return (
     <section className="historia" id="conoce-parque" aria-label="Conoce el parque y el proyecto">
       <div className="historia-acordeon">
-        <details id="acordeon-parque" className="historia-acordeon-item">
+        <details id="acordeon-parque" className="historia-acordeon-item" open={abierto || undefined}>
           <summary className="historia-acordeon-titulo">
             <span className="historia-acordeon-cabecera">
               <span className="historia-eyebrow">Nuestro parque</span>
@@ -39,7 +41,7 @@ export default function SeccionParque({ especies, familias }) {
           </div>
         </details>
 
-        <details className="historia-acordeon-item">
+        <details id="acordeon-proyecto" className="historia-acordeon-item" open={abierto || undefined}>
           <summary className="historia-acordeon-titulo">
             <span className="historia-acordeon-cabecera">
               <span className="historia-eyebrow">Nuestro proyecto</span>
@@ -68,6 +70,12 @@ export default function SeccionParque({ especies, familias }) {
                 <dd>En cada árbol</dd>
               </div>
             </dl>
+
+            <div className="historia-accion">
+              <Boton enlace href="#/galeria" variante="primary">
+                Conoce nuestras especies
+              </Boton>
+            </div>
           </div>
         </details>
       </div>
@@ -80,4 +88,6 @@ SeccionParque.propTypes = {
   especies: PropTypes.number.isRequired,
   /** Número de familias botánicas distintas en el catálogo. */
   familias: PropTypes.number.isRequired,
+  /** Muestra ambos bloques extendidos (en vez de acordeón colapsado). */
+  abierto: PropTypes.bool,
 };
