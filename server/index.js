@@ -11,6 +11,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import plantaRoutes from './routes/plantaRoutes.js';
 import qrRoutes from './routes/qrRoutes.js';
+import adminImagenesRoutes from './routes/adminImagenes.js';
 
 dotenv.config();
 
@@ -119,6 +120,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: t
 
 app.use('/api/plantas', plantaRoutes);
 app.use('/api/qr', qrRoutes);
+app.use(adminImagenesRoutes);
 
 const indexFile = path.join(distPath, 'index.html');
 

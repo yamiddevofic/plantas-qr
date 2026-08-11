@@ -9,6 +9,8 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:3001',
       '/uploads': 'http://localhost:3001',
+      '/depurar-plantas': 'http://localhost:3001',
+      '/depurar-imagenes': 'http://localhost:3001',
     },
   },
 })
