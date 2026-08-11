@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { crearPlanta, actualizarPlanta } from '../../api';
+import { crearPlanta, actualizarPlanta, buscarPlanta } from '../../api';
 import { normalizarUsos, PLACEHOLDER } from '../../constantes';
 import CampoFormulario from '../molecules/CampoFormulario';
 import Boton from '../atoms/Boton';
@@ -17,6 +17,9 @@ const ESTADOS_CONSERVACION = [
   'no amenazada (cultivada)',
   'no amenazada, aunque cada vez más escasa en áreas urbanas',
   'vulnerable (según catálogo plantaqr del parque)',
+  'no amenazada / ampliamente distribuida en los Andes',
+  'preocupación menor (LC)',
+  'preocupación menor (LC) / Ampliamente cultivada',
   'no determinado',
 ];
 
@@ -41,25 +44,96 @@ function inicialEstado(planta) {
 
 export default function FormularioPlanta({ planta, onClose, onGuardado }) {
   const [estado, setEstado] = useState(() => inicialEstado(planta));
+  const [plantaEditable, setPlantaEditable] = useState(planta || null);
   const [imagenFile, setImagenFile] = useState(null);
   const [previa, setPrevia] = useState(planta?.imagen || '');
   const [enviando, setEnviando] = useState(false);
   const [errores, setErrores] = useState({});
   const [mensajeError, setMensajeError] = useState(null);
+  const [idBusqueda, setIdBusqueda] = useState(planta?._id || '');
+  const [cargandoFicha, setCargandoFicha] = useState(false);
+  const [mensajeId, setMensajeId] = useState(null);
   const dialogoRef = useRef(null);
 
-  const esEdicion = Boolean(planta);
-  const titulo = esEdicion ? `Editar ${planta.nombre.comun}` : 'Agregar nueva especie';
+  const esEdicion = Boolean(plantaEditable);
+  const titulo = esEdicion ? `Editar ${plantaEditable.nombre.comun}` : 'Agregar nueva especie';
+
+  async function cargarPorId(e) {
+    e.preventDefault();
+    const id = idBusqueda.trim();
+    if (!id) {
+      setMensajeId({ tipo: 'error', texto: 'Escribe el ID de una especie para buscarla.' });
+      return;
+    }
+    setCargandoFicha(true);
+    setMensajeId(null);
+    try {
+      const encontrada = await buscarPlanta(id);
+      if (!encontrada) {
+        setMensajeId({ tipo: 'error', texto: 'No existe una especie con ese ID.' });
+      } else {
+        setPlantaEditable(encontrada);
+        setEstado(inicialEstado(encontrada));
+        setPrevia(encontrada.imagen || '');
+        setImagenFile(null);
+        setErrores({});
+        setIdBusqueda(encontrada._id);
+        setMensajeId({
+          tipo: 'ok',
+          texto: `${encontrada.nombre.comun} cargada. Modifica los datos y guarda los cambios.`,
+        });
+      }
+    } catch (error) {
+      setMensajeId({ tipo: 'error', texto: error.message });
+    } finally {
+      setCargandoFicha(false);
+    }
+  }
 
   useEffect(() => {
     dialogoRef.current?.focus();
   }, []);
 
   useEffect(() => {
-    const estilos = [document.documentElement, document.body];
-    const previos = estilos.map((el) => el.style.overflow);
-    estilos.forEach((el) => { el.style.overflow = 'hidden'; });
-    return () => estilos.forEach((el, i) => { el.style.overflow = previos[i]; });
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const html = document.documentElement;
+
+    const prev = {
+      bodyPos: body.style.position,
+      bodyTop: body.style.top,
+      bodyLeft: body.style.left,
+      bodyRight: body.style.right,
+      bodyOverflow: body.style.overflow,
+      htmlOverflow: html.style.overflow,
+    };
+
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.overflow = 'hidden';
+    html.style.overflow = 'hidden';
+
+    const bloquearFuera = (e) => {
+      if (dialogoRef.current && !dialogoRef.current.contains(e.target)) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('wheel', bloquearFuera, { passive: false });
+    document.addEventListener('touchmove', bloquearFuera, { passive: false });
+
+    return () => {
+      body.style.position = prev.bodyPos;
+      body.style.top = prev.bodyTop;
+      body.style.left = prev.bodyLeft;
+      body.style.right = prev.bodyRight;
+      body.style.overflow = prev.bodyOverflow;
+      html.style.overflow = prev.htmlOverflow;
+      document.removeEventListener('wheel', bloquearFuera);
+      document.removeEventListener('touchmove', bloquearFuera);
+      window.scrollTo(0, scrollY);
+    };
   }, []);
 
   useEffect(() => {
@@ -143,8 +217,8 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
       imagenFile,
     };
     try {
-      const guardada = esEdicion
-        ? await actualizarPlanta(planta._id, datos)
+      const guardada = plantaEditable
+        ? await actualizarPlanta(plantaEditable._id, datos)
         : await crearPlanta(datos);
       onGuardado(guardada);
     } catch (error) {
@@ -171,6 +245,38 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
         </header>
 
         <form onSubmit={guardar} noValidate>
+          <section className="form-seccion" aria-label="Buscar para editar">
+            <h3 className="form-seccion-titulo">Editar por ID</h3>
+            <div className="form-busqueda-id">
+              <input
+                id="f-id"
+                className="form-input"
+                placeholder="Pega aquí el ID de una especie para editarla…"
+                value={idBusqueda}
+                onChange={(e) => {
+                  setIdBusqueda(e.target.value);
+                  if (mensajeId) setMensajeId(null);
+                }}
+              />
+              <Boton variant="primary" onClick={cargarPorId} disabled={cargandoFicha}>
+                {cargandoFicha ? 'Buscando…' : 'Cargar'}
+              </Boton>
+            </div>
+            <p className="form-ayuda">
+              El ID aparece en cada ficha del catálogo. Al cargarlo, el formulario se llena
+              solo y guardar actualiza esa especie en vez de crear una nueva.
+            </p>
+            {mensajeId && (
+              <p
+                className={mensajeId.tipo === 'error' ? 'form-error' : 'form-ok'}
+                role={mensajeId.tipo === 'error' ? 'alert' : 'status'}
+                aria-live="polite"
+              >
+                {mensajeId.texto}
+              </p>
+            )}
+          </section>
+
           <section className="form-seccion" aria-label="Identificación">
             <h3 className="form-seccion-titulo">Identificación</h3>
             <div className="form-grid">
@@ -350,7 +456,7 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
                   />
                 </label>
                 {imagenFile && (
-                  <Boton variante="ghost" onClick={() => { setImagenFile(null); setPrevia(planta?.imagen || ''); }}>
+                  <Boton variante="ghost" onClick={() => { setImagenFile(null); setPrevia(plantaEditable?.imagen || ''); }}>
                     Quitar foto nueva
                   </Boton>
                 )}
@@ -359,7 +465,7 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
             </div>
           </section>
 
-          {mensajeError && <p className="form-error form-error-bloque" role="alert">{mensajeError}</p>}
+          {mensajeError && <p className="form-error form-error-bloque" role="alert" aria-live="assertive">{mensajeError}</p>}
 
           <footer className="form-acciones">
             <Boton variante="ghost" onClick={onClose} disabled={enviando}>

@@ -1,17 +1,10 @@
 import TarjetaPlanta from './TarjetaPlanta';
 
-export default function ListaPlantas({ plantas, qrs, onDeleted, onQRRegenerated, onEdit }) {
+export default function ListaPlantas({ plantas }) {
   return (
     <div className="planta-grid">
-      {plantas.map((p) => (
-        <TarjetaPlanta
-          key={p._id}
-          planta={p}
-          qr={qrs[p._id]}
-          onDeleted={onDeleted}
-          onQRRegenerated={onQRRegenerated}
-          onEdit={onEdit}
-        />
+      {plantas.map((p, i) => (
+        <TarjetaPlanta key={p._id} planta={p} indice={i} />
       ))}
     </div>
   );

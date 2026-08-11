@@ -10,12 +10,13 @@ export default function PaginaListado() {
   const [error, setError] = useState(null);
   const [recargar, setRecargar] = useState(0);
   const [qrsGenerando, setQrsGenerando] = useState(false);
+  const [actualizando, setActualizando] = useState(false);
   const [mensajeQR, setMensajeQR] = useState(null);
-  const [busqueda, setBusqueda] = useState('');
   const [filtroFamilia, setFiltroFamilia] = useState('');
   const [filtroTipo, setFiltroTipo] = useState('');
-  const [filtroEstado, setFiltroEstado] = useState('');
   const [formulario, setFormulario] = useState(null);
+  const [qrDialogoAbierto, setQrDialogoAbierto] = useState(false);
+  const [qrDialogoError, setQrDialogoError] = useState(null);
 
   useEffect(() => {
     let cancelado = false;
@@ -45,25 +46,32 @@ export default function PaginaListado() {
     return () => { cancelado = true; };
   }, [recargar]);
 
-  const handleDeleted = (id) => {
-    setPlantas((prev) => prev.filter((p) => p._id !== id));
-    setQrs((prev) => {
-      const copy = { ...prev };
-      delete copy[id];
-      return copy;
-    });
+  const actualizarCatalogo = async () => {
+    setMensajeQR(null);
+    setActualizando(true);
+    try {
+      const [plantasData, qrsData] = await Promise.all([
+        fetchPlantas(),
+        fetchQRs(),
+      ]);
+      const qrsMap = {};
+      qrsData.forEach((qr) => {
+        qrsMap[qr.plantaId._id || qr.plantaId] = qr;
+      });
+      setPlantas(plantasData);
+      setQrs(qrsMap);
+      setMensajeQR(`Catálogo actualizado (${plantasData.length} especies).`);
+    } catch (e) {
+      setMensajeQR(`Error al actualizar el catálogo: ${e.message}`);
+    }
+    setActualizando(false);
   };
 
-  const handleQRRegenerated = (id, nuevoQR) => {
-    setQrs((prev) => ({ ...prev, [id]: nuevoQR }));
-  };
-
-  const handleQRsRegenerados = async () => {
-    if (!confirm(`¿Regenerar los códigos QR de las ${plantas.length} plantas?`)) return;
+  const handleQRsRegenerados = async (password) => {
     setQrsGenerando(true);
     setMensajeQR(null);
     try {
-      const resultado = await generarTodosQRs();
+      const resultado = await generarTodosQRs(password);
       const mapa = { ...qrs };
       resultado.resultados.forEach((qr) => {
         mapa[String(qr.plantaId._id || qr.plantaId)] = qr;
@@ -73,14 +81,20 @@ export default function PaginaListado() {
       if (resultado.creados > 0) partes.unshift(`${resultado.creados} creados`);
       if (resultado.errores > 0) partes.push(`${resultado.errores} con error`);
       setMensajeQR(`QRs regenerados (${partes.join(', ')}) de ${resultado.total} plantas.`);
+      setQrDialogoAbierto(false);
     } catch (e) {
+      setQrDialogoError(e.message);
       setMensajeQR(`Error al regenerar los QRs: ${e.message}`);
     }
     setQrsGenerando(false);
   };
 
+  const abrirDialogoQR = () => {
+    setQrDialogoError(null);
+    setQrDialogoAbierto(true);
+  };
+
   const abrirCrear = () => setFormulario({ modo: 'crear', planta: null });
-  const abrirEditar = (planta) => setFormulario({ modo: 'editar', planta });
   const cerrarFormulario = () => setFormulario(null);
 
   const handleGuardado = (plantaGuardada) => {
@@ -102,33 +116,20 @@ export default function PaginaListado() {
     () => [...new Set(plantas.map((p) => p.tipo).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es')),
     [plantas],
   );
-  const estados = useMemo(
-    () => [...new Set(plantas.map((p) => p.estadoConservacion).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es')),
-    [plantas],
-  );
 
-  const filtrosActivos = Boolean(busqueda.trim() || filtroFamilia || filtroTipo || filtroEstado);
+  const filtrosActivos = Boolean(filtroFamilia || filtroTipo);
 
   const plantasFiltradas = useMemo(() => {
-    const q = busqueda.trim().toLowerCase();
     return plantas.filter((p) => {
-      const coincideBusqueda =
-        !q ||
-        p.nombre.comun.toLowerCase().includes(q) ||
-        (p.nombre.cientifico || '').toLowerCase().includes(q) ||
-        String(p._id).toLowerCase().includes(q);
       const coincideFamilia = !filtroFamilia || p.familia === filtroFamilia;
       const coincideTipo = !filtroTipo || p.tipo === filtroTipo;
-      const coincideEstado = !filtroEstado || p.estadoConservacion === filtroEstado;
-      return coincideBusqueda && coincideFamilia && coincideTipo && coincideEstado;
+      return coincideFamilia && coincideTipo;
     });
-  }, [plantas, busqueda, filtroFamilia, filtroTipo, filtroEstado]);
+  }, [plantas, filtroFamilia, filtroTipo]);
 
   const limpiarFiltros = () => {
-    setBusqueda('');
     setFiltroFamilia('');
     setFiltroTipo('');
-    setFiltroEstado('');
   };
 
   const sinResultados = plantas.length > 0 && plantasFiltradas.length === 0;
@@ -140,33 +141,33 @@ export default function PaginaListado() {
         error={error}
         onReintentar={() => setRecargar((n) => n + 1)}
         filtros={{
-          busqueda,
-          setBusqueda,
           familias,
           tipos,
-          estados,
           filtroFamilia,
           setFiltroFamilia,
           filtroTipo,
           setFiltroTipo,
-          filtroEstado,
-          setFiltroEstado,
           activos: filtrosActivos,
           onLimpiar: limpiarFiltros,
         }}
         contador={{ total: plantas.length, filtrados: plantasFiltradas.length, activos: filtrosActivos }}
         generando={qrsGenerando}
+        actualizando={actualizando}
         puedeGenerar={plantas.length > 0}
         onCrear={abrirCrear}
-        onRegenerarTodos={handleQRsRegenerados}
-        onActualizar={() => setRecargar((n) => n + 1)}
+        onRegenerarTodos={abrirDialogoQR}
+        onActualizar={actualizarCatalogo}
         mensajeQR={mensajeQR}
         sinResultados={sinResultados}
         plantas={plantasFiltradas}
-        qrs={qrs}
-        onDeleted={handleDeleted}
-        onQRRegenerated={handleQRRegenerated}
-        onEdit={abrirEditar}
+        todasLasPlantas={plantas}
+        formularioAbierto={Boolean(formulario)}
+        qrDialogo={{
+          abierto: qrDialogoAbierto,
+          error: qrDialogoError,
+          onCerrar: () => setQrDialogoAbierto(false),
+          alConfirmar: handleQRsRegenerados,
+        }}
       />
       {formulario && (
         <FormularioPlanta

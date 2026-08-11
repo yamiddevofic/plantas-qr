@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import ImagenPlanta from '../atoms/ImagenPlanta';
-import InsigniasPlanta from '../molecules/InsigniasPlanta';
 import { listaImagenes } from '../../constantes';
 
 const INTERVALO_CARRUSEL = 4500;
@@ -36,14 +35,6 @@ export default function CarruselImagenes({ planta, alto = 1200 }) {
       ) : (
         <ImagenPlanta src={planta.imagen} alt={alt} ancho={1600} alto={alto} prioridad="high" cargando="lazy" />
       )}
-      {imagenes.length > 1 && (
-        <div className="card-galeria-dots" aria-hidden="true">
-          {imagenes.map((img, i) => (
-            <span key={img} className={`card-galeria-dot ${i === indice ? 'activo' : ''}`} />
-          ))}
-        </div>
-      )}
-      <InsigniasPlanta tipo={planta.tipo} estado={planta.estadoConservacion} />
     </div>
   );
 }

@@ -23,20 +23,42 @@ export async function obtenerPlanta(id) {
   return res.json();
 }
 
+export async function buscarPlanta(id) {
+  const res = await fetch(`${BASE}/plantas/${id}`);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error('No se pudo consultar la especie');
+  return res.json();
+}
+
 export async function fetchQRs() {
   const res = await fetch(`${BASE}/qr`);
   if (!res.ok) throw new Error('Error al obtener QRs');
   return res.json();
 }
 
-export async function generarQR(plantaId) {
-  const res = await fetch(`${BASE}/qr/generar/${plantaId}`, { method: 'POST' });
-  if (!res.ok) throw new Error('Error al generar QR');
+export async function obtenerQR(plantaId) {
+  const res = await fetch(`${BASE}/qr/${plantaId}`);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error('Error al obtener el código QR');
   return res.json();
 }
 
-export async function generarTodosQRs() {
-  const res = await fetch(`${BASE}/qr/generar-todos`, { method: 'POST' });
+export async function generarQR(plantaId, password) {
+  const res = await fetch(`${BASE}/qr/generar/${plantaId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  });
+  if (!res.ok) throw new Error(await leerError(res, 'Error al generar QR'));
+  return res.json();
+}
+
+export async function generarTodosQRs(password) {
+  const res = await fetch(`${BASE}/qr/generar-todos`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  });
   if (!res.ok) throw new Error(await leerError(res, 'Error al regenerar los QRs'));
   return res.json();
 }
@@ -58,6 +80,12 @@ export function construirFormData(datos) {
   fd.append('ubicacion[longitud]', String(datos.longitud));
   fd.append('ubicacion[descripcion]', datos.ubicacionDescripcion);
   if (datos.imagenFile) fd.append('imagen', datos.imagenFile);
+  if (Array.isArray(datos.imagenesConservar) && datos.imagenesConservar.length > 0) {
+    fd.append('imagenesConservar', JSON.stringify(datos.imagenesConservar));
+  }
+  for (const archivo of datos.imagenesNuevas || []) {
+    fd.append('imagenes', archivo);
+  }
   return fd;
 }
 
