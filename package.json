@@ -9,6 +9,7 @@
     "optimizar-imagenes": "node server/scripts/optimizarImagenes.js",
     "normalizar-imagenes": "node server/scripts/normalizarImagenes.js",
     "generar-variantes": "node server/scripts/generarVariantes.js",
+    "verificar-imagenes": "node server/scripts/verificarImagenes.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

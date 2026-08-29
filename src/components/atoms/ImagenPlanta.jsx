@@ -2,19 +2,22 @@ import { useState } from 'react';
 import { PLACEHOLDER } from '../../constantes';
 import VARIANTES from '../../variantesImagenes.json';
 
-/* Solo el catálogo versionado en public/uploads tiene recortes -400/-800
-   (los genera `npm run generar-variantes`). Lo que se sube desde el panel admin
-   no los tiene, así que a esas fotos no se les pone srcset: pedir un recorte
-   inexistente daría 404 y el navegador no reintenta con el original. */
-const CON_VARIANTES = new Set(VARIANTES);
-const ANCHOS = [400, 800];
-
+/* Solo el catálogo versionado en public/uploads tiene recortes, y no todas las
+   fotos tienen los mismos: una que ya nace angosta no genera el de 800px. Por
+   eso el srcset se arma con lo que el manifiesto declara para cada una —pedir
+   un recorte inexistente da 404 y el navegador no reintenta con el original—,
+   y las fotos subidas desde el panel admin, que no están en el manifiesto, se
+   quedan sin srcset. */
 function construirSrcSet(src) {
   if (typeof src !== 'string') return null;
   const coincide = src.match(/^\/uploads\/(.+)\.webp$/);
-  if (!coincide || !CON_VARIANTES.has(coincide[1])) return null;
+  const entrada = coincide && VARIANTES[coincide[1]];
+  if (!entrada) return null;
   const base = `/uploads/${coincide[1]}`;
-  return [...ANCHOS.map((a) => `${base}-${a}.webp ${a}w`), `${src} 1200w`].join(', ');
+  return [
+    ...entrada.recortes.map((a) => `${base}-${a}.webp ${a}w`),
+    `${src} ${entrada.ancho}w`,
+  ].join(', ');
 }
 
 export default function ImagenPlanta({

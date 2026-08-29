@@ -142,6 +142,7 @@ npm run lint                 # ESLint
 npm run optimizar-imagenes   # Convierte jpg/png de server/uploads a WebP
 npm run normalizar-imagenes  # Corrige las rutas de imagen guardadas en Mongo
 npm run generar-variantes    # Recortes -400/-800 para srcset + manifiesto
+npm run verificar-imagenes   # Comprueba que el srcset no anuncie 404 (tras build)
 ```
 
 ### Imágenes del catálogo
@@ -171,7 +172,10 @@ un respaldo de la colección en `tmp/respaldo-plantas-AAAA-MM-DD.json`.
 ### Tamaños responsivos
 
 `generar-variantes` produce un recorte de 400px y otro de 800px por foto y escribe
-`src/variantesImagenes.json` con los nombres que los tienen. `ImagenPlanta` arma el
+`src/variantesImagenes.json` con los recortes que existen y el ancho real de cada
+original. No todas tienen los dos: una foto que ya nace angosta no genera el de
+800px, y anunciarlo igual daría 404. Por eso `npm run verificar-imagenes` (después
+de `npm run build`) comprueba que cada candidato del srcset exista en `dist/`. `ImagenPlanta` arma el
 `srcset` solo para esas fotos: una imagen subida desde el panel admin no tiene
 recortes, y pedir uno inexistente daría 404 sin que el navegador reintente con el
 original. Por eso el manifiesto, y por eso hay que correr el script al agregar fotos.

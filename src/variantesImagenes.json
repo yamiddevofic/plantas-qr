@@ -1,53 +1,355 @@
-[
-  "01_Arrayan",
-  "01_Cipres",
-  "02_Carbonero",
-  "02_Palma_canaria",
-  "03_Cedro_de_montana",
-  "03_Palma_de_cera_del_Quindio",
-  "04_Araucaria",
-  "05_Cipres",
-  "06_Cipres",
-  "07_Cipres",
-  "08_Cipres",
-  "09_Calistemo_lloron",
-  "09_Cipres",
-  "10_Cipres",
-  "11_Cipres",
-  "12_Ficus",
-  "13_Cipres",
-  "13_Palma_de_cera",
-  "14_Ficus",
-  "15_Duraznillo_rojo",
-  "16_Cipres",
-  "17_Arrayan",
-  "18_Araucaria",
-  "19_Palma_de_cera_del_Quindio",
-  "20_Arrayan",
-  "21_Palma_de_cera_del_Quindio",
-  "22_Palma_de_cera_del_Quindio",
-  "23_Duraznillo_rojo",
-  "24_Arrayan",
-  "25_Araucaria",
-  "26_Duraznillo_rojo",
-  "27_Palma_de_cera_del_Quindio",
-  "29_Duraznillo_rojo",
-  "30_Duraznillo_rojo",
-  "31_Arrayan",
-  "32_Palma_de_cera_del_Quindio",
-  "33_Arrayan",
-  "34_Arrayan",
-  "35_Palma_de_cera_del_Quindio",
-  "36_Duraznillo_rojo",
-  "37_Arrayan",
-  "38_Cajeto",
-  "39_Arbusto_de_hoja_gris_verde_sin_confirmar",
-  "40_Arrayan",
-  "41_Arrayan",
-  "42_Duraznillo_rojo",
-  "43_Cajeto",
-  "44_Arrayan",
-  "45_Palma_de_cera_del_Quindio",
-  "47_Senna-spectabilis",
-  "48-calistemo-lloron"
-]
+{
+  "01_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "01_Cipres": {
+    "recortes": [
+      400
+    ],
+    "ancho": 576
+  },
+  "02_Carbonero": {
+    "recortes": [
+      400
+    ],
+    "ancho": 576
+  },
+  "02_Palma_canaria": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "03_Cedro_de_montana": {
+    "recortes": [
+      400
+    ],
+    "ancho": 576
+  },
+  "03_Palma_de_cera_del_Quindio": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "04_Araucaria": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "05_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "06_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "07_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "08_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "09_Calistemo_lloron": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "09_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "10_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "11_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "12_Ficus": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "13_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "13_Palma_de_cera": {
+    "recortes": [
+      400
+    ],
+    "ancho": 576
+  },
+  "14_Ficus": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "15_Duraznillo_rojo": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "16_Cipres": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "17_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "18_Araucaria": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "19_Palma_de_cera_del_Quindio": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "20_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "21_Palma_de_cera_del_Quindio": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "22_Palma_de_cera_del_Quindio": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "23_Duraznillo_rojo": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "24_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "25_Araucaria": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "26_Duraznillo_rojo": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "27_Palma_de_cera_del_Quindio": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "29_Duraznillo_rojo": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "30_Duraznillo_rojo": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "31_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "32_Palma_de_cera_del_Quindio": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "33_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "34_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "35_Palma_de_cera_del_Quindio": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "36_Duraznillo_rojo": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "37_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "38_Cajeto": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "39_Arbusto_de_hoja_gris_verde_sin_confirmar": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "40_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "41_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "42_Duraznillo_rojo": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "43_Cajeto": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "44_Arrayan": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "45_Palma_de_cera_del_Quindio": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "47_Senna-spectabilis": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1086
+  },
+  "48-calistemo-lloron": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  }
+}
