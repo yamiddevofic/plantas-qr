@@ -143,6 +143,7 @@ npm run optimizar-imagenes   # Convierte jpg/png de server/uploads a WebP
 npm run normalizar-imagenes  # Corrige las rutas de imagen guardadas en Mongo
 npm run generar-variantes    # Recortes -400/-800 para srcset + manifiesto
 npm run verificar-imagenes   # Comprueba que el srcset no anuncie 404 (tras build)
+npm run capturar-og          # Rehace public/og.jpg desde la landing (servidor arriba)
 ```
 
 ### Imágenes del catálogo
@@ -184,6 +185,13 @@ Dos límites que conviene tener presentes:
   fragmento, así que las 12 fichas son una sola URL para ellos. Por eso
   `sitemap.xml` solo lista la raíz. Resolver ambas cosas pasa por servir rutas
   reales (`/planta/:id`) y prerenderizarlas.
+
+La imagen de vista previa (`public/og.jpg`) es un pantallazo del hero de la
+landing, generado por `npm run capturar-og` con el Chrome o Edge del sistema —no
+instala nada—. El script necesita el servidor levantado, aísla el hero midiéndolo
+sobre la propia captura y aborta sin tocar `og.jpg` si la página no pintó bien.
+Al rehacerla hay que subir el `?v=` de `og:image` en `index.html`: WhatsApp cachea
+la vista previa por URL y si no cambia sigue mostrando la anterior.
 
 ### Tamaños responsivos
 

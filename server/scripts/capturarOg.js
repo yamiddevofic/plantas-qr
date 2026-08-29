@@ -24,6 +24,10 @@ const ESCALA = 2;
 /* WhatsApp descarta las vistas previas pesadas, así que la calidad se ajusta
    hacia abajo hasta entrar en el presupuesto. */
 const LIMITE_BYTES = 300 * 1024;
+/* El degradado del hero es vertical, así que sus filas son planas en
+   horizontal; con la foto detrás la variación se dispara (0 frente a ~37).
+   Sirve para saber si la captura salió sin la imagen de fondo. */
+const UMBRAL_FOTO = 10;
 
 const CANDIDATOS = [
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -45,6 +49,29 @@ async function buscarNavegador() {
     }
   }
   throw new Error('No se encontró Chrome ni Edge. Define CHROME_PATH con la ruta al ejecutable.');
+}
+
+async function variacionHorizontal(captura) {
+  const { data, info } = await sharp(captura).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width, height, channels } = info;
+  let total = 0;
+  let filas = 0;
+
+  for (let y = Math.floor(height * 0.1); y < height * 0.5; y += 10) {
+    let suma = 0;
+    let sumaCuadrados = 0;
+    let n = 0;
+    for (let x = 0; x < width; x += 4) {
+      const i = (y * width + x) * channels;
+      const v = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      suma += v;
+      sumaCuadrados += v * v;
+      n++;
+    }
+    total += Math.sqrt(Math.max(0, sumaCuadrados / n - (suma / n) ** 2));
+    filas++;
+  }
+  return filas ? total / filas : 0;
 }
 
 /* El hero es la banda de foto de arriba; debajo empieza el cuerpo blanco de la
@@ -69,38 +96,68 @@ async function medirHero(captura, width, height) {
   while (fin < height && !esBlanca(fin)) fin++;
 
   const alto = fin - inicio;
-  // Si no se distingue la banda, se devuelve la captura entera y se avisa.
-  if (alto < height * 0.15) {
-    console.warn('No se pudo aislar el hero; se usa la captura completa.');
-    return { top: 0, alto: height };
+  /* Sin banda distinguible la página no pintó (error de red, servidor caído).
+     Antes se seguía adelante y se sobrescribía og.jpg con la pantalla de error;
+     mejor abortar y dejar la imagen buena en su sitio. */
+  if (alto < height * 0.15 || alto > height * 0.95) {
+    throw new Error(`No se distingue el hero en la captura (banda de ${alto}px sobre ${height}px). No se toca og.jpg.`);
   }
   return { top: inicio, alto };
 }
 
+async function comprobarUrl(url) {
+  let respuesta;
+  try {
+    respuesta = await fetch(url, { redirect: 'follow' });
+  } catch (error) {
+    throw new Error(`No se pudo abrir ${url}. ¿Está el servidor levantado? npm run server`, { cause: error });
+  }
+  if (!respuesta.ok) throw new Error(`${url} respondió ${respuesta.status}. Levanta el servidor antes de capturar.`);
+}
+
 async function main() {
   const url = process.argv[2] || URL_POR_DEFECTO;
+  await comprobarUrl(url);
   const navegador = await buscarNavegador();
   const perfil = await fs.mkdtemp(path.join(os.tmpdir(), 'og-'));
   const png = path.join(perfil, 'captura.png');
 
   console.log(`Capturando ${url} con ${path.basename(navegador)}...`);
 
-  await ejecutar(navegador, [
-    '--headless=new',
-    '--disable-gpu',
-    '--hide-scrollbars',
-    '--force-device-scale-factor=' + ESCALA,
-    `--window-size=${ANCHO},${ALTO_CAPTURA}`,
-    // Deja correr el JS y la descarga de la foto: la landing pinta tras montar React.
-    '--virtual-time-budget=15000',
-    `--user-data-dir=${perfil}`,
-    `--screenshot=${png}`,
-    url,
-  ]);
+  /* La foto del hero se revela en el onLoad de React (ImagenPlanta arranca en
+     opacity: 0), así que a veces la captura llega antes y sale solo el
+     degradado. Se reintenta dando más tiempo y se comprueba el resultado. */
+  let captura = null;
+  let width = 0;
+  let height = 0;
 
-  const captura = await fs.readFile(png);
-  const { width, height } = await sharp(captura).metadata();
-  console.log(`Captura de ${width}x${height}`);
+  for (const presupuesto of [15000, 30000, 45000]) {
+    await ejecutar(navegador, [
+      '--headless=new',
+      '--disable-gpu',
+      '--hide-scrollbars',
+      // Espera a que el compositor termine: sin esto la captura sale a medio pintar.
+      '--run-all-compositor-stages-before-draw',
+      '--force-device-scale-factor=' + ESCALA,
+      `--window-size=${ANCHO},${ALTO_CAPTURA}`,
+      `--virtual-time-budget=${presupuesto}`,
+      `--user-data-dir=${perfil}`,
+      `--screenshot=${png}`,
+      url,
+    ]);
+
+    captura = await fs.readFile(png);
+    ({ width, height } = await sharp(captura).metadata());
+    const variacion = await variacionHorizontal(captura);
+    if (variacion >= UMBRAL_FOTO) {
+      console.log(`Captura de ${width}x${height} (variación ${variacion.toFixed(1)})`);
+      break;
+    }
+    console.warn(`La foto del hero no alcanzó a pintar (variación ${variacion.toFixed(1)}); reintentando...`);
+    captura = null;
+  }
+
+  if (!captura) throw new Error('La foto del hero nunca terminó de pintar. No se toca og.jpg.');
 
   const { top, alto } = await medirHero(captura, width, height);
   console.log(`Hero detectado: ${width}x${alto} desde y=${top}`);
