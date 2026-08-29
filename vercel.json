@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/api/:ruta*",
+      "destination": "https://plantas-qr.onrender.com/api/:ruta*"
+    },
+    {
+      "source": "/depurar-verificar",
+      "destination": "https://plantas-qr.onrender.com/depurar-verificar"
+    }
+  ]
+}
