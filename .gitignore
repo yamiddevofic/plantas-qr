@@ -25,3 +25,6 @@ server/uploads/*
 *.njsproj
 *.sln
 *.sw?
+
+# Respaldos y salidas de scripts
+tmp/

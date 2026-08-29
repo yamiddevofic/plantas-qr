@@ -11,8 +11,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const UPLOADS = path.join(__dirname, '..', 'uploads');
 
-const CALIDAD_WEBP = 80;
-const ANCHO_MAXIMO = 1600;
+// Mismos parámetros con los que se comprimió el catálogo de public/uploads,
+// para que las fotos nuevas no pesen el doble que las que ya viajan en el build.
+const CALIDAD_WEBP = 72;
+const ANCHO_MAXIMO = 1200;
 const EXTENSIONES = new Set(['.jpg', '.jpeg', '.png', '.gif']);
 
 async function optimizarArchivo(ruta) {

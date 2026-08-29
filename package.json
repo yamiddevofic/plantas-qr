@@ -7,6 +7,7 @@
     "dev": "vite",
     "server": "node server/index.js",
     "optimizar-imagenes": "node server/scripts/optimizarImagenes.js",
+    "normalizar-imagenes": "node server/scripts/normalizarImagenes.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

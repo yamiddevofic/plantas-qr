@@ -32,19 +32,22 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-app.use(
-  '/uploads',
-  express.static(path.join(__dirname, 'uploads'), {
-    maxAge: '30d',
-    immutable: true,
-    setHeaders(res, filePath) {
-      const ext = path.extname(filePath).toLowerCase();
-      if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'].includes(ext)) {
-        res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
-      }
-    },
-  }),
-);
+const opcionesUploads = {
+  maxAge: '30d',
+  immutable: true,
+  setHeaders(res, filePath) {
+    const ext = path.extname(filePath).toLowerCase();
+    if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'].includes(ext)) {
+      res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+    }
+  },
+};
+
+// Las fotos del catálogo viven versionadas en public/uploads/ y viajan con el
+// build; server/uploads/ solo guarda lo que se sube desde el panel y se pierde
+// en cada despliegue, así que se consulta primero y luego se cae al catálogo.
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), opcionesUploads));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads'), opcionesUploads));
 
 const swaggerOptions = {
   definition: {

@@ -71,11 +71,12 @@ plantas-qr/
 │   ├── routes/               # /api/plantas, /api/qr, adminImagenes
 │   ├── middleware/qrAuth.js  # Protección por ADMIN_PASSWORD (timing-safe)
 │   ├── config/upload.js      # multer + optimización WebP con sharp
-│   ├── scripts/              # importarPlantas, optimizarImagenes,
+│   ├── scripts/              # importarPlantas, optimizarImagenes, normalizarImagenes,
 │   │                         #   fusionarDuplicados, vincularImagenUbicaciones
-│   ├── uploads/              # Imágenes (jpg original + webp optimizado)
+│   ├── uploads/              # Taller local: originales jpg + webp (fuera de git)
 │   └── views/fichaTemplate.js# Ficha HTML del visitante (fallback QR antiguo)
 ├── public/                   # favicon, iconos
+│   └── uploads/              # Catálogo webp versionado que viaja con el build
 ├── parque-chitaga-platas.json# Datos de las especies (fuente del import)
 ├── docs/DESIGN.md            # Notas de diseño del proyecto
 └── dist/                     # Build de producción (servido por Express)
@@ -139,7 +140,31 @@ npm run build                # Build de producción (dist/)
 npm run preview              # Previsualiza el build
 npm run lint                 # ESLint
 npm run optimizar-imagenes   # Convierte jpg/png de server/uploads a WebP
+npm run normalizar-imagenes  # Corrige las rutas de imagen guardadas en Mongo
 ```
+
+### Imágenes del catálogo
+
+Las fotos que ve el visitante viven versionadas en `public/uploads/`, así que Vite las
+copia a `dist/` y viajan con el despliegue. `server/uploads/` es el taller local
+(originales pesados y lo que se sube desde el panel admin) y está fuera de git: en
+producción llega vacío, por eso el catálogo no puede depender de él.
+
+Express monta `/uploads` dos veces —primero `server/uploads/`, luego
+`public/uploads/`— para que en local siga ganando lo recién subido y en producción
+se sirva el catálogo del build.
+
+Para incorporar fotos nuevas:
+
+```bash
+npm run optimizar-imagenes   # genera los .webp en server/uploads
+npm run normalizar-imagenes  # deja las rutas de Mongo en /uploads/*.webp
+```
+
+Después copia a `public/uploads/` los `.webp` que estén referenciados y haz commit.
+`normalizar-imagenes` acepta `--simulacion` para ver los cambios sin aplicarlos y
+`--purgar-rotas` para quitar de las fichas las referencias sin archivo. Siempre deja
+un respaldo de la colección en `tmp/respaldo-plantas-AAAA-MM-DD.json`.
 
 ### Importar datos
 
