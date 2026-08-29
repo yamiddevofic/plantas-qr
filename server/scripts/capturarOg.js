@@ -107,7 +107,7 @@ async function main() {
   const recortada = await sharp(captura).extract({ left: 0, top, width, height: alto }).toBuffer();
 
   let calidad = 88;
-  let salida = null;
+  let salida;
   do {
     salida = await sharp(recortada).resize(ANCHO, ALTO, { fit: 'cover', position: 'centre' }).jpeg({ quality: calidad, mozjpeg: true }).toBuffer();
     if (salida.length <= LIMITE_BYTES) break;
