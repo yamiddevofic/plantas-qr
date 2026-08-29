@@ -190,8 +190,10 @@ La imagen de vista previa (`public/og.jpg`) es un pantallazo del hero de la
 landing, generado por `npm run capturar-og` con el Chrome o Edge del sistema —no
 instala nada—. El script necesita el servidor levantado, aísla el hero midiéndolo
 sobre la propia captura y aborta sin tocar `og.jpg` si la página no pintó bien.
-Al rehacerla hay que subir el `?v=` de `og:image` en `index.html`: WhatsApp cachea
-la vista previa por URL y si no cambia sigue mostrando la anterior.
+Al rehacerla, WhatsApp seguirá mostrando la anterior hasta que Meta vuelva a leer
+la página: su caché de vistas previas es por URL y dura días. Se fuerza desde
+developers.facebook.com/tools/debug con *Scrape Again*, que es la misma
+infraestructura que usa WhatsApp.
 
 ### Tamaños responsivos
 
