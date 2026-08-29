@@ -42,7 +42,7 @@ export default function HeroInicio({ onConocerProyecto }) {
         alt="Parque Principal de Chitagá con la Parroquia San Juan Nepomuceno al fondo"
         ancho={1240}
         alto={640}
-        prioridad="alta"
+        prioridad="high"
         cargando="eager"
       />
       <div className="hero-inicio-degradado" aria-hidden="true" />

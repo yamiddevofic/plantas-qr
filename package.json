@@ -10,6 +10,7 @@
     "normalizar-imagenes": "node server/scripts/normalizarImagenes.js",
     "generar-variantes": "node server/scripts/generarVariantes.js",
     "verificar-imagenes": "node server/scripts/verificarImagenes.js",
+    "capturar-og": "node server/scripts/capturarOg.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
