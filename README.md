@@ -169,6 +169,22 @@ Después copia a `public/uploads/` los `.webp` que estén referenciados y corre
 `--purgar-rotas` para quitar de las fichas las referencias sin archivo. Siempre deja
 un respaldo de la colección en `tmp/respaldo-plantas-AAAA-MM-DD.json`.
 
+### SEO
+
+Los valores estáticos del `<head>` viven en `index.html` y apuntan a
+`https://plantas-qr.vercel.app`. `src/seo.js` los reescribe al cambiar de vista:
+título, descripción, canónica, Open Graph y un bloque JSON-LD por especie.
+
+Dos límites que conviene tener presentes:
+
+- Los rastreadores de WhatsApp, Facebook y X **no ejecutan JavaScript**, así que
+  para ellos siempre valen los valores estáticos de `index.html`. Compartir el
+  enlace de una especie concreta muestra la vista previa genérica del sitio.
+- La app enruta por hash (`/#/planta/:id`) y los buscadores descartan el
+  fragmento, así que las 12 fichas son una sola URL para ellos. Por eso
+  `sitemap.xml` solo lista la raíz. Resolver ambas cosas pasa por servir rutas
+  reales (`/planta/:id`) y prerenderizarlas.
+
 ### Tamaños responsivos
 
 `generar-variantes` produce un recorte de 400px y otro de 800px por foto y escribe

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { obtenerPlanta, obtenerQR } from '../../api';
+import { aplicarSeo, seoDePlanta, SEO_INICIO } from '../../seo';
 import PlantillaDetalle from '../templates/PlantillaDetalle';
 import LeyendaEstados from '../molecules/LeyendaEstados';
 
@@ -25,6 +26,11 @@ export default function PaginaDetalle({ plantaId }) {
       .finally(() => { if (!cancelado) setCargando(false); });
     return () => { cancelado = true; };
   }, [plantaId]);
+
+  useEffect(() => {
+    if (planta) aplicarSeo(seoDePlanta(planta));
+    return () => aplicarSeo(SEO_INICIO);
+  }, [planta]);
 
   return (
     <>

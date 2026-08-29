@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Solo va la raíz: la app enruta por hash (/#/planta/:id) y los buscadores
+  descartan el fragmento, así que todas las fichas son la misma URL para ellos.
+  Al pasar a rutas reales (/planta/:id) aquí entraría una entrada por especie.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://plantas-qr.vercel.app/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

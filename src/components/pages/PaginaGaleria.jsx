@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fetchPlantas, fetchQRs, generarTodosQRs, verificarAdmin } from '../../api';
+import { aplicarSeo } from '../../seo';
 import PlantillaGaleria from '../templates/PlantillaGaleria';
 import FormularioPlanta from '../organisms/FormularioPlanta';
 import LeyendaEstados from '../molecules/LeyendaEstados';
@@ -21,6 +22,15 @@ export default function PaginaGaleria() {
   const [puertaAdminCargando, setPuertaAdminCargando] = useState(false);
   const [puertaAdminError, setPuertaAdminError] = useState(null);
   const [leyendaAbierta, setLeyendaAbierta] = useState(false);
+
+  useEffect(() => {
+    aplicarSeo({
+      titulo: 'Catálogo de especies · PlantaQR',
+      descripcion:
+        'Las especies inventariadas del Parque principal de Chitagá: nombre científico, familia, origen, usos y estado de conservación de cada árbol.',
+      ruta: '/#/galeria',
+    });
+  }, []);
 
   useEffect(() => {
     let cancelado = false;

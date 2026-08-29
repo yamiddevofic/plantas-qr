@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Paneles de administración: no tiene sentido indexarlos.
+Disallow: /depurar-plantas
+Disallow: /depurar-imagenes
+Disallow: /depurar-verificar
+Disallow: /api-docs
+
+Sitemap: https://plantas-qr.vercel.app/sitemap.xml
