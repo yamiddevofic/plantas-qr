@@ -28,8 +28,14 @@ function getBaseUrl(req) {
   const host = hostHeader.replace(/:\d+$/, '');
   const isLocal = ['localhost', '127.0.0.1', '::1'].includes(host);
 
-  if (host && !isLocal) {
-    return `http://${host}:${port}`;
+  if (hostHeader && !isLocal) {
+    /* El Host ya trae el puerto público (o ninguno, si es 80/443). Detrás de un
+       proxy como Render, PORT es el puerto interno del contenedor —10000— y
+       pegarlo aquí generaba QRs hacia http://dominio:10000, que no resuelven.
+       El esquema lo dice el proxy en X-Forwarded-Proto. */
+    const reenviado = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+    const esquema = reenviado || req.protocol || 'http';
+    return `${esquema}://${hostHeader}`;
   }
 
   return `http://${getNetworkIP()}:${port}`;
