@@ -141,6 +141,7 @@ npm run preview              # Previsualiza el build
 npm run lint                 # ESLint
 npm run optimizar-imagenes   # Convierte jpg/png de server/uploads a WebP
 npm run normalizar-imagenes  # Corrige las rutas de imagen guardadas en Mongo
+npm run generar-variantes    # Recortes -400/-800 para srcset + manifiesto
 ```
 
 ### Imágenes del catálogo
@@ -161,10 +162,23 @@ npm run optimizar-imagenes   # genera los .webp en server/uploads
 npm run normalizar-imagenes  # deja las rutas de Mongo en /uploads/*.webp
 ```
 
-Después copia a `public/uploads/` los `.webp` que estén referenciados y haz commit.
+Después copia a `public/uploads/` los `.webp` que estén referenciados y corre
+`npm run generar-variantes` antes de hacer commit.
 `normalizar-imagenes` acepta `--simulacion` para ver los cambios sin aplicarlos y
 `--purgar-rotas` para quitar de las fichas las referencias sin archivo. Siempre deja
 un respaldo de la colección en `tmp/respaldo-plantas-AAAA-MM-DD.json`.
+
+### Tamaños responsivos
+
+`generar-variantes` produce un recorte de 400px y otro de 800px por foto y escribe
+`src/variantesImagenes.json` con los nombres que los tienen. `ImagenPlanta` arma el
+`srcset` solo para esas fotos: una imagen subida desde el panel admin no tiene
+recortes, y pedir uno inexistente daría 404 sin que el navegador reintente con el
+original. Por eso el manifiesto, y por eso hay que correr el script al agregar fotos.
+
+Los carruseles apilan sus fotos con `position: absolute`, así que el navegador las
+considera visibles y `loading="lazy"` no las frena. Montan solo la foto visible y,
+cuando esa termina de cargar, sus dos vecinas para el fundido y la precarga.
 
 ### Importar datos
 

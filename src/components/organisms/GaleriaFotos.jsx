@@ -7,6 +7,7 @@ const UMBRAL_DESLIZAMIENTO = 45;
 
 export default function GaleriaFotos({ imagenes, alt }) {
   const [indice, setIndice] = useState(0);
+  const [listo, setListo] = useState(false);
   const toqueInicio = useRef(null);
 
   useEffect(() => {
@@ -50,24 +51,32 @@ export default function GaleriaFotos({ imagenes, alt }) {
     );
   };
 
+  /* Las fotos se apilan con position:absolute, así que el navegador las tiene
+     por visibles y `loading="lazy"` no evita que las pida todas. Se monta solo
+     la visible y, una vez cargada, los vecinos para el fundido y la precarga. */
+  const ventana = new Set([indice, ...(listo ? [(indice + 1) % imagenes.length, (indice - 1 + imagenes.length) % imagenes.length] : [])]);
+
   return (
     <div
       className="detalle-image detalle-galeria"
       onPointerDown={alTocar}
       onPointerUp={alSoltar}
     >
-      {imagenes.map((img, i) => (
-        <ImagenPlanta
-          key={img}
-          src={img}
-          alt={i === indice ? alt : ''}
-          ancho={1600}
-          alto={1000}
-          cargando={i === 0 ? 'eager' : 'lazy'}
-          prioridad={i === 0 ? 'high' : 'auto'}
-          clase={i === indice ? 'is-visible' : ''}
-        />
-      ))}
+      {imagenes.map((img, i) =>
+        ventana.has(i) ? (
+          <ImagenPlanta
+            key={img}
+            src={img}
+            alt={i === indice ? alt : ''}
+            ancho={1600}
+            alto={1000}
+            cargando={i === 0 ? 'eager' : 'lazy'}
+            prioridad={i === 0 ? 'high' : 'auto'}
+            clase={i === indice ? 'is-visible' : ''}
+            alCargar={() => setListo(true)}
+          />
+        ) : null,
+      )}
       <div className="galeria-flotas">
         <button type="button" className="galeria-nav" onClick={anterior} aria-label="Imagen anterior">
           <LuChevronLeft aria-hidden="true" />

@@ -185,6 +185,7 @@ export default function BuscadorLupa({ plantas }) {
                         alt=""
                         ancho={44}
                         alto={44}
+                        tamanos="44px"
                         cargando="lazy"
                         clase="buscador-resultado-imagen"
                       />
