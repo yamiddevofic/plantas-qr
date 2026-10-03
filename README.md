@@ -325,8 +325,10 @@ aparece. Las fuentes de teselas sí pueden tener condiciones y límites propios.
   sin token. El sombreado topográfico se aplica sobre el mapa vectorial.
 - **Atribuciones:** el mapa muestra los créditos correspondientes a Esri/Maxar,
   OpenFreeMap/OpenMapTiles/OpenStreetMap y AWS Terrain Tiles.
-- **Accesible:** lista de individuos con botones (teclado/lector de pantalla) que
-  centra el mapa y abre su popup; gestos cooperativos para no secuestrar el scroll en
+- **Individuos en la ficha:** en *Datos rápidos* se listan los individuos registrados
+  (reemplazan las ubicaciones escritas, que solo se muestran si aún no hay ninguno);
+  tocar uno baja al mapa, lo centra y abre su popup. Bajo el mapa no hay lista.
+- **Accesible:** la lista de individuos son botones (teclado/lector de pantalla); gestos cooperativos para no secuestrar el scroll en
   móvil; control para ampliar el mapa a pantalla completa; respeta `prefers-reduced-motion`.
 - **Fotos por individuo:** cada árbol puede tener su propia imagen, visible en la lista
   y el popup del mapa; no sustituye la foto general de la especie.
