@@ -314,9 +314,10 @@ aparece. Las fuentes de teselas sí pueden tener condiciones y límites propios.
 
 - **Carga diferida:** MapLibre (~280 KB gzip) va en un chunk aparte
   (`src/mapa/maplibre.js`) que solo se descarga cuando la sección se acerca a la pantalla.
-- **Capas:** vista satelital de Esri World Imagery (predeterminada, cobertura hasta z18)
-  y calles de [OpenFreeMap](https://openfreemap.org/) (`positron` en claro, `dark`
-  en oscuro). Las dos respetan la selección del visitante; el mapa de calles sigue el
+- **Capas:** calles de [OpenFreeMap](https://openfreemap.org/) (`positron` en claro, `dark`
+  en oscuro), que es la vista inicial de la ficha, y vista satelital de Esri World Imagery
+  (cobertura hasta z18; es la del selector de ubicación del formulario de individuos).
+  Las dos respetan la selección del visitante; el mapa de calles sigue el
   tema de la app.
 - **Relieve 3D:** botón opcional que inclina la cámara y muestra el terreno SRTM de
   [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) (formato Terrarium),

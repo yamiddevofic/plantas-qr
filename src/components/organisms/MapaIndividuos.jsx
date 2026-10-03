@@ -35,7 +35,7 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
   const [mapaListo, setMapaListo] = useState(false);
   const [errorMapa, setErrorMapa] = useState(null);
   const [seleccionado, setSeleccionado] = useState(null);
-  const [base, setBase] = useState('satelite');
+  const [base, setBase] = useState('mapa');
   const [relieve3D, setRelieve3D] = useState(false);
 
   // Los manejadores de MapLibre viven fuera del ciclo de React: leen de refs.
