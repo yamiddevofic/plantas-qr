@@ -3,6 +3,7 @@ import { LuHouse, LuInfo, LuMapPin, LuMoon, LuSun } from 'react-icons/lu';
 import { fetchPlantas } from '../../api';
 import SeccionParque from '../organisms/SeccionParque';
 import HeroInicio from '../organisms/HeroInicio';
+import BuscadorInicio from '../organisms/BuscadorInicio';
 import SeccionContacto from '../molecules/SeccionContacto';
 import PopoverContacto from '../molecules/PopoverContacto';
 import BotonMenu from '../atoms/BotonMenu';
@@ -53,6 +54,11 @@ export default function PaginaInicio() {
         Saltar al contenido
       </a>
 
+      {/* Arriba a la izquierda del hero, a la altura del botón de menú. */}
+      <div className="home-buscador">
+        <BuscadorInicio plantas={plantas} />
+      </div>
+
       <div className="home-acciones">
         <div className="hero-acciones-grupo">
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
@@ -99,7 +105,7 @@ export default function PaginaInicio() {
       </MenuLateral>
 
       <main id="app-main">
-        <HeroInicio onConocerProyecto={conocerProyecto} plantas={plantas} />
+        <HeroInicio onConocerProyecto={conocerProyecto} />
 
         {datos ? (
           <SeccionParque especies={datos.especies} familias={datos.familias} abierto />
