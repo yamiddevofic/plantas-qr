@@ -2750,9 +2750,26 @@ html[data-tema="oscuro"] .menu-filtros-movil .filtros {
   color: var(--ink-500);
 }
 
-.mapa-popup-codigo { font-weight: 800; color: var(--ink-900); }
-.mapa-popup-especie { font-size: 0.82rem; color: var(--forest-600); margin-top: 2px; }
-.mapa-popup-detalle { font-size: 0.78rem; color: var(--ink-500); margin-top: 6px; }
+.mapa-popup-codigo {
+  margin: 0;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--ink-900);
+}
+
+.mapa-popup-especie {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  color: var(--forest-600);
+}
+
+.mapa-popup-detalle {
+  margin: 5px 0 0;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: var(--ink-500);
+}
 .mapa-popup-imagen {
   display: block;
   width: min(220px, 100%);
@@ -2760,6 +2777,33 @@ html[data-tema="oscuro"] .menu-filtros-movil .filtros {
   object-fit: cover;
   border-radius: var(--radius-sm);
   margin: 0 0 10px;
+}
+
+@media (max-width: 480px) {
+  .mapa-marco .maplibregl-popup {
+    max-width: min(195px, calc(100vw - 36px)) !important;
+  }
+
+  .mapa-marco .maplibregl-popup-content {
+    padding: 8px 28px 8px 10px;
+    font-size: 0.82rem;
+  }
+
+  .mapa-marco .maplibregl-popup-close-button {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .mapa-popup-imagen {
+    width: min(150px, 100%);
+    max-height: 72px;
+    margin-bottom: 5px;
+  }
+
+  .mapa-popup-codigo { font-size: 0.82rem; }
+  .mapa-popup-especie,
+  .mapa-popup-detalle { font-size: 0.72rem; }
 }
 
 .mapa-lista-imagen {
