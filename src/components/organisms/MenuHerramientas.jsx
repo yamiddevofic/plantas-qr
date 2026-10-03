@@ -9,6 +9,7 @@ import {
   LuShieldAlert,
   LuSlidersHorizontal,
   LuSun,
+  LuTreePine,
 } from 'react-icons/lu';
 import BarraFiltros from './BarraFiltros';
 import GrupoMenu from '../molecules/GrupoMenu';
@@ -90,6 +91,15 @@ export default function MenuHerramientas({
               descripcion="Registrar una planta en el catálogo"
               onClick={() => {
                 onCrear();
+                onCerrar();
+              }}
+            />
+            <ItemMenu
+              icono={<LuTreePine aria-hidden="true" />}
+              etiqueta="Gestionar individuos"
+              descripcion="Agregar, editar o eliminar árboles y su ubicación"
+              onClick={() => {
+                window.location.hash = '#/individuos';
                 onCerrar();
               }}
             />

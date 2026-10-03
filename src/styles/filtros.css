@@ -1,0 +1,128 @@
+/* ══════════════════════════════════════════════════════════════
+   Barra de filtros (búsqueda + familia / tipo)
+   ══════════════════════════════════════════════════════════════ */
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.filtro-busqueda {
+  flex: 1 1 240px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-bottom: 1px solid var(--line-200);
+  min-height: var(--hit);
+  padding: 0 6px 0 4px;
+  color: var(--ink-300);
+  transition: border-color 0.15s;
+}
+
+.filtro-busqueda:focus-within {
+  border-color: var(--forest-600);
+}
+
+.filtro-busqueda input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--step-1);
+  color: var(--ink-900);
+  min-height: calc(var(--hit) - 2px);
+}
+
+.filtro-busqueda input::placeholder {
+  color: var(--ink-300);
+}
+
+.filtro-busqueda input:focus {
+  outline: none;
+}
+
+.filtro-busqueda input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.filtro-limpiar-texto {
+  display: grid;
+  place-items: center;
+  width: var(--hit);
+  height: var(--hit);
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--ink-300);
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.filtro-limpiar-texto:hover {
+  background: var(--mint-100);
+  color: var(--ink-700);
+}
+
+.filtro-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1 1 150px;
+  min-width: 150px;
+}
+
+.filtro-etiqueta {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  padding-left: 4px;
+}
+
+.filtro-campo select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--line-200);
+  border-radius: 0;
+  background:
+    transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235f6f66' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+  min-height: var(--hit);
+  padding: 0 28px 0 4px;
+  font: inherit;
+  font-size: var(--step-0);
+  font-weight: 600;
+  color: var(--ink-900);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.filtro-campo select:hover,
+.filtro-campo select:focus {
+  border-color: var(--forest-600);
+  outline: none;
+}
+
+.filtro-reset {
+  align-self: auto;
+  margin-left: auto;
+  box-shadow: none;
+}
+
+@media (max-width: 700px) {
+  .filtro-reset {
+    margin-left: 0;
+    width: 100%;
+  }
+}

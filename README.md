@@ -45,11 +45,17 @@ Proyecto desarrollado como trabajo de formación SENA.
 plantas-qr/
 ├── src/                      # Frontend React
 │   ├── App.jsx               # Enrutador de páginas (hash)
-│   ├── router.js             # Rutas hash: #/planta/:id, #/galeria
+│   ├── router.js             # Rutas hash: #/planta/:id, #/galeria, #/individuos
 │   ├── api.js                # Cliente de la API
 │   ├── constantes.js         # Estados de conservación y placeholder
 │   ├── tema.js               # Tema claro/oscuro (contexto + localStorage)
-│   ├── index.css             # Sistema de diseño (tokens, componentes)
+│   ├── index.css             # Solo @import de styles/ (el orden es la cascada)
+│   ├── styles/               # Hojas por sección: tokens, tema-oscuro, base, menu-lateral,
+│   │                         #   tarjeta-planta, detalle, mapa, individuos, utilidades...
+│   ├── hooks/                # useModal (foco/scroll/Esc), useAccionProtegida (contraseña)
+│   ├── individuos.js         # Utilidades puras: sugerir código, agrupar especies
+│   ├── mapa/                 # maplibre.js (carga diferida) y capasIndividuos.js
+│   ├── offline/              # sw.js (service worker) y cola.js (cambios sin conexión)
 │   └── components/           # Arquitectura atómica (Atomic Design)
 │       ├── atoms/            # Boton, Insignia, ImagenPlanta, Spinner, Chip,
 │       │                     #   PuntoEscala, EstadoBox, BotonMenu, ItemMenu,
@@ -63,7 +69,7 @@ plantas-qr/
 │       │                     #   EncabezadoApp, HeroInicio, Hero, MenuLateral,
 │       │                     #   MenuHerramientas, SeccionParque, SplashCarga...
 │       ├── templates/        # PlantillaListado/Galeria, PlantillaDetalle
-│       └── pages/            # PaginaInicio, PaginaGaleria, PaginaDetalle
+│       └── pages/            # PaginaInicio, PaginaGaleria, PaginaDetalle, PaginaIndividuos
 ├── server/                   # Backend Express
 │   ├── index.js              # Servidor, Swagger, SPA estática, fix DNS Atlas
 │   ├── controllers/          # plantaController, qrController
@@ -239,6 +245,40 @@ entrega un GeoJSON `FeatureCollection` y admite filtros opcionales `especieId` y
 Al filtrar por `especieId` se incluyen los individuos de todas las fichas con el mismo
 nombre científico, así cualquier QR de Ciprés muestra los 10 árboles.
 
+### Gestión de individuos (`#/individuos`)
+
+Módulo de administración para registrar, editar y eliminar árboles y su ubicación sin
+tocar la base de datos. Se abre desde el menú de la galería → **Gestionar individuos**.
+
+- **Listado** con búsqueda (código, especie, parque) y filtro por especie. Las fichas
+  históricas de una misma especie se agrupan por nombre científico.
+- **Formulario** con la ubicación elegida en un mapa satelital (toque o marcador
+  arrastrable), coordenadas numéricas, o **Usar mi ubicación** (GPS del dispositivo:
+  rellena también precisión y altitud). Los demás individuos se ven como puntos de
+  referencia. Al elegir la especie se sugiere el siguiente código libre (`CIP-011`).
+- **Contraseña de administrador:** se pide la primera vez y se conserva solo en memoria
+  mientras la página esté abierta. **Eliminar** siempre pide confirmar con la contraseña.
+- La foto es opcional: ruta `/uploads/...` o URL HTTPS; si se deja vacía se usa
+  `public/uploads/individuos/CÓDIGO.webp` cuando existe.
+
+### Uso sin conexión
+
+La app es instalable (PWA) y funciona sin internet con lo que ya se haya visto con conexión:
+
+- **Service worker** (`src/offline/sw.js`; `vite.config.js` lo genera como `dist/sw.js`
+  con la lista de archivos del build). Solo se registra en producción (`npm run build`).
+  - App (HTML, JS, CSS, iconos): se guarda al instalar, así abre sin red.
+  - `GET /api/...`: red primero (máx. 4 s) y, si no hay, la última copia guardada.
+  - Fotos de `/uploads`, teselas del mapa y tipografías: se guardan al verlas por primera vez.
+- **Individuos sin conexión:** crear, editar y eliminar se guardan en una cola en el
+  dispositivo (`localStorage`, sin contraseñas) y la tarjeta muestra *Sin enviar*. Al
+  volver la conexión, con la página de individuos abierta, se pide la contraseña y se
+  envían en orden. Si el servidor rechaza alguno (p. ej. código repetido) queda listado
+  para revisarlo o descartarlo; el resto se envía igual.
+- Sin conexión, el mapa del formulario solo muestra las zonas ya visitadas; las
+  coordenadas a mano y **Usar mi ubicación** (GPS) funcionan igual.
+- No funciona sin conexión: crear/editar especies, subir fotos ni generar QR.
+
 ### Mapa de individuos (MapLibre GL)
 
 La ficha de cada especie muestra la sección **"¿Dónde encontrarlo?"** con un mapa
@@ -318,6 +358,10 @@ Documentación interactiva en **`/api-docs`** (Swagger UI).
 | Método | Ruta | Descripción |
 |---|---|---|
 | `GET` | `/` | Obtener individuos como GeoJSON; filtros opcionales `especieId` y `parque` |
+| `GET` | `/:id` | Un individuo como Feature GeoJSON |
+| `POST` | `/` | Registrar un individuo: `codigoArbol`, `especieId`, `parque`, `latitud`, `longitud`, opcionales `altitudMsnm`, `precisionGpsM`, `imagen` (requiere `password`) |
+| `PUT` | `/:id` | Editar solo los campos enviados; `null` en `altitudMsnm`/`precisionGpsM` los borra (requiere `password`) |
+| `DELETE` | `/:id` | Eliminar un individuo (requiere `password` en el cuerpo JSON) |
 | `PUT` | `/:codigoArbol/imagen` | Asociar una ruta `/uploads/...` o URL HTTPS a un individuo (requiere `password`) |
 
 Ejemplo para vincular una foto local versionada:
@@ -329,6 +373,8 @@ curl -X PUT https://plantas-qr.vercel.app/api/individuos/CIP-001/imagen \
 ```
 
 El campo `imagen` queda incluido en las propiedades de cada Feature GeoJSON.
+
+Errores: `400` datos inválidos, `401` contraseña faltante o incorrecta, `404` individuo o especie inexistente, `409` código de árbol ya usado.
 
 ### QRs — `/api/qr`
 
@@ -388,7 +434,7 @@ El QR almacena `{ plantaId, url, imagen }`.
 
 ## 🎨 Diseño
 
-Sistema de diseño propio con tokens CSS (`src/index.css`) y notas en `docs/DESIGN.md`:
+Sistema de diseño propio con tokens CSS (`src/styles/tokens.css`; `src/index.css` solo importa las hojas en orden) y notas en `docs/DESIGN.md`:
 
 - **Paleta botánica**: verdes bosque, salvia y menta sobre tonos tierra y neutros; sin colores saturados.
 - **Temas claro y oscuro** conmutables, persistiendo en `localStorage` (`data-tema` en `<html>`).

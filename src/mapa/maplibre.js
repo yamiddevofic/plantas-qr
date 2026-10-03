@@ -1,6 +1,6 @@
 // Punto único de entrada a MapLibre GL. Se importa con import() dinámico para que
 // los ~1 MB de la librería solo se descarguen cuando una ficha tiene mapa.
-import { AttributionControl, FullscreenControl, LngLatBounds, Map, NavigationControl, Popup, ScaleControl, setWorkerUrl } from 'maplibre-gl';
+import { AttributionControl, FullscreenControl, LngLatBounds, Map, Marker, NavigationControl, Popup, ScaleControl, setWorkerUrl } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 // MapLibre 6 ubica su worker relativo a import.meta.url, ruta que deja de existir
 // tras el bundle. Vite empaqueta el worker (con su chunk compartido) y da su URL.
@@ -97,4 +97,4 @@ export const LOCALE_ES = {
   'CooperativeGesturesHandler.MobileHelpText': 'Usa dos dedos para mover el mapa',
 };
 
-export { AttributionControl, FullscreenControl, LngLatBounds, Map, NavigationControl, Popup, ScaleControl };
+export { AttributionControl, FullscreenControl, LngLatBounds, Map, Marker, NavigationControl, Popup, ScaleControl };

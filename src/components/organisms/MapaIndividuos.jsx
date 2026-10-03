@@ -1,157 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuMap, LuMountainSnow, LuSatellite } from 'react-icons/lu';
 import { fetchIndividuos } from '../../api';
 import { useTema } from '../../tema.js';
+import {
+  CAMARA_3D,
+  CAPA_PUNTOS,
+  ZOOM_INICIAL_MAX,
+  POSICION_SELECCION_Y,
+  agregarCapas,
+  aplicarRelieve,
+  contenidoPopup,
+  mapaEnPantallaCompleta,
+  marcar,
+  prefiereMenosMovimiento,
+} from '../../mapa/capasIndividuos';
 import SeccionFicha from '../molecules/SeccionFicha';
+import ControlesMapa from '../molecules/ControlesMapa';
+import ListaIndividuosMapa from '../molecules/ListaIndividuosMapa';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
-
-const FUENTE = 'individuos';
-const FUENTE_TERRENO = 'terreno';
-// MapLibre recomienda no compartir la fuente DEM entre terreno y sombreado.
-const FUENTE_SOMBRA = 'terreno-sombra';
-const CAPA_SOMBRA = 'terreno-sombreado';
-const CAPA_PUNTOS = 'individuos-puntos';
-const CAPA_ETIQUETAS = 'individuos-etiquetas';
-const ZOOM_INICIAL_MAX = 17;
-const POSICION_SELECCION_Y = 0.45;
-
-const BASES = [
-  { id: 'satelite', etiqueta: 'Satélite', Icono: LuSatellite },
-  { id: 'mapa', etiqueta: 'Mapa', Icono: LuMap },
-];
-
-// Cámara al activar el relieve: algo más lejos e inclinada para que entren las
-// laderas que rodean el casco urbano.
-const CAMARA_3D = { pitch: 65, bearing: -25, zoomMax: 16.2 };
-
-const numero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 });
-
-function prefiereMenosMovimiento() {
-  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-}
-
-// Las capas de MapLibre no entienden var(--x): se leen los tokens al pintar para
-// que los puntos sigan la paleta del tema activo.
-function token(nombre, alternativo) {
-  return getComputedStyle(document.documentElement).getPropertyValue(nombre).trim() || alternativo;
-}
-
-function detalleIndividuo({ altitudMsnm, precisionGpsM }) {
-  const partes = [];
-  if (altitudMsnm != null) partes.push(`${numero.format(altitudMsnm)} msnm`);
-  if (precisionGpsM != null) partes.push(`precisión GPS ±${numero.format(precisionGpsM)} m`);
-  return partes.join(' · ');
-}
-
-// Contenido del popup con nodos DOM (textContent), nunca HTML interpolado.
-function contenidoPopup(props, nombreEspecie) {
-  const raiz = document.createElement('div');
-  raiz.className = 'mapa-popup';
-  if (props.imagen) {
-    const imagen = document.createElement('img');
-    imagen.className = 'mapa-popup-imagen';
-    imagen.src = props.imagen;
-    imagen.alt = `Fotografía del árbol ${props.codigoArbol}`;
-    // El popup solo existe cuando ya se abrió el individuo: cargar de inmediato.
-    imagen.loading = 'eager';
-    imagen.decoding = 'async';
-    imagen.addEventListener('error', () => imagen.remove(), { once: true });
-    raiz.append(imagen);
-  }
-  const codigo = document.createElement('p');
-  codigo.className = 'mapa-popup-codigo';
-  codigo.textContent = props.codigoArbol;
-  const especie = document.createElement('p');
-  especie.className = 'mapa-popup-especie';
-  especie.textContent = nombreEspecie;
-  raiz.append(codigo, especie);
-  const detalle = detalleIndividuo(props);
-  if (detalle) {
-    const linea = document.createElement('p');
-    linea.className = 'mapa-popup-detalle';
-    linea.textContent = detalle;
-    raiz.append(linea);
-  }
-  return raiz;
-}
-
-// Durante un setStyle la fuente desaparece unos instantes; sin esta guarda
-// setFeatureState lanzaría "source not found".
-function marcar(map, id, seleccionado) {
-  if (id && map?.getSource(FUENTE)) map.setFeatureState({ source: FUENTE, id }, { seleccionado });
-}
-
-function mapaEnPantallaCompleta(map) {
-  const elementoPantallaCompleta = document.fullscreenElement || document.webkitFullscreenElement;
-  return elementoPantallaCompleta === map.getContainer()
-    || map.getContainer().classList.contains('maplibregl-pseudo-fullscreen');
-}
-
-function agregarCapas(map, datos, base) {
-  if (map.getSource(FUENTE)) return;
-  const sobreSatelite = base === 'satelite';
-  // Sobre la foto aérea el verde bosque se pierde entre la vegetación: se usa
-  // menta clara con borde oscuro y etiquetas blancas.
-  const relleno = sobreSatelite ? '#b7e4c7' : token('--forest-700', '#2d6a4f');
-  const borde = sobreSatelite ? '#173f2f' : token('--surface', '#ffffff');
-  const texto = sobreSatelite ? '#ffffff' : token('--ink-900', '#1f2a24');
-  const halo = sobreSatelite ? 'rgba(15, 22, 18, 0.85)' : token('--surface', '#ffffff');
-  const seleccionado = ['boolean', ['feature-state', 'seleccionado'], false];
-
-  map.addSource(FUENTE, { type: 'geojson', data: datos, promoteId: 'id' });
-  map.addLayer({
-    id: CAPA_PUNTOS,
-    type: 'circle',
-    source: FUENTE,
-    paint: {
-      'circle-color': ['case', seleccionado, token('--clay-500', '#c2653c'), relleno],
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 14, ['case', seleccionado, 6, 3.5], 19, ['case', seleccionado, 13, 9]],
-      'circle-stroke-color': borde,
-      'circle-stroke-width': 2,
-      // Con la cámara inclinada los puntos se ven como discos sobre el suelo.
-      'circle-pitch-alignment': 'map',
-    },
-  });
-  map.addLayer({
-    id: CAPA_ETIQUETAS,
-    type: 'symbol',
-    source: FUENTE,
-    minzoom: 17.5,
-    layout: {
-      'text-field': ['get', 'codigoArbol'],
-      'text-font': ['Noto Sans Regular'],
-      'text-size': 11,
-      'text-offset': [0, 1.3],
-      'text-anchor': 'top',
-    },
-    paint: { 'text-color': texto, 'text-halo-color': halo, 'text-halo-width': 1.5 },
-  });
-}
-
-function aplicarRelieve(map, lib, activo, base) {
-  if (!map.getSource(FUENTE)) return; // estilo aún cargando: style.load lo aplicará
-  if (activo) {
-    if (!map.getSource(FUENTE_TERRENO)) map.addSource(FUENTE_TERRENO, lib.TERRENO);
-    map.setTerrain({ source: FUENTE_TERRENO, exaggeration: lib.EXAGERACION_TERRENO });
-    map.setSky(lib.CIELO);
-    // El sombreado da lectura de volumen al mapa vectorial; sobre la foto aérea
-    // solo la oscurecería.
-    if (base === 'mapa' && !map.getLayer(CAPA_SOMBRA)) {
-      if (!map.getSource(FUENTE_SOMBRA)) map.addSource(FUENTE_SOMBRA, lib.TERRENO);
-      map.addLayer({
-        id: CAPA_SOMBRA,
-        type: 'hillshade',
-        source: FUENTE_SOMBRA,
-        paint: { 'hillshade-exaggeration': 0.35, 'hillshade-shadow-color': '#173f2f' },
-      }, CAPA_PUNTOS);
-    }
-  } else {
-    map.setTerrain(null);
-    map.setSky();
-    if (map.getLayer(CAPA_SOMBRA)) map.removeLayer(CAPA_SOMBRA);
-  }
-}
 
 export default function MapaIndividuos({ especieId, nombreEspecie }) {
   const { tema } = useTema();
@@ -388,33 +254,13 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
           las montañas que rodean el pueblo.
         </p>
 
-        <div className="mapa-controles">
-          <div className="mapa-segmentado" role="group" aria-label="Tipo de mapa">
-            {BASES.map(({ id, etiqueta, Icono }) => (
-              <button
-                key={id}
-                type="button"
-                className="mapa-control"
-                aria-pressed={base === id}
-                disabled={Boolean(errorMapa)}
-                onClick={() => setBase(id)}
-              >
-                <Icono aria-hidden="true" />
-                {etiqueta}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            className="mapa-control mapa-control-relieve"
-            aria-pressed={relieve3D}
-            disabled={Boolean(errorMapa)}
-            onClick={() => setRelieve3D((v) => !v)}
-          >
-            <LuMountainSnow aria-hidden="true" />
-            Relieve 3D
-          </button>
-        </div>
+        <ControlesMapa
+          base={base}
+          onBase={setBase}
+          relieve3D={relieve3D}
+          onRelieve={() => setRelieve3D((v) => !v)}
+          deshabilitado={Boolean(errorMapa)}
+        />
 
         <div className="mapa-marco">
           <div
@@ -432,39 +278,13 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
         </div>
 
         {estado === 'listo' && (
-          <>
-            <p className="mapa-lista-titulo" id="mapa-lista-titulo">{titulo}</p>
-            <ul className="mapa-lista" aria-labelledby="mapa-lista-titulo">
-              {datos.features.map((feature) => {
-                const { id, codigoArbol } = feature.properties;
-                const activo = seleccionado === id;
-                return (
-                  <li key={id}>
-                    <button
-                      type="button"
-                      className={`mapa-lista-item${activo ? ' activo' : ''}`}
-                      aria-pressed={activo}
-                      disabled={!mapaListo}
-                      onClick={() => seleccionar(feature, { centrar: true })}
-                    >
-                      {feature.properties.imagen && (
-                        <img
-                          className="mapa-lista-imagen"
-                          src={feature.properties.imagen}
-                          alt=""
-                          loading="lazy"
-                          decoding="async"
-                          onError={(event) => { event.currentTarget.hidden = true; }}
-                        />
-                      )}
-                      <span className="mapa-lista-codigo">{codigoArbol}</span>
-                      <span className="mapa-lista-detalle">{detalleIndividuo(feature.properties)}</span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </>
+          <ListaIndividuosMapa
+            titulo={titulo}
+            features={datos.features}
+            seleccionado={seleccionado}
+            deshabilitado={!mapaListo}
+            onSeleccionar={(feature) => seleccionar(feature, { centrar: true })}
+          />
         )}
       </SeccionFicha>
     </div>

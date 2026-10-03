@@ -49,6 +49,35 @@ export async function actualizarImagenIndividuo(codigoArbol, imagen, password) {
   return res.json();
 }
 
+async function enviarIndividuo(url, metodo, cuerpo, fallback) {
+  let res;
+  try {
+    res = await fetch(url, {
+      method: metodo,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cuerpo),
+    });
+  } catch (error) {
+    // fetch solo rechaza cuando no hubo respuesta (sin red, servidor caído):
+    // quien llama puede guardar el cambio en la cola y reintentar luego.
+    throw Object.assign(new Error('Sin conexión con el servidor'), { sinRed: true, causa: error });
+  }
+  if (!res.ok) throw new Error(await leerError(res, fallback));
+  return res.json();
+}
+
+export function crearIndividuo(datos, password) {
+  return enviarIndividuo(`${BASE}/individuos`, 'POST', { ...datos, password }, 'No se pudo registrar el individuo');
+}
+
+export function actualizarIndividuo(id, datos, password) {
+  return enviarIndividuo(`${BASE}/individuos/${encodeURIComponent(id)}`, 'PUT', { ...datos, password }, 'No se pudo actualizar el individuo');
+}
+
+export function eliminarIndividuo(id, password) {
+  return enviarIndividuo(`${BASE}/individuos/${encodeURIComponent(id)}`, 'DELETE', { password }, 'No se pudo eliminar el individuo');
+}
+
 export async function fetchQRs() {
   const res = await fetch(`${BASE}/qr`);
   if (!res.ok) throw new Error('Error al obtener QRs');

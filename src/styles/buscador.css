@@ -1,0 +1,328 @@
+/* ── Buscador (lupa) ──────────────────────────────────────────── */
+
+.hero-acciones-grupo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.buscador-trigger {
+  border: 1px solid var(--line-200);
+  background: var(--mint-50);
+  color: var(--ink-700);
+}
+
+.buscador-trigger:hover {
+  background: var(--line-100);
+  color: var(--forest-700);
+}
+
+.buscador-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12vh 16px 48px;
+  background: rgba(15, 22, 18, 0.45);
+  animation: overlayIn 0.25s ease-out;
+}
+
+.buscador-panel {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: modalIn 0.3s ease-out;
+}
+
+.buscador-fila {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line-100);
+}
+
+.buscador-fila-icono {
+  flex-shrink: 0;
+  color: var(--forest-600);
+  font-size: 1.1rem;
+}
+
+.buscador-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--step-1);
+  color: var(--ink-900);
+}
+
+.buscador-input::placeholder {
+  color: var(--ink-300);
+}
+
+.buscador-resultados {
+  max-height: 52vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+}
+
+.buscador-resultado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  text-align: left;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background 0.15s ease-out;
+}
+
+.buscador-resultado:hover,
+.buscador-resultado.activo {
+  background: var(--mint-50);
+}
+
+.buscador-resultado-imagen {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--line-200);
+}
+
+.buscador-resultado-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.buscador-resultado-nombre {
+  font-weight: 700;
+  font-size: var(--step-0);
+  color: var(--ink-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.buscador-resultado-detalle {
+  font-size: 0.76rem;
+  color: var(--ink-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.buscador-vacio {
+  padding: 18px 16px;
+  text-align: center;
+  color: var(--ink-500);
+  font-size: var(--step-0);
+}
+
+.buscador-pista {
+  padding: 10px 16px;
+  border-top: 1px solid var(--line-100);
+  font-size: 0.7rem;
+  color: var(--ink-300);
+  text-align: center;
+}
+
+.btn-lupa-icono {
+  margin-right: 6px;
+  font-size: 1rem;
+  vertical-align: -2px;
+}
+
+.detalle-qr-exito {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--forest-600);
+}
+
+.form-seccion {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-100);
+}
+
+.form-seccion-titulo {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--forest-600);
+  margin-bottom: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.form-grid-span2 {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 560px) {
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.form-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.form-campo-error .form-input,
+.form-campo-error .form-textarea,
+.form-campo-error .form-select {
+  border-color: var(--danger-700);
+}
+
+.form-etiqueta {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--ink-500);
+  padding-left: 2px;
+}
+
+.form-requerido {
+  color: var(--danger-700);
+  margin-left: 2px;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-md);
+  background: var(--mint-50);
+  font: inherit;
+  font-size: var(--step-0);
+  color: var(--ink-900);
+  padding: 10px 12px;
+  min-height: var(--hit);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--ink-300);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--forest-600);
+  box-shadow: var(--focus-ring);
+}
+
+.form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background:
+    var(--mint-50)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235f6f66' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+    no-repeat right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.form-select:hover {
+  border-color: var(--sage-300);
+}
+
+.form-error {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--danger-700);
+}
+
+.form-error-bloque {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--danger-50);
+  border: 1px solid rgba(159, 43, 48, 0.25);
+  border-radius: var(--radius-md);
+}
+
+.form-ayuda {
+  font-size: 0.74rem;
+  color: var(--ink-300);
+}
+
+.form-imagen {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.form-imagen-previa {
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-200);
+  flex-shrink: 0;
+}
+
+.form-imagen-accion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.form-archivo input[type='file'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.form-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-100);
+}
+
+@media (max-width: 480px) {
+  .form-acciones {
+    flex-direction: column-reverse;
+  }
+
+  .form-acciones .btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,62 @@
+/* ══════════════════════════════════════════════════════════════
+   Botones
+   ══════════════════════════════════════════════════════════════ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--hit);
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background: var(--forest-700);
+  color: var(--white);
+}
+
+.btn-primary:hover:not(:disabled),
+.btn-primary:focus-visible {
+  background: var(--forest-800);
+}
+
+.btn-ghost {
+  background: var(--surface);
+  border-color: transparent;
+  color: var(--ink-700);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--mint-100);
+  border-color: var(--sage-300);
+  color: var(--forest-700);
+}
+
+.btn-retry {
+  background: var(--forest-700);
+  color: var(--white);
+}
+
+.btn-retry:hover {
+  background: var(--forest-800);
+}
