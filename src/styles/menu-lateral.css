@@ -8,10 +8,6 @@
   .filtros.filtros-desktop {
     display: flex;
   }
-
-  .menu-panel {
-    width: min(400px, 44vw);
-  }
 }
 
 @media (max-width: 767px) {
@@ -24,96 +20,81 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  width: auto;
+  width: var(--hit);
   height: var(--hit);
-  padding: 0 16px;
+  padding: 0;
   flex-shrink: 0;
   border: 1px solid var(--line-200);
   border-radius: var(--radius-md);
   background: var(--surface);
-  color: var(--ink-700);
+  color: var(--ink-900);
   cursor: pointer;
-  transition:
-    background 0.15s ease-out,
-    border-color 0.15s ease-out;
+  transition: border-color 0.15s ease-out;
 }
 
-.menu-hamburguesa::after {
-  content: "Menú";
-  font-size: var(--step-0);
-  font-weight: 600;
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  transition:
-    max-width 0.2s ease-out,
-    opacity 0.2s ease-out;
-}
-
-.menu-hamburguesa:hover::after,
-.menu-hamburguesa:focus-visible::after {
-  max-width: 5rem;
-  opacity: 1;
-}
-
-.menu-hamburguesa:hover {
-  background: var(--forest-600);
-  border-color: var(--forest-600);
-  color: var(--white);
-}
-
+/* Sin relleno ni texto emergente: solo un borde un poco más marcado. */
+.menu-hamburguesa:hover,
 .menu-hamburguesa[aria-expanded="true"] {
-  background: var(--forest-600);
-  border-color: var(--forest-600);
-  color: var(--white);
+  border-color: var(--ink-300);
 }
 
 .menu-lineas {
   display: inline-flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: flex-end;
+  gap: 5px;
 }
 
 .menu-lineas span {
   width: 18px;
-  height: 2px;
+  height: 1.5px;
   border-radius: 1px;
   background: currentColor;
 }
 
-/* ── Menú hamburguesa (móvil) · drawer desde la derecha ───────── */
+.menu-lineas span:nth-child(2) {
+  width: 12px;
+}
+
+/* ── Menú lateral · panel flotante desde la derecha ──────────── */
 
 .menu-panel {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
   z-index: 51;
-  width: min(320px, 86vw);
-  padding: 10px 10px 18px;
+  width: min(340px, calc(100vw - 16px));
+  padding: 14px 12px 18px;
   background: var(--surface);
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  border: 1px solid var(--line-100);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  animation: drawerIn 0.28s ease-out;
+  gap: 18px;
+  animation: drawerIn 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .menu-movil-backdrop {
   position: fixed;
   inset: 0;
   z-index: 50;
-  background: rgba(15, 35, 26, 0.55);
+  background: rgba(15, 35, 26, 0.32);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   animation: fadeIn 0.2s ease-out;
 }
 
 @keyframes drawerIn {
   from {
-    transform: translateX(100%);
+    opacity: 0;
+    transform: translateX(24px);
   }
   to {
+    opacity: 1;
     transform: none;
   }
 }
@@ -127,22 +108,26 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .menu-panel,
+  .menu-movil-backdrop {
+    animation: none;
+  }
+}
+
 .menu-cabecera {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 6px 8px 10px;
-  border-bottom: 1px solid var(--line-200);
-  margin-bottom: 6px;
+  padding: 0 4px 0 10px;
 }
 
 .menu-cabecera-titulo {
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--forest-600);
+  font-size: var(--step-1);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink-900);
 }
 
 .menu-cerrar {
@@ -152,38 +137,37 @@
   width: var(--hit);
   height: var(--hit);
   border: none;
-  border-radius: 50%;
+  border-radius: var(--radius-md);
   background: transparent;
   color: var(--ink-500);
-  font-size: 1.05rem;
   cursor: pointer;
   transition: background-color 0.15s, color 0.15s;
 }
 
-.menu-cerrar:hover {
-  background: var(--mint-100);
-  color: var(--forest-800);
+.menu-cerrar svg {
+  width: 20px;
+  height: 20px;
 }
 
-.menu-grupo + .menu-grupo {
-  margin-top: 6px;
-  padding-top: 8px;
-  border-top: 1px solid var(--line-200);
+.menu-cerrar:hover {
+  background: var(--mint-50);
+  color: var(--ink-900);
 }
 
 .menu-grupo-titulo {
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--forest-600);
-  padding: 8px 10px 4px;
+  color: var(--ink-300);
+  padding: 0 10px 6px;
 }
 
 .menu-grupo-lista {
   list-style: none;
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .menu-item {
@@ -196,25 +180,21 @@
   border: none;
   border-radius: var(--radius-md);
   background: transparent;
-  color: var(--ink-700);
+  color: var(--ink-900);
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition:
-    background-color 0.15s ease-out,
-    color 0.15s ease-out;
+  transition: background-color 0.15s ease-out;
 }
 
 .menu-item:hover:not(:disabled),
 .menu-item:focus-visible,
 .menu-item[aria-expanded="true"] {
-  background: var(--mint-100);
-  color: var(--forest-800);
+  background: var(--mint-50);
 }
 
 .menu-item[aria-pressed="true"] {
   background: var(--mint-100);
-  color: var(--forest-800);
 }
 
 .menu-item:disabled {
@@ -222,10 +202,24 @@
   cursor: not-allowed;
 }
 
+/* Icono en una pastilla suave: da ritmo a la lista sin recargarla. */
 .menu-item-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--mint-100);
+  color: var(--forest-700);
   font-size: 1.05rem;
   line-height: 1;
-  flex-shrink: 0;
+}
+
+.menu-item[aria-pressed="true"] .menu-item-icono {
+  background: var(--forest-700);
+  color: var(--surface);
 }
 
 .menu-item-texto {
@@ -237,13 +231,13 @@
 
 .menu-item-etiqueta {
   font-weight: 600;
-  font-size: var(--step-1);
+  font-size: 0.95rem;
   line-height: 1.3;
 }
 
 .menu-item-descripcion {
-  font-size: var(--step-0);
-  color: var(--ink-300);
+  font-size: 0.8rem;
+  color: var(--ink-500);
   line-height: 1.35;
 }
 
@@ -389,6 +383,29 @@ html[data-tema="oscuro"] .menu-filtros-movil .filtros {
 
 .popover-contacto-boton:hover {
   background: var(--forest-800);
+}
+
+/* En móvil solo el icono, para no tapar el contenido al hacer scroll. */
+@media (max-width: 639px) {
+  .popover-contacto-boton {
+    width: 52px;
+    height: 52px;
+    padding: 0;
+  }
+
+  .popover-contacto-boton svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .popover-contacto-texto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 }
 
 .popover-contacto-boton:active {

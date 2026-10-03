@@ -44,14 +44,9 @@
 }
 
 .historia-acordeon-item {
-  background: var(--surface);
-  border: 1px solid rgba(23, 63, 47, 0.14);
+  background: var(--mint-50);
   border-radius: var(--radius-lg);
   overflow: hidden;
-}
-
-.historia-acordeon-item[open] {
-  border-color: rgba(23, 63, 47, 0.28);
 }
 
 .historia-acordeon-titulo {
@@ -61,7 +56,7 @@
   justify-content: space-between;
   gap: 16px;
   width: 100%;
-  padding: 18px 22px;
+  padding: 22px 24px;
   cursor: pointer;
   text-align: left;
   transition: background-color 0.15s;
@@ -72,7 +67,7 @@
 }
 
 .historia-acordeon-titulo:hover {
-  background: rgba(23, 63, 47, 0.05);
+  background: var(--mint-100);
 }
 
 .historia-acordeon-titulo:focus-visible {
@@ -91,18 +86,21 @@
 }
 
 .historia-acordeon-cabecera strong {
-  font-size: var(--step-1);
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-size: var(--step-2);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--forest-900);
 }
 
 .historia-acordeon-titulo > svg {
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  color: var(--forest-600, #2f6a4f);
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--forest-700);
   transition: transform 0.2s ease;
 }
 
@@ -111,7 +109,7 @@
 }
 
 .historia-acordeon-contenido {
-  padding: 16px 22px 24px;
+  padding: 0 24px 26px;
 }
 
 .historia-acordeon-contenido .historia-imagen {
@@ -124,10 +122,10 @@
 
 .historia-eyebrow {
   font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--forest-600);
+  color: var(--ink-500);
   margin-bottom: 8px;
 }
 
@@ -191,9 +189,10 @@
 .historia-datos {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin: 22px auto 0;
-  max-width: 540px;
+  margin: 24px 0 0;
+  padding: 18px 0;
+  border-top: 1px solid var(--line-200);
+  border-bottom: 1px solid var(--line-200);
 }
 
 .historia-accion {
@@ -202,37 +201,35 @@
   margin-top: 22px;
 }
 
-@media (min-width: 768px) {
-  .historia-datos {
-    max-width: 640px;
-    gap: 16px;
-    margin-top: 30px;
-  }
-
-  .historia-dato {
-    padding: 24px 16px;
-  }
-
-  .historia-dato dt {
-    font-size: var(--step-3);
-  }
+.historia-accion .btn {
+  border-radius: var(--radius-pill);
+  padding-inline: 22px;
 }
 
+/* Cifras limpias separadas por líneas finas, sin tarjetas. */
 .historia-dato {
-  background: var(--surface);
-  border-radius: var(--radius-md);
-  padding: 16px 10px;
+  padding: 0 12px;
+}
+
+.historia-dato:first-child {
+  padding-left: 0;
+}
+
+.historia-dato + .historia-dato {
+  border-left: 1px solid var(--line-200);
 }
 
 .historia-dato dt {
-  font-size: var(--step-2);
+  font-size: var(--step-3);
   font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   color: var(--forest-700);
 }
 
 .historia-dato dd {
-  font-size: 0.74rem;
+  font-size: 0.78rem;
   color: var(--ink-500);
-  margin-top: 2px;
+  margin-top: 4px;
   line-height: 1.35;
 }

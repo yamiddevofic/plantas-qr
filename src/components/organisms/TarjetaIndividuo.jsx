@@ -1,27 +1,30 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuMapPin, LuPencil, LuTrash2 } from 'react-icons/lu';
-import { detalleIndividuo } from '../../mapa/capasIndividuos';
-import Boton from '../atoms/Boton';
+import { LuPencil, LuTrash2 } from 'react-icons/lu';
 
+const numero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 });
+
+/** Fila de un individuo: foto, código y especie, ubicación y acciones. */
 export default function TarjetaIndividuo({ feature, onEditar, onEliminar }) {
-  const { codigoArbol, parque, imagen, especie, pendiente } = feature.properties;
+  const { codigoArbol, imagen, especie, pendiente, altitudMsnm } = feature.properties;
   const [longitud, latitud] = feature.geometry.coordinates;
-  const detalle = detalleIndividuo(feature.properties);
+  const [fotoRota, setFotoRota] = useState(false);
 
   return (
-    <li className="individuo-tarjeta">
-      {imagen ? (
+    <li className="individuo-fila">
+      {imagen && !fotoRota ? (
         <img
           className="individuo-foto"
           src={imagen}
           alt={`Fotografía del árbol ${codigoArbol}`}
           loading="lazy"
           decoding="async"
-          onError={(e) => { e.currentTarget.hidden = true; }}
+          onError={() => setFotoRota(true)}
         />
       ) : (
         <span className="individuo-foto individuo-foto-vacia" aria-hidden="true">🌳</span>
       )}
+
       <div className="individuo-datos">
         <p className="individuo-codigo">
           {codigoArbol}
@@ -30,26 +33,36 @@ export default function TarjetaIndividuo({ feature, onEditar, onEliminar }) {
           )}
         </p>
         <p className="individuo-especie">
-          {especie ? (
-            <a href={`#/planta/${especie._id}`}>{especie.nombre?.comun}</a>
-          ) : 'Especie no disponible'}
-          {especie?.nombre?.cientifico && <em> · {especie.nombre.cientifico}</em>}
+          {especie ? <a href={`#/planta/${especie._id}`}>{especie.nombre?.comun}</a> : 'Especie no disponible'}
+          {especie?.nombre?.cientifico && <em> {especie.nombre.cientifico}</em>}
         </p>
         <p className="individuo-meta">
-          <LuMapPin aria-hidden="true" />
-          {latitud.toFixed(6)}, {longitud.toFixed(6)}
+          {latitud.toFixed(5)}, {longitud.toFixed(5)}
+          {altitudMsnm != null && (
+            <span className="individuo-meta-extra"> · {numero.format(altitudMsnm)} msnm</span>
+          )}
         </p>
-        <p className="individuo-meta">{parque}{detalle && ` · ${detalle}`}</p>
       </div>
+
       <div className="individuo-acciones">
-        <Boton variante="ghost" onClick={() => onEditar(feature)} aria-label={`Editar ${codigoArbol}`}>
-          <LuPencil aria-hidden="true" className="btn-lupa-icono" />
-          Editar
-        </Boton>
-        <Boton variante="ghost" clase="btn-peligro" onClick={() => onEliminar(feature)} aria-label={`Eliminar ${codigoArbol}`}>
-          <LuTrash2 aria-hidden="true" className="btn-lupa-icono" />
-          Eliminar
-        </Boton>
+        <button
+          type="button"
+          className="individuo-accion"
+          onClick={() => onEditar(feature)}
+          aria-label={`Editar ${codigoArbol}`}
+          title="Editar"
+        >
+          <LuPencil aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          className="individuo-accion individuo-accion-peligro"
+          onClick={() => onEliminar(feature)}
+          aria-label={`Eliminar ${codigoArbol}`}
+          title="Eliminar"
+        >
+          <LuTrash2 aria-hidden="true" />
+        </button>
       </div>
     </li>
   );

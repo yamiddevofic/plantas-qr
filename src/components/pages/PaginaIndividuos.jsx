@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { LuArrowLeft, LuCirclePlus, LuTreePine } from 'react-icons/lu';
+import { LuArrowLeft, LuPlus, LuSearch } from 'react-icons/lu';
 import {
   actualizarIndividuo,
   crearIndividuo,
@@ -361,18 +361,29 @@ export default function PaginaIndividuos() {
     <div className="app">
       <a className="skip-link" href="#app-main">Saltar al contenido</a>
 
-      <header className="galeria-header">
-        <div className="galeria-header-titulo">
-          <LuTreePine aria-hidden="true" className="galeria-header-icono" />
-          <h1 id="individuos-titulo" className="galeria-header-texto">Individuos del parque</h1>
-        </div>
-        <Boton enlace href="#/galeria" variante="ghost">
-          <LuArrowLeft aria-hidden="true" className="btn-lupa-icono" />
+      <header className="individuos-cabecera">
+        <a className="individuos-volver" href="#/galeria">
+          <LuArrowLeft aria-hidden="true" />
           Catálogo
-        </Boton>
+        </a>
       </header>
 
-      <main id="app-main" className="app-main" aria-labelledby="individuos-titulo">
+      <main id="app-main" className="individuos-main" aria-labelledby="individuos-titulo">
+        <div className="individuos-titular">
+          <div>
+            <h1 id="individuos-titulo" className="individuos-titulo">Individuos</h1>
+            <p className="individuos-intro">
+              Árboles del parque con su código y ubicación GPS.
+            </p>
+          </div>
+          {!cargando && !error && (
+            <Boton variante="primary" clase="individuos-agregar" onClick={() => abrirFormulario()} disabled={especies.length === 0}>
+              <LuPlus aria-hidden="true" />
+              Agregar
+            </Boton>
+          )}
+        </div>
+
         {cargando ? (
           <div className="cargando-central"><ArbolitoLoader etiqueta="Cargando individuos" /></div>
         ) : error ? (
@@ -381,36 +392,26 @@ export default function PaginaIndividuos() {
           </EstadoBox>
         ) : (
           <section className="individuos-panel">
-            <p className="individuos-intro">
-              Cada individuo es un árbol físico del parque con su código y su ubicación GPS; es lo que
-              aparece en el mapa de la ficha de cada especie. Agregar, editar o eliminar requiere la
-              contraseña de administrador.
-            </p>
-
-            <div className="individuos-barra">
-              <div className="individuos-filtros">
+            <div className="individuos-filtros">
+              <label className="individuos-busqueda">
+                <LuSearch aria-hidden="true" />
                 <input
                   type="search"
-                  className="form-input"
-                  placeholder="Buscar por código, especie o parque…"
+                  placeholder="Buscar código, especie o parque"
                   aria-label="Buscar individuos"
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
                 />
-                <select
-                  className="form-select"
-                  aria-label="Filtrar por especie"
-                  value={filtroEspecie}
-                  onChange={(e) => setFiltroEspecie(e.target.value)}
-                >
-                  <option value="">Todas las especies</option>
-                  {especies.map((e) => <option key={e.id} value={e.id}>{e.nombre}</option>)}
-                </select>
-              </div>
-              <Boton variante="primary" onClick={() => abrirFormulario()} disabled={especies.length === 0}>
-                <LuCirclePlus aria-hidden="true" className="btn-lupa-icono" />
-                Agregar individuo
-              </Boton>
+              </label>
+              <select
+                className="individuos-select"
+                aria-label="Filtrar por especie"
+                value={filtroEspecie}
+                onChange={(e) => setFiltroEspecie(e.target.value)}
+              >
+                <option value="">Todas las especies</option>
+                {especies.map((e) => <option key={e.id} value={e.id}>{e.nombre}</option>)}
+              </select>
             </div>
 
             <BannerSincronizacion
