@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import sharp from 'sharp';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -243,5 +244,55 @@ export const eliminarIndividuo = async (req, res) => {
     res.json({ mensaje: `Individuo ${individuo.codigoArbol} eliminado`, id: String(individuo._id) });
   } catch (error) {
     responderError(res, error, 'Error al eliminar el individuo');
+  }
+};
+
+const ANCHO_FOTO = 1280;
+const CALIDAD_FOTO = 78;
+
+export const subirFotoIndividuo = async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({ mensaje: 'El id no es un ObjectId válido' });
+    }
+    if (!req.file?.buffer?.length) return res.status(400).json({ mensaje: 'Falta la foto (campo "foto")' });
+
+    let datos;
+    try {
+      // rotate() aplica la orientación EXIF de la cámara antes de descartarla.
+      datos = await sharp(req.file.buffer)
+        .rotate()
+        .resize({ width: ANCHO_FOTO, height: ANCHO_FOTO, fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: CALIDAD_FOTO })
+        .toBuffer();
+    } catch {
+      return res.status(400).json({ mensaje: 'El archivo no es una imagen válida' });
+    }
+
+    const actualizada = new Date();
+    const imagen = `/api/individuos/${req.params.id}/foto?v=${actualizada.getTime()}`;
+    const individuo = await Individuo.findByIdAndUpdate(
+      req.params.id,
+      { $set: { foto: { datos, tipo: 'image/webp', actualizada }, imagen } },
+      { new: true }
+    ).populate('especieId', POBLAR_ESPECIE).lean();
+    if (!individuo) return res.status(404).json({ mensaje: 'No existe el individuo' });
+    res.json(aFeature(individuo));
+  } catch (error) {
+    responderError(res, error, 'Error al guardar la foto del individuo');
+  }
+};
+
+export const obtenerFotoIndividuo = async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).end();
+    const individuo = await Individuo.findById(req.params.id).select('+foto').lean();
+    const foto = individuo?.foto;
+    if (!foto?.datos) return res.status(404).json({ mensaje: 'Este individuo no tiene foto' });
+    // La URL lleva ?v=<fecha>, así que cada versión puede guardarse para siempre.
+    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    res.type(foto.tipo || 'image/webp').send(Buffer.from(foto.datos.buffer ?? foto.datos));
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener la foto', error: error.message });
   }
 };

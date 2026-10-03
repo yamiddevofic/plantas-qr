@@ -4,10 +4,12 @@
 // razonar sobre ellas; `leerCola`/`guardarCola` la conservan en localStorage.
 // La contraseña de administrador NUNCA se guarda aquí: se pide al sincronizar.
 //
-// Operación: { tipo: 'crear' | 'editar' | 'eliminar', id, datos?, error? }
+// Operación: { tipo: 'crear' | 'editar' | 'eliminar' | 'foto', id, datos?, error? }
 //   - crear: `id` es temporal (prefijo `local-`) hasta que el servidor asigne el real.
 //   - editar / eliminar: `id` es el del individuo en el servidor.
 //   - `datos` es el cuerpo que acepta la API (codigoArbol, especieId, latitud…).
+//   - foto: la imagen está en IndexedDB (offline/fotos.js) con la clave `id`;
+//     `codigoArbol` solo sirve para nombrarla en pantalla.
 //   - `error` marca una operación que el servidor rechazó (409, 400…) para mostrarla.
 
 const CLAVE = 'plantaqr:cola-individuos:v1';
@@ -58,9 +60,28 @@ export function encolarEliminar(cola, id) {
   return esIdLocal(id) ? sinEste : [...sinEste, { tipo: 'eliminar', id }];
 }
 
+/** Foto nueva para un individuo (local o del servidor); una sola por individuo. */
+export function encolarFoto(cola, id, codigoArbol) {
+  const sinFotoPrevia = cola.filter((op) => !(op.tipo === 'foto' && op.id === id));
+  return [...sinFotoPrevia, { tipo: 'foto', id, codigoArbol }];
+}
+
+/** Quita todas las operaciones de un individuo. */
 export const descartar = (cola, id) => cola.filter((op) => op.id !== id);
 
+/** Quita solo esa operación (mismo tipo e id). */
+export const descartarOperacion = (cola, { tipo, id }) => cola.filter((op) => !(op.tipo === tipo && op.id === id));
+
+/** Marca con error todas las operaciones de un individuo. */
 export const marcarError = (cola, id, mensaje) => cola.map((op) => (op.id === id ? { ...op, error: mensaje } : op));
+
+/** Marca con error solo esa operación. */
+export const marcarErrorOperacion = (cola, { tipo, id }, mensaje) => cola.map((op) => (
+  op.tipo === tipo && op.id === id ? { ...op, error: mensaje } : op
+));
+
+/** Cuando el servidor crea un individuo, lo que quedaba con su id local pasa al real. */
+export const reasignarId = (cola, de, a) => cola.map((op) => (op.id === de ? { ...op, id: a } : op));
 
 /**
  * Superpone la cola sobre los individuos del servidor para mostrar lo que verá
@@ -98,7 +119,7 @@ export function aplicarCola(features, cola, plantas) {
       resultado = resultado.filter((f) => f.properties.id !== op.id);
     } else if (op.tipo === 'editar') {
       resultado = resultado.map((f) => (f.properties.id === op.id ? aFeature(op, f) : f));
-    } else {
+    } else if (op.tipo === 'crear') {
       resultado = [...resultado, aFeature(op)];
     }
   }

@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuLocateFixed } from 'react-icons/lu';
+import { LuCamera, LuImage, LuLocateFixed } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
 import { sugerirCodigo } from '../../individuos';
+import { comprimirFoto } from '../../offline/fotos';
 import Boton from '../atoms/Boton';
 import CampoFormulario from '../molecules/CampoFormulario';
 import SelectorUbicacion from './SelectorUbicacion';
@@ -44,6 +45,20 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
   const [enviando, setEnviando] = useState(false);
   const [buscandoGps, setBuscandoGps] = useState(false);
   const [mensajeGps, setMensajeGps] = useState(null);
+  const [foto, setFoto] = useState(null);
+  const [procesandoFoto, setProcesandoFoto] = useState(false);
+  const previaFoto = useMemo(() => (foto ? URL.createObjectURL(foto) : ''), [foto]);
+  // Libera la URL temporal de la vista previa al cambiar de foto o cerrar.
+  useEffect(() => () => { if (previaFoto) URL.revokeObjectURL(previaFoto); }, [previaFoto]);
+
+  async function elegirFoto(e) {
+    const archivo = e.target.files?.[0];
+    e.target.value = '';
+    if (!archivo) return;
+    setProcesandoFoto(true);
+    setFoto(await comprimirFoto(archivo));
+    setProcesandoFoto(false);
+  }
 
   // Al corregir un campo se retira su error en vez de esperar al siguiente envío.
   const limpiarErrores = (...campos) => setErrores((prev) => {
@@ -127,10 +142,6 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
       const n = numeroOVacio(estado[campo]);
       if (n !== null && (!Number.isFinite(n) || n < 0)) nuevos[campo] = 'Debe ser un número mayor o igual a 0.';
     }
-    const imagen = estado.imagen.trim();
-    if (imagen && !imagen.startsWith('/uploads/') && !imagen.startsWith('https://')) {
-      nuevos.imagen = 'Usa una ruta /uploads/… o una URL https://…';
-    }
     setErrores(nuevos);
     return Object.keys(nuevos).length === 0;
   }
@@ -149,8 +160,7 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
         longitud: Number(estado.longitud),
         altitudMsnm: numeroOVacio(estado.altitudMsnm),
         precisionGpsM: numeroOVacio(estado.precisionGpsM),
-        imagen: estado.imagen.trim(),
-      });
+      }, foto);
     } catch (error) {
       if (!error.cancelado) setMensajeError(error.message);
       setEnviando(false);
@@ -297,18 +307,35 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
 
           <section className="form-seccion" aria-label="Fotografía">
             <h3 className="form-seccion-titulo">Fotografía (opcional)</h3>
-            <CampoFormulario id="ind-imagen" etiqueta="Ruta o URL de la foto" error={errores.imagen}>
-              <input
-                id="ind-imagen"
-                className="form-input"
-                placeholder="/uploads/individuos/CIP-011.webp"
-                value={estado.imagen}
-                onChange={(e) => set('imagen', e.target.value)}
-              />
-            </CampoFormulario>
-            <p className="form-ayuda">
-              Déjala vacía para usar automáticamente <code>public/uploads/individuos/CÓDIGO.webp</code> si existe.
-            </p>
+            <div className="form-imagen">
+              {previaFoto || estado.imagen ? (
+                <img
+                  className="form-imagen-previa"
+                  src={previaFoto || estado.imagen}
+                  alt={previaFoto ? 'Foto nueva del árbol' : 'Foto actual del árbol'}
+                />
+              ) : (
+                <span className="form-imagen-previa individuo-foto-vacia" aria-hidden="true">🌳</span>
+              )}
+              <div className="form-imagen-accion">
+                <label className="btn btn-primary form-archivo">
+                  <LuCamera aria-hidden="true" className="btn-lupa-icono" />
+                  {procesandoFoto ? 'Procesando…' : 'Tomar foto'}
+                  <input type="file" accept="image/*" capture="environment" onChange={elegirFoto} disabled={procesandoFoto} />
+                </label>
+                <label className="btn btn-ghost form-archivo">
+                  <LuImage aria-hidden="true" className="btn-lupa-icono" />
+                  Elegir de la galería
+                  <input type="file" accept="image/*" onChange={elegirFoto} disabled={procesandoFoto} />
+                </label>
+                {foto && (
+                  <Boton variante="ghost" onClick={() => setFoto(null)}>Quitar foto nueva</Boton>
+                )}
+                <p className="form-ayuda">
+                  Sin conexión, la foto queda guardada en este dispositivo y se sube sola cuando vuelva internet.
+                </p>
+              </div>
+            </div>
           </section>
 
           {mensajeError && <p className="form-error form-error-bloque" role="alert" aria-live="assertive">{mensajeError}</p>}
