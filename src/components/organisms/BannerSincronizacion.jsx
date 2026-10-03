@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { LuCloudOff, LuRefreshCw } from 'react-icons/lu';
 import Boton from '../atoms/Boton';
 
-const ETIQUETA = { crear: 'Nuevo', editar: 'Cambio', eliminar: 'Eliminación' };
+const ETIQUETA = { crear: 'Nuevo', editar: 'Cambio', eliminar: 'Eliminación', foto: 'Foto' };
 
 /**
  * Estado de la conexión y de los cambios guardados sin enviar. Los que el
@@ -13,7 +13,7 @@ export default function BannerSincronizacion({ enLinea, cola, sincronizando, onS
   const rechazados = cola.filter((op) => op.error);
   if (enLinea && cola.length === 0) return null;
 
-  const nombre = (op) => op.datos?.codigoArbol ?? op.id;
+  const nombre = (op) => op.datos?.codigoArbol ?? op.codigoArbol ?? op.id;
 
   return (
     <div className="sincronizacion" role="region" aria-label="Sincronización">

@@ -258,8 +258,12 @@ tocar la base de datos. Se abre desde el menú de la galería → **Gestionar in
   referencia. Al elegir la especie se sugiere el siguiente código libre (`CIP-011`).
 - **Contraseña de administrador:** se pide la primera vez y se conserva solo en memoria
   mientras la página esté abierta. **Eliminar** siempre pide confirmar con la contraseña.
-- La foto es opcional: ruta `/uploads/...` o URL HTTPS; si se deja vacía se usa
-  `public/uploads/individuos/CÓDIGO.webp` cuando existe.
+- **Foto** (opcional, al agregar o editar): **Tomar foto** abre la cámara del
+  teléfono y **Elegir de la galería** usa una existente. Se reduce en el teléfono a
+  ≤1600 px antes de guardarla o enviarla; el servidor la convierte a WebP (≤1280 px) y
+  la guarda en MongoDB, no en disco, porque el disco de Render se borra en cada
+  despliegue. Si un individuo no tiene foto se usa `public/uploads/individuos/CÓDIGO.webp`
+  cuando existe.
 
 ### Uso sin conexión
 
@@ -270,14 +274,15 @@ La app es instalable (PWA) y funciona sin internet con lo que ya se haya visto c
   - App (HTML, JS, CSS, iconos): se guarda al instalar, así abre sin red.
   - `GET /api/...`: red primero (máx. 4 s) y, si no hay, la última copia guardada.
   - Fotos de `/uploads`, teselas del mapa y tipografías: se guardan al verlas por primera vez.
-- **Individuos sin conexión:** crear, editar y eliminar se guardan en una cola en el
-  dispositivo (`localStorage`, sin contraseñas) y la tarjeta muestra *Sin enviar*. Al
+- **Individuos sin conexión:** crear, editar, eliminar y las fotos se guardan en una
+  cola en el dispositivo (`localStorage` para los datos, IndexedDB para las fotos; sin
+  contraseñas) y la tarjeta muestra *Sin enviar*. Al
   volver la conexión, con la página de individuos abierta, se pide la contraseña y se
   envían en orden. Si el servidor rechaza alguno (p. ej. código repetido) queda listado
   para revisarlo o descartarlo; el resto se envía igual.
 - Sin conexión, el mapa del formulario solo muestra las zonas ya visitadas; las
   coordenadas a mano y **Usar mi ubicación** (GPS) funcionan igual.
-- No funciona sin conexión: crear/editar especies, subir fotos ni generar QR.
+- No funciona sin conexión: crear/editar especies, subir fotos de especies ni generar QR.
 
 ### Mapa de individuos (MapLibre GL)
 
@@ -362,6 +367,8 @@ Documentación interactiva en **`/api-docs`** (Swagger UI).
 | `POST` | `/` | Registrar un individuo: `codigoArbol`, `especieId`, `parque`, `latitud`, `longitud`, opcionales `altitudMsnm`, `precisionGpsM`, `imagen` (requiere `password`) |
 | `PUT` | `/:id` | Editar solo los campos enviados; `null` en `altitudMsnm`/`precisionGpsM` los borra (requiere `password`) |
 | `DELETE` | `/:id` | Eliminar un individuo (requiere `password` en el cuerpo JSON) |
+| `POST` | `/:id/foto` | Subir o reemplazar la foto (`multipart/form-data`: `foto`, `password`) |
+| `GET` | `/:id/foto` | Foto del individuo en WebP (caché larga; la URL lleva `?v=`) |
 | `PUT` | `/:codigoArbol/imagen` | Asociar una ruta `/uploads/...` o URL HTTPS a un individuo (requiere `password`) |
 
 Ejemplo para vincular una foto local versionada:

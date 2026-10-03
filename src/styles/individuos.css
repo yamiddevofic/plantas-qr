@@ -259,7 +259,8 @@
   /* En móvil va por encima de los botones flotantes ("+", "Contacto"), que
      ocupan 60px desde 18px del borde. */
   bottom: calc(90px + env(safe-area-inset-bottom, 0px));
-  z-index: 60;
+  /* Debajo de las ventanas (.overlay, 50) y del menú lateral para no tapar campos. */
+  z-index: 46;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -327,4 +328,16 @@
   .aviso-sin-conexion {
     animation: none;
   }
+}
+
+/* Botones de foto: un <label> que envuelve el <input type="file"> oculto. */
+.form-imagen-accion .form-archivo {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.form-archivo:focus-within {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
 }

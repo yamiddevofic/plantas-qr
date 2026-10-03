@@ -49,14 +49,10 @@ export async function actualizarImagenIndividuo(codigoArbol, imagen, password) {
   return res.json();
 }
 
-async function enviarIndividuo(url, metodo, cuerpo, fallback) {
+async function pedirIndividuo(url, opciones, fallback) {
   let res;
   try {
-    res = await fetch(url, {
-      method: metodo,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cuerpo),
-    });
+    res = await fetch(url, opciones);
   } catch (error) {
     // fetch solo rechaza cuando no hubo respuesta (sin red, servidor caído):
     // quien llama puede guardar el cambio en la cola y reintentar luego.
@@ -64,6 +60,22 @@ async function enviarIndividuo(url, metodo, cuerpo, fallback) {
   }
   if (!res.ok) throw new Error(await leerError(res, fallback));
   return res.json();
+}
+
+function enviarIndividuo(url, metodo, cuerpo, fallback) {
+  return pedirIndividuo(url, {
+    method: metodo,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cuerpo),
+  }, fallback);
+}
+
+/** Sube (o reemplaza) la foto de un individuo; devuelve su Feature actualizada. */
+export function subirFotoIndividuo(id, foto, password) {
+  const fd = new FormData();
+  fd.append('password', password);
+  fd.append('foto', foto, foto.name || 'foto.jpg');
+  return pedirIndividuo(`${BASE}/individuos/${encodeURIComponent(id)}/foto`, { method: 'POST', body: fd }, 'No se pudo subir la foto');
 }
 
 export function crearIndividuo(datos, password) {

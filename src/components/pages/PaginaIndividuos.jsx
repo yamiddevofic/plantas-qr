@@ -6,6 +6,7 @@ import {
   eliminarIndividuo,
   fetchIndividuos,
   fetchPlantas,
+  subirFotoIndividuo,
 } from '../../api';
 import useAccionProtegida from '../../hooks/useAccionProtegida';
 import useEnLinea from '../../hooks/useEnLinea';
@@ -13,14 +14,20 @@ import { agruparEspecies, parqueMasUsado } from '../../individuos';
 import {
   aplicarCola,
   descartar,
+  descartarOperacion,
   encolarCrear,
   encolarEditar,
   encolarEliminar,
+  encolarFoto,
   esIdLocal,
   guardarCola,
   leerCola,
   marcarError,
+  marcarErrorOperacion,
+  nuevoIdLocal,
+  reasignarId,
 } from '../../offline/cola';
+import { borrarFoto, guardarFoto, leerFoto, moverFoto } from '../../offline/fotos';
 import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
@@ -85,9 +92,41 @@ export default function PaginaIndividuos() {
     return () => control.abort();
   }, [recargar]);
 
+  // Fotos aún sin subir, guardadas en el teléfono: id → URL temporal para mostrarlas.
+  const [fotosLocales, setFotosLocales] = useState({});
+  const idsConFoto = cola.filter((op) => op.tipo === 'foto').map((op) => op.id).sort().join('|');
+  useEffect(() => {
+    let cancelado = false;
+    const urls = {};
+    (async () => {
+      for (const id of idsConFoto ? idsConFoto.split('|') : []) {
+        try {
+          const blob = await leerFoto(id);
+          if (blob) urls[id] = URL.createObjectURL(blob);
+        } catch {
+          // Sin IndexedDB no hay vista previa; la operación sigue en la cola.
+        }
+      }
+      if (cancelado) Object.values(urls).forEach((u) => URL.revokeObjectURL(u));
+      else setFotosLocales(urls);
+    })();
+    return () => {
+      cancelado = true;
+      Object.values(urls).forEach((u) => URL.revokeObjectURL(u));
+    };
+  }, [idsConFoto]);
+
   const especies = useMemo(() => agruparEspecies(plantas), [plantas]);
   // Lo guardado en el servidor más los cambios aún sin enviar.
-  const vista = useMemo(() => aplicarCola(individuos, cola, plantas), [individuos, cola, plantas]);
+  const vista = useMemo(() => {
+    const conCambios = aplicarCola(individuos, cola, plantas);
+    if (!Object.keys(fotosLocales).length) return conCambios;
+    return conCambios.map((f) => {
+      const local = fotosLocales[f.properties.id];
+      if (!local) return f;
+      return { ...f, properties: { ...f.properties, imagen: local, pendiente: f.properties.pendiente ?? 'foto' } };
+    });
+  }, [individuos, cola, plantas, fotosLocales]);
 
   // Individuo → especie agrupada, para filtrar sin importar qué ficha hermana tenga.
   const grupoPorFicha = useMemo(() => {
@@ -117,48 +156,73 @@ export default function PaginaIndividuos() {
     }
   }, []);
 
-  const guardar = useCallback(async (datos) => {
+  // Guarda en la cola (y la foto en el teléfono) para enviarlo con conexión.
+  const ponerEnCola = useCallback(async ({ editarId, datos, foto, codigoArbol }) => {
+    const id = editarId ?? (datos ? nuevoIdLocal() : null);
+    if (foto) await guardarFoto(id, foto);
+    setCola((c) => {
+      let siguiente = c;
+      if (datos) siguiente = editarId ? encolarEditar(siguiente, id, datos) : encolarCrear(siguiente, datos, id);
+      if (foto) siguiente = encolarFoto(siguiente, id, codigoArbol ?? datos?.codigoArbol);
+      return siguiente;
+    });
+  }, []);
+
+  const guardar = useCallback(async (datos, foto) => {
     const editando = formulario?.individuo;
     const id = editando?.properties.id;
-
-    const guardarEnCola = () => {
-      setCola((c) => (editando ? encolarEditar(c, id, datos) : encolarCrear(c, datos)));
+    const enCola = () => ponerEnCola({ editarId: id, datos, foto }).then(() => {
       setAviso({
         tipo: 'ok',
-        texto: `${datos.codigoArbol} guardado en este dispositivo; se enviará cuando haya conexión.`,
+        texto: `${datos.codigoArbol}${foto ? ' y su foto' : ''} guardado en este dispositivo; se enviará cuando haya conexión.`,
       });
       setFormulario(null);
-    };
+    });
 
     // Sin red, o sobre algo que aún está en la cola, el cambio se suma a la cola.
     if (!enLinea || (id && cola.some((op) => op.id === id))) {
-      guardarEnCola();
+      await enCola();
       return;
     }
 
     const descripcion = editando
       ? `Para guardar los cambios de ${editando.properties.codigoArbol} necesitas la contraseña de administrador.`
       : `Para registrar ${datos.codigoArbol} necesitas la contraseña de administrador.`;
-    let feature;
+    let resultado;
     try {
-      feature = await ejecutar(
-        (password) => (editando
-          ? actualizarIndividuo(id, datos, password)
-          : crearIndividuo(datos, password)),
-        descripcion,
-      );
+      resultado = await ejecutar(async (password) => {
+        const feature = editando
+          ? await actualizarIndividuo(id, datos, password)
+          : await crearIndividuo(datos, password);
+        if (!foto) return { feature };
+        // El individuo ya quedó guardado: si la foto falla no se debe repetir todo.
+        try {
+          return { feature: await subirFotoIndividuo(feature.properties.id, foto, password) };
+        } catch (e) {
+          return { feature, errorFoto: e };
+        }
+      }, descripcion);
     } catch (e) {
       if (e.sinRed) {
-        guardarEnCola();
+        await enCola();
         return;
       }
       throw e;
     }
+
+    const { feature, errorFoto } = resultado;
     setIndividuos((prev) => [...prev.filter((f) => f.properties.id !== feature.properties.id), feature]);
-    setAviso({ tipo: 'ok', texto: `${feature.properties.codigoArbol} ${editando ? 'actualizado' : 'registrado'} correctamente.` });
+    let texto = `${feature.properties.codigoArbol} ${editando ? 'actualizado' : 'registrado'} correctamente.`;
+    if (errorFoto?.sinRed) {
+      await ponerEnCola({ editarId: feature.properties.id, foto, codigoArbol: feature.properties.codigoArbol });
+      texto += ' La foto se subirá cuando haya conexión.';
+    } else if (errorFoto) {
+      texto += ` No se pudo subir la foto: ${errorFoto.message}`;
+    }
+    setAviso({ tipo: errorFoto && !errorFoto.sinRed ? 'error' : 'ok', texto });
     setFormulario(null);
     refrescar();
-  }, [ejecutar, formulario, enLinea, cola, refrescar]);
+  }, [ejecutar, formulario, enLinea, cola, refrescar, ponerEnCola]);
 
   const eliminar = useCallback(async (feature) => {
     const { id, codigoArbol } = feature.properties;
@@ -166,6 +230,7 @@ export default function PaginaIndividuos() {
 
     const eliminarEnCola = () => {
       setCola((c) => encolarEliminar(c, id));
+      borrarFoto(id).catch(() => {});
       setAviso({
         tipo: 'ok',
         texto: esIdLocal(id)
@@ -210,24 +275,46 @@ export default function PaginaIndividuos() {
         let restante = colaRef.current;
         let ok = 0;
         let rechazadas = 0;
-        for (const op of restante.filter((o) => !o.error)) {
+        // Se toma siempre la siguiente operación sin error de la cola actual: al
+        // crear un individuo, su foto pasa del id local al real y sigue en la cola.
+        for (let op = restante.find((o) => !o.error); op; op = restante.find((o) => !o.error)) {
           try {
-            if (op.tipo === 'crear') await crearIndividuo(op.datos, password);
-            else if (op.tipo === 'editar') await actualizarIndividuo(op.id, op.datos, password);
-            else await eliminarIndividuo(op.id, password);
-            restante = descartar(restante, op.id);
+            if (op.tipo === 'crear') {
+              const creado = await crearIndividuo(op.datos, password);
+              restante = descartarOperacion(restante, op);
+              const idReal = creado.properties.id;
+              if (restante.some((o) => o.id === op.id)) {
+                await moverFoto(op.id, idReal);
+                restante = reasignarId(restante, op.id, idReal);
+              }
+            } else if (op.tipo === 'editar') {
+              await actualizarIndividuo(op.id, op.datos, password);
+              restante = descartarOperacion(restante, op);
+            } else if (op.tipo === 'foto') {
+              const foto = await leerFoto(op.id);
+              if (foto) await subirFotoIndividuo(op.id, foto, password);
+              restante = descartarOperacion(restante, op);
+              await borrarFoto(op.id);
+            } else {
+              await eliminarIndividuo(op.id, password);
+              restante = descartarOperacion(restante, op);
+            }
             ok += 1;
           } catch (e) {
             if (e.sinRed || /contraseña/i.test(e.message)) throw e;
             // Eliminar algo que ya no existe es, a efectos prácticos, un éxito.
             if (op.tipo === 'eliminar' && /no existe/i.test(e.message)) {
-              restante = descartar(restante, op.id);
+              restante = descartarOperacion(restante, op);
               ok += 1;
             } else {
-              restante = marcarError(restante, op.id, e.message);
+              // Si falla la creación, su foto tampoco puede subirse: se marcan ambas.
+              restante = op.tipo === 'crear'
+                ? marcarError(restante, op.id, e.message)
+                : marcarErrorOperacion(restante, op, e.message);
               rechazadas += 1;
             }
           }
+          colaRef.current = restante;
           guardarCola(restante);
           setCola(restante);
         }
@@ -258,7 +345,10 @@ export default function PaginaIndividuos() {
     }
   }, [enLinea, hayPorEnviar, cargando, formulario, sincronizar]);
 
-  const descartarOperacion = (id) => setCola((c) => descartar(c, id));
+  const descartarPendiente = (id) => {
+    setCola((c) => descartar(c, id));
+    borrarFoto(id).catch(() => {});
+  };
 
   const abrirFormulario = (individuo = null) => {
     setAviso(null);
@@ -328,7 +418,7 @@ export default function PaginaIndividuos() {
               cola={cola}
               sincronizando={sincronizando}
               onSincronizar={sincronizar}
-              onDescartar={descartarOperacion}
+              onDescartar={descartarPendiente}
             />
 
             <p className="individuos-conteo" role="status" aria-live="polite">

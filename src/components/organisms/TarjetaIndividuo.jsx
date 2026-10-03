@@ -25,7 +25,9 @@ export default function TarjetaIndividuo({ feature, onEditar, onEliminar }) {
       <div className="individuo-datos">
         <p className="individuo-codigo">
           {codigoArbol}
-          {pendiente && <span className="individuo-pendiente">Sin enviar</span>}
+          {pendiente && (
+            <span className="individuo-pendiente">{pendiente === 'foto' ? 'Foto sin subir' : 'Sin enviar'}</span>
+          )}
         </p>
         <p className="individuo-especie">
           {especie ? (
