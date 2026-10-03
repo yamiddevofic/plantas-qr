@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { fetchIndividuos } from '../../api';
 import { useTema } from '../../tema.js';
 import {
   CAMARA_3D,
@@ -16,10 +15,9 @@ import {
 } from '../../mapa/capasIndividuos';
 import SeccionFicha from '../molecules/SeccionFicha';
 import ControlesMapa from '../molecules/ControlesMapa';
-import ListaIndividuosMapa from '../molecules/ListaIndividuosMapa';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 
-export default function MapaIndividuos({ especieId, nombreEspecie }) {
+export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido = null, onSeleccion }) {
   const { tema } = useTema();
   const contenedorRef = useRef(null);
   const seccionRef = useRef(null);
@@ -29,14 +27,18 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
   const popupRef = useRef(null);
   const seleccionRef = useRef(null);
 
-  const [datos, setDatos] = useState(null);
-  const [estado, setEstado] = useState('cargando');
+  const datos = coleccion;
+  const estado = coleccion?.features?.length ? 'listo' : 'vacio';
   const [visible, setVisible] = useState(false);
   const [mapaListo, setMapaListo] = useState(false);
   const [errorMapa, setErrorMapa] = useState(null);
-  const [seleccionado, setSeleccionado] = useState(null);
   const [base, setBase] = useState('mapa');
   const [relieve3D, setRelieve3D] = useState(false);
+
+  const onSeleccionRef = useRef(onSeleccion);
+  useEffect(() => {
+    onSeleccionRef.current = onSeleccion;
+  }, [onSeleccion]);
 
   // Los manejadores de MapLibre viven fuera del ciclo de React: leen de refs.
   const vistaRef = useRef({ base, tema, relieve3D });
@@ -46,22 +48,8 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
 
   const total = datos?.features?.length ?? 0;
 
-  // 1. Datos: GeoJSON de los individuos de esta especie.
-  useEffect(() => {
-    const control = new AbortController();
-    fetchIndividuos(especieId, { signal: control.signal })
-      .then((coleccion) => {
-        setDatos(coleccion);
-        setEstado(coleccion?.features?.length ? 'listo' : 'vacio');
-      })
-      .catch((error) => {
-        if (error.name === 'AbortError') return;
-        // La sección es complementaria: si la API falla, la ficha sigue sin mapa.
-        console.warn('Mapa de individuos no disponible:', error.message);
-        setEstado('error');
-      });
-    return () => control.abort();
-  }, [especieId]);
+  // 1. Los datos (GeoJSON de los individuos) llegan de ContenidoFicha, que también
+  //    los lista en "Datos rápidos".
 
   // 2. Solo se descarga MapLibre cuando la sección se acerca al viewport.
   useEffect(() => {
@@ -88,7 +76,7 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
     if (seleccionRef.current !== id) marcar(map, seleccionRef.current, false);
     marcar(map, id, true);
     seleccionRef.current = id;
-    setSeleccionado(id);
+    onSeleccionRef.current?.(id);
 
     popupRef.current
       .setLngLat(coordenadas)
@@ -154,7 +142,7 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
         popupRef.current.on('close', () => {
           marcar(map, seleccionRef.current, false);
           seleccionRef.current = null;
-          setSeleccionado(null);
+          onSeleccionRef.current?.(null);
         });
 
         // visualizePitch: la brújula muestra la inclinación y la restablece al pulsarla.
@@ -193,6 +181,18 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
       setMapaListo(false);
     };
   }, [estado, visible, datos, seleccionar]);
+
+  // Pedido desde la lista de "Datos rápidos". Quien pide desplaza la página hasta el
+  // mapa, lo que dispara su carga; el pedido se atiende cuando el mapa está listo.
+  useEffect(() => {
+    if (!pedido?.id || !mapaListo) return;
+    const feature = datos?.features?.find((f) => f.properties.id === pedido.id);
+    if (!feature) return;
+    seleccionar(feature, { centrar: true });
+    // Se repite el desplazamiento: el primero (desde la lista) puede quedarse corto
+    // porque la sección cambia de alto mientras el mapa termina de cargar.
+    seccionRef.current?.scrollIntoView({ behavior: prefiereMenosMovimiento() ? 'auto' : 'smooth', block: 'center' });
+  }, [pedido, mapaListo, datos, seleccionar]);
 
   // 4. Cambio de capa base o de tema → otro estilo. El tema solo afecta al
   //    mapa vectorial; el satélite es igual de día y de noche.
@@ -239,19 +239,15 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
     }
   }, [relieve3D, base]);
 
-  if (estado === 'vacio' || estado === 'error') return null;
+  if (estado === 'vacio') return null;
 
-  const titulo = estado === 'listo'
-    ? `${total} ${total === 1 ? 'individuo' : 'individuos'} en el parque`
-    : 'Individuos en el parque';
+  const titulo = `${total} ${total === 1 ? 'individuo' : 'individuos'} en el parque`;
 
   return (
     <div ref={seccionRef} className="detalle-mapa">
       <SeccionFicha id="ficha-mapa" titulo="¿Dónde encontrarlo?">
-        <p className="detalle-parrafo">
-          Ubicación GPS de cada árbol de esta especie registrado en el Parque principal de Chitagá.
-          Toca un punto o un código de la lista para ver sus datos; activa el relieve 3D para ver
-          las montañas que rodean el pueblo.
+        <p className="detalle-parrafo detalle-parrafo-suave">
+          Toca un punto para ver el árbol; con relieve 3D ves las montañas que rodean el pueblo.
         </p>
 
         <ControlesMapa
@@ -276,22 +272,17 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
           )}
           {errorMapa && <p className="mapa-error" role="status">{errorMapa}</p>}
         </div>
-
-        {estado === 'listo' && (
-          <ListaIndividuosMapa
-            titulo={titulo}
-            features={datos.features}
-            seleccionado={seleccionado}
-            deshabilitado={!mapaListo}
-            onSeleccionar={(feature) => seleccionar(feature, { centrar: true })}
-          />
-        )}
       </SeccionFicha>
     </div>
   );
 }
 
 MapaIndividuos.propTypes = {
-  especieId: PropTypes.string.isRequired,
+  /** FeatureCollection de los individuos de la especie. */
+  coleccion: PropTypes.object,
+  /** { id, vez }: pide seleccionar y centrar un individuo (vez cambia en cada pedido). */
+  pedido: PropTypes.shape({ id: PropTypes.string, vez: PropTypes.number }),
+  /** Avisa qué individuo está seleccionado (o null). */
+  onSeleccion: PropTypes.func,
   nombreEspecie: PropTypes.string.isRequired,
 };

@@ -21,9 +21,8 @@ import { generarQR } from '../../api';
 import { useTema } from '../../tema.js';
 
 export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGenerado, onVerEstados }) {
-  const { nombre, ubicaciones, imagen } = planta || {};
+  const { nombre, imagen } = planta || {};
   const imagenes = listaImagenes({ imagen, imagenes: planta?.imagenes });
-  const sitios = Array.isArray(ubicaciones) ? ubicaciones : [];
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [descargando, setDescargando] = useState(false);
   const [errorQR, setErrorQR] = useState(null);
@@ -217,7 +216,6 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
               <PanelQR
                 planta={planta}
                 qr={qr}
-                totalSitios={sitios.length}
                 copiado={copiado}
                 onCopiar={copiarId}
                 descargando={descargando}

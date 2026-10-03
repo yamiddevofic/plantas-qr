@@ -112,8 +112,7 @@
 
 /* Estado de conservación, antes de "Conoce este árbol" */
 .detalle-estado {
-  margin: 2px 0 6px;
-  padding-left: 22px;
+  margin: 0;
 }
 
 /* ── Splash de carga (arbolito + nombre de la app) ───────────── */
