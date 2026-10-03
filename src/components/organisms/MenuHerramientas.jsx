@@ -12,6 +12,7 @@ import {
   LuTreePine,
 } from 'react-icons/lu';
 import BarraFiltros from './BarraFiltros';
+import ItemInstalarApp from '../molecules/ItemInstalarApp';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
 import MenuLateral from './MenuLateral';
@@ -82,6 +83,7 @@ export default function MenuHerramientas({
                 onCerrar();
               }}
             />
+            <ItemInstalarApp onCerrarMenu={onCerrar} />
           </GrupoMenu>
 
           <GrupoMenu titulo="Herramientas">

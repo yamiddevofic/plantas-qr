@@ -8,7 +8,10 @@ export default function AvisoSinConexion() {
   return (
     <p className="aviso-sin-conexion" role="status">
       <LuWifiOff aria-hidden="true" />
-      Sin conexión · mostrando lo guardado en este dispositivo
+      <span className="aviso-sin-conexion-texto">
+        <strong>Sin conexión</strong>
+        <span>Mostrando lo guardado en este dispositivo</span>
+      </span>
     </p>
   );
 }
