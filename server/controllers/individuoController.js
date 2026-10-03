@@ -1,17 +1,23 @@
 import mongoose from 'mongoose';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import Individuo from '../models/Individuo.js';
 import Planta from '../models/Planta.js';
 
 const EXTENSIONES_IMAGEN = ['.webp', '.jpg', '.jpeg', '.png'];
+const CARPETA_IMAGENES_INDIVIDUOS = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../../public/uploads/individuos'
+);
 
 function imagenPublica(individuo) {
   if (individuo.imagen) return individuo.imagen;
   const codigo = individuo.codigoArbol;
   if (!/^[A-Z0-9-]+$/.test(codigo)) return '';
-  const carpeta = path.resolve('public/uploads/individuos');
-  const extension = EXTENSIONES_IMAGEN.find((ext) => fs.existsSync(path.join(carpeta, `${codigo}${ext}`)));
+  const extension = EXTENSIONES_IMAGEN.find((ext) => fs.existsSync(
+    path.join(CARPETA_IMAGENES_INDIVIDUOS, `${codigo}${ext}`)
+  ));
   return extension ? `/uploads/individuos/${codigo}${extension}` : '';
 }
 

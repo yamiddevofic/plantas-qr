@@ -2575,6 +2575,19 @@ html[data-tema="oscuro"] .menu-filtros-movil .filtros {
   margin-top: 16px;
 }
 
+@media (max-width: 767px) {
+  /* Rompe el padding lateral de la ficha: la tarjeta del mapa ocupa el ancho
+     completo del viewport y conserva padding interior para el texto/controles. */
+  .detalle-mapa {
+    margin-inline: -18px;
+  }
+
+  .detalle-mapa > .detalle-seccion {
+    border-radius: 0;
+    padding-inline: 18px;
+  }
+}
+
 .mapa-segmentado {
   display: inline-flex;
   padding: 3px;
