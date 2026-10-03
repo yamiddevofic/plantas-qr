@@ -105,7 +105,7 @@ export default function PaginaInicio() {
       </MenuLateral>
 
       <main id="app-main">
-        <HeroInicio onConocerProyecto={conocerProyecto} />
+        <HeroInicio onConocerProyecto={conocerProyecto} plantas={plantas} />
 
         {datos ? (
           <SeccionParque especies={datos.especies} familias={datos.familias} abierto />

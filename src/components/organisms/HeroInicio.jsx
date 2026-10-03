@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { LuArrowRight } from 'react-icons/lu';
 import ImagenPlanta from '../atoms/ImagenPlanta';
 import Boton from '../atoms/Boton';
+import BuscadorInicio from './BuscadorInicio';
 
 const TITULO = 'Cada árbol, una historia';
 const VELOCIDAD_MS = 70;
@@ -12,7 +13,7 @@ const VELOCIDAD_MS = 70;
  * con degradado, un mensaje que explica de una sola mirada qué es el
  * proyecto y dos llamados a la acción (proyecto y galería).
  */
-export default function HeroInicio({ onConocerProyecto }) {
+export default function HeroInicio({ onConocerProyecto, plantas = null }) {
   const [visibles, setVisibles] = useState(() =>
     window.matchMedia('(prefers-reduced-motion: reduce)').matches ? TITULO.length : 0
   );
@@ -62,6 +63,10 @@ export default function HeroInicio({ onConocerProyecto }) {
           Escanea el código QR de cualquier árbol del parque para descubrir su
           ficha: familia, origen, usos y estado de conservación.
         </p>
+        {/* Solo móvil: en escritorio el buscador va junto al botón de menú (PaginaInicio). */}
+        <div className="hero-inicio-buscador">
+          <BuscadorInicio plantas={plantas} />
+        </div>
         <div className="hero-inicio-acciones">
           <Boton variante="primary" onClick={onConocerProyecto}>
             Conoce nuestro proyecto
@@ -78,4 +83,6 @@ export default function HeroInicio({ onConocerProyecto }) {
 HeroInicio.propTypes = {
   /** Navega hasta la sección del proyecto (scroll suave). */
   onConocerProyecto: PropTypes.func.isRequired,
+  /** Catálogo para el buscador de móvil; null mientras carga. */
+  plantas: PropTypes.arrayOf(PropTypes.object),
 };

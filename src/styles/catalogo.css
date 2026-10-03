@@ -10,7 +10,8 @@
   z-index: 30;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* Solo hay botones de acción: van al borde derecho (en escritorio, al izquierdo). */
+  justify-content: flex-end;
   gap: 16px;
   padding: 10px 0;
   margin-bottom: 8px;
@@ -76,18 +77,6 @@
       font-size: 1rem;
     }
   }
-}
-
-/* Marca a la izquierda del header (vuelve al inicio). */
-.galeria-marca {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--hit);
-  font-size: 1.05rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--ink-900);
-  text-decoration: none;
 }
 
 .galeria-titular {

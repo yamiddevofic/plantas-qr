@@ -215,6 +215,12 @@ html[data-tema="oscuro"] .hero {
   .hero-inicio-pie {
     display: none;
   }
+
+  /* En móvil el hero ocupa toda la pantalla (svh: no cambia con la barra del navegador). */
+  .hero-inicio {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
 }
 
 @media (min-width: 768px) {

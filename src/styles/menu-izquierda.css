@@ -1,0 +1,60 @@
+/* ══════════════════════════════════════════════════════════════
+   Escritorio (≥ 768 px): menú a la izquierda
+   El botón de menú pasa a la esquina izquierda con el buscador a su lado y el
+   panel se abre desde ese mismo borde. En móvil se conserva a la derecha, donde
+   alcanza el pulgar. Va al final del índice para ganar a las reglas base.
+   ══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  /* Inicio: [menú] [buscador] */
+  .home-acciones {
+    left: 18px;
+    right: auto;
+  }
+
+  .home-buscador {
+    left: calc(18px + var(--hit) + 12px);
+    width: 440px;
+  }
+
+  /* Ficha: [menú] [lupa] sobre la foto */
+  .hero-acciones {
+    left: 14px;
+    right: auto;
+  }
+
+  .hero-acciones-grupo {
+    flex-direction: row-reverse;
+  }
+
+  /* Galería: [menú] [lupa]  PlantaQR */
+  .galeria-header {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 20px;
+  }
+
+  /* Panel lateral: nace en el borde izquierdo */
+  .menu-panel {
+    left: 8px;
+    right: auto;
+    animation-name: drawerInIzquierda;
+  }
+}
+
+@keyframes drawerInIzquierda {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-panel {
+    animation: none;
+  }
+}
