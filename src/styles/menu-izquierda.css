@@ -6,32 +6,41 @@
    ══════════════════════════════════════════════════════════════ */
 
 @media (min-width: 768px) {
-  /* Inicio: [menú] [buscador] */
+  /* Los controles se pegan a los bordes de la ventana (20 px), no a los del
+     contenido centrado: 50% - 50vw lleva del borde de .app al de la ventana. */
+
+  /* Inicio: [menú] ………………… [buscador] */
   .home-acciones {
-    left: 18px;
+    left: calc(50% - 50vw + 20px);
     right: auto;
   }
 
   .home-buscador {
-    left: calc(18px + var(--hit) + 12px);
+    right: calc(50% - 50vw + 20px);
+    left: auto;
     width: 440px;
   }
 
-  /* Ficha: [menú] [lupa] sobre la foto */
+  /* Ficha: [menú] ………………… [lupa] sobre la foto */
   .hero-acciones {
-    left: 14px;
-    right: auto;
+    left: 20px;
+    right: 20px;
   }
 
-  .hero-acciones-grupo {
+  .hero-acciones .hero-acciones-grupo {
+    justify-content: space-between;
     flex-direction: row-reverse;
   }
 
-  /* Galería: [menú] [lupa]  PlantaQR */
+  /* Galería: [menú] ………………… [lupa] */
   .galeria-header {
+    margin-inline: calc(50% - 50vw + 20px);
+  }
+
+  .galeria-header .hero-acciones-grupo {
+    flex: 1;
     flex-direction: row-reverse;
-    justify-content: flex-end;
-    gap: 20px;
+    justify-content: space-between;
   }
 
   /* Panel lateral: nace en el borde izquierdo */
