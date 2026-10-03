@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { LuSearch, LuX } from 'react-icons/lu';
 import { listaImagenes } from '../../constantes';
@@ -33,12 +33,40 @@ Miniatura.propTypes = { planta: PropTypes.object.isRequired };
  * escribir filtra por nombre común, científico, familia o tipo. Elegir una lleva a su
  * ficha. Es un combobox accesible: flechas, Enter y Escape.
  */
+// En móvil, al enfocar el buscador el teclado tapa la mitad baja de la pantalla:
+// la barra se fija arriba del área visible y la lista ocupa lo que queda.
+const ES_MOVIL = '(max-width: 767px)';
+
+function useFocoMovil(activo, refRaiz) {
+  useEffect(() => {
+    const raiz = refRaiz.current;
+    if (!activo || !raiz || !window.matchMedia?.(ES_MOVIL).matches) return undefined;
+    const vv = window.visualViewport;
+    const ajustar = () => {
+      // visualViewport es el área que queda sobre el teclado (iOS y Android).
+      raiz.style.setProperty('--vv-arriba', `${vv ? vv.offsetTop : 0}px`);
+      raiz.style.setProperty('--vv-alto', `${vv ? vv.height : window.innerHeight}px`);
+    };
+    ajustar();
+    vv?.addEventListener('resize', ajustar);
+    vv?.addEventListener('scroll', ajustar);
+    raiz.classList.add('en-foco');
+    return () => {
+      vv?.removeEventListener('resize', ajustar);
+      vv?.removeEventListener('scroll', ajustar);
+      raiz.classList.remove('en-foco');
+    };
+  }, [activo, refRaiz]);
+}
+
 export default function BuscadorInicio({ plantas }) {
   const [texto, setTexto] = useState('');
   const [abierto, setAbierto] = useState(false);
   const [activo, setActivo] = useState(0);
   const inputRef = useRef(null);
+  const raizRef = useRef(null);
   const idLista = useId();
+  useFocoMovil(abierto, raizRef);
 
   const catalogo = useMemo(() => unicas(plantas ?? []), [plantas]);
 
@@ -80,7 +108,9 @@ export default function BuscadorInicio({ plantas }) {
   const mostrarPanel = abierto && Boolean(plantas);
 
   return (
-    <div className="buscador-inicio">
+    <div className="buscador-inicio" ref={raizRef}>
+      {/* Fondo del modo foco en móvil: tocarlo cierra el buscador. */}
+      <div className="buscador-inicio-fondo" aria-hidden="true" onMouseDown={(e) => { e.preventDefault(); inputRef.current?.blur(); }} />
       <div className={`buscador-inicio-barra${abierto ? ' abierto' : ''}`}>
         <LuSearch aria-hidden="true" className="buscador-inicio-lupa" />
         <input
