@@ -61,7 +61,6 @@ export default function PlantillaGaleria({
       <header
         className={`galeria-header ${headerOculto ? 'galeria-header-oculto' : ''}`.trim()}
       >
-        <a className="galeria-marca" href="#/">PlantaQR</a>
         <div className="hero-acciones-grupo">
           <BuscadorLupa plantas={todasLasPlantas} />
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />

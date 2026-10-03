@@ -2,14 +2,38 @@
    Buscador del inicio · barra en el hero con sugerencias
    ══════════════════════════════════════════════════════════════ */
 
-/* Contenedor en la esquina superior izquierda; el botón de menú ocupa la derecha. */
+/* Escritorio: esquina superior, junto al botón de menú (ver menu-izquierda.css).
+   En móvil se oculta y se usa la copia del hero. */
 .home-buscador {
+  display: none;
   position: absolute;
   top: 14px;
-  left: 18px;
-  right: 76px;
   z-index: 20;
-  max-width: 440px;
+}
+
+/* Móvil: dentro del hero, entre la frase y los botones. */
+.hero-inicio-buscador {
+  width: min(100%, 520px);
+  margin-top: 28px;
+}
+
+/* El buscador del hero queda en la mitad baja de la pantalla: la lista se abre
+   hacia arriba para no salirse por abajo. */
+@media (max-width: 767px) {
+  .hero-inicio-buscador .buscador-inicio-panel {
+    top: auto;
+    bottom: calc(100% + 8px);
+  }
+}
+
+@media (min-width: 768px) {
+  .home-buscador {
+    display: block;
+  }
+
+  .hero-inicio-buscador {
+    display: none;
+  }
 }
 
 .buscador-inicio {
