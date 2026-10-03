@@ -1,0 +1,195 @@
+/* ══════════════════════════════════════════════════════════════
+   Buscador del inicio · barra en el hero con sugerencias
+   ══════════════════════════════════════════════════════════════ */
+
+.buscador-inicio {
+  position: relative;
+  width: min(100%, 520px);
+  margin-top: 28px;
+  text-align: left;
+}
+
+.buscador-inicio-barra {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 8px 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--ink-500);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  transition: box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+html[data-tema="oscuro"] .buscador-inicio-barra {
+  background: rgba(21, 31, 26, 0.92);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.buscador-inicio-barra.abierto,
+.buscador-inicio-barra:focus-within {
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(183, 228, 199, 0.55), 0 14px 36px rgba(0, 0, 0, 0.28);
+}
+
+.buscador-inicio-lupa {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.buscador-inicio-barra input {
+  flex: 1;
+  min-width: 0;
+  height: 54px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.buscador-inicio-barra input::placeholder {
+  color: var(--ink-500);
+}
+
+.buscador-inicio-limpiar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-500);
+  cursor: pointer;
+}
+
+.buscador-inicio-limpiar:hover {
+  background: var(--mint-100);
+  color: var(--ink-900);
+}
+
+.buscador-inicio-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 10px 8px 8px;
+  border: 1px solid var(--line-100);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink-900);
+  box-shadow: var(--shadow-lg);
+  animation: buscadorInicioEntra 0.16s ease-out;
+}
+
+@keyframes buscadorInicioEntra {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .buscador-inicio-panel {
+    animation: none;
+  }
+}
+
+.buscador-inicio-titulo {
+  margin: 0;
+  padding: 2px 10px 6px;
+  color: var(--ink-300);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.buscador-inicio-panel ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.buscador-inicio-opcion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.buscador-inicio-opcion.activa {
+  background: var(--mint-50);
+}
+
+.buscador-inicio-foto {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--mint-100);
+}
+
+.buscador-inicio-foto-vacia {
+  display: grid;
+  place-items: center;
+}
+
+.buscador-inicio-texto {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.buscador-inicio-texto strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.buscador-inicio-texto em {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-500);
+  font-size: 0.8125rem;
+}
+
+.buscador-inicio-etiquetas {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+  color: var(--ink-300);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* En pantallas angostas solo cabe una etiqueta junto al nombre. */
+@media (max-width: 479px) {
+  .buscador-inicio-etiquetas span:not(:first-child) {
+    display: none;
+  }
+}
+
+.buscador-inicio-vacio {
+  margin: 0;
+  padding: 12px 10px 14px;
+  color: var(--ink-500);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}

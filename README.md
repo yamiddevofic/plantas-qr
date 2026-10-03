@@ -11,6 +11,7 @@ Proyecto desarrollado como trabajo de formación SENA.
 ## ✨ Características
 
 - **Ficha por especie accesible por QR** — cada QR apunta a una ruta propia de la aplicación (`#/planta/:id`); la ruta antigua `/api/qr/ver/:id` se conserva como ficha HTML de respaldo.
+- **Buscador en el inicio** — barra "Busca rápidamente una planta" que sugiere tres especies (el arrayán primero) y filtra al escribir por nombre, familia o categoría; sin repetir especies con varias fichas.
 - **Página de inicio** — hero con identidad del parque, sección "Nuestro parque" (conteo de especies y familias), acordeón del proyecto y sección de contacto.
 - **Galería con búsqueda y filtros** (`#/galeria`) — busca por nombre común, científico o ID, y filtra por familia, tipo y estado de conservación (todo en cliente, sin recargar).
 - **Escala termómetro de conservación** — cada estado (extinto → preocupación menor) tiene su propio color, tipo categorías IUCN, con ventana de leyenda explicativa.
