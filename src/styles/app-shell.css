@@ -1,0 +1,249 @@
+/* ══════════════════════════════════════════════════════════════
+   App shell
+   ══════════════════════════════════════════════════════════════ */
+
+.app {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 18px 64px;
+}
+
+/* Controles flotantes (búsqueda y menú) al quitar el hero del inicio */
+.home-acciones {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 20;
+}
+
+/* ── Hero ────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  margin: 16px 0 28px;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+html[data-tema="oscuro"] .hero {
+  background: transparent;
+}
+
+/* ── Hero profesional de la página de inicio ─────────────────── */
+
+.hero-inicio {
+  position: relative;
+  margin: 16px 0 34px;
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  isolation: isolate;
+}
+
+.hero-inicio > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.hero-inicio-degradado {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 26, 18, 0.18) 0%,
+    rgba(10, 26, 18, 0.42) 45%,
+    rgba(9, 22, 15, 0.78) 100%
+  );
+}
+
+.hero-inicio-contenido {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 84px 24px 32px;
+  text-align: center;
+  color: var(--white);
+}
+
+.hero-inicio-corchete {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 10px;
+}
+
+.hero-inicio-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-inicio-titulo {
+  font-size: var(--step-4);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-wrap: balance;
+  color: var(--white);
+}
+
+/* Cursor del efecto "escribir a máquina" del titular */
+.hero-inicio-cursor {
+  display: inline-block;
+  width: 0.09em;
+  height: 1em;
+  margin-left: 4px;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: hero-cursor-parpadeo 0.8s step-end infinite;
+}
+
+@keyframes hero-cursor-parpadeo {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.hero-inicio-texto {
+  margin: 16px auto 0;
+  max-width: 52ch;
+  font-size: var(--step-1);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.hero-inicio-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+@media (min-width: 768px) {
+  .hero-inicio {
+    width: 100vw;
+    height: 60dvh;
+    margin: 0 calc(50% - 50vw) 34px;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-inicio {
+    min-height: 565px;
+    margin: 0 -18px 34px;
+    border-radius: 0;
+  }
+
+  .hero-inicio-titulo {
+    font-size: clamp(2.4rem, 1.1rem + 4.4vw, 3.1rem);
+  }
+}
+
+/* Botón hamburguesa del menú de herramientas, sobre el hero */
+.hero-acciones {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 64px 24px 40px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.hero-brand-mark {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  display: block;
+  color: var(--forest-600);
+}
+
+.hero-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--forest-600);
+  margin-bottom: 8px;
+}
+
+.hero-title {
+  font-size: var(--step-4);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--forest-900);
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.hero-subtitle {
+  margin-top: 16px;
+  max-width: 52ch;
+  margin-inline: auto;
+  color: var(--ink-500);
+  font-size: var(--step-1);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* Reutilizado en detalle */
+.app-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--forest-600);
+  margin-bottom: 2px;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    min-height: 340px;
+    border-radius: var(--radius-lg);
+    margin-inline: 0;
+  }
+
+  .hero-content {
+    padding: 84px 32px 56px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 380px;
+  }
+}

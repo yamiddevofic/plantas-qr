@@ -1,0 +1,113 @@
+/* ══════════════════════════════════════════════════════════════
+   Toolbar
+   ══════════════════════════════════════════════════════════════ */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  padding-block: 4px;
+}
+
+.toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* FAB · acción principal en zona natural del pulgar */
+.fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 45;
+  width: 60px;
+  height: 60px;
+  min-height: 60px;
+  padding: 0;
+  border-radius: 50%;
+  transition: transform 0.15s ease-out;
+}
+
+.fab svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease-out;
+}
+
+.fab:active {
+  transform: scale(0.92);
+}
+
+.fab.abierto {
+  transform: scale(0.92);
+}
+
+/* Botón flotante de tema (claro/oscuro) */
+.fab-tema {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 45;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition:
+    background 0.15s ease-out,
+    color 0.15s ease-out,
+    transform 0.15s ease-out;
+}
+
+/* En claro muestra la paleta de la noche (luna); en oscuro la del día (sol),
+   de modo que el botón siempre anuncia el tema al que se cambiará. */
+html:not([data-tema="oscuro"]) .fab-tema {
+  background: #151f1a;
+  color: #7fae92;
+}
+
+html:not([data-tema="oscuro"]) .fab-tema:hover {
+  background: #24342b;
+}
+
+html[data-tema="oscuro"] .fab-tema {
+  background: #2d6a4f;
+  color: #ffffff;
+}
+
+html[data-tema="oscuro"] .fab-tema:hover {
+  background: #1f4d3a;
+}
+
+.fab-tema:active {
+  transform: scale(0.92);
+}
+
+.fab.abierto svg {
+  transform: rotate(90deg) scale(1.2);
+}
+
+/* En escritorio se muestran filtros y toolbar; en móvil viven en el menú hamburguesa */
+.filtros.filtros-desktop {
+  display: none;
+  padding: 6px 14px 8px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  justify-content: center;
+}
+
+html[data-tema="oscuro"] .filtros.filtros-desktop {
+  background: transparent;
+}
+
+.toolbar-desktop {
+  display: none;
+}

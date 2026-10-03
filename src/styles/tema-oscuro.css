@@ -1,0 +1,58 @@
+/* ══════════════════════════════════════════════════════════════
+   Modo oscuro · paleta de noche (html[data-tema="oscuro"])
+   ══════════════════════════════════════════════════════════════ */
+
+html[data-tema="oscuro"] {
+  color-scheme: dark;
+
+  /* Verdes: claros para texto sobre superficie oscura y botones primarios */
+  --forest-900: #cbe2d3;
+  --forest-800: #a2d3b1;
+  --forest-700: #6fbf8d;
+  --forest-600: #57a97b;
+  --leaf-500: #4d9d74;
+
+  --sage-300: #7fae92;
+  --sage-200: #86a894;
+  --mint-100: #1d2b23;
+  --mint-50: #18241d;
+  --leaf-50: #1b2a21;
+
+  --earth-600: #c08a57;
+  --earth-500: #b3773f;
+  --clay-500: #d08551;
+  --cream-100: #2a2418;
+
+  --ink-900: #e8f0ea;
+  --ink-700: #b6c7bb;
+  --ink-500: #8ba092;
+  --ink-300: #5e7266;
+  --line-200: #24342b;
+  --line-100: #1b2a22;
+
+  --danger-700: #e88a8d;
+  --danger-50: #33201f;
+  --warning-700: #e0b45e;
+  --warning-50: #322a15;
+  --info-50: #1d2836;
+
+  --page-bg: #0f1612;
+  --surface: #151f1a;
+
+  --focus-ring: 0 0 0 3px rgba(111, 191, 141, 0.4);
+}
+
+html[data-tema="oscuro"] .estado-bien,
+html[data-tema="oscuro"] .badge-success { background: #1e3a2b; color: #8fd3a8; }
+
+html[data-tema="oscuro"] .estado-cultivada { background: #1f3a2c; color: #96d6ad; }
+
+html[data-tema="oscuro"] .estado-escasa { background: #3a3117; color: #e8c66a; }
+
+html[data-tema="oscuro"] .badge-danger { background: #4a1f22; color: #f0a4a8; }
+
+html[data-tema="oscuro"] .badge-warning { background: #4a2f14; color: #f3c67b; }
+
+html[data-tema="oscuro"] .badge-caution { background: #45341a; color: #f0ce8a; }
+
+html[data-tema="oscuro"] .badge-info { background: #22313c; color: #a9c7d6; }

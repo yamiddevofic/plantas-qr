@@ -1,37 +1,28 @@
 import { useState } from 'react';
-import { LuDownload, LuHouse, LuMoon, LuRefreshCcw, LuShieldAlert, LuSun, LuTreeDeciduous } from 'react-icons/lu';
+import { LuHouse, LuMoon, LuRefreshCcw, LuShieldAlert, LuSun, LuTreeDeciduous } from 'react-icons/lu';
 import EstadoBox from '../atoms/EstadoBox';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
 import GaleriaFotos from '../organisms/GaleriaFotos';
-import MapaIndividuos from '../organisms/MapaIndividuos';
 import Hero from '../organisms/Hero';
+import ContenidoFicha from '../organisms/ContenidoFicha';
+import PanelQR from '../organisms/PanelQR';
 import MenuLateral from '../organisms/MenuLateral';
 import SeccionContacto from '../molecules/SeccionContacto';
 import BuscadorLupa from '../organisms/BuscadorLupa';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
-import SeccionFicha from '../molecules/SeccionFicha';
-import Hecho from '../molecules/Hecho';
 import PiePagina from '../molecules/PiePagina';
 import DialogoPassword from '../molecules/DialogoPassword';
-import EstadoConservacion from '../molecules/EstadoConservacion';
-import Chip from '../atoms/Chip';
-import { listaImagenes, normalizarUsos } from '../../constantes';
+import { listaImagenes } from '../../constantes';
 import { generarQR } from '../../api';
 import { useTema } from '../../tema.js';
 
 export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGenerado, onVerEstados }) {
-  const { nombre, familia, origen, altura, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion, imagen } = planta || {};
-  // El catálogo importado trae 0,0 como "sin coordenadas": no es un punto real.
-  const tieneCoordenadas = Number.isFinite(Number(ubicacion?.latitud)) && Number.isFinite(Number(ubicacion?.longitud))
-    && !(Number(ubicacion.latitud) === 0 && Number(ubicacion.longitud) === 0);
-  const lat = tieneCoordenadas ? Number(ubicacion.latitud).toFixed(6) : null;
-  const lng = tieneCoordenadas ? Number(ubicacion.longitud).toFixed(6) : null;
-  const usosLista = normalizarUsos(usos);
+  const { nombre, ubicaciones, imagen } = planta || {};
   const imagenes = listaImagenes({ imagen, imagenes: planta?.imagenes });
-  const sitios = Array.isArray(ubicaciones) && ubicaciones.length > 0 ? ubicaciones : [];
+  const sitios = Array.isArray(ubicaciones) ? ubicaciones : [];
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [descargando, setDescargando] = useState(false);
   const [errorQR, setErrorQR] = useState(null);
@@ -219,104 +210,19 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
             />
 
             <div className="detalle-contenido">
-              <div className="detalle-grid">
-                {(descripcion?.general || descripcion?.hojas || impacto) && (
-                  <SeccionFicha id="ficha-conoce" titulo="Conoce este árbol">
-                    {descripcion?.general && <p className="detalle-parrafo">{descripcion.general}</p>}
-                    {descripcion?.hojas && <p className="detalle-parrafo"><strong>Hojas:</strong> {descripcion.hojas}</p>}
-                    {impacto && (
-                      <div className="detalle-impacto">
-                        <span aria-hidden="true">🌿</span>
-                        <div>
-                          <p className="detalle-impacto-label">Importancia ambiental</p>
-                          <p>{impacto}</p>
-                        </div>
-                      </div>
-                    )}
-                  </SeccionFicha>
-                )}
+              <ContenidoFicha planta={planta} />
 
-                {estadoConservacion && (
-                  <div className="detalle-estado">
-                    <EstadoConservacion estado={estadoConservacion} />
-                  </div>
-                )}
-
-                {usosLista.length > 0 && (
-                  <SeccionFicha id="ficha-usos" titulo="Usos tradicionales">
-                    <div className="detalle-usos">
-                      {usosLista.map((u) => <Chip key={u}>{u}</Chip>)}
-                    </div>
-                  </SeccionFicha>
-                )}
-
-                {(familia || origen || altura || ubicacion?.descripcion || (lat && lng)) && (
-                  <SeccionFicha id="ficha-datos" titulo="Datos rápidos">
-                    <div className="detalle-facts">
-                      <Hecho icono="🌱" etiqueta="Familia" valor={familia && `Familia ${familia}`} />
-                      <Hecho icono="🌎" etiqueta="Origen" valor={origen} />
-                      <Hecho icono="📏" etiqueta="Altura" valor={altura} />
-                      <Hecho icono="📍" etiqueta="Ubicación" valor={ubicacion?.descripcion} />
-                      {lat && lng && <Hecho icono="🧭" etiqueta="Coordenadas" valor={`${lat}, ${lng}`} />}
-                      {sitios.length > 0 && (
-                        <Hecho icono="🌳" etiqueta="Individuos en el parque" valor={`${sitios.length} ${sitios.length === 1 ? 'individuo' : 'individuos'}`} />
-                      )}
-                    </div>
-                    {sitios.length > 1 && (
-                      <div className="detalle-ubicaciones">
-                        <p className="detalle-ubicaciones-titulo">📍 Ejemplares en el parque</p>
-                        <ul>
-                          {sitios.map((sitio) => <li key={sitio}>{sitio}</li>)}
-                        </ul>
-                      </div>
-                    )}
-                  </SeccionFicha>
-                )}
-
-                <MapaIndividuos especieId={planta._id} nombreEspecie={nombre.comun} />
-              </div>
-
-              <div className="detalle-qr">
-                <div className="detalle-id">
-                  <span className="detalle-id-etiqueta">ID de la especie</span>
-                  <code className="detalle-id-valor">{planta._id}</code>
-                  <button
-                    type="button"
-                    className="detalle-id-copiar"
-                    onClick={copiarId}
-                    title="Copiar ID al portapapeles"
-                  >
-                    {copiado ? '✓ Copiado' : 'Copiar'}
-                  </button>
-                </div>
-                {qr && (
-                  <img
-                    className="detalle-qr-imagen"
-                    src={qr.imagen}
-                    alt={`Código QR de ${nombre.comun}`}
-                    width={96}
-                    height={96}
-                  />
-                )}
-                <div className="detalle-qr-info">
-                  <Boton variante="primary" onClick={descargarQR} disabled={descargando}>
-                    <LuDownload aria-hidden="true" className="btn-lupa-icono" />
-                    {descargando ? 'Preparando…' : 'Descargar QR'}
-                  </Boton>
-                  <p className="detalle-qr-nota">
-                    El código QR de este árbol enlaza a su ficha para que las
-                    visitas lo escaneen y conozcan la especie.
-                    {sitios.length > 0 && (
-                      <>
-                        {' '}Se han registrado {sitios.length} {sitios.length === 1 ? 'individuo' : 'individuos'}
-                        {' '}de esta especie en distintas zonas del parque.
-                      </>
-                    )}
-                  </p>
-                  {errorQR && <p className="form-error" role="alert" aria-live="assertive">{errorQR}</p>}
-                  {exitoQR && <p className="detalle-qr-exito" role="status">{exitoQR}</p>}
-                </div>
-              </div>
+              <PanelQR
+                planta={planta}
+                qr={qr}
+                totalSitios={sitios.length}
+                copiado={copiado}
+                onCopiar={copiarId}
+                descargando={descargando}
+                onDescargar={descargarQR}
+                error={errorQR}
+                exito={exitoQR}
+              />
             </div>
           </article>
         )}

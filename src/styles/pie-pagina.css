@@ -1,0 +1,17 @@
+/* ══════════════════════════════════════════════════════════════
+   Pie de página
+   ══════════════════════════════════════════════════════════════ */
+
+.footer {
+  margin-top: 48px;
+  padding: 22px 16px 30px;
+  border-top: 1px solid var(--line-100);
+  text-align: center;
+  color: var(--ink-300);
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+
+.footer p + p {
+  margin-top: 4px;
+}

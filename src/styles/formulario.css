@@ -1,0 +1,76 @@
+/* ══════════════════════════════════════════════════════════════
+   Modal de formulario · Agregar / Editar especie
+   ══════════════════════════════════════════════════════════════ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px 48px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: rgba(23, 63, 47, 0.5);
+  animation: overlayIn 0.25s ease-out;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  width: 100%;
+  max-width: 680px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 22px 20px 18px;
+  margin-top: auto;
+  margin-bottom: auto;
+  max-height: 92vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal:focus {
+  outline: none;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.modal-titulo {
+  font-size: var(--step-2);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--forest-900);
+  line-height: 1.25;
+  padding-top: 8px;
+}
+
+.modal-cerrar {
+  flex-shrink: 0;
+  width: var(--hit);
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1rem;
+}

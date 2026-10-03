@@ -1,0 +1,278 @@
+/* ══════════════════════════════════════════════════════════════
+   Grilla de tarjetas
+   ══════════════════════════════════════════════════════════════ */
+
+.planta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 600px) {
+  .planta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 980px) {
+  .planta-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Tarjeta de planta
+   ══════════════════════════════════════════════════════════════ */
+
+.planta-card {
+  display: block;
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.25s ease;
+  text-decoration: none;
+  color: inherit;
+  animation: cardIn 0.4s ease-out both;
+  animation-delay: calc(var(--d, 0) * 50ms);
+  /* Evita renderizar las tarjetas fuera de pantalla (galería larga) */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.planta-card:hover {
+  transform: translateY(-3px);
+}
+
+.planta-card .card-image {
+  aspect-ratio: 3 / 4;
+}
+
+.card-nombre-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 32px 16px 16px;
+  background: linear-gradient(transparent, rgba(23, 63, 47, 0.78));
+  text-align: center;
+}
+
+.card-nombre-overlay .card-nombre {
+  font-size: var(--step-1);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.25;
+  margin: 0;
+}
+
+.card-nombre-overlay .card-cientifico {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 2px 0 0;
+}
+
+.card-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(140deg, var(--mint-100), var(--sage-200));
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-image.is-galeria img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.card-image.is-galeria img.is-visible {
+  opacity: 1;
+}
+
+/* ── Escala termómetro de conservación ─────────────────────────
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(23, 63, 47, 0.82);
+  backdrop-filter: blur(4px);
+  color: var(--white);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  max-width: 58%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-tipo::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sage-300);
+}
+
+.card-estado {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.03em;
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  max-width: 55%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 380px) {
+  .card-tipo {
+    max-width: 46%;
+    font-size: 0.6rem;
+    padding: 5px 8px;
+  }
+
+  .card-estado {
+    max-width: 46%;
+    font-size: 0.6rem;
+    padding: 5px 8px;
+  }
+}
+
+/* ── Escala termómetro de conservación ─────────────────────────
+   Del rojo crítico al verde estable, como un termómetro de riesgo.
+   Basada en las categorías IUCN.                                  */
+.estado-extinto    { background: #3b0d0d; color: #ffffff; }
+.estado-silvestre  { background: #6b1515; color: #ffffff; }
+.estado-peligro    { background: #c1272d; color: #ffffff; }
+.estado-vulnerable { background: #f97316; color: #3c1a05; }
+.estado-amenazado  { background: #fbbf24; color: #451a03; }
+.estado-bien       { background: #cfe8d8; color: #173f2f; }
+.estado-cultivada  { background: #d7efdf; color: #1e5631; }
+.estado-escasa     { background: #fef3c7; color: #713f12; }
+.estado-info       { background: #d6dde0; color: #374151; }
+
+/* Píldora del estado de conservación (ficha de la especie) */
+.estado-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  padding: 9px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(23, 63, 47, 0.14);
+  box-shadow: 0 1px 3px rgba(23, 63, 47, 0.1);
+  cursor: help;
+}
+
+.estado-pill-punto {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.28);
+}
+
+.estado-pill-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.estado-pill-caption {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.estado-pill-valor {
+  font-size: 0.85rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* Ventana "Estados de conservación" (leyenda de colores) */
+.leyenda-modal {
+  max-width: 480px;
+}
+
+.leyenda-descripcion {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  color: var(--ink-500);
+}
+
+.leyenda-estados {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.leyenda-estado {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--page-bg);
+  border: 1px solid var(--line-100);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.leyenda-estado-muestra {
+  flex: 0 0 14px;
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(23, 63, 47, 0.18);
+}
+
+.leyenda-estado-etiqueta {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.leyenda-estado-descripcion {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-500);
+}

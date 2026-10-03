@@ -1,0 +1,238 @@
+/* ══════════════════════════════════════════════════════════════
+   Sección historia · Conoce el parque
+   ══════════════════════════════════════════════════════════════ */
+
+.historia {
+  margin: 8px 0 16px;
+  display: grid;
+  gap: 28px;
+}
+
+@media (min-width: 768px) {
+  .historia {
+    gap: 26px;
+    margin: 20px 0 24px;
+  }
+}
+
+@media (min-width: 1060px) {
+  .historia {
+    max-width: 1080px;
+    margin-inline: auto;
+  }
+}
+
+.historia-columnas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.historia-acordeon {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .historia-acordeon {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    align-items: start;
+  }
+}
+
+.historia-acordeon-item {
+  background: var(--surface);
+  border: 1px solid rgba(23, 63, 47, 0.14);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.historia-acordeon-item[open] {
+  border-color: rgba(23, 63, 47, 0.28);
+}
+
+.historia-acordeon-titulo {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 22px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s;
+}
+
+.historia-acordeon-titulo::-webkit-details-marker {
+  display: none;
+}
+
+.historia-acordeon-titulo:hover {
+  background: rgba(23, 63, 47, 0.05);
+}
+
+.historia-acordeon-titulo:focus-visible {
+  outline: 3px solid var(--forest-500, rgba(23, 63, 47, 0.6));
+  outline-offset: -3px;
+}
+
+.historia-acordeon-cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.historia-acordeon-cabecera .historia-eyebrow {
+  margin-bottom: 0;
+}
+
+.historia-acordeon-cabecera strong {
+  font-size: var(--step-1);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--forest-900);
+}
+
+.historia-acordeon-titulo > svg {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: var(--forest-600, #2f6a4f);
+  transition: transform 0.2s ease;
+}
+
+.historia-acordeon-item[open] .historia-acordeon-titulo > svg {
+  transform: rotate(180deg);
+}
+
+.historia-acordeon-contenido {
+  padding: 16px 22px 24px;
+}
+
+.historia-acordeon-contenido .historia-imagen {
+  margin-top: 20px;
+}
+
+.historia-acordeon-contenido .historia-datos {
+  max-width: 100%;
+}
+
+.historia-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--forest-600);
+  margin-bottom: 8px;
+}
+
+.historia-titulo {
+  font-size: var(--step-3);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--forest-900);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  text-wrap: balance;
+}
+
+.historia-parrafo {
+  color: var(--ink-500);
+  font-size: var(--step-1);
+  line-height: 1.65;
+  max-width: 62ch;
+  text-align: left;
+}
+
+.historia-parrafo + .historia-parrafo {
+  margin-top: 12px;
+}
+
+.historia-imagen {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.historia-imagen img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .historia-acordeon-contenido > .historia-imagen {
+    margin: 20px 0 0;
+    border-radius: var(--radius-lg);
+  }
+
+  .historia-acordeon-contenido > .historia-imagen img {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (min-width: 768px) {
+  .historia-imagen {
+    width: min(596px, 100%);
+    margin-inline: auto;
+  }
+
+  .historia-imagen img {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.historia-datos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 22px auto 0;
+  max-width: 540px;
+}
+
+.historia-accion {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 22px;
+}
+
+@media (min-width: 768px) {
+  .historia-datos {
+    max-width: 640px;
+    gap: 16px;
+    margin-top: 30px;
+  }
+
+  .historia-dato {
+    padding: 24px 16px;
+  }
+
+  .historia-dato dt {
+    font-size: var(--step-3);
+  }
+}
+
+.historia-dato {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 16px 10px;
+}
+
+.historia-dato dt {
+  font-size: var(--step-2);
+  font-weight: 800;
+  color: var(--forest-700);
+}
+
+.historia-dato dd {
+  font-size: 0.74rem;
+  color: var(--ink-500);
+  margin-top: 2px;
+  line-height: 1.35;
+}
