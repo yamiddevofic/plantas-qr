@@ -13,7 +13,7 @@ const FUENTE_SOMBRA = 'terreno-sombra';
 const CAPA_SOMBRA = 'terreno-sombreado';
 const CAPA_PUNTOS = 'individuos-puntos';
 const CAPA_ETIQUETAS = 'individuos-etiquetas';
-const ZOOM_INICIAL_MAX = 16.5;
+const ZOOM_INICIAL_MAX = 17;
 const POSICION_SELECCION_Y = 0.45;
 
 const BASES = [
@@ -80,6 +80,12 @@ function contenidoPopup(props, nombreEspecie) {
 // setFeatureState lanzaría "source not found".
 function marcar(map, id, seleccionado) {
   if (id && map?.getSource(FUENTE)) map.setFeatureState({ source: FUENTE, id }, { seleccionado });
+}
+
+function mapaEnPantallaCompleta(map) {
+  const elementoPantallaCompleta = document.fullscreenElement || document.webkitFullscreenElement;
+  return elementoPantallaCompleta === map.getContainer()
+    || map.getContainer().classList.contains('maplibregl-pseudo-fullscreen');
 }
 
 function agregarCapas(map, datos, base) {
@@ -223,7 +229,7 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
       .setDOMContent(contenidoPopup(feature.properties, nombreEspecie));
     if (!popupRef.current.isOpen()) popupRef.current.addTo(map);
 
-    if (centrar) {
+    if (centrar && !mapaEnPantallaCompleta(map)) {
       map.easeTo({
         center: coordenadas,
         // Un offset positivo hacia abajo coloca el punto más bajo en pantalla
@@ -251,12 +257,18 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
         limitesRef.current = limites;
 
         const vista = vistaRef.current;
+        const offsetInicialY = -contenedorRef.current.clientHeight * 0.05;
         map = new lib.Map({
           container: contenedorRef.current,
           style: vista.base === 'satelite' ? lib.estiloSatelite() : lib.ESTILOS[vista.tema] || lib.ESTILOS.claro,
           bounds: limites,
           bearing: 90,
-          fitBoundsOptions: { padding: 48, maxZoom: ZOOM_INICIAL_MAX, bearing: 90 },
+          fitBoundsOptions: {
+            padding: 48,
+            maxZoom: ZOOM_INICIAL_MAX,
+            bearing: 90,
+            offset: [0, offsetInicialY],
+          },
           maxZoom: 20,
           maxPitch: 75,
           cooperativeGestures: true,
@@ -350,7 +362,14 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
         duration,
       });
     } else if (limitesRef.current) {
-      map.fitBounds(limitesRef.current, { padding: 48, maxZoom: ZOOM_INICIAL_MAX, pitch: 0, bearing: 90, duration });
+      map.fitBounds(limitesRef.current, {
+        padding: 48,
+        maxZoom: ZOOM_INICIAL_MAX,
+        pitch: 0,
+        bearing: 90,
+        offset: [0, -map.getContainer().clientHeight * 0.05],
+        duration,
+      });
     }
   }, [relieve3D, base]);
 
