@@ -90,6 +90,18 @@ export function eliminarIndividuo(id, password) {
   return enviarIndividuo(`${BASE}/individuos/${encodeURIComponent(id)}`, 'DELETE', { password }, 'No se pudo eliminar el individuo');
 }
 
+/**
+ * Fotos de una especie. `orden` es la lista final: referencias existentes y
+ * `nueva:<n>` para la n-ésima de `fotos`; la primera queda como principal.
+ */
+export function actualizarFotosPlanta(id, orden, fotos, password) {
+  const fd = new FormData();
+  fd.append('password', password);
+  fd.append('orden', JSON.stringify(orden));
+  fotos.forEach((foto, i) => fd.append('fotos', foto, foto.name || `foto-${i + 1}.jpg`));
+  return pedirIndividuo(`${BASE}/plantas/${encodeURIComponent(id)}/fotos`, { method: 'PUT', body: fd }, 'No se pudieron guardar las fotos');
+}
+
 export async function fetchQRs() {
   const res = await fetch(`${BASE}/qr`);
   if (!res.ok) throw new Error('Error al obtener QRs');

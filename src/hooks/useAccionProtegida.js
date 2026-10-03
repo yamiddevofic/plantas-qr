@@ -1,5 +1,6 @@
 import { createElement, useCallback, useState } from 'react';
 import DialogoPassword from '../components/molecules/DialogoPassword';
+import { cerrarSesion, guardarPasswordSesion, passwordSesion } from '../offline/sesionAdmin';
 
 /**
  * Ejecuta acciones que exigen la contraseña de administrador.
@@ -15,7 +16,8 @@ import DialogoPassword from '../components/molecules/DialogoPassword';
  * acción se propaga para que el llamador lo muestre.
  */
 export default function useAccionProtegida() {
-  const [passwordGuardada, setPasswordGuardada] = useState('');
+  // Parte de la sesión de administrador (PuertaAdmin) para no volver a pedirla.
+  const [passwordGuardada, setPasswordGuardada] = useState(passwordSesion);
   const [solicitud, setSolicitud] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
@@ -25,12 +27,14 @@ export default function useAccionProtegida() {
     try {
       const resultado = await pedido.accion(password);
       setPasswordGuardada(password);
+      guardarPasswordSesion(password);
       setSolicitud(null);
       setError(null);
       pedido.resolver(resultado);
     } catch (e) {
       if (/contraseña/i.test(e.message)) {
         setPasswordGuardada('');
+        cerrarSesion();
         setError(e.message);
         setSolicitud(pedido);
       } else {

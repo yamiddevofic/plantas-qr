@@ -245,6 +245,24 @@ entrega un GeoJSON `FeatureCollection` y admite filtros opcionales `especieId` y
 Al filtrar por `especieId` se incluyen los individuos de todas las fichas con el mismo
 nombre científico, así cualquier QR de Ciprés muestra los 10 árboles.
 
+### Fotos de especies (`#/especies-fotos`)
+
+Menú de la galería → **Editar imágenes de especies**. Lista cada ficha con su foto
+principal; al editar se puede elegir la principal (la de la galería y la portada de la
+ficha), quitar fotos y agregar nuevas con **Tomar foto** o **Elegir de la galería**. Las
+fotos nuevas se guardan en MongoDB (`/api/imagenes/:id`) igual que las del formulario de
+especies, porque el disco de Render se borra en cada despliegue y Vercel no reenvía
+`/uploads`; las del catálogo versionado en `public/uploads/` siguen funcionando igual.
+Requiere conexión.
+
+### Acceso de administrador
+
+**Gestión de individuos** y **Fotos de especies** piden la contraseña de administrador
+al entrar. La primera vez se verifica con el servidor; después el dispositivo guarda una
+huella PBKDF2 (nunca la contraseña) para poder entrar también sin conexión. La
+contraseña queda en memoria mientras la app esté abierta, así que no se vuelve a pedir
+en cada acción (eliminar sí pide confirmarla).
+
 ### Gestión de individuos (`#/individuos`)
 
 Módulo de administración para registrar, editar y eliminar árboles y su ubicación sin
@@ -256,8 +274,8 @@ tocar la base de datos. Se abre desde el menú de la galería → **Gestionar in
   arrastrable), coordenadas numéricas, o **Usar mi ubicación** (GPS del dispositivo:
   rellena también precisión y altitud). Los demás individuos se ven como puntos de
   referencia. Al elegir la especie se sugiere el siguiente código libre (`CIP-011`).
-- **Contraseña de administrador:** se pide la primera vez y se conserva solo en memoria
-  mientras la página esté abierta. **Eliminar** siempre pide confirmar con la contraseña.
+- **Contraseña de administrador:** se pide al entrar (ver *Acceso de administrador*).
+  **Eliminar** siempre pide confirmarla.
 - **Foto** (opcional, al agregar o editar): **Tomar foto** abre la cámara del
   teléfono y **Elegir de la galería** usa una existente. Se reduce en el teléfono a
   ≤1600 px antes de guardarla o enviarla; el servidor la convierte a WebP (≤1280 px) y
@@ -283,6 +301,9 @@ La app es instalable (PWA) y funciona sin internet con lo que ya se haya visto c
 - Sin conexión, el mapa del formulario solo muestra las zonas ya visitadas; las
   coordenadas a mano y **Usar mi ubicación** (GPS) funcionan igual.
 - No funciona sin conexión: crear/editar especies, subir fotos de especies ni generar QR.
+- **App de escritorio:** el manifiesto pide `window-controls-overlay`; en Chrome/Edge la
+  app dibuja su propia barra de título del color de la página (botón ⌃ de la barra para
+  activarlo). El color de la barra sigue al tema claro u oscuro.
 
 ### Mapa de individuos (MapLibre GL)
 

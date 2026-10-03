@@ -1,4 +1,5 @@
 import Planta from '../models/Planta.js';
+import Imagen, { guardarImagenes, idDeImagen } from '../models/Imagen.js';
 
 function limpiarUsos(usos) {
   if (usos == null) return undefined;
@@ -55,7 +56,7 @@ function parsearBody(body) {
   return datos;
 }
 
-function resolverImagenes(datos, archivos) {
+async function resolverImagenes(datos, archivos) {
   let conservadas = [];
   if (Array.isArray(datos.imagenesConservar)) {
     conservadas = datos.imagenesConservar;
@@ -66,9 +67,9 @@ function resolverImagenes(datos, archivos) {
       conservadas = [];
     }
   }
-  const nuevas = (archivos?.imagenes || []).map((archivo) => `/uploads/${archivo.filename}`);
+  const nuevas = await guardarImagenes(archivos?.imagenes);
   const lista = [...conservadas, ...nuevas].filter(Boolean);
-  if (archivos?.imagen?.[0]) lista.unshift(`/uploads/${archivos.imagen[0].filename}`);
+  if (archivos?.imagen?.[0]) lista.unshift(...(await guardarImagenes(archivos.imagen)));
   return { imagen: lista[0] || '', imagenes: lista.slice(1) };
 }
 
@@ -76,7 +77,7 @@ export const crearPlanta = async (req, res) => {
   try {
     const datos = parsearBody(req.body);
     if (req.files) {
-      Object.assign(datos, resolverImagenes(datos, req.files));
+      Object.assign(datos, await resolverImagenes(datos, req.files));
     }
     delete datos.imagenesConservar;
     datos.usos = limpiarUsos(datos.usos);
@@ -160,7 +161,7 @@ export const actualizarPlanta = async (req, res) => {
   try {
     const datos = parsearBody(req.body);
     if (req.files) {
-      Object.assign(datos, resolverImagenes(datos, req.files));
+      Object.assign(datos, await resolverImagenes(datos, req.files));
     }
     delete datos.imagenesConservar;
     datos.usos = limpiarUsos(datos.usos);
@@ -179,5 +180,73 @@ export const eliminarPlanta = async (req, res) => {
     res.json({ mensaje: 'Planta eliminada correctamente' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al eliminar planta', error: error.message });
+  }
+};
+
+// Borra de la BD las fotos subidas que ninguna especie ni individuo usa ya.
+async function limpiarHuerfanas(refs) {
+  for (const ref of refs) {
+    const id = idDeImagen(ref);
+    if (!id) continue;
+    const enUso = await Planta.exists({ $or: [{ imagen: ref }, { imagenes: ref }] });
+    if (!enUso) await Imagen.deleteOne({ _id: id });
+  }
+}
+
+/**
+ * Fotos de una especie: `orden` (JSON) es la lista final, con las referencias
+ * que ya tenía y `nueva:<n>` para la n-ésima foto subida en `fotos`. La primera
+ * es la principal. Lo que no aparezca en `orden` se quita.
+ */
+export const actualizarFotosPlanta = async (req, res) => {
+  try {
+    const planta = await Planta.findById(req.params.id);
+    if (!planta) return res.status(404).json({ mensaje: 'No existe esa especie' });
+
+    let orden;
+    try {
+      orden = JSON.parse(req.body?.orden ?? '[]');
+    } catch {
+      orden = null;
+    }
+    if (!Array.isArray(orden)) return res.status(400).json({ mensaje: 'orden debe ser una lista JSON' });
+
+    const actuales = [planta.imagen, ...(planta.imagenes || [])].filter(Boolean);
+    const subidas = req.files?.fotos || [];
+    const urlsNuevas = await guardarImagenes(subidas);
+    const lista = [];
+    for (const item of orden) {
+      const nueva = /^nueva:(\d+)$/.exec(String(item));
+      if (nueva) {
+        const url = urlsNuevas[Number(nueva[1])];
+        if (url) lista.push(url);
+      } else if (actuales.includes(item) && !lista.includes(item)) {
+        // Solo se conservan referencias que la especie ya tenía.
+        lista.push(item);
+      }
+    }
+    // Una foto subida que no se colocó en `orden` se agrega al final.
+    for (const url of urlsNuevas) if (!lista.includes(url)) lista.push(url);
+
+    planta.imagen = lista[0] ?? '';
+    planta.imagenes = lista.slice(1);
+    await planta.save();
+    await limpiarHuerfanas(actuales.filter((ref) => !lista.includes(ref)));
+    res.json(planta);
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al guardar las fotos', error: error.message });
+  }
+};
+
+export const obtenerImagen = async (req, res) => {
+  try {
+    if (!/^[0-9a-f]{24}$/.test(req.params.id)) return res.status(400).end();
+    const imagen = await Imagen.findById(req.params.id).lean();
+    if (!imagen) return res.status(404).json({ mensaje: 'No existe la imagen' });
+    // Cada id es una foto distinta e inmutable: puede guardarse para siempre.
+    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    res.type(imagen.tipo || 'image/webp').send(Buffer.from(imagen.datos.buffer ?? imagen.datos));
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener la imagen', error: error.message });
   }
 };

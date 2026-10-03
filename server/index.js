@@ -13,6 +13,7 @@ import plantaRoutes from './routes/plantaRoutes.js';
 import qrRoutes from './routes/qrRoutes.js';
 import adminImagenesRoutes from './routes/adminImagenes.js';
 import individuoRoutes from './routes/individuoRoutes.js';
+import imagenRoutes from './routes/imagenRoutes.js';
 
 dotenv.config();
 
@@ -127,6 +128,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: t
 
 app.use('/api/plantas', plantaRoutes);
 app.use('/api/individuos', individuoRoutes);
+app.use('/api/imagenes', imagenRoutes);
 app.use('/api/qr', qrRoutes);
 app.use(adminImagenesRoutes);
 

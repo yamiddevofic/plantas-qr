@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { CLAVE, TemaContext, leerTema } from './tema';
+import { CLAVE, TemaContext, aplicarTema, leerTema } from './tema';
 
 export default function TemaProvider({ children }) {
   const [tema, setTema] = useState(leerTema);
 
   useEffect(() => {
-    document.documentElement.dataset.tema = tema;
+    aplicarTema(tema);
     try {
       localStorage.setItem(CLAVE, tema);
     } catch {

@@ -69,5 +69,12 @@
   --focus: var(--forest-700);
   --focus-ring: 0 0 0 3px rgba(45, 106, 79, 0.35);
 
-  --hit: 44px; /* tamaño táctil mínimo */
+  --hit: 44px; /* tamaño táctil mínimo (Apple HIG: 44 pt) */
+}
+
+/* En pantallas táctiles, 48 px como pide Material 3 (48 dp). */
+@media (pointer: coarse) {
+  :root {
+    --hit: 48px;
+  }
 }

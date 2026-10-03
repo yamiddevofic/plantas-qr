@@ -7,14 +7,19 @@
 }
 
 .buscador-trigger {
+  width: var(--hit);
+  height: var(--hit);
   border: 1px solid var(--line-200);
-  background: var(--mint-50);
-  color: var(--ink-700);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-900);
 }
 
+/* Igual que el botón de menú: sin relleno, solo el borde se marca. */
 .buscador-trigger:hover {
-  background: var(--line-100);
-  color: var(--forest-700);
+  background: var(--surface);
+  border-color: var(--ink-300);
+  color: var(--ink-900);
 }
 
 .buscador-overlay {
