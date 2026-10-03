@@ -43,6 +43,7 @@ html[data-tema="oscuro"] .hero {
   min-height: min(640px, 88svh);
   display: flex;
   align-items: flex-end;
+  justify-content: center;
   overflow: hidden;
   isolation: isolate;
   color: var(--white);
@@ -63,42 +64,69 @@ html[data-tema="oscuro"] .hero {
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(0deg, rgba(8, 20, 14, 0.88) 0%, rgba(8, 20, 14, 0.45) 38%, rgba(8, 20, 14, 0) 70%),
-    linear-gradient(90deg, rgba(8, 20, 14, 0.35) 0%, rgba(8, 20, 14, 0) 60%);
+    linear-gradient(0deg, rgba(8, 20, 14, 0.9) 0%, rgba(8, 20, 14, 0.55) 42%, rgba(8, 20, 14, 0.12) 75%, rgba(8, 20, 14, 0.05) 100%),
+    radial-gradient(ellipse 60% 50% at 50% 62%, rgba(8, 20, 14, 0.35), rgba(8, 20, 14, 0) 100%);
 }
 
 .hero-inicio-contenido {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1240px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 120px 22px 40px;
-  text-align: left;
+  padding: 120px 22px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .hero-inicio-ubicacion {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 4px 14px;
-  margin: 0 0 18px;
-  padding-left: 14px;
-  border-left: 2px solid var(--sage-300);
+  justify-content: center;
+  gap: 4px 12px;
+  margin: 0 0 20px;
   font-size: 0.85rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.92);
 }
 
 .hero-inicio-coordenadas {
+  position: relative;
+  padding-left: 12px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.hero-inicio-coordenadas::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 50%;
+  background: var(--sage-300);
+}
+
+/* Si la coordenada baja a otra línea, el punto separador sobra. */
+@media (max-width: 560px) {
+  .hero-inicio-coordenadas {
+    padding-left: 0;
+  }
+
+  .hero-inicio-coordenadas::before {
+    display: none;
+  }
 }
 
 .hero-inicio-titulo {
-  max-width: 11ch;
+  max-width: 12ch;
   font-size: clamp(2.8rem, 1.2rem + 6.4vw, 5.6rem);
   font-weight: 800;
   letter-spacing: -0.045em;
@@ -129,8 +157,8 @@ html[data-tema="oscuro"] .hero {
 }
 
 .hero-inicio-texto {
-  margin: 18px 0 0;
-  max-width: 42ch;
+  margin: 20px auto 0;
+  max-width: 46ch;
   font-size: var(--step-1);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.84);
@@ -141,8 +169,9 @@ html[data-tema="oscuro"] .hero {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 22px;
-  margin-top: 28px;
+  justify-content: center;
+  gap: 12px 24px;
+  margin-top: 32px;
 }
 
 .hero-inicio-acciones .btn {
@@ -169,8 +198,10 @@ html[data-tema="oscuro"] .hero {
 /* Pie de foto, como en una lámina impresa. */
 .hero-inicio-pie {
   position: absolute;
-  right: 22px;
-  bottom: 18px;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  white-space: nowrap;
   z-index: 1;
   margin: 0;
   font-size: 0.72rem;
@@ -192,7 +223,7 @@ html[data-tema="oscuro"] .hero {
   }
 
   .hero-inicio-contenido {
-    padding: 140px 40px 64px;
+    padding: 140px 40px 84px;
   }
 }
 
