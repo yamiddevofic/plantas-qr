@@ -12,6 +12,7 @@ import swaggerUi from 'swagger-ui-express';
 import plantaRoutes from './routes/plantaRoutes.js';
 import qrRoutes from './routes/qrRoutes.js';
 import adminImagenesRoutes from './routes/adminImagenes.js';
+import individuoRoutes from './routes/individuoRoutes.js';
 
 dotenv.config();
 
@@ -125,6 +126,7 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
 
 app.use('/api/plantas', plantaRoutes);
+app.use('/api/individuos', individuoRoutes);
 app.use('/api/qr', qrRoutes);
 app.use(adminImagenesRoutes);
 

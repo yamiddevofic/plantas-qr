@@ -67,11 +67,12 @@ plantas-qr/
 ├── server/                   # Backend Express
 │   ├── index.js              # Servidor, Swagger, SPA estática, fix DNS Atlas
 │   ├── controllers/          # plantaController, qrController
-│   ├── models/               # Planta, QR
-│   ├── routes/               # /api/plantas, /api/qr, adminImagenes
+│   ├── models/               # Planta, Individuo, QR
+│   ├── routes/               # /api/plantas, /api/individuos, /api/qr, adminImagenes
 │   ├── middleware/qrAuth.js  # Protección por ADMIN_PASSWORD (timing-safe)
 │   ├── config/upload.js      # multer + optimización WebP con sharp
-│   ├── scripts/              # importarPlantas, optimizarImagenes, normalizarImagenes,
+│   ├── scripts/              # importarPlantas, cargarIndividuosCipres, optimizarImagenes,
+│   │                         #   normalizarImagenes,
 │   │                         #   fusionarDuplicados, vincularImagenUbicaciones
 │   ├── uploads/              # Taller local: originales jpg + webp (fuera de git)
 │   └── views/fichaTemplate.js# Ficha HTML del visitante (fallback QR antiguo)
@@ -139,6 +140,7 @@ npm run server               # API Express
 npm run build                # Build de producción (dist/)
 npm run preview              # Previsualiza el build
 npm run lint                 # ESLint
+npm run cargar-individuos-cipres # Upsert de los 10 individuos Ciprés en MongoDB
 npm run optimizar-imagenes   # Convierte jpg/png de server/uploads a WebP
 npm run normalizar-imagenes  # Corrige las rutas de imagen guardadas en Mongo
 npm run generar-variantes    # Recortes -400/-800 para srcset + manifiesto
@@ -218,6 +220,77 @@ Con la BD conectada y el archivo `parque-chitaga-platas.json` en la raíz:
 node server/scripts/importarPlantas.js
 ```
 
+### Individuos geolocalizados
+
+La ficha `Planta` conserva los metadatos botánicos compartidos. Los árboles físicos se
+guardan en la colección `individuos`, vinculados mediante `especieId` y con geometría
+GeoJSON `Point` (`coordinates: [longitud, latitud]`) e índice `2dsphere`.
+
+Con el catálogo Ciprés ya importado y `MONGODB_URI` configurada, carga o actualiza sus
+10 individuos de forma idempotente:
+
+```bash
+npm run cargar-individuos-cipres
+```
+
+El script actualiza la primera ficha Ciprés como referencia canónica y no elimina las
+fichas/IDs históricos, para no invalidar códigos QR ya impresos. `GET /api/individuos`
+entrega un GeoJSON `FeatureCollection` y admite filtros opcionales `especieId` y `parque`.
+Al filtrar por `especieId` se incluyen los individuos de todas las fichas con el mismo
+nombre científico, así cualquier QR de Ciprés muestra los 10 árboles.
+
+### Mapa de individuos (MapLibre GL)
+
+La ficha de cada especie muestra la sección **"¿Dónde encontrarlo?"** con un mapa
+[MapLibre GL JS](https://maplibre.org/) (motor open source que no requiere token de
+Mapbox) cuando la especie tiene individuos registrados; si no tiene, la sección no
+aparece. Las fuentes de teselas sí pueden tener condiciones y límites propios.
+
+- **Carga diferida:** MapLibre (~280 KB gzip) va en un chunk aparte
+  (`src/mapa/maplibre.js`) que solo se descarga cuando la sección se acerca a la pantalla.
+- **Capas:** vista satelital de Esri World Imagery (predeterminada, cobertura hasta z18)
+  y calles de [OpenFreeMap](https://openfreemap.org/) (`positron` en claro, `dark`
+  en oscuro). Las dos respetan la selección del visitante; el mapa de calles sigue el
+  tema de la app.
+- **Relieve 3D:** botón opcional que inclina la cámara y muestra el terreno SRTM de
+  [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) (formato Terrarium),
+  sin token. El sombreado topográfico se aplica sobre el mapa vectorial.
+- **Atribuciones:** el mapa muestra los créditos correspondientes a Esri/Maxar,
+  OpenFreeMap/OpenMapTiles/OpenStreetMap y AWS Terrain Tiles.
+- **Accesible:** lista de individuos con botones (teclado/lector de pantalla) que
+  centra el mapa y abre su popup; gestos cooperativos para no secuestrar el scroll en
+  móvil; respeta `prefers-reduced-motion`.
+- **Fotos por individuo:** cada árbol puede tener su propia imagen, visible en la lista
+  y el popup del mapa; no sustituye la foto general de la especie.
+
+Para asociar fotos propias en producción, coloca los archivos como
+`public/uploads/individuos/CIP-001.webp` (también admite `.jpg`, `.jpeg` y `.png`) y
+ejecuta el build para publicarlos junto al frontend. La API detecta automáticamente el
+archivo cuyo nombre coincide con el código si el campo `imagen` aún está vacío. También
+puedes asociar una ruta o URL HTTPS explícitamente mediante el endpoint protegido de abajo.
+
+Fotos ya cargadas: `CIP-001.webp` (origen `11_Cipres`), `CIP-002.webp` (origen
+`07_Cipres`), `CIP-008.webp` (origen `16_Cipres`) y `CIP-010.webp` (origen `08_Cipres`).
+El script `npm run cargar-individuos-cipres` las vincula automáticamente al ejecutarse;
+la API también detecta archivos por código cuando `imagen` aún está vacío.
+
+Para cambiar proveedor o estilo, define en `.env` (las variables `VITE_*` se incorporan
+al build de Vite; vuelve a construir el frontend después de cambiarlas):
+
+```env
+VITE_MAPA_ESTILO_CLARO=https://.../style.json
+VITE_MAPA_ESTILO_OSCURO=https://.../style.json
+VITE_MAPA_SATELITE_TILES=https://.../{z}/{y}/{x}
+VITE_MAPA_SATELITE_MAXZOOM=18
+VITE_MAPA_SATELITE_ATRIBUCION=© proveedor de imágenes
+VITE_MAPA_TERRENO_TILES=https://.../{z}/{x}/{y}.png
+VITE_MAPA_TERRENO_CODIFICACION=terrarium
+```
+
+Los estilos deben ser compatibles con MapLibre; las URLs `mapbox://` requieren Mapbox GL JS
+y token. Los proveedores de teselas pueden tener sus propios términos de uso, límites y
+requisitos de atribución; se deben respetar al sustituir los valores predeterminados.
+
 ---
 
 ## 🔌 API REST
@@ -239,6 +312,23 @@ Documentación interactiva en **`/api-docs`** (Swagger UI).
 | `GET` | `/buscar/origen?origen=` | Buscar por origen |
 | `GET` | `/buscar/tipo?tipo=` | Buscar por tipo |
 | `GET` | `/buscar/familia?familia=` | Buscar por familia |
+
+### Individuos — `/api/individuos`
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/` | Obtener individuos como GeoJSON; filtros opcionales `especieId` y `parque` |
+| `PUT` | `/:codigoArbol/imagen` | Asociar una ruta `/uploads/...` o URL HTTPS a un individuo (requiere `password`) |
+
+Ejemplo para vincular una foto local versionada:
+
+```bash
+curl -X PUT https://plantas-qr.vercel.app/api/individuos/CIP-001/imagen \
+  -H 'Content-Type: application/json' \
+  -d "{\"imagen\":\"/uploads/individuos/CIP-001.webp\",\"password\":\"$ADMIN_PASSWORD\"}"
+```
+
+El campo `imagen` queda incluido en las propiedades de cada Feature GeoJSON.
 
 ### QRs — `/api/qr`
 

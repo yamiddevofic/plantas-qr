@@ -30,6 +30,25 @@ export async function buscarPlanta(id) {
   return res.json();
 }
 
+/** Individuos geolocalizados de una especie, como GeoJSON FeatureCollection. */
+export async function fetchIndividuos(especieId, { signal } = {}) {
+  const params = new URLSearchParams();
+  if (especieId) params.set('especieId', especieId);
+  const res = await fetch(`${BASE}/individuos?${params}`, { signal });
+  if (!res.ok) throw new Error(await leerError(res, 'No se pudieron cargar los individuos'));
+  return res.json();
+}
+
+export async function actualizarImagenIndividuo(codigoArbol, imagen, password) {
+  const res = await fetch(`${BASE}/individuos/${encodeURIComponent(codigoArbol)}/imagen`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ imagen, password }),
+  });
+  if (!res.ok) throw new Error(await leerError(res, 'No se pudo asociar la imagen al individuo'));
+  return res.json();
+}
+
 export async function fetchQRs() {
   const res = await fetch(`${BASE}/qr`);
   if (!res.ok) throw new Error('Error al obtener QRs');

@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  // El worker de MapLibre 6 es un módulo ES (lo crea con { type: 'module' }).
+  worker: { format: 'es' },
   server: {
     host: true,
     allowedHosts: true,

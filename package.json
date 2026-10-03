@@ -11,6 +11,7 @@
     "generar-variantes": "node server/scripts/generarVariantes.js",
     "verificar-imagenes": "node server/scripts/verificarImagenes.js",
     "capturar-og": "node server/scripts/capturarOg.js",
+    "cargar-individuos-cipres": "node server/scripts/cargarIndividuosCipres.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -19,6 +20,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "maplibre-gl": "^6.11.2",
     "mongodb": "^7.5.0",
     "mongoose": "^9.9.1",
     "multer": "^2.2.0",

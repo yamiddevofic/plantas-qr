@@ -5,6 +5,7 @@ import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
 import GaleriaFotos from '../organisms/GaleriaFotos';
+import MapaIndividuos from '../organisms/MapaIndividuos';
 import Hero from '../organisms/Hero';
 import MenuLateral from '../organisms/MenuLateral';
 import SeccionContacto from '../molecules/SeccionContacto';
@@ -23,8 +24,11 @@ import { useTema } from '../../tema.js';
 
 export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGenerado, onVerEstados }) {
   const { nombre, familia, origen, altura, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion, imagen } = planta || {};
-  const lat = Number.isFinite(Number(ubicacion?.latitud)) ? Number(ubicacion.latitud).toFixed(6) : null;
-  const lng = Number.isFinite(Number(ubicacion?.longitud)) ? Number(ubicacion.longitud).toFixed(6) : null;
+  // El catálogo importado trae 0,0 como "sin coordenadas": no es un punto real.
+  const tieneCoordenadas = Number.isFinite(Number(ubicacion?.latitud)) && Number.isFinite(Number(ubicacion?.longitud))
+    && !(Number(ubicacion.latitud) === 0 && Number(ubicacion.longitud) === 0);
+  const lat = tieneCoordenadas ? Number(ubicacion.latitud).toFixed(6) : null;
+  const lng = tieneCoordenadas ? Number(ubicacion.longitud).toFixed(6) : null;
   const usosLista = normalizarUsos(usos);
   const imagenes = listaImagenes({ imagen, imagenes: planta?.imagenes });
   const sitios = Array.isArray(ubicaciones) && ubicaciones.length > 0 ? ubicaciones : [];
@@ -268,6 +272,8 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
                     )}
                   </SeccionFicha>
                 )}
+
+                <MapaIndividuos especieId={planta._id} nombreEspecie={nombre.comun} />
               </div>
 
               <div className="detalle-qr">
