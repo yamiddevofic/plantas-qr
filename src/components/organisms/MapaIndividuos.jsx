@@ -13,6 +13,8 @@ const FUENTE_SOMBRA = 'terreno-sombra';
 const CAPA_SOMBRA = 'terreno-sombreado';
 const CAPA_PUNTOS = 'individuos-puntos';
 const CAPA_ETIQUETAS = 'individuos-etiquetas';
+const ZOOM_INICIAL_MAX = 16.5;
+const POSICION_SELECCION_Y = 0.45;
 
 const BASES = [
   { id: 'satelite', etiqueta: 'Satélite', Icono: LuSatellite },
@@ -224,6 +226,9 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
     if (centrar) {
       map.easeTo({
         center: coordenadas,
+        // Un offset positivo hacia abajo coloca el punto más bajo en pantalla
+        // (la cámara desplaza el mapa hacia arriba) y reserva espacio para el popup.
+        offset: [0, map.getContainer().clientHeight * POSICION_SELECCION_Y],
         zoom: Math.max(map.getZoom(), 18.5),
         duration: prefiereMenosMovimiento() ? 0 : 600,
       });
@@ -251,7 +256,7 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
           style: vista.base === 'satelite' ? lib.estiloSatelite() : lib.ESTILOS[vista.tema] || lib.ESTILOS.claro,
           bounds: limites,
           bearing: 90,
-          fitBoundsOptions: { padding: 48, maxZoom: 19, bearing: 90 },
+          fitBoundsOptions: { padding: 48, maxZoom: ZOOM_INICIAL_MAX, bearing: 90 },
           maxZoom: 20,
           maxPitch: 75,
           cooperativeGestures: true,
@@ -261,7 +266,13 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
         mapaRef.current = map;
         // anchor bottom ubica la punta del popup en la coordenada y el contenido
         // queda por encima del marcador.
-        popupRef.current = new lib.Popup({ anchor: 'bottom', offset: 14, maxWidth: '260px', focusAfterOpen: false });
+        popupRef.current = new lib.Popup({
+          anchor: 'bottom',
+          offset: 14,
+          maxWidth: '260px',
+          focusAfterOpen: false,
+          autoPan: false,
+        });
         popupRef.current.on('close', () => {
           marcar(map, seleccionRef.current, false);
           seleccionRef.current = null;
@@ -270,6 +281,7 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
 
         // visualizePitch: la brújula muestra la inclinación y la restablece al pulsarla.
         map.addControl(new lib.NavigationControl({ visualizePitch: true }), 'top-right');
+        map.addControl(new lib.FullscreenControl(), 'top-right');
         map.addControl(new lib.ScaleControl({ unit: 'metric' }), 'bottom-left');
         map.addControl(new lib.AttributionControl({ compact: true }), 'bottom-right');
 
@@ -282,7 +294,7 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
           marcar(map, seleccionRef.current, true);
           setMapaListo(true);
         });
-        map.on('click', CAPA_PUNTOS, (e) => seleccionar(e.features?.[0]));
+        map.on('click', CAPA_PUNTOS, (e) => seleccionar(e.features?.[0], { centrar: true }));
         map.on('mouseenter', CAPA_PUNTOS, () => { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', CAPA_PUNTOS, () => { map.getCanvas().style.cursor = ''; });
         map.on('error', (e) => console.warn('MapLibre:', e.error?.message || e));
@@ -338,7 +350,7 @@ export default function MapaIndividuos({ especieId, nombreEspecie }) {
         duration,
       });
     } else if (limitesRef.current) {
-      map.fitBounds(limitesRef.current, { padding: 48, maxZoom: 19, pitch: 0, bearing: 90, duration });
+      map.fitBounds(limitesRef.current, { padding: 48, maxZoom: ZOOM_INICIAL_MAX, pitch: 0, bearing: 90, duration });
     }
   }, [relieve3D, base]);
 

@@ -259,7 +259,7 @@ aparece. Las fuentes de teselas sí pueden tener condiciones y límites propios.
   OpenFreeMap/OpenMapTiles/OpenStreetMap y AWS Terrain Tiles.
 - **Accesible:** lista de individuos con botones (teclado/lector de pantalla) que
   centra el mapa y abre su popup; gestos cooperativos para no secuestrar el scroll en
-  móvil; respeta `prefers-reduced-motion`.
+  móvil; control para ampliar el mapa a pantalla completa; respeta `prefers-reduced-motion`.
 - **Fotos por individuo:** cada árbol puede tener su propia imagen, visible en la lista
   y el popup del mapa; no sustituye la foto general de la especie.
 
