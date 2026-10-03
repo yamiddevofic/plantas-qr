@@ -4,6 +4,8 @@ import './index.css'
 import App from './App.jsx'
 import TemaProvider from './TemaProvider.jsx'
 import { aplicarTemaInicial } from './tema.js'
+// Escucha `beforeinstallprompt` desde el arranque para el botón "Instalar app".
+import './offline/instalacion.js'
 
 aplicarTemaInicial();
 

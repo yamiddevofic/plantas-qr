@@ -7,6 +7,7 @@ import SeccionContacto from '../molecules/SeccionContacto';
 import PopoverContacto from '../molecules/PopoverContacto';
 import BotonMenu from '../atoms/BotonMenu';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
+import ItemInstalarApp from '../molecules/ItemInstalarApp';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
 import MenuLateral from '../organisms/MenuLateral';
@@ -76,6 +77,7 @@ export default function PaginaInicio() {
             descripcion="Identificación de especies con QR"
             onClick={irASeccion('acordeon-proyecto')}
           />
+          <ItemInstalarApp onCerrarMenu={() => setMenuAbierto(false)} />
         </GrupoMenu>
 
         <SeccionContacto />

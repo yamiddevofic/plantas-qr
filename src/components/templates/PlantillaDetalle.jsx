@@ -11,6 +11,7 @@ import PanelQR from '../organisms/PanelQR';
 import MenuLateral from '../organisms/MenuLateral';
 import SeccionContacto from '../molecules/SeccionContacto';
 import BuscadorLupa from '../organisms/BuscadorLupa';
+import ItemInstalarApp from '../molecules/ItemInstalarApp';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
 import PiePagina from '../molecules/PiePagina';
@@ -140,6 +141,7 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
             descripcion="Explorar las plantas del parque"
             onClick={irAlCatalogo}
           />
+          <ItemInstalarApp onCerrarMenu={() => setMenuAbierto(false)} />
         </GrupoMenu>
         <GrupoMenu titulo="Herramientas">
           <ItemMenu
