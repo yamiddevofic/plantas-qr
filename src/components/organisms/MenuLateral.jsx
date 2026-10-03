@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { LuX } from 'react-icons/lu';
 
 /**
  * Drawer lateral del menú hamburguesa: panel fijo desde la derecha con
@@ -49,7 +50,7 @@ export default function MenuLateral({ abierto, onCerrar, children }) {
             onClick={onCerrar}
             aria-label="Cerrar menú principal"
           >
-            ✕
+            <LuX aria-hidden="true" />
           </button>
         </div>
         {children}

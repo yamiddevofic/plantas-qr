@@ -62,7 +62,7 @@ export default function PopoverContacto() {
         onClick={() => setAbierto((v) => !v)}
       >
         <LuHeadset aria-hidden="true" />
-        Contacto
+        <span className="popover-contacto-texto">Contacto</span>
       </button>
     </div>
   );

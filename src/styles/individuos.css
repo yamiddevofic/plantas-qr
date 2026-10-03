@@ -2,22 +2,68 @@
    Módulo de individuos · listado, formulario y selector de ubicación
    ══════════════════════════════════════════════════════════════ */
 
-.individuos-panel {
-  display: grid;
-  gap: 14px;
+.individuos-cabecera {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+}
+
+.individuos-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--hit);
+  padding: 0 12px 0 8px;
+  margin-left: -8px;
+  border-radius: var(--radius-md);
+  color: var(--ink-500);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.individuos-volver:hover {
+  background: var(--mint-50);
+  color: var(--ink-900);
+}
+
+.individuos-main {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.individuos-titular {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px 0 24px;
+}
+
+.individuos-titulo {
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ink-900);
 }
 
 .individuos-intro {
-  margin: 0;
-  max-width: 68ch;
+  margin: 6px 0 0;
   color: var(--ink-500);
-  font-size: var(--step-0);
+  font-size: 0.95rem;
 }
 
-.individuos-barra {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.individuos-agregar {
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  padding-inline: 18px;
+}
+
+.individuos-panel {
+  display: grid;
+  gap: 14px;
 }
 
 .individuos-filtros {
@@ -25,36 +71,81 @@
   gap: 10px;
 }
 
-.individuos-conteo {
-  margin: 0;
-  color: var(--ink-500);
-  font-size: 0.875rem;
+.individuos-busqueda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--hit);
+  padding: 0 14px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-300);
+  transition: border-color 0.15s;
 }
 
+.individuos-busqueda:focus-within {
+  border-color: var(--forest-600);
+}
+
+.individuos-busqueda input {
+  flex: 1;
+  min-width: 0;
+  height: var(--hit);
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.individuos-select {
+  min-height: var(--hit);
+  padding: 0 14px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-700);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.individuos-select:focus-visible {
+  outline: none;
+  border-color: var(--forest-600);
+}
+
+.individuos-conteo {
+  margin: 4px 0 0;
+  color: var(--ink-300);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Lista tipo tabla: filas separadas por líneas finas, sin tarjetas. */
 .individuos-lista {
-  display: grid;
-  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
+  border-top: 1px solid var(--line-100);
 }
 
-.individuo-tarjeta {
+.individuo-fila {
   display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 4px 14px;
-  align-items: start;
-  padding: 14px;
-  background: var(--surface);
-  border: 1px solid var(--line-200);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--line-100);
 }
 
 .individuo-foto {
-  width: 72px;
-  height: 72px;
-  border-radius: var(--radius-sm);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
   object-fit: cover;
   background: var(--mint-100);
 }
@@ -62,7 +153,7 @@
 .individuo-foto-vacia {
   display: grid;
   place-items: center;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
 }
 
 .individuo-datos {
@@ -71,54 +162,100 @@
 
 .individuo-datos p {
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .individuo-codigo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--forest-800);
-  letter-spacing: 0.02em;
+  font-size: 1rem;
+  color: var(--ink-900);
+  letter-spacing: 0.01em;
 }
 
-.individuo-especie,
-.individuo-meta {
+.individuo-especie {
   font-size: 0.9rem;
   color: var(--ink-700);
-  overflow-wrap: anywhere;
 }
 
 .individuo-especie a {
   color: inherit;
-  font-weight: 600;
+  text-decoration: none;
+}
+
+.individuo-especie a:hover {
+  text-decoration: underline;
 }
 
 .individuo-especie em {
-  color: var(--ink-500);
+  color: var(--ink-300);
 }
 
 .individuo-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--ink-500);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  color: var(--ink-300);
+  font-variant-numeric: tabular-nums;
 }
 
 .individuo-acciones {
-  grid-column: 1 / -1;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding-top: 8px;
-  border-top: 1px solid var(--line-100);
+  gap: 2px;
 }
 
-.btn-peligro {
+.individuo-accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hit);
+  height: var(--hit);
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink-500);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.individuo-accion svg {
+  width: 18px;
+  height: 18px;
+}
+
+.individuo-accion:hover {
+  background: var(--mint-50);
+  color: var(--ink-900);
+}
+
+.individuo-accion-peligro:hover {
+  background: var(--danger-50);
   color: var(--danger-700);
 }
 
-.btn-peligro:hover:not(:disabled) {
-  background: var(--danger-50);
+.individuo-accion:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 1px;
+}
+
+/* En móvil el nombre científico y la altitud se omiten para que nada se corte. */
+@media (max-width: 639px) {
+  .individuo-especie em,
+  .individuo-meta-extra {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .individuos-filtros {
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+
+  .individuo-fila {
+    padding: 14px 8px;
+  }
 }
 
 /* ── Selector de ubicación (mapa del formulario) ─────────────── */
@@ -153,35 +290,6 @@
   margin: 0;
 }
 
-@media (min-width: 640px) {
-  .individuos-barra {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .individuos-filtros {
-    flex: 1;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    max-width: 640px;
-  }
-
-  .individuos-lista {
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  }
-
-  .individuo-tarjeta {
-    grid-template-columns: 72px 1fr auto;
-  }
-
-  .individuo-acciones {
-    grid-column: auto;
-    flex-direction: column;
-    padding-top: 0;
-    border-top: 0;
-  }
-}
-
 /* ── Trabajo sin conexión ────────────────────────────────────── */
 .individuo-pendiente {
   margin-left: 8px;
@@ -189,10 +297,9 @@
   border-radius: var(--radius-pill);
   background: var(--warning-50);
   color: var(--warning-700);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0;
-  vertical-align: middle;
 }
 
 .sincronizacion {
