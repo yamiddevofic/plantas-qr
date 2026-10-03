@@ -179,7 +179,7 @@ export default function PaginaGaleria() {
         puedeGenerar={plantas.length > 0}
         onCrear={abrirCrear}
         onRegenerarTodos={abrirDialogoQR}
-        onEditarImagenes={abrirPuerta({ url: '/depurar-plantas' })}
+        onEditarImagenes={() => { window.location.hash = '#/especies-fotos'; }}
         onArchivos={abrirPuerta({ url: '/depurar-imagenes' })}
         onVerEstados={() => setLeyendaAbierta(true)}
         mensajeQR={mensajeQR}

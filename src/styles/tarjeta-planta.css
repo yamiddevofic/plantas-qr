@@ -64,14 +64,16 @@
   right: 0;
   bottom: 0;
   z-index: 2;
-  padding: 32px 16px 16px;
-  background: linear-gradient(transparent, rgba(23, 63, 47, 0.78));
-  text-align: center;
+  padding: 56px 18px 18px;
+  /* Sombra firme abajo para que el nombre se lea sobre cualquier foto. */
+  background: linear-gradient(180deg, rgba(8, 20, 14, 0) 0%, rgba(8, 20, 14, 0.55) 45%, rgba(8, 20, 14, 0.85) 100%);
+  text-align: left;
 }
 
 .card-nombre-overlay .card-nombre {
-  font-size: var(--step-1);
+  font-size: var(--step-2);
   font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--white);
   line-height: 1.25;
   margin: 0;
@@ -80,7 +82,7 @@
 .card-nombre-overlay .card-cientifico {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.8);
   margin: 2px 0 0;
 }

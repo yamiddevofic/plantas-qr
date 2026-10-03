@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  actualizarFotosPlanta,
   crearPlanta,
   obtenerPlantas,
   obtenerPlantaPorId,
@@ -241,6 +242,36 @@ router.get('/:id', obtenerPlantaPorId);
  *       404:
  *         description: Planta no encontrada
  */
+/**
+ * @swagger
+ * /api/plantas/{id}/fotos:
+ *   put:
+ *     tags: [Plantas]
+ *     summary: Ordenar, quitar o subir fotos de una especie (admin)
+ *     description: "`orden` es la lista final en JSON: referencias que ya tenía la especie y `nueva:<n>` para la n-ésima foto de `fotos`. La primera es la principal."
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [orden, password]
+ *             properties:
+ *               orden: { type: string, example: '["nueva:0", "/uploads/01_Arrayan.webp"]' }
+ *               fotos: { type: array, items: { type: string, format: binary } }
+ *               password: { type: string }
+ *     responses:
+ *       200: { description: Especie actualizada }
+ *       401: { description: Contraseña inválida o faltante }
+ *       404: { description: No existe }
+ */
+router.put('/:id/fotos', upload.fields([{ name: 'fotos', maxCount: 10 }]), qrAuth, actualizarFotosPlanta);
+
 router.put('/:id', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imagenes', maxCount: 10 }]), qrAuth, actualizarPlanta);
 
 /**

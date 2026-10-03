@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { LuImages } from 'react-icons/lu';
 import MenuHerramientas from '../organisms/MenuHerramientas';
 import ListaPlantas from '../organisms/ListaPlantas';
 import BuscadorLupa from '../organisms/BuscadorLupa';
@@ -62,12 +61,7 @@ export default function PlantillaGaleria({
       <header
         className={`galeria-header ${headerOculto ? 'galeria-header-oculto' : ''}`.trim()}
       >
-        <div className="galeria-header-titulo">
-          <LuImages aria-hidden="true" className="galeria-header-icono" />
-          <h1 id="catalogo-titulo" className="galeria-header-texto">
-            Galería de especies
-          </h1>
-        </div>
+        <a className="galeria-marca" href="#/">PlantaQR</a>
         <div className="hero-acciones-grupo">
           <BuscadorLupa plantas={todasLasPlantas} />
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
@@ -75,6 +69,14 @@ export default function PlantillaGaleria({
       </header>
 
       <main id="app-main" className="app-main">
+        <div className="galeria-titular">
+          <h1 id="catalogo-titulo" className="individuos-titulo">Especies</h1>
+          <p className="individuos-intro">
+            {cargando || error
+              ? 'Árboles del Parque Principal de Chitagá'
+              : `${todasLasPlantas.length} ${todasLasPlantas.length === 1 ? 'especie' : 'especies'} del Parque Principal de Chitagá`}
+          </p>
+        </div>
         {cargando ? (
           <div className="cargando-central">
             <ArbolitoLoader etiqueta="Cargando catálogo" />

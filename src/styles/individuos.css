@@ -35,14 +35,21 @@
 
 .individuos-titular {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px 16px;
   margin: 8px 0 24px;
 }
 
+.individuos-titular > div {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
 .individuos-titulo {
-  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+  /* 28 px en móvil (titular de Material 3), hasta 40 px en escritorio. */
+  font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -52,7 +59,8 @@
 .individuos-intro {
   margin: 6px 0 0;
   color: var(--ink-500);
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
 }
 
 .individuos-agregar {
@@ -63,11 +71,15 @@
 
 .individuos-panel {
   display: grid;
+  /* minmax(0, 1fr): sin esto la columna crece con el texto más largo (selector
+     de especies, nombres sin cortar) y la página se sale de la pantalla. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 14px;
 }
 
 .individuos-filtros {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 }
 
@@ -101,6 +113,8 @@
 }
 
 .individuos-select {
+  width: 100%;
+  min-width: 0;
   min-height: var(--hit);
   padding: 0 14px;
   border: 1px solid var(--line-200);
@@ -178,7 +192,7 @@
 }
 
 .individuo-especie {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: var(--ink-700);
 }
 
@@ -196,7 +210,7 @@
 }
 
 .individuo-meta {
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   color: var(--ink-300);
   font-variant-numeric: tabular-nums;
 }
@@ -221,8 +235,8 @@
 }
 
 .individuo-accion svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 
 .individuo-accion:hover {
@@ -447,4 +461,144 @@
 .form-archivo:focus-within {
   outline: 3px solid var(--leaf-500);
   outline-offset: 2px;
+}
+
+/* ── Editor de fotos de especies ─────────────────────────────── */
+.fotos-subtitulo {
+  margin: 2px 0 0;
+  color: var(--ink-500);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.fotos-vacio {
+  margin: 16px 0;
+  color: var(--ink-500);
+}
+
+.fotos-rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fotos-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--mint-100);
+}
+
+.fotos-item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.fotos-principal,
+.fotos-nueva {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(15, 30, 22, 0.78);
+  color: var(--white);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.fotos-principal + .fotos-nueva {
+  top: 34px;
+}
+
+.fotos-nueva {
+  background: var(--forest-700);
+}
+
+.fotos-item-acciones {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  display: flex;
+  gap: 4px;
+}
+
+.fotos-item-acciones button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink-900);
+  cursor: pointer;
+}
+
+.fotos-item-acciones button:hover {
+  background: var(--white);
+}
+
+.fotos-item-acciones button:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 1px;
+}
+
+/* ── Puerta de administrador ──────────────────────────────────── */
+.puerta-admin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 360px;
+  margin: 8vh auto 0;
+  text-align: center;
+}
+
+.puerta-admin-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--mint-100);
+  color: var(--forest-700);
+  font-size: 1.5rem;
+}
+
+.puerta-admin-titulo {
+  margin-top: 18px;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink-900);
+}
+
+.puerta-admin-texto {
+  margin: 8px 0 24px;
+  color: var(--ink-500);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.puerta-admin-form {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+}
+
+.puerta-admin-form .btn {
+  width: 100%;
+  border-radius: var(--radius-pill);
+}
+
+.puerta-admin-form .form-error {
+  margin: 0;
 }

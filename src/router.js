@@ -13,6 +13,9 @@ export function useHashRoute() {
   if (match) {
     return { nombre: 'detalle', id: decodeURIComponent(match[1]) };
   }
+  if (hash.startsWith('#/especies-fotos')) {
+    return { nombre: 'especies-fotos' };
+  }
   if (hash.startsWith('#/individuos')) {
     return { nombre: 'individuos' };
   }

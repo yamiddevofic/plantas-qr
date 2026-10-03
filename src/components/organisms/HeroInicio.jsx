@@ -47,24 +47,30 @@ export default function HeroInicio({ onConocerProyecto }) {
       />
       <div className="hero-inicio-degradado" aria-hidden="true" />
       <div className="hero-inicio-contenido">
-        <p className="hero-inicio-corchete">Parque principal de Chitagá</p>
-        <div className="hero-inicio-centro">
-          <h1 className="hero-inicio-titulo" aria-label={TITULO}>
-            <span aria-hidden="true">{TITULO.slice(0, visibles)}</span>
-            {cursor && <span className="hero-inicio-cursor" aria-hidden="true" />}
-          </h1>
-          <p className="hero-inicio-texto">
-            Escanea el código QR de cualquier árbol del parque para descubrir su
-            ficha: familia, origen, usos y estado de conservación.
-          </p>
-        </div>
+        {/* Rótulo de libreta de campo: dónde está el parque, en vez de una etiqueta genérica. */}
+        <p className="hero-inicio-ubicacion">
+          <span>Chitagá, Norte de Santander</span>
+          <span className="hero-inicio-coordenadas" aria-label="Latitud 7 grados 8 minutos norte, longitud 72 grados 39 minutos oeste, 2.345 metros sobre el nivel del mar">
+            7°08′ N · 72°39′ O · 2.345 m
+          </span>
+        </p>
+        <h1 className="hero-inicio-titulo" aria-label={TITULO}>
+          <span aria-hidden="true">{TITULO.slice(0, visibles)}</span>
+          {cursor && <span className="hero-inicio-cursor" aria-hidden="true" />}
+        </h1>
+        <p className="hero-inicio-texto">
+          Escanea el código QR de cualquier árbol del parque para descubrir su
+          ficha: familia, origen, usos y estado de conservación.
+        </p>
         <div className="hero-inicio-acciones">
           <Boton variante="primary" onClick={onConocerProyecto}>
             Conoce nuestro proyecto
             <LuArrowRight aria-hidden="true" />
           </Boton>
+          <a className="hero-inicio-enlace" href="#/galeria">Ver las especies</a>
         </div>
       </div>
+      <p className="hero-inicio-pie" aria-hidden="true">Parroquia San Juan Nepomuceno</p>
     </header>
   );
 }

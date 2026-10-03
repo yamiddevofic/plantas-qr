@@ -72,3 +72,47 @@ img {
 .skip-link:focus {
   left: 8px;
 }
+
+/* iOS hace zoom al enfocar campos con letra menor de 16 px y la vista queda
+   corrida hacia un lado; en pantallas táctiles se fuerza ese mínimo. */
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em) !important;
+  }
+}
+
+/* ── App instalada en escritorio: barra de título integrada ──────
+   Con display_override "window-controls-overlay" (manifest) la app dibuja
+   su propia barra del color de la página y los botones de la ventana quedan
+   encima. Fuera de ese modo las variables env() valen 0 y nada cambia. */
+.barra-titulo {
+  display: none;
+}
+
+@media (display-mode: window-controls-overlay) {
+  body {
+    padding-top: env(titlebar-area-height, 0px);
+  }
+
+  .barra-titulo {
+    position: fixed;
+    top: env(titlebar-area-y, 0px);
+    left: env(titlebar-area-x, 0px);
+    width: env(titlebar-area-width, 100%);
+    height: env(titlebar-area-height, 33px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    background: var(--page-bg);
+    color: var(--ink-500);
+    font-size: 0.8rem;
+    font-weight: 600;
+    -webkit-app-region: drag;
+    app-region: drag;
+    user-select: none;
+  }
+}

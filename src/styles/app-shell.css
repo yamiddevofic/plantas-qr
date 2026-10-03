@@ -39,14 +39,13 @@ html[data-tema="oscuro"] .hero {
 
 .hero-inicio {
   position: relative;
-  margin: 16px 0 34px;
-  min-height: 460px;
+  margin: 0 -18px 40px;
+  min-height: min(640px, 88svh);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
   overflow: hidden;
-  border-radius: var(--radius-lg);
   isolation: isolate;
+  color: var(--white);
 }
 
 .hero-inicio > img {
@@ -58,71 +57,64 @@ html[data-tema="oscuro"] .hero {
   z-index: -2;
 }
 
+/* La foto se ve limpia arriba; el texto se apoya en una sombra desde abajo a la izquierda. */
 .hero-inicio-degradado {
   position: absolute;
   inset: 0;
   z-index: -1;
-  /* Foto limpia arriba; solo se oscurece donde va el texto. */
   background:
-    linear-gradient(180deg, rgba(10, 26, 18, 0.05) 0%, rgba(10, 26, 18, 0.25) 40%, rgba(9, 22, 15, 0.82) 100%);
+    linear-gradient(0deg, rgba(8, 20, 14, 0.88) 0%, rgba(8, 20, 14, 0.45) 38%, rgba(8, 20, 14, 0) 70%),
+    linear-gradient(90deg, rgba(8, 20, 14, 0.35) 0%, rgba(8, 20, 14, 0) 60%);
 }
 
 .hero-inicio-contenido {
   position: relative;
   z-index: 1;
-  height: 100%;
   width: 100%;
-  max-width: 620px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 84px 24px 32px;
-  text-align: center;
-  color: var(--white);
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 120px 22px 40px;
+  text-align: left;
 }
 
-.hero-inicio-corchete {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 10px;
+.hero-inicio-ubicacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin: 0 0 18px;
+  padding-left: 14px;
+  border-left: 2px solid var(--sage-300);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.hero-inicio-centro {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.hero-inicio-coordenadas {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.68);
 }
 
 .hero-inicio-titulo {
-  font-size: clamp(2.6rem, 1.4rem + 4.6vw, 4.6rem);
+  max-width: 11ch;
+  font-size: clamp(2.8rem, 1.2rem + 6.4vw, 5.6rem);
   font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
-  text-wrap: balance;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
   color: var(--white);
+  text-wrap: balance;
 }
 
 /* Cursor del efecto "escribir a máquina" del titular */
 .hero-inicio-cursor {
   display: inline-block;
-  width: 0.09em;
-  height: 1em;
+  width: 0.07em;
+  height: 0.9em;
   margin-left: 4px;
-  vertical-align: -0.12em;
-  background: currentColor;
+  vertical-align: -0.08em;
+  background: var(--sage-300);
   animation: hero-cursor-parpadeo 0.8s step-end infinite;
 }
 
@@ -137,19 +129,19 @@ html[data-tema="oscuro"] .hero {
 }
 
 .hero-inicio-texto {
-  margin: 18px auto 0;
-  max-width: 44ch;
+  margin: 18px 0 0;
+  max-width: 42ch;
   font-size: var(--step-1);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(255, 255, 255, 0.84);
   text-wrap: pretty;
 }
 
 .hero-inicio-acciones {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
+  align-items: center;
+  gap: 12px 22px;
   margin-top: 28px;
 }
 
@@ -158,25 +150,55 @@ html[data-tema="oscuro"] .hero {
   padding-inline: 22px;
 }
 
-@media (min-width: 768px) {
-  .hero-inicio {
-    width: 100vw;
-    height: 72dvh;
-    max-height: 760px;
-    margin: 0 calc(50% - 50vw) 34px;
-    border-radius: 0;
-  }
+.hero-inicio-enlace {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+  color: var(--white);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.45);
+  text-underline-offset: 5px;
+  transition: text-decoration-color 0.15s;
+}
+
+.hero-inicio-enlace:hover {
+  text-decoration-color: var(--white);
+}
+
+/* Pie de foto, como en una lámina impresa. */
+.hero-inicio-pie {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  z-index: 1;
+  margin: 0;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 @media (max-width: 767px) {
+  .hero-inicio-pie {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
   .hero-inicio {
-    min-height: 565px;
-    margin: 0 -18px 34px;
-    border-radius: 0;
+    width: 100vw;
+    margin: 0 calc(50% - 50vw) 48px;
+    min-height: min(720px, 82svh);
   }
 
-  .hero-inicio-titulo {
-    font-size: clamp(2.4rem, 1.1rem + 4.4vw, 3.1rem);
+  .hero-inicio-contenido {
+    padding: 140px 40px 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-inicio-cursor {
+    animation: none;
   }
 }
 
