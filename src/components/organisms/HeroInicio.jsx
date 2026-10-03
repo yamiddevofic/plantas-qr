@@ -50,8 +50,8 @@ export default function HeroInicio({ onConocerProyecto }) {
         {/* Rótulo de libreta de campo: dónde está el parque, en vez de una etiqueta genérica. */}
         <p className="hero-inicio-ubicacion">
           <span>Chitagá, Norte de Santander</span>
-          <span className="hero-inicio-coordenadas" aria-label="Latitud 7 grados 8 minutos norte, longitud 72 grados 39 minutos oeste, 2.345 metros sobre el nivel del mar">
-            7°08′ N · 72°39′ O · 2.345 m
+          <span className="hero-inicio-coordenadas" aria-label="Latitud 7 grados 8 minutos 18 segundos norte, longitud 72 grados 39 minutos 54 segundos oeste, 2.345 metros sobre el nivel del mar">
+            7°08′18″ N · 72°39′54″ O · 2.345 m
           </span>
         </p>
         <h1 className="hero-inicio-titulo" aria-label={TITULO}>
