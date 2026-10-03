@@ -44,8 +44,10 @@ html[data-tema="oscuro"] .hero {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  overflow: hidden;
+  /* Sin overflow:hidden para que la lista del buscador pueda salir de la foto. La
+     imagen y el degradado son absolute inset:0, así que no se desbordan. */
   isolation: isolate;
+  z-index: 3;
   color: var(--white);
 }
 

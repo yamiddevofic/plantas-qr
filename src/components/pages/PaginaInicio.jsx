@@ -16,6 +16,7 @@ import { useTema } from '../../tema.js';
 
 export default function PaginaInicio() {
   const [datos, setDatos] = useState(null);
+  const [plantas, setPlantas] = useState(null);
   const [menuAbierto, setMenuAbierto] = useState(false);
   const { tema, alternar } = useTema();
   const esOscuro = tema === 'oscuro';
@@ -25,6 +26,7 @@ export default function PaginaInicio() {
     fetchPlantas()
       .then((lista) => {
         if (cancelado) return;
+        setPlantas(lista);
         const especies = lista.length;
         const familias = new Set(lista.map((p) => p.familia).filter(Boolean)).size;
         setDatos({ especies, familias });
@@ -97,7 +99,7 @@ export default function PaginaInicio() {
       </MenuLateral>
 
       <main id="app-main">
-        <HeroInicio onConocerProyecto={conocerProyecto} />
+        <HeroInicio onConocerProyecto={conocerProyecto} plantas={plantas} />
 
         {datos ? (
           <SeccionParque especies={datos.especies} familias={datos.familias} abierto />
