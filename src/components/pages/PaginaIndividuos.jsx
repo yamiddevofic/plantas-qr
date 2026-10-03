@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LuArrowLeft, LuCirclePlus, LuTreePine } from 'react-icons/lu';
 import {
   actualizarIndividuo,
@@ -8,12 +8,25 @@ import {
   fetchPlantas,
 } from '../../api';
 import useAccionProtegida from '../../hooks/useAccionProtegida';
+import useEnLinea from '../../hooks/useEnLinea';
 import { agruparEspecies, parqueMasUsado } from '../../individuos';
+import {
+  aplicarCola,
+  descartar,
+  encolarCrear,
+  encolarEditar,
+  encolarEliminar,
+  esIdLocal,
+  guardarCola,
+  leerCola,
+  marcarError,
+} from '../../offline/cola';
 import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
 import PiePagina from '../molecules/PiePagina';
+import BannerSincronizacion from '../organisms/BannerSincronizacion';
 import FormularioIndividuo from '../organisms/FormularioIndividuo';
 import TarjetaIndividuo from '../organisms/TarjetaIndividuo';
 
@@ -29,7 +42,19 @@ export default function PaginaIndividuos() {
   const [filtroEspecie, setFiltroEspecie] = useState('');
   const [formulario, setFormulario] = useState(null); // { individuo: feature | null }
   const [aviso, setAviso] = useState(null);
+  const [cola, setCola] = useState(leerCola);
+  const [sincronizando, setSincronizando] = useState(false);
+  const enLinea = useEnLinea();
+  const colaRef = useRef(cola);
+  const sincronizandoRef = useRef(false);
+  const autoIntentadoRef = useRef(false);
   const { ejecutar, dialogo } = useAccionProtegida();
+
+  // La cola vive en el dispositivo para sobrevivir a cerrar la página sin conexión.
+  useEffect(() => {
+    colaRef.current = cola;
+    guardarCola(cola);
+  }, [cola]);
 
   useEffect(() => {
     aplicarSeo({
@@ -61,6 +86,8 @@ export default function PaginaIndividuos() {
   }, [recargar]);
 
   const especies = useMemo(() => agruparEspecies(plantas), [plantas]);
+  // Lo guardado en el servidor más los cambios aún sin enviar.
+  const vista = useMemo(() => aplicarCola(individuos, cola, plantas), [individuos, cola, plantas]);
 
   // Individuo → especie agrupada, para filtrar sin importar qué ficha hermana tenga.
   const grupoPorFicha = useMemo(() => {
@@ -71,36 +98,89 @@ export default function PaginaIndividuos() {
 
   const visibles = useMemo(() => {
     const texto = sinTildes(busqueda.trim());
-    return individuos.filter((f) => {
+    return vista.filter((f) => {
       const { codigoArbol, parque, especie } = f.properties;
       if (filtroEspecie && grupoPorFicha.get(especie?._id) !== filtroEspecie) return false;
       if (!texto) return true;
       return sinTildes(`${codigoArbol} ${parque} ${especie?.nombre?.comun} ${especie?.nombre?.cientifico}`).includes(texto);
     });
-  }, [individuos, busqueda, filtroEspecie, grupoPorFicha]);
+  }, [vista, busqueda, filtroEspecie, grupoPorFicha]);
+
+  // Actualiza la lista desde el servidor sin pantalla de carga; tras cada cambio
+  // también deja al día la copia que usa el service worker sin conexión.
+  const refrescar = useCallback(async () => {
+    try {
+      const coleccion = await fetchIndividuos();
+      setIndividuos(coleccion.features);
+    } catch {
+      // Sin red: se conserva lo que ya hay en pantalla.
+    }
+  }, []);
 
   const guardar = useCallback(async (datos) => {
     const editando = formulario?.individuo;
+    const id = editando?.properties.id;
+
+    const guardarEnCola = () => {
+      setCola((c) => (editando ? encolarEditar(c, id, datos) : encolarCrear(c, datos)));
+      setAviso({
+        tipo: 'ok',
+        texto: `${datos.codigoArbol} guardado en este dispositivo; se enviará cuando haya conexión.`,
+      });
+      setFormulario(null);
+    };
+
+    // Sin red, o sobre algo que aún está en la cola, el cambio se suma a la cola.
+    if (!enLinea || (id && cola.some((op) => op.id === id))) {
+      guardarEnCola();
+      return;
+    }
+
     const descripcion = editando
       ? `Para guardar los cambios de ${editando.properties.codigoArbol} necesitas la contraseña de administrador.`
       : `Para registrar ${datos.codigoArbol} necesitas la contraseña de administrador.`;
-    const feature = await ejecutar(
-      (password) => (editando
-        ? actualizarIndividuo(editando.properties.id, datos, password)
-        : crearIndividuo(datos, password)),
-      descripcion,
-    );
-    setIndividuos((prev) => {
-      const sinEste = prev.filter((f) => f.properties.id !== feature.properties.id);
-      return [...sinEste, feature].sort((a, b) => a.properties.codigoArbol.localeCompare(b.properties.codigoArbol, 'es', { numeric: true }));
-    });
+    let feature;
+    try {
+      feature = await ejecutar(
+        (password) => (editando
+          ? actualizarIndividuo(id, datos, password)
+          : crearIndividuo(datos, password)),
+        descripcion,
+      );
+    } catch (e) {
+      if (e.sinRed) {
+        guardarEnCola();
+        return;
+      }
+      throw e;
+    }
+    setIndividuos((prev) => [...prev.filter((f) => f.properties.id !== feature.properties.id), feature]);
     setAviso({ tipo: 'ok', texto: `${feature.properties.codigoArbol} ${editando ? 'actualizado' : 'registrado'} correctamente.` });
     setFormulario(null);
-  }, [ejecutar, formulario]);
+    refrescar();
+  }, [ejecutar, formulario, enLinea, cola, refrescar]);
 
   const eliminar = useCallback(async (feature) => {
     const { id, codigoArbol } = feature.properties;
     setAviso(null);
+
+    const eliminarEnCola = () => {
+      setCola((c) => encolarEliminar(c, id));
+      setAviso({
+        tipo: 'ok',
+        texto: esIdLocal(id)
+          ? `${codigoArbol} descartado.`
+          : `${codigoArbol} se eliminará cuando haya conexión.`,
+      });
+    };
+
+    // Sin red no se puede validar la contraseña (se pedirá al sincronizar), así
+    // que la confirmación es local.
+    if (!enLinea || cola.some((op) => op.id === id)) {
+      if (window.confirm(`¿Eliminar el individuo ${codigoArbol}? Se aplicará al sincronizar.`)) eliminarEnCola();
+      return;
+    }
+
     try {
       await ejecutar(
         (password) => eliminarIndividuo(id, password),
@@ -109,10 +189,76 @@ export default function PaginaIndividuos() {
       );
       setIndividuos((prev) => prev.filter((f) => f.properties.id !== id));
       setAviso({ tipo: 'ok', texto: `${codigoArbol} eliminado.` });
+      refrescar();
     } catch (e) {
-      if (!e.cancelado) setAviso({ tipo: 'error', texto: e.message });
+      if (e.sinRed) eliminarEnCola();
+      else if (!e.cancelado) setAviso({ tipo: 'error', texto: e.message });
     }
-  }, [ejecutar]);
+  }, [ejecutar, enLinea, cola, refrescar]);
+
+  // Envía la cola en orden. Un rechazo del servidor (código repetido, datos
+  // inválidos…) marca esa operación y sigue con las demás; si falta la red o la
+  // contraseña es incorrecta se detiene y lo gestiona quien llama.
+  const sincronizar = useCallback(async () => {
+    if (sincronizandoRef.current) return;
+    sincronizandoRef.current = true;
+    setSincronizando(true);
+    try {
+      const pendientes = colaRef.current.filter((op) => !op.error).length;
+      if (!pendientes) return;
+      const { enviados, rechazados } = await ejecutar(async (password) => {
+        let restante = colaRef.current;
+        let ok = 0;
+        let rechazadas = 0;
+        for (const op of restante.filter((o) => !o.error)) {
+          try {
+            if (op.tipo === 'crear') await crearIndividuo(op.datos, password);
+            else if (op.tipo === 'editar') await actualizarIndividuo(op.id, op.datos, password);
+            else await eliminarIndividuo(op.id, password);
+            restante = descartar(restante, op.id);
+            ok += 1;
+          } catch (e) {
+            if (e.sinRed || /contraseña/i.test(e.message)) throw e;
+            // Eliminar algo que ya no existe es, a efectos prácticos, un éxito.
+            if (op.tipo === 'eliminar' && /no existe/i.test(e.message)) {
+              restante = descartar(restante, op.id);
+              ok += 1;
+            } else {
+              restante = marcarError(restante, op.id, e.message);
+              rechazadas += 1;
+            }
+          }
+          guardarCola(restante);
+          setCola(restante);
+        }
+        return { enviados: ok, rechazados: rechazadas };
+      }, `Hay ${pendientes} ${pendientes === 1 ? 'cambio guardado' : 'cambios guardados'} sin conexión. Ingresa la contraseña de administrador para enviarlos.`);
+      await refrescar();
+      setAviso({
+        tipo: rechazados ? 'error' : 'ok',
+        texto: `${enviados} ${enviados === 1 ? 'cambio enviado' : 'cambios enviados'}${rechazados ? `; ${rechazados} rechazado${rechazados === 1 ? '' : 's'} por el servidor (revísalos abajo)` : ''}.`,
+      });
+    } catch (e) {
+      if (e.sinRed) setAviso({ tipo: 'error', texto: 'Se perdió la conexión; los cambios siguen guardados y se enviarán después.' });
+      else if (!e.cancelado) setAviso({ tipo: 'error', texto: e.message });
+    } finally {
+      sincronizandoRef.current = false;
+      setSincronizando(false);
+    }
+  }, [ejecutar, refrescar]);
+
+  // Al volver la conexión (o al abrir la página con ella) se ofrece enviar lo pendiente.
+  const hayPorEnviar = cola.some((op) => !op.error);
+  useEffect(() => {
+    if (!enLinea) {
+      autoIntentadoRef.current = false;
+    } else if (hayPorEnviar && !cargando && !formulario && !autoIntentadoRef.current) {
+      autoIntentadoRef.current = true;
+      sincronizar();
+    }
+  }, [enLinea, hayPorEnviar, cargando, formulario, sincronizar]);
+
+  const descartarOperacion = (id) => setCola((c) => descartar(c, id));
 
   const abrirFormulario = (individuo = null) => {
     setAviso(null);
@@ -177,8 +323,16 @@ export default function PaginaIndividuos() {
               </Boton>
             </div>
 
+            <BannerSincronizacion
+              enLinea={enLinea}
+              cola={cola}
+              sincronizando={sincronizando}
+              onSincronizar={sincronizar}
+              onDescartar={descartarOperacion}
+            />
+
             <p className="individuos-conteo" role="status" aria-live="polite">
-              {visibles.length} de {individuos.length} {individuos.length === 1 ? 'individuo' : 'individuos'}
+              {visibles.length} de {vista.length} {vista.length === 1 ? 'individuo' : 'individuos'}
             </p>
 
             {aviso && (
@@ -190,7 +344,7 @@ export default function PaginaIndividuos() {
               </p>
             )}
 
-            {individuos.length === 0 ? (
+            {vista.length === 0 ? (
               <EstadoBox
                 icono="🌱"
                 titulo="Aún no hay individuos registrados"
@@ -224,8 +378,8 @@ export default function PaginaIndividuos() {
         <FormularioIndividuo
           individuo={formulario.individuo}
           especies={especies}
-          individuos={individuos}
-          parquePorDefecto={parqueMasUsado(individuos)}
+          individuos={vista}
+          parquePorDefecto={parqueMasUsado(vista)}
           onClose={() => setFormulario(null)}
           onGuardar={guardar}
         />

@@ -4,7 +4,7 @@ import { detalleIndividuo } from '../../mapa/capasIndividuos';
 import Boton from '../atoms/Boton';
 
 export default function TarjetaIndividuo({ feature, onEditar, onEliminar }) {
-  const { codigoArbol, parque, imagen, especie } = feature.properties;
+  const { codigoArbol, parque, imagen, especie, pendiente } = feature.properties;
   const [longitud, latitud] = feature.geometry.coordinates;
   const detalle = detalleIndividuo(feature.properties);
 
@@ -23,7 +23,10 @@ export default function TarjetaIndividuo({ feature, onEditar, onEliminar }) {
         <span className="individuo-foto individuo-foto-vacia" aria-hidden="true">🌳</span>
       )}
       <div className="individuo-datos">
-        <p className="individuo-codigo">{codigoArbol}</p>
+        <p className="individuo-codigo">
+          {codigoArbol}
+          {pendiente && <span className="individuo-pendiente">Sin enviar</span>}
+        </p>
         <p className="individuo-especie">
           {especie ? (
             <a href={`#/planta/${especie._id}`}>{especie.nombre?.comun}</a>

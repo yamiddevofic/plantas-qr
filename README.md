@@ -55,6 +55,7 @@ plantas-qr/
 │   ├── hooks/                # useModal (foco/scroll/Esc), useAccionProtegida (contraseña)
 │   ├── individuos.js         # Utilidades puras: sugerir código, agrupar especies
 │   ├── mapa/                 # maplibre.js (carga diferida) y capasIndividuos.js
+│   ├── offline/              # sw.js (service worker) y cola.js (cambios sin conexión)
 │   └── components/           # Arquitectura atómica (Atomic Design)
 │       ├── atoms/            # Boton, Insignia, ImagenPlanta, Spinner, Chip,
 │       │                     #   PuntoEscala, EstadoBox, BotonMenu, ItemMenu,
@@ -259,6 +260,24 @@ tocar la base de datos. Se abre desde el menú de la galería → **Gestionar in
   mientras la página esté abierta. **Eliminar** siempre pide confirmar con la contraseña.
 - La foto es opcional: ruta `/uploads/...` o URL HTTPS; si se deja vacía se usa
   `public/uploads/individuos/CÓDIGO.webp` cuando existe.
+
+### Uso sin conexión
+
+La app es instalable (PWA) y funciona sin internet con lo que ya se haya visto con conexión:
+
+- **Service worker** (`src/offline/sw.js`; `vite.config.js` lo genera como `dist/sw.js`
+  con la lista de archivos del build). Solo se registra en producción (`npm run build`).
+  - App (HTML, JS, CSS, iconos): se guarda al instalar, así abre sin red.
+  - `GET /api/...`: red primero (máx. 4 s) y, si no hay, la última copia guardada.
+  - Fotos de `/uploads`, teselas del mapa y tipografías: se guardan al verlas por primera vez.
+- **Individuos sin conexión:** crear, editar y eliminar se guardan en una cola en el
+  dispositivo (`localStorage`, sin contraseñas) y la tarjeta muestra *Sin enviar*. Al
+  volver la conexión, con la página de individuos abierta, se pide la contraseña y se
+  envían en orden. Si el servidor rechaza alguno (p. ej. código repetido) queda listado
+  para revisarlo o descartarlo; el resto se envía igual.
+- Sin conexión, el mapa del formulario solo muestra las zonas ya visitadas; las
+  coordenadas a mano y **Usar mi ubicación** (GPS) funcionan igual.
+- No funciona sin conexión: crear/editar especies, subir fotos ni generar QR.
 
 ### Mapa de individuos (MapLibre GL)
 

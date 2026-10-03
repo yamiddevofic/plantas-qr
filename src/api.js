@@ -50,11 +50,18 @@ export async function actualizarImagenIndividuo(codigoArbol, imagen, password) {
 }
 
 async function enviarIndividuo(url, metodo, cuerpo, fallback) {
-  const res = await fetch(url, {
-    method: metodo,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(cuerpo),
-  });
+  let res;
+  try {
+    res = await fetch(url, {
+      method: metodo,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cuerpo),
+    });
+  } catch (error) {
+    // fetch solo rechaza cuando no hubo respuesta (sin red, servidor caído):
+    // quien llama puede guardar el cambio en la cola y reintentar luego.
+    throw Object.assign(new Error('Sin conexión con el servidor'), { sinRed: true, causa: error });
+  }
   if (!res.ok) throw new Error(await leerError(res, fallback));
   return res.json();
 }

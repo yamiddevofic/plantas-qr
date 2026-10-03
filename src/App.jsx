@@ -4,6 +4,7 @@ import PaginaGaleria from './components/pages/PaginaGaleria';
 import PaginaDetalle from './components/pages/PaginaDetalle';
 import PaginaIndividuos from './components/pages/PaginaIndividuos';
 import PaginaInicio from './components/pages/PaginaInicio';
+import AvisoSinConexion from './components/molecules/AvisoSinConexion';
 import SplashCarga from './components/organisms/SplashCarga';
 
 export default function App() {
@@ -36,6 +37,7 @@ export default function App() {
     <>
       {transicion && <SplashCarga etiqueta="Cargando…" />}
       {pagina}
+      <AvisoSinConexion />
     </>
   );
 }
