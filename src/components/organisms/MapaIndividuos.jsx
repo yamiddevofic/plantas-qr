@@ -45,6 +45,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   // porque el contenedor lo gestiona la librería.
   const [pantalla, setPantalla] = useState(false);
   const [pedidoAtendido, setPedidoAtendido] = useState(null);
+  // Capa base que había antes de abrir la pantalla completa, para devolverla al cerrar.
+  const [baseAntes, setBaseAntes] = useState(null);
   // Cargar el mapa ya, aunque la sección aún no esté cerca de la pantalla.
   const cargar = visible || Boolean(pedido?.pantallaCompleta);
 
@@ -80,19 +82,25 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
     return () => observador.disconnect();
   }, [estado, cargar]);
 
-  // Un pedido nuevo con pantalla completa abre el modo (se ajusta durante el
-  // render, que es lo que React recomienda para derivar estado de props).
+  // Un pedido nuevo con pantalla completa abre el modo, y en vista satelital: de
+  // cerca se distingue el árbol entre la vegetación y los edificios (se ajusta
+  // durante el render, que es lo que React recomienda para derivar estado de props).
   if (pedido?.pantallaCompleta && pedido.vez !== pedidoAtendido) {
     setPedidoAtendido(pedido.vez);
     setPantalla(true);
+    setBaseAntes(base);
+    setBase('satelite');
   }
 
-  // Cierra la pantalla completa; la entrada que se añadió al historial (para que
-  // "atrás" cierre el mapa en vez de salir de la ficha) se retira aquí.
-  const cerrarPantalla = useCallback(() => {
+  // Sale de la pantalla completa y devuelve la capa base que había. Si se cierra
+  // desde la página, también se retira la entrada que se añadió al historial (para
+  // que "atrás" cierre el mapa en vez de salir de la ficha).
+  const salirPantalla = useCallback((retirarHistorial) => {
     setPantalla(false);
-    if (window.history.state?.plantaqrMapa) window.history.back();
-  }, []);
+    setBase(baseAntes ?? 'mapa');
+    if (retirarHistorial && window.history.state?.plantaqrMapa) window.history.back();
+  }, [baseAntes]);
+  const cerrarPantalla = useCallback(() => salirPantalla(true), [salirPantalla]);
 
   useEffect(() => {
     const contenedor = contenedorRef.current;
@@ -103,7 +111,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
     cuerpo.style.overflow = 'hidden';
     if (!window.history.state?.plantaqrMapa) window.history.pushState({ plantaqrMapa: true }, '');
     const alTeclear = (e) => { if (e.key === 'Escape') cerrarPantalla(); };
-    const alVolver = () => { if (!window.history.state?.plantaqrMapa) setPantalla(false); };
+    const alVolver = () => { if (!window.history.state?.plantaqrMapa) salirPantalla(false); };
     window.addEventListener('keydown', alTeclear);
     window.addEventListener('popstate', alVolver);
     cerrarRef.current?.focus({ preventScroll: true });
@@ -115,7 +123,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
       window.removeEventListener('popstate', alVolver);
       mapaRef.current?.resize();
     };
-  }, [pantalla, cerrarPantalla]);
+  }, [pantalla, cerrarPantalla, salirPantalla]);
 
   const seleccionar = useCallback((feature, { centrar = false } = {}) => {
     const map = mapaRef.current;
