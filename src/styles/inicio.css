@@ -264,6 +264,8 @@ html[data-tema="oscuro"] .emblema {
   bottom: 0;
   width: 100%;
   height: var(--alto-paisaje);
+  /* El resplandor del sol puede pasar del borde del dibujo; .paisaje recorta. */
+  overflow: visible;
 }
 
 .paisaje-capa-1 { fill: var(--capa-1); }
@@ -1337,10 +1339,10 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 .hero-galeria {
-  /* Franja de ~30vh: título, cifras y el paisaje abajo. */
-  --alto-paisaje: clamp(100px, 15svh, 130px);
-  min-height: 30vh;
-  min-height: 30svh;
+  /* Móvil: ~44vh con título, cifras y el paisaje abajo. */
+  --alto-paisaje: clamp(130px, 20svh, 190px);
+  min-height: 44vh;
+  min-height: 44svh;
   /* Sube bajo la barra (alto del botón + 2 × 10 px de relleno). */
   margin-top: calc(-1 * (var(--hit) + 20px));
   margin-bottom: 24px;
@@ -1359,18 +1361,18 @@ html[data-tema="oscuro"] .proyecto {
   gap: 10px;
 }
 
-/* Móvil: en 30vh solo caben el título y las cifras. */
-@media (max-width: 767px) {
-  .hero-galeria :is(.hero-inicio-emblema, .hero-inicio-ubicacion, .hero-inicio-texto) {
-    display: none;
-  }
+/* El sol (o la luna) se corre a la derecha y crece un poco: no queda tapado
+   por el texto y ocupa el lado libre del hero. */
+.hero-galeria .paisaje-astro > * {
+  transform-box: view-box;
+  transform-origin: 820px 118px;
+  transform: translate(260px, -48px) scale(1.2);
+}
 
-  /* El sol (o la luna) se corre a la derecha y crece un poco, para que no
-     quede tapado por las cifras en la franja baja. */
-  .hero-galeria .paisaje-astro > * {
-    transform-box: view-box;
-    transform-origin: 820px 118px;
-    transform: translate(360px, -6px) scale(1.35);
+/* Móvil: en la franja solo caben el título y las cifras. */
+@media (max-width: 767px) {
+  .hero-galeria :is(.hero-inicio-ubicacion, .hero-inicio-texto) {
+    display: none;
   }
 }
 
@@ -1465,8 +1467,8 @@ html[data-tema="oscuro"] .proyecto {
     font-size: clamp(2.5rem, 1.3rem + 5vw, 4.4rem);
   }
 
-  .hero-galeria .hero-inicio-emblema {
-    width: 96px;
+  .hero-galeria .paisaje-astro > * {
+    transform: translate(360px, -60px) scale(1.4);
   }
 
   .hero-galeria-cifras li {
@@ -1476,11 +1478,7 @@ html[data-tema="oscuro"] .proyecto {
 
 @media (min-width: 1024px) {
   .hero-galeria .hero-inicio-contenido {
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
-  }
-
-  .hero-galeria .hero-inicio-emblema {
-    width: min(100%, 230px);
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .hero-galeria-cifras {

@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import { IconoFamilias, IconoHoja, IconoQr } from '../atoms/IconosInicio';
 import PaisajeHero from './PaisajeHero';
 
 /**
  * Encabezado de la galería con el mismo lenguaje del inicio: paisaje SVG del
- * parque (claro/oscuro), titular con acento serif, emblema animado y cifras
- * del catálogo. Más bajo que el hero del inicio para llegar rápido a las fichas.
+ * parque (claro/oscuro) con el sol o la luna a un lado, titular con acento serif
+ * y cifras del catálogo. Más bajo que el hero del inicio para llegar rápido a las fichas.
  */
 export default function HeroGaleria({ plantas, cargando = false }) {
   const cifras = useMemo(() => {
@@ -25,10 +24,6 @@ export default function HeroGaleria({ plantas, cargando = false }) {
       <PaisajeHero />
 
       <div className="hero-inicio-contenido">
-        <div className="hero-inicio-emblema">
-          <EmblemaArbolQr />
-        </div>
-
         <div className="hero-inicio-texto-bloque">
           <p className="hero-inicio-ubicacion">
             <IconoHoja />
