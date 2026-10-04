@@ -10,7 +10,9 @@
 .hero-inicio,
 .home-marca,
 .home-acciones,
-.galeria-header {
+.galeria-header,
+.hero-splash,
+.puerta {
   --cielo-1: #d6ede0;
   --cielo-2: #ecf6ee;
   --cielo-3: #fbf1dd;
@@ -38,7 +40,9 @@
 html[data-tema="oscuro"] .hero-inicio,
 html[data-tema="oscuro"] .home-marca,
 html[data-tema="oscuro"] .home-acciones,
-html[data-tema="oscuro"] .galeria-header {
+html[data-tema="oscuro"] .galeria-header,
+html[data-tema="oscuro"] .hero-splash,
+html[data-tema="oscuro"] .puerta {
   --cielo-1: #040b08;
   --cielo-2: #08140e;
   --cielo-3: #11241a;

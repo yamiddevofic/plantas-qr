@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuLockKeyhole, LuX } from 'react-icons/lu';
+import { LuX } from 'react-icons/lu';
 import Boton from '../atoms/Boton';
+import { IconoCandado } from '../atoms/IconosInicio';
+import CampoPassword from './CampoPassword';
 
 /**
  * Diálogo de contraseña para acciones protegidas (regenerar códigos QR).
@@ -45,20 +47,16 @@ export default function DialogoPassword({
       }}
     >
       <div
-        className="modal dialogo"
+        className="modal dialogo dialogo-password"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialogo-titulo"
       >
-        <div className="modal-header">
-          <LuLockKeyhole className="dialogo-icono" aria-hidden="true" />
-          <h2 id="dialogo-titulo" className="modal-titulo">
-            {titulo}
-          </h2>
-          <Boton variante="ghost" clase="modal-cerrar" onClick={onCerrar} aria-label="Cerrar">
-            <LuX aria-hidden="true" />
-          </Boton>
-        </div>
+        <Boton variante="ghost" clase="modal-cerrar dialogo-cerrar" onClick={onCerrar} aria-label="Cerrar">
+          <LuX aria-hidden="true" />
+        </Boton>
+        <span className="puerta-icono dialogo-icono" aria-hidden="true"><IconoCandado /></span>
+        <h2 id="dialogo-titulo" className="dialogo-titulo">{titulo}</h2>
         <p className="dialogo-descripcion">{descripcion}</p>
 
         <form onSubmit={enviar}>
@@ -66,15 +64,13 @@ export default function DialogoPassword({
             <label className="form-etiqueta" htmlFor="dialogo-password">
               Contraseña de administrador
             </label>
-            <input
+            <CampoPassword
               ref={inputRef}
               id="dialogo-password"
-              className="form-input"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
+              valor={password}
+              onCambiar={setPassword}
               placeholder="••••••••"
+              invalido={Boolean(error)}
             />
           </div>
 

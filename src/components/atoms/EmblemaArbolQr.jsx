@@ -26,7 +26,7 @@ Marcador.propTypes = { x: PropTypes.number.isRequired, y: PropTypes.number.isReq
  * Resume el proyecto en un solo dibujo. Todo el color sale de tokens CSS
  * (inicio.css), así que se adapta solo al modo claro u oscuro.
  */
-export default function EmblemaArbolQr({ clase = '' }) {
+export default function EmblemaArbolQr({ clase = '', cargando = false }) {
   return (
     <svg
       className={`emblema ${clase}`.trim()}
@@ -36,6 +36,8 @@ export default function EmblemaArbolQr({ clase = '' }) {
     >
       <circle className="emblema-halo" cx="80" cy="80" r="72" />
       <circle className="emblema-orbita" cx="80" cy="80" r="76" pathLength="100" />
+      {/* Como cargador: un arco que recorre la órbita. */}
+      {cargando && <circle className="emblema-arco" cx="80" cy="80" r="76" pathLength="100" />}
 
       <ellipse className="emblema-suelo" cx="80" cy="134" rx="40" ry="5" />
 
@@ -95,4 +97,6 @@ export default function EmblemaArbolQr({ clase = '' }) {
 EmblemaArbolQr.propTypes = {
   /** Clase extra para dimensionar el emblema desde el consumidor. */
   clase: PropTypes.string,
+  /** Añade el arco giratorio de carga alrededor del emblema. */
+  cargando: PropTypes.bool,
 };

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuArrowLeft, LuLockKeyhole } from 'react-icons/lu';
 import { verificarAdmin } from '../../api';
 import {
   guardarPasswordSesion,
@@ -10,6 +9,9 @@ import {
   verificarHuella,
 } from '../../offline/sesionAdmin';
 import Boton from '../atoms/Boton';
+import { IconoCandado, IconoFlecha, IconoVolver } from '../atoms/IconosInicio';
+import CampoPassword from '../molecules/CampoPassword';
+import PaisajeHero from './PaisajeHero';
 
 /**
  * Pide la contraseña de administrador antes de mostrar una página de gestión.
@@ -21,6 +23,9 @@ export default function PuertaAdmin({ titulo, children }) {
   const [password, setPassword] = useState('');
   const [verificando, setVerificando] = useState(false);
   const [error, setError] = useState(null);
+  // Contraseña incorrecta: la tarjeta se sacude (sin volver a montarse, para no
+  // perder el foco ni el "mostrar contraseña").
+  const [sacudir, setSacudir] = useState(false);
 
   if (abierta) return children;
 
@@ -52,6 +57,7 @@ export default function PuertaAdmin({ titulo, children }) {
       }
     }
     setVerificando(false);
+    if (!ok) setSacudir(true);
     if (ok) {
       guardarPasswordSesion(password);
       setAbierta(true);
@@ -59,34 +65,38 @@ export default function PuertaAdmin({ titulo, children }) {
   }
 
   return (
-    <div className="app">
-      <header className="individuos-cabecera">
-        <a className="individuos-volver" href="#/galeria">
-          <LuArrowLeft aria-hidden="true" />
-          Catálogo
-        </a>
-      </header>
-      <main id="app-main" className="puerta-admin">
-        <span className="puerta-admin-icono" aria-hidden="true"><LuLockKeyhole /></span>
-        <h1 className="puerta-admin-titulo">{titulo}</h1>
-        <p className="puerta-admin-texto">Esta sección es para administradores. Ingresa la contraseña para continuar.</p>
-        <form className="puerta-admin-form" onSubmit={entrar}>
-          <label className="visually-hidden" htmlFor="puerta-password">Contraseña de administrador</label>
-          <input
-            id="puerta-password"
-            className="form-input"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Contraseña de administrador"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoFocus
-          />
-          {error && <p className="form-error" role="alert">{error}</p>}
-          <Boton variante="primary" tipo="submit" disabled={verificando || !password}>
-            {verificando ? 'Verificando…' : 'Entrar'}
-          </Boton>
-        </form>
+    <div className="puerta">
+      <PaisajeHero />
+      <a className="puerta-volver" href="#/galeria">
+        <IconoVolver />
+        Catálogo
+      </a>
+      <main id="app-main" className="puerta-contenido">
+        <div
+          className={`puerta-tarjeta${sacudir ? ' sacudir' : ''}`}
+          onAnimationEnd={(e) => { if (e.animationName === 'sacudir') setSacudir(false); }}
+        >
+          <span className="puerta-icono" aria-hidden="true"><IconoCandado /></span>
+          <p className="inicio-eyebrow">Acceso de administración</p>
+          <h1 className="puerta-titulo">{titulo}</h1>
+          <p className="puerta-texto">Esta sección es para administradores. Ingresa la contraseña para continuar.</p>
+          <form className="puerta-form" onSubmit={entrar}>
+            <label className="visually-hidden" htmlFor="puerta-password">Contraseña de administrador</label>
+            <CampoPassword
+              id="puerta-password"
+              valor={password}
+              onCambiar={(v) => { setPassword(v); setError(null); }}
+              invalido={Boolean(error)}
+              autoFocus
+            />
+            {error && <p className="form-error puerta-error" role="alert">{error}</p>}
+            <Boton variante="primary" tipo="submit" clase="puerta-entrar" disabled={verificando || !password}>
+              {verificando ? 'Verificando…' : 'Entrar'}
+              {!verificando && <IconoFlecha />}
+            </Boton>
+          </form>
+          <p className="puerta-nota">Si ya entraste antes en este dispositivo, también funciona sin conexión.</p>
+        </div>
       </main>
     </div>
   );

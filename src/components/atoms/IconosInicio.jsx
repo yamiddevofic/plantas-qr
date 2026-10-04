@@ -260,6 +260,18 @@ export function IconoMapa({ clase }) {
   );
 }
 
+/** Candado con una hoja: acceso de administración. */
+export function IconoCandado({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <rect className="icono-tinte" x="4.5" y="10.5" width="15" height="10.5" rx="2.5" />
+      <rect className="trazo" pathLength="1" x="4.5" y="10.5" width="15" height="10.5" rx="2.5" />
+      <path className="trazo" pathLength="1" d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+      <path className="trazo" pathLength="1" d="M10 17.5c0-2.2 1.1-3.5 3.5-3.5 0 2.2-1.1 3.5-3.5 3.5zM10 17.5l1.6-1.6" />
+    </Icono>
+  );
+}
+
 /** Flecha hacia la izquierda (volver). */
 export function IconoVolver({ clase }) {
   return (
@@ -273,5 +285,5 @@ export function IconoVolver({ clase }) {
   IconoArbolPlaca, IconoEscanear, IconoFicha, IconoHoja, IconoFamilias, IconoQr,
   IconoUbicacion, IconoAve, IconoArdilla, IconoMariposa, IconoFlecha, IconoBajar,
   IconoArbol, IconoGlobo, IconoRegla, IconoEscudo, IconoLibro, IconoUsos, IconoCorazonHoja,
-  IconoMapa, IconoVolver,
+  IconoMapa, IconoVolver, IconoCandado,
 ].forEach((c) => { c.propTypes = tipos; });

@@ -1,23 +1,32 @@
 import PropTypes from 'prop-types';
-import ArbolitoLoader from '../atoms/ArbolitoLoader';
+import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
+import PaisajeHero from './PaisajeHero';
 
 /**
- * Splash de carga a pantalla completa: el arbolito que se rellena, el
- * texto breve y el nombre de la app. Se usa al entrar y en cada cambio
- * de página (ver App.jsx).
+ * Pantalla de carga entre páginas (ver App.jsx), con el mismo lenguaje del
+ * inicio: cielo y paisaje del parque en SVG (claro u oscuro), el emblema del
+ * árbol con su QR girando como cargador y la marca.
  */
 export default function SplashCarga({ etiqueta = 'Cargando…' }) {
+  const texto = etiqueta.replace(/(…|\.\.\.)$/, '');
   return (
     <div className="hero-splash" role="status" aria-live="polite">
+      <PaisajeHero />
       <div className="hero-splash-contenido">
-        <ArbolitoLoader etiqueta={etiqueta} />
-        <p className="hero-splash-titulo">PlantaQR</p>
+        <span className="hero-splash-emblema" aria-hidden="true">
+          <EmblemaArbolQr cargando />
+        </span>
+        <p className="hero-splash-titulo">Planta<em>QR</em></p>
+        <p className="arbolito-carga-texto">
+          {texto}
+          <span className="arbolito-carga-puntos" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span>
+        </p>
       </div>
     </div>
   );
 }
 
 SplashCarga.propTypes = {
-  /** Texto breve bajo el arbolito (p. ej. "Cargando catálogo"). */
+  /** Texto breve bajo la marca (p. ej. "Cargando catálogo"). */
   etiqueta: PropTypes.string,
 };
