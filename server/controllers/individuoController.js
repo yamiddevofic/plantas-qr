@@ -57,6 +57,7 @@ function aFeature(individuo) {
       altitudMsnm: individuo.altitudMsnm ?? null,
       precisionGpsM: individuo.precisionGpsM ?? null,
       imagen: imagenPublica(individuo),
+      imagenEscritorio: individuo.imagenEscritorio || '',
       especie: individuo.especieId,
     },
   };
@@ -247,8 +248,15 @@ export const eliminarIndividuo = async (req, res) => {
   }
 };
 
-const ANCHO_FOTO = 1280;
-const CALIDAD_FOTO = 78;
+// Cada variante tiene su campo y su tamaño máximo: la vertical (móvil, 4:5)
+// hasta 1600 px de alto y la horizontal (escritorio, 16:9) hasta 2560 de ancho.
+const VARIANTES_FOTO = {
+  movil: { campo: 'foto', url: 'imagen', lado: 1600 },
+  escritorio: { campo: 'fotoEscritorio', url: 'imagenEscritorio', lado: 2560 },
+};
+const CALIDAD_FOTO = 80;
+
+const varianteFoto = (req) => (req.query.variante === 'escritorio' ? 'escritorio' : 'movil');
 
 export const subirFotoIndividuo = async (req, res) => {
   try {
@@ -256,13 +264,15 @@ export const subirFotoIndividuo = async (req, res) => {
       return res.status(400).json({ mensaje: 'El id no es un ObjectId válido' });
     }
     if (!req.file?.buffer?.length) return res.status(400).json({ mensaje: 'Falta la foto (campo "foto")' });
+    const variante = varianteFoto(req);
+    const { campo, url, lado } = VARIANTES_FOTO[variante];
 
     let datos;
     try {
       // rotate() aplica la orientación EXIF de la cámara antes de descartarla.
       datos = await sharp(req.file.buffer)
         .rotate()
-        .resize({ width: ANCHO_FOTO, height: ANCHO_FOTO, fit: 'inside', withoutEnlargement: true })
+        .resize({ width: lado, height: lado, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: CALIDAD_FOTO })
         .toBuffer();
     } catch {
@@ -270,10 +280,11 @@ export const subirFotoIndividuo = async (req, res) => {
     }
 
     const actualizada = new Date();
-    const imagen = `/api/individuos/${req.params.id}/foto?v=${actualizada.getTime()}`;
+    const consulta = variante === 'escritorio' ? 'variante=escritorio&' : '';
+    const imagen = `/api/individuos/${req.params.id}/foto?${consulta}v=${actualizada.getTime()}`;
     const individuo = await Individuo.findByIdAndUpdate(
       req.params.id,
-      { $set: { foto: { datos, tipo: 'image/webp', actualizada }, imagen } },
+      { $set: { [campo]: { datos, tipo: 'image/webp', actualizada }, [url]: imagen } },
       { new: true }
     ).populate('especieId', POBLAR_ESPECIE).lean();
     if (!individuo) return res.status(404).json({ mensaje: 'No existe el individuo' });
@@ -286,8 +297,9 @@ export const subirFotoIndividuo = async (req, res) => {
 export const obtenerFotoIndividuo = async (req, res) => {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).end();
-    const individuo = await Individuo.findById(req.params.id).select('+foto').lean();
-    const foto = individuo?.foto;
+    const { campo } = VARIANTES_FOTO[varianteFoto(req)];
+    const individuo = await Individuo.findById(req.params.id).select(`+${campo}`).lean();
+    const foto = individuo?.[campo];
     if (!foto?.datos) return res.status(404).json({ mensaje: 'Este individuo no tiene foto' });
     // La URL lleva ?v=<fecha>, así que cada versión puede guardarse para siempre.
     res.set('Cache-Control', 'public, max-age=31536000, immutable');

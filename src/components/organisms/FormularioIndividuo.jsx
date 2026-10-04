@@ -1,13 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuCamera, LuImage, LuLocateFixed } from 'react-icons/lu';
+import { LuLocateFixed } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
 import { calidadPrecision, sugerirCodigo } from '../../individuos';
 import useMedicionGps from '../../hooks/useMedicionGps';
-import { comprimirFoto } from '../../offline/fotos';
+import { recortarFoto } from '../../offline/fotos';
 import Boton from '../atoms/Boton';
 import CampoFormulario from '../molecules/CampoFormulario';
+import CampoFotoVariante from '../molecules/CampoFotoVariante';
 import SelectorUbicacion from './SelectorUbicacion';
+import CamaraEncuadre from './CamaraEncuadre';
 
 function valorInicial(feature, parquePorDefecto) {
   const p = feature?.properties;
@@ -21,6 +23,7 @@ function valorInicial(feature, parquePorDefecto) {
     altitudMsnm: p?.altitudMsnm ?? '',
     precisionGpsM: p?.precisionGpsM ?? '',
     imagen: p?.imagen ?? '',
+    imagenEscritorio: p?.imagenEscritorio ?? '',
   };
 }
 
@@ -45,19 +48,19 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
   const [mensajeError, setMensajeError] = useState(null);
   const [enviando, setEnviando] = useState(false);
   const [mensajeGps, setMensajeGps] = useState(null);
-  const [foto, setFoto] = useState(null);
-  const [procesandoFoto, setProcesandoFoto] = useState(false);
-  const previaFoto = useMemo(() => (foto ? URL.createObjectURL(foto) : ''), [foto]);
-  // Libera la URL temporal de la vista previa al cambiar de foto o cerrar.
-  useEffect(() => () => { if (previaFoto) URL.revokeObjectURL(previaFoto); }, [previaFoto]);
+  // Dos fotos por individuo: móvil (vertical 4:5) y escritorio (horizontal 16:9).
+  const [fotos, setFotos] = useState({ movil: null, escritorio: null });
+  const [procesando, setProcesando] = useState(null);
+  const [camara, setCamara] = useState(null);
+  const [camaraSistema, setCamaraSistema] = useState({ movil: 0, escritorio: 0 });
 
-  async function elegirFoto(e) {
-    const archivo = e.target.files?.[0];
-    e.target.value = '';
-    if (!archivo) return;
-    setProcesandoFoto(true);
-    setFoto(await comprimirFoto(archivo));
-    setProcesandoFoto(false);
+  const ponerFoto = (variante, blob) => setFotos((prev) => ({ ...prev, [variante]: blob }));
+
+  // De la galería o la cámara del sistema: se recorta al centro con su proporción.
+  async function elegirArchivo(variante, archivo) {
+    setProcesando(variante);
+    ponerFoto(variante, await recortarFoto(archivo, variante));
+    setProcesando(null);
   }
 
   // Al corregir un campo se retira su error en vez de esperar al siguiente envío.
@@ -160,7 +163,7 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
         longitud: Number(estado.longitud),
         altitudMsnm: numeroOVacio(estado.altitudMsnm),
         precisionGpsM: numeroOVacio(estado.precisionGpsM),
-      }, foto);
+      }, fotos);
     } catch (error) {
       if (!error.cancelado) setMensajeError(error.message);
       setEnviando(false);
@@ -335,36 +338,27 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
             </div>
           </section>
 
-          <section className="form-seccion" aria-label="Fotografía">
-            <h3 className="form-seccion-titulo">Fotografía (opcional)</h3>
-            <div className="form-imagen">
-              {previaFoto || estado.imagen ? (
-                <img
-                  className="form-imagen-previa"
-                  src={previaFoto || estado.imagen}
-                  alt={previaFoto ? 'Foto nueva del árbol' : 'Foto actual del árbol'}
+          <section className="form-seccion" aria-label="Fotografías">
+            <h3 className="form-seccion-titulo">Fotografías (opcional)</h3>
+            <p className="form-ayuda">
+              Toma cada foto con su encuadre: la de móvil en vertical y la de escritorio en horizontal.
+              La primera foto tomada de la especie es la que se muestra en su ficha. Sin conexión
+              quedan guardadas en este dispositivo y se suben solas cuando vuelva internet.
+            </p>
+            <div className="fotos-variantes">
+              {['movil', 'escritorio'].map((variante) => (
+                <CampoFotoVariante
+                  key={variante}
+                  variante={variante}
+                  actual={variante === 'movil' ? estado.imagen : estado.imagenEscritorio}
+                  nueva={fotos[variante]}
+                  procesando={procesando === variante}
+                  pedirCamaraSistema={camaraSistema[variante]}
+                  onTomar={() => setCamara(variante)}
+                  onArchivo={(archivo) => elegirArchivo(variante, archivo)}
+                  onQuitar={() => ponerFoto(variante, null)}
                 />
-              ) : (
-                <span className="form-imagen-previa individuo-foto-vacia" aria-hidden="true">🌳</span>
-              )}
-              <div className="form-imagen-accion">
-                <label className="btn btn-primary form-archivo">
-                  <LuCamera aria-hidden="true" className="btn-lupa-icono" />
-                  {procesandoFoto ? 'Procesando…' : 'Tomar foto'}
-                  <input type="file" accept="image/*" capture="environment" onChange={elegirFoto} disabled={procesandoFoto} />
-                </label>
-                <label className="btn btn-ghost form-archivo">
-                  <LuImage aria-hidden="true" className="btn-lupa-icono" />
-                  Elegir de la galería
-                  <input type="file" accept="image/*" onChange={elegirFoto} disabled={procesandoFoto} />
-                </label>
-                {foto && (
-                  <Boton variante="ghost" onClick={() => setFoto(null)}>Quitar foto nueva</Boton>
-                )}
-                <p className="form-ayuda">
-                  Sin conexión, la foto queda guardada en este dispositivo y se sube sola cuando vuelva internet.
-                </p>
-              </div>
+              ))}
             </div>
           </section>
 
@@ -378,6 +372,21 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
           </footer>
         </form>
       </div>
+
+      {camara && (
+        <CamaraEncuadre
+          variante={camara}
+          onCerrar={() => setCamara(null)}
+          onCapturar={(blob) => {
+            ponerFoto(camara, blob);
+            setCamara(null);
+          }}
+          onSinCamara={() => {
+            setCamaraSistema((prev) => ({ ...prev, [camara]: prev[camara] + 1 }));
+            setCamara(null);
+          }}
+        />
+      )}
     </div>
   );
 }

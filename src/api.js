@@ -71,11 +71,13 @@ function enviarIndividuo(url, metodo, cuerpo, fallback) {
 }
 
 /** Sube (o reemplaza) la foto de un individuo; devuelve su Feature actualizada. */
-export function subirFotoIndividuo(id, foto, password) {
+/** Sube la foto vertical ('movil', 4:5) u horizontal ('escritorio', 16:9) de un individuo. */
+export function subirFotoIndividuo(id, foto, password, variante = 'movil') {
   const fd = new FormData();
   fd.append('password', password);
   fd.append('foto', foto, foto.name || 'foto.jpg');
-  return pedirIndividuo(`${BASE}/individuos/${encodeURIComponent(id)}/foto`, { method: 'POST', body: fd }, 'No se pudo subir la foto');
+  const consulta = variante === 'escritorio' ? '?variante=escritorio' : '';
+  return pedirIndividuo(`${BASE}/individuos/${encodeURIComponent(id)}/foto${consulta}`, { method: 'POST', body: fd }, 'No se pudo subir la foto');
 }
 
 export function crearIndividuo(datos, password) {

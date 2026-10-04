@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { fetchIndividuos } from '../../api';
 import { normalizarUsos } from '../../constantes';
 import EstadoConservacion from '../molecules/EstadoConservacion';
 import SeccionFicha from '../molecules/SeccionFicha';
@@ -9,7 +8,7 @@ import {
   IconoCorazonHoja, IconoHoja, IconoLibro, IconoUbicacion, IconoUsos,
 } from '../atoms/IconosInicio';
 import MapaIndividuos from './MapaIndividuos';
-import ListaIndividuosFicha from './ListaIndividuosFicha';
+import GaleriaIndividuos from './GaleriaIndividuos';
 import DatosFicha from './DatosFicha';
 
 /**
@@ -17,26 +16,15 @@ import DatosFicha from './DatosFicha';
  * usos, ubicación y mapa) y la lateral (datos rápidos, estado y `lateral`, el
  * panel del QR). En móvil ambas se intercalan: primero los datos y el estado.
  */
-export default function ContenidoFicha({ planta, onVerEstados, lateral = null }) {
+export default function ContenidoFicha({ planta, coleccion = null, onVerEstados, lateral = null }) {
   const { nombre, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion } = planta;
   const usosLista = normalizarUsos(usos);
   const sitios = Array.isArray(ubicaciones) ? ubicaciones : [];
 
-  // Individuos registrados (árboles con GPS): se listan en "Dónde verlo" y se
-  // dibujan en el mapa. Si la API falla, la ficha sigue sin ellos.
-  const [coleccion, setColeccion] = useState(null);
+  // Individuos registrados (árboles con GPS): su galería de fotos va en "Dónde
+  // verlo" y cada uno se ubica en el mapa.
   const [seleccionado, setSeleccionado] = useState(null);
   const [pedido, setPedido] = useState(null);
-
-  useEffect(() => {
-    const control = new AbortController();
-    fetchIndividuos(planta._id, { signal: control.signal })
-      .then(setColeccion)
-      .catch((error) => {
-        if (error.name !== 'AbortError') console.warn('Individuos no disponibles:', error.message);
-      });
-    return () => control.abort();
-  }, [planta._id]);
 
   const individuos = coleccion?.features ?? [];
 
@@ -84,7 +72,7 @@ export default function ContenidoFicha({ planta, onVerEstados, lateral = null })
             {ubicacion?.descripcion && <p className="detalle-parrafo">{ubicacion.descripcion}</p>}
 
             {individuos.length > 0 ? (
-              <ListaIndividuosFicha
+              <GaleriaIndividuos
                 individuos={individuos}
                 seleccionado={seleccionado}
                 onVer={verEnMapa}
@@ -119,6 +107,8 @@ export default function ContenidoFicha({ planta, onVerEstados, lateral = null })
 
 ContenidoFicha.propTypes = {
   planta: PropTypes.object.isRequired,
+  /** FeatureCollection de los individuos de la especie (null mientras carga). */
+  coleccion: PropTypes.object,
   /** Abre la ventana con la escala de estados de conservación. */
   onVerEstados: PropTypes.func,
   /** Contenido extra al final de la columna lateral (el panel del QR). */

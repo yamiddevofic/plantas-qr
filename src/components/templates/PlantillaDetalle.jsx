@@ -22,9 +22,22 @@ import { listaImagenes } from '../../constantes';
 import { generarQR } from '../../api';
 import { useTema } from '../../tema.js';
 
-export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGenerado, onVerEstados }) {
+// Fecha de la foto, que va en su URL (?v=<ms>); las antiguas sin fecha cuentan como primeras.
+const fechaFoto = (url) => Number(/[?&]v=(\d+)/.exec(url)?.[1] ?? 0);
+
+/** La primera foto tomada (la más antigua) entre los individuos, para ese campo. */
+function primeraFoto(coleccion, campo) {
+  const urls = (coleccion?.features ?? []).map((f) => f.properties[campo]).filter(Boolean);
+  return urls.sort((a, b) => fechaFoto(a) - fechaFoto(b))[0] ?? null;
+}
+
+export default function PlantillaDetalle({ cargando, error, planta, qr, coleccion = null, onQrGenerado, onVerEstados }) {
   const { nombre, imagen } = planta || {};
-  const imagenes = listaImagenes({ imagen, imagenes: planta?.imagenes });
+  // El hero usa la primera foto tomada de los individuos: la vertical en móvil y
+  // la horizontal en escritorio. Sin ellas, las fotos del catálogo.
+  const fotoMovil = primeraFoto(coleccion, 'imagen');
+  const fotoEscritorio = primeraFoto(coleccion, 'imagenEscritorio');
+  const imagenes = fotoMovil ? [fotoMovil] : listaImagenes({ imagen, imagenes: planta?.imagenes });
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [descargando, setDescargando] = useState(false);
   const [errorQR, setErrorQR] = useState(null);
@@ -208,6 +221,7 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
               media={
                 <GaleriaFotos
                   imagenes={imagenes}
+                  imagenEscritorio={fotoEscritorio}
                   alt={`Fotografía de ${nombre.comun} (${nombre.cientifico})`}
                 />
               }
@@ -227,6 +241,7 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
             <div className="detalle-contenido">
               <ContenidoFicha
                 planta={planta}
+                coleccion={coleccion}
                 onVerEstados={onVerEstados}
                 lateral={
                   <PanelQR

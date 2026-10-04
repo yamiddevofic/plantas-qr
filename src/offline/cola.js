@@ -8,8 +8,9 @@
 //   - crear: `id` es temporal (prefijo `local-`) hasta que el servidor asigne el real.
 //   - editar / eliminar: `id` es el del individuo en el servidor.
 //   - `datos` es el cuerpo que acepta la API (codigoArbol, especieId, latitud…).
-//   - foto: la imagen está en IndexedDB (offline/fotos.js) con la clave `id`;
-//     `codigoArbol` solo sirve para nombrarla en pantalla.
+//   - foto: la imagen está en IndexedDB (offline/fotos.js) con la clave
+//     claveFoto(id, variante); `variante` es 'movil' (4:5, la principal; si falta
+//     se asume esta) o 'escritorio' (16:9). `codigoArbol` solo la nombra en pantalla.
 //   - `error` marca una operación que el servidor rechazó (409, 400…) para mostrarla.
 
 const CLAVE = 'plantaqr:cola-individuos:v1';
@@ -60,24 +61,27 @@ export function encolarEliminar(cola, id) {
   return esIdLocal(id) ? sinEste : [...sinEste, { tipo: 'eliminar', id }];
 }
 
-/** Foto nueva para un individuo (local o del servidor); una sola por individuo. */
-export function encolarFoto(cola, id, codigoArbol) {
-  const sinFotoPrevia = cola.filter((op) => !(op.tipo === 'foto' && op.id === id));
-  return [...sinFotoPrevia, { tipo: 'foto', id, codigoArbol }];
+const varianteDe = (op) => op.variante ?? 'movil';
+const mismaOperacion = (a, b) => a.tipo === b.tipo && a.id === b.id && varianteDe(a) === varianteDe(b);
+
+/** Foto nueva para un individuo (local o del servidor); una por individuo y variante. */
+export function encolarFoto(cola, id, codigoArbol, variante = 'movil') {
+  const op = { tipo: 'foto', id, codigoArbol, variante };
+  return [...cola.filter((o) => !mismaOperacion(o, op)), op];
 }
 
 /** Quita todas las operaciones de un individuo. */
 export const descartar = (cola, id) => cola.filter((op) => op.id !== id);
 
-/** Quita solo esa operación (mismo tipo e id). */
-export const descartarOperacion = (cola, { tipo, id }) => cola.filter((op) => !(op.tipo === tipo && op.id === id));
+/** Quita solo esa operación (mismo tipo, id y, si es foto, variante). */
+export const descartarOperacion = (cola, objetivo) => cola.filter((op) => !mismaOperacion(op, objetivo));
 
 /** Marca con error todas las operaciones de un individuo. */
 export const marcarError = (cola, id, mensaje) => cola.map((op) => (op.id === id ? { ...op, error: mensaje } : op));
 
 /** Marca con error solo esa operación. */
-export const marcarErrorOperacion = (cola, { tipo, id }, mensaje) => cola.map((op) => (
-  op.tipo === tipo && op.id === id ? { ...op, error: mensaje } : op
+export const marcarErrorOperacion = (cola, objetivo, mensaje) => cola.map((op) => (
+  mismaOperacion(op, objetivo) ? { ...op, error: mensaje } : op
 ));
 
 /** Cuando el servidor crea un individuo, lo que quedaba con su id local pasa al real. */

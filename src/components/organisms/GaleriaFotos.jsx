@@ -5,7 +5,18 @@ import ImagenPlanta from '../atoms/ImagenPlanta';
 const INTERVALO = 4500;
 const UMBRAL_DESLIZAMIENTO = 45;
 
-export default function GaleriaFotos({ imagenes, alt }) {
+// Desde este ancho el hero es horizontal y usa la foto de escritorio si la hay.
+const MEDIA_ESCRITORIO = '(min-width: 900px)';
+
+/* Fondo desenfocado del hero en escritorio: la misma foto, para que una vertical
+   se vea entera sin franjas vacías a los lados. */
+const fondo = (src) => (src ? { '--fondo': `url("${String(src).replace(/"/g, '%22')}")` } : undefined);
+
+/**
+ * Fotos del hero de la ficha. `imagenEscritorio` (horizontal 16:9) reemplaza a
+ * la galería en pantallas grandes; en móvil se ven `imagenes` (verticales).
+ */
+export default function GaleriaFotos({ imagenes, alt, imagenEscritorio = null }) {
   const [indice, setIndice] = useState(0);
   const [listo, setListo] = useState(false);
   const toqueInicio = useRef(null);
@@ -18,9 +29,20 @@ export default function GaleriaFotos({ imagenes, alt }) {
     return () => clearInterval(id);
   }, [imagenes.length]);
 
+  if (imagenEscritorio) {
+    return (
+      <div className="detalle-image detalle-image-dirigida">
+        <picture>
+          <source media={MEDIA_ESCRITORIO} srcSet={imagenEscritorio} />
+          <ImagenPlanta src={imagenes[0]} alt={alt} ancho={1600} alto={1000} prioridad="high" cargando="eager" />
+        </picture>
+      </div>
+    );
+  }
+
   if (imagenes.length <= 1) {
     return (
-      <div className="detalle-image">
+      <div className="detalle-image" style={fondo(imagenes[0])}>
         <ImagenPlanta src={imagenes[0]} alt={alt} ancho={1600} alto={1000} prioridad="high" cargando="eager" />
       </div>
     );
@@ -59,6 +81,7 @@ export default function GaleriaFotos({ imagenes, alt }) {
   return (
     <div
       className="detalle-image detalle-galeria"
+      style={fondo(imagenes[indice])}
       onPointerDown={alTocar}
       onPointerUp={alSoltar}
     >

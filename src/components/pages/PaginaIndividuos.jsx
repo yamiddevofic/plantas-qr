@@ -27,7 +27,7 @@ import {
   nuevoIdLocal,
   reasignarId,
 } from '../../offline/cola';
-import { borrarFoto, guardarFoto, leerFoto, moverFoto } from '../../offline/fotos';
+import { borrarFoto, borrarFotos, claveFoto, guardarFoto, leerFoto, moverFoto } from '../../offline/fotos';
 import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
@@ -95,7 +95,10 @@ export default function PaginaIndividuos() {
 
   // Fotos aún sin subir, guardadas en el teléfono: id → URL temporal para mostrarlas.
   const [fotosLocales, setFotosLocales] = useState({});
-  const idsConFoto = cola.filter((op) => op.tipo === 'foto').map((op) => op.id).sort().join('|');
+  // Solo la foto móvil (la principal) reemplaza la imagen en la lista y el mapa.
+  const idsConFoto = cola
+    .filter((op) => op.tipo === 'foto' && (op.variante ?? 'movil') === 'movil')
+    .map((op) => op.id).sort().join('|');
   useEffect(() => {
     let cancelado = false;
     const urls = {};
@@ -157,25 +160,31 @@ export default function PaginaIndividuos() {
     }
   }, []);
 
-  // Guarda en la cola (y la foto en el teléfono) para enviarlo con conexión.
-  const ponerEnCola = useCallback(async ({ editarId, datos, foto, codigoArbol }) => {
+  // Guarda en la cola (y las fotos en el teléfono) para enviarlo con conexión.
+  // `fotos` es { movil, escritorio }; cada una puede faltar.
+  const ponerEnCola = useCallback(async ({ editarId, datos, fotos = {}, codigoArbol }) => {
     const id = editarId ?? (datos ? nuevoIdLocal() : null);
-    if (foto) await guardarFoto(id, foto);
+    const variantes = Object.keys(fotos).filter((v) => fotos[v]);
+    for (const variante of variantes) await guardarFoto(claveFoto(id, variante), fotos[variante]);
     setCola((c) => {
       let siguiente = c;
       if (datos) siguiente = editarId ? encolarEditar(siguiente, id, datos) : encolarCrear(siguiente, datos, id);
-      if (foto) siguiente = encolarFoto(siguiente, id, codigoArbol ?? datos?.codigoArbol);
+      for (const variante of variantes) {
+        siguiente = encolarFoto(siguiente, id, codigoArbol ?? datos?.codigoArbol, variante);
+      }
       return siguiente;
     });
   }, []);
 
-  const guardar = useCallback(async (datos, foto) => {
+  const guardar = useCallback(async (datos, fotos = {}) => {
     const editando = formulario?.individuo;
     const id = editando?.properties.id;
-    const enCola = () => ponerEnCola({ editarId: id, datos, foto }).then(() => {
+    const variantes = Object.keys(fotos).filter((v) => fotos[v]);
+    const textoFotos = variantes.length === 1 ? ' y su foto' : variantes.length > 1 ? ' y sus fotos' : '';
+    const enCola = () => ponerEnCola({ editarId: id, datos, fotos }).then(() => {
       setAviso({
         tipo: 'ok',
-        texto: `${datos.codigoArbol}${foto ? ' y su foto' : ''} guardado en este dispositivo; se enviará cuando haya conexión.`,
+        texto: `${datos.codigoArbol}${textoFotos} guardado en este dispositivo; se enviará cuando haya conexión.`,
       });
       setFormulario(null);
     });
@@ -192,16 +201,26 @@ export default function PaginaIndividuos() {
     let resultado;
     try {
       resultado = await ejecutar(async (password) => {
-        const feature = editando
+        let feature = editando
           ? await actualizarIndividuo(id, datos, password)
           : await crearIndividuo(datos, password);
-        if (!foto) return { feature };
-        // El individuo ya quedó guardado: si la foto falla no se debe repetir todo.
-        try {
-          return { feature: await subirFotoIndividuo(feature.properties.id, foto, password) };
-        } catch (e) {
-          return { feature, errorFoto: e };
+        // El individuo ya quedó guardado: si una foto falla no se debe repetir todo,
+        // y las que falten por falta de red se dejan en la cola.
+        let errorFoto = null;
+        const pendientes = {};
+        for (const variante of variantes) {
+          if (errorFoto?.sinRed) {
+            pendientes[variante] = fotos[variante];
+            continue;
+          }
+          try {
+            feature = await subirFotoIndividuo(feature.properties.id, fotos[variante], password, variante);
+          } catch (e) {
+            errorFoto = e;
+            if (e.sinRed) pendientes[variante] = fotos[variante];
+          }
         }
+        return { feature, errorFoto, pendientes };
       }, descripcion);
     } catch (e) {
       if (e.sinRed) {
@@ -211,12 +230,14 @@ export default function PaginaIndividuos() {
       throw e;
     }
 
-    const { feature, errorFoto } = resultado;
+    const { feature, errorFoto, pendientes } = resultado;
     setIndividuos((prev) => [...prev.filter((f) => f.properties.id !== feature.properties.id), feature]);
     let texto = `${feature.properties.codigoArbol} ${editando ? 'actualizado' : 'registrado'} correctamente.`;
     if (errorFoto?.sinRed) {
-      await ponerEnCola({ editarId: feature.properties.id, foto, codigoArbol: feature.properties.codigoArbol });
-      texto += ' La foto se subirá cuando haya conexión.';
+      await ponerEnCola({ editarId: feature.properties.id, fotos: pendientes, codigoArbol: feature.properties.codigoArbol });
+      texto += Object.keys(pendientes).length > 1
+        ? ' Las fotos se subirán cuando haya conexión.'
+        : ' La foto se subirá cuando haya conexión.';
     } else if (errorFoto) {
       texto += ` No se pudo subir la foto: ${errorFoto.message}`;
     }
@@ -231,7 +252,7 @@ export default function PaginaIndividuos() {
 
     const eliminarEnCola = () => {
       setCola((c) => encolarEliminar(c, id));
-      borrarFoto(id).catch(() => {});
+      borrarFotos(id).catch(() => {});
       setAviso({
         tipo: 'ok',
         texto: esIdLocal(id)
@@ -292,10 +313,11 @@ export default function PaginaIndividuos() {
               await actualizarIndividuo(op.id, op.datos, password);
               restante = descartarOperacion(restante, op);
             } else if (op.tipo === 'foto') {
-              const foto = await leerFoto(op.id);
-              if (foto) await subirFotoIndividuo(op.id, foto, password);
+              const clave = claveFoto(op.id, op.variante);
+              const foto = await leerFoto(clave);
+              if (foto) await subirFotoIndividuo(op.id, foto, password, op.variante);
               restante = descartarOperacion(restante, op);
-              await borrarFoto(op.id);
+              await borrarFoto(clave);
             } else {
               await eliminarIndividuo(op.id, password);
               restante = descartarOperacion(restante, op);
@@ -348,7 +370,7 @@ export default function PaginaIndividuos() {
 
   const descartarPendiente = (id) => {
     setCola((c) => descartar(c, id));
-    borrarFoto(id).catch(() => {});
+    borrarFotos(id).catch(() => {});
   };
 
   const abrirFormulario = (individuo = null) => {

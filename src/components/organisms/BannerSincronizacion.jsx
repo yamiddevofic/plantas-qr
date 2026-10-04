@@ -14,6 +14,8 @@ export default function BannerSincronizacion({ enLinea, cola, sincronizando, onS
   if (enLinea && cola.length === 0) return null;
 
   const nombre = (op) => op.datos?.codigoArbol ?? op.codigoArbol ?? op.id;
+  const etiqueta = (op) => (op.tipo === 'foto' && op.variante === 'escritorio' ? 'Foto de escritorio' : ETIQUETA[op.tipo]);
+  const clave = (op) => `${op.tipo}-${op.id}-${op.variante ?? ''}`;
 
   return (
     <div className="sincronizacion" role="region" aria-label="Sincronización">
@@ -31,7 +33,7 @@ export default function BannerSincronizacion({ enLinea, cola, sincronizando, onS
         <div className="sincronizacion-pendientes">
           <p role="status">
             {porEnviar.length} {porEnviar.length === 1 ? 'cambio pendiente' : 'cambios pendientes'} de enviar
-            {' '}({porEnviar.map((op) => `${ETIQUETA[op.tipo]} ${nombre(op)}`).join(', ')}).
+            {' '}({porEnviar.map((op) => `${etiqueta(op)} ${nombre(op)}`).join(', ')}).
           </p>
           {enLinea && (
             <Boton variante="primary" onClick={onSincronizar} disabled={sincronizando}>
@@ -45,7 +47,7 @@ export default function BannerSincronizacion({ enLinea, cola, sincronizando, onS
       {rechazados.length > 0 && (
         <ul className="sincronizacion-rechazos">
           {rechazados.map((op) => (
-            <li key={op.id}>
+            <li key={clave(op)}>
               <span>
                 <strong>{nombre(op)}</strong>: el servidor no aceptó este cambio — {op.error}
               </span>

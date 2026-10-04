@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { obtenerPlanta, obtenerQR } from '../../api';
+import { fetchIndividuos, obtenerPlanta, obtenerQR } from '../../api';
 import { aplicarSeo, seoDePlanta, SEO_INICIO } from '../../seo';
 import PlantillaDetalle from '../templates/PlantillaDetalle';
 import LeyendaEstados from '../molecules/LeyendaEstados';
@@ -10,6 +10,19 @@ export default function PaginaDetalle({ plantaId }) {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [leyendaAbierta, setLeyendaAbierta] = useState(false);
+  // Individuos con GPS de la especie: su mapa, su galería y la foto del hero.
+  // Si la API falla, la ficha sigue sin ellos.
+  const [coleccion, setColeccion] = useState(null);
+
+  useEffect(() => {
+    const control = new AbortController();
+    fetchIndividuos(plantaId, { signal: control.signal })
+      .then(setColeccion)
+      .catch((e) => {
+        if (e.name !== 'AbortError') console.warn('Individuos no disponibles:', e.message);
+      });
+    return () => control.abort();
+  }, [plantaId]);
 
   useEffect(() => {
     let cancelado = false;
@@ -39,6 +52,7 @@ export default function PaginaDetalle({ plantaId }) {
         error={error}
         planta={planta}
         qr={qr}
+        coleccion={coleccion}
         onQrGenerado={setQr}
         onVerEstados={() => setLeyendaAbierta(true)}
       />

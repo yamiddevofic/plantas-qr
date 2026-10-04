@@ -43,6 +43,16 @@ const individuoSchema = new mongoose.Schema(
       ),
       select: false,
     },
+    // `foto`/`imagen` son la foto vertical (4:5, para móvil); estas dos, la
+    // horizontal (16:9) que usa el hero de la ficha en pantallas grandes.
+    imagenEscritorio: { type: String, trim: true, default: '' },
+    fotoEscritorio: {
+      type: new mongoose.Schema(
+        { datos: Buffer, tipo: String, actualizada: Date },
+        { _id: false }
+      ),
+      select: false,
+    },
   },
   { timestamps: true, versionKey: false }
 );

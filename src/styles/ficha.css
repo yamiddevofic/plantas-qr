@@ -186,79 +186,46 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
   text-transform: uppercase;
 }
 
-/* Escritorio: hero dividido. El texto va a la izquierda sobre un fondo suave y
-   la foto vertical se muestra entera a la derecha, sin recortar la copa. */
+/* Escritorio: hero grande y horizontal (16:9) con el texto sobre la foto.
+   Con foto de escritorio (detalle-image-dirigida) se ve entera a todo el ancho;
+   sin ella, la foto vertical se muestra completa sobre un fondo desenfocado de
+   sí misma, para no recortar la copa del árbol. */
 @media (min-width: 900px) {
   .detalle-hero-full {
-    --alto-foto: min(70vh, 620px);
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 48px;
     width: min(1180px, calc(100% - 40px));
     margin: calc(var(--hit) + 28px) auto 56px;
-    padding: 28px;
-    border: 1px solid var(--line-100);
-    border-radius: 32px;
-    background:
-      radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--sage-300) 40%, transparent), transparent 55%),
-      linear-gradient(160deg, var(--mint-50), var(--mint-100));
-    box-shadow: none;
-  }
-
-  html[data-tema="oscuro"] .detalle-hero-full {
-    background:
-      radial-gradient(circle at 0% 0%, rgba(111, 191, 141, 0.12), transparent 55%),
-      linear-gradient(160deg, var(--mint-50), var(--mint-100));
+    border-radius: 28px;
   }
 
   .detalle-hero-full .detalle-image {
-    grid-column: 2;
-    grid-row: 1;
-    width: calc(var(--alto-foto) * 0.75);
-    height: var(--alto-foto);
+    aspect-ratio: 16 / 9;
     max-height: none;
-    aspect-ratio: auto;
-    border-radius: 24px;
-    box-shadow: 0 30px 60px -30px rgba(8, 20, 14, 0.55);
+    background: #0b1510;
   }
 
-  /* Sin texto encima, la foto no necesita el degradado oscuro. */
-  .detalle-hero-full .detalle-image::after {
-    display: none;
+  .detalle-hero-full .detalle-image:not(.detalle-image-dirigida)::before {
+    content: '';
+    position: absolute;
+    inset: -60px;
+    background: var(--fondo) center / cover no-repeat;
+    filter: blur(40px) saturate(1.15) brightness(0.75);
+  }
+
+  .detalle-hero-full .detalle-image:not(.detalle-image-dirigida) img {
+    position: relative;
+    object-fit: contain;
+  }
+
+  .detalle-hero-full .detalle-galeria:not(.detalle-image-dirigida) img {
+    position: absolute;
+  }
+
+  .detalle-image-dirigida picture {
+    display: contents;
   }
 
   .detalle-hero-texto {
-    position: static;
-    grid-column: 1;
-    grid-row: 1;
-    padding: 12px 0 12px 24px;
-    background: none;
-  }
-
-  .detalle-hero-eyebrow {
-    border-color: var(--line-200);
-    background: color-mix(in srgb, var(--surface) 70%, transparent);
-    color: var(--ink-700);
-  }
-
-  .detalle-hero-eyebrow::before {
-    background: var(--forest-600);
-  }
-
-  .detalle-hero-nombre {
-    color: var(--ink-900);
-    font-size: clamp(2.6rem, 1.4rem + 2.6vw, 4.4rem);
-  }
-
-  .detalle-hero-cientifico {
-    color: var(--forest-700);
-  }
-
-  .detalle-hero-etiquetas li {
-    border-color: var(--line-200);
-    background: var(--surface);
-    color: var(--ink-700);
+    padding: 120px 48px 40px;
   }
 }
 
@@ -537,44 +504,12 @@ html[data-tema="oscuro"] .detalle-impacto {
   color: var(--forest-700);
 }
 
-.ficha-individuos {
+.galeria-individuos {
   margin-top: 18px;
 }
 
 .ficha-individuos-titulo {
   margin-bottom: 10px;
-}
-
-.ficha-individuos ul {
-  display: grid;
-  gap: 8px;
-  border-top: none;
-}
-
-.ficha-individuo {
-  min-height: 68px;
-  padding: 10px 14px 10px 10px;
-  border: 1px solid var(--line-100);
-  border-radius: 18px;
-  background: var(--surface);
-  transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
-}
-
-.ficha-individuo-foto {
-  border-radius: 12px;
-}
-
-@media (hover: hover) {
-  .ficha-individuo:hover {
-    border-color: var(--sage-300);
-    background: var(--mint-50);
-    transform: translateY(-1px);
-  }
-}
-
-.ficha-individuo.activo {
-  border-color: var(--forest-700);
-  background: var(--mint-100);
 }
 
 /* ── Datos rápidos ────────────────────────────────────────────── */

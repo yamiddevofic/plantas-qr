@@ -304,10 +304,6 @@
 
 /* ── Individuos registrados (reemplazan las ubicaciones escritas) ─ */
 
-.ficha-individuos {
-  margin-top: 28px;
-}
-
 .ficha-individuos-titulo,
 .detalle-ubicaciones-titulo {
   margin-bottom: 6px;
@@ -316,103 +312,6 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-500);
-}
-
-.ficha-individuos ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--line-200);
-}
-
-.ficha-individuo {
-  display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  min-height: 64px;
-  padding: 10px 8px;
-  border: none;
-  border-bottom: 1px solid var(--line-100);
-  background: transparent;
-  color: var(--ink-900);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.15s;
-}
-
-.ficha-individuo:hover {
-  background: var(--mint-50);
-}
-
-.ficha-individuo.activo {
-  background: var(--mint-100);
-}
-
-.ficha-individuo:focus-visible {
-  outline: 3px solid var(--leaf-500);
-  outline-offset: -3px;
-}
-
-.ficha-individuo-foto {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-sm);
-  object-fit: cover;
-  background: var(--mint-100);
-}
-
-.ficha-individuo-foto-vacia {
-  display: grid;
-  place-items: center;
-  font-size: 1.2rem;
-}
-
-.ficha-individuo-texto {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.ficha-individuo-texto strong {
-  font-size: 0.9375rem;
-  font-weight: 700;
-}
-
-.ficha-individuo-texto span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 0.8125rem;
-  color: var(--ink-500);
-  font-variant-numeric: tabular-nums;
-}
-
-.ficha-individuo-ver {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--forest-700);
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
-
-.ficha-individuo-ver svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* En móvil solo el icono, para que el código no se corte. */
-@media (max-width: 479px) {
-  .ficha-individuo-ver span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-  }
 }
 
 /* ── Código QR ───────────────────────────────────────────────── */

@@ -1,0 +1,558 @@
+/* ══════════════════════════════════════════════════════════════
+   Fotos de los individuos: galería y visor en la ficha, cámara con
+   encuadre y las dos fotos (móvil 4:5 / escritorio 16:9) del formulario.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Galería de individuos (ficha de la especie) ─────────────── */
+
+.galeria-individuos-rejilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .galeria-individuos-rejilla {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.galeria-individuo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-100);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--ink-900);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.galeria-individuo:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
+}
+
+.galeria-individuo.activo {
+  border-color: var(--forest-700);
+  box-shadow: 0 0 0 2px var(--forest-700);
+}
+
+.galeria-individuo-foto {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--mint-50);
+}
+
+.galeria-individuo-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.galeria-individuo-vacia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  color: var(--forest-700);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.galeria-individuo-vacia .icono-inicio {
+  width: 32px;
+  height: 32px;
+}
+
+.galeria-individuo-pie {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px 12px;
+  min-width: 0;
+}
+
+.galeria-individuo-pie strong {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.galeria-individuo-pie span {
+  overflow: hidden;
+  color: var(--ink-500);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .galeria-individuo:hover {
+    transform: translateY(-3px);
+    border-color: var(--sage-300);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .galeria-individuo:hover .galeria-individuo-foto img {
+    transform: scale(1.05);
+  }
+}
+
+.revelar:not(.revelado) .galeria-individuos-rejilla > li {
+  opacity: 0;
+}
+
+.revelado .galeria-individuos-rejilla > li {
+  animation: inicioSube 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(0.2s + min(var(--i, 0), 8) * 0.06s);
+}
+
+/* ── Visor a pantalla completa ───────────────────────────────── */
+
+.visor-individuo {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 64px 16px 24px;
+  background: rgba(5, 12, 8, 0.92);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: inicioAparece 0.25s ease both;
+}
+
+.visor-figura {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(100%, 1100px);
+  max-height: 100%;
+  margin: 0;
+}
+
+.visor-figura img {
+  display: block;
+  width: 100%;
+  max-height: calc(100svh - 200px);
+  object-fit: contain;
+  border-radius: 18px;
+  animation: visorEntra 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes visorEntra {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.visor-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #ffffff;
+}
+
+.visor-pie > span {
+  display: flex;
+  flex-direction: column;
+}
+
+.visor-pie strong {
+  font-size: 1.1rem;
+}
+
+.visor-pie span span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.85rem;
+}
+
+.visor-pie .btn {
+  border-radius: var(--radius-pill);
+}
+
+.visor-boton {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: var(--hit);
+  height: var(--hit);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.visor-boton svg {
+  width: 22px;
+  height: 22px;
+}
+
+.visor-cerrar { top: 12px; right: 12px; }
+.visor-anterior { left: 12px; top: 50%; transform: translateY(-50%); }
+.visor-siguiente { right: 12px; top: 50%; transform: translateY(-50%); }
+
+.visor-contador {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Formulario: foto móvil y foto escritorio ───────────────── */
+
+.fotos-variantes {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .fotos-variantes {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+  }
+}
+
+.foto-variante {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line-200);
+  border-radius: 18px;
+  background: var(--mint-50);
+}
+
+.foto-variante-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-900);
+}
+
+.foto-variante-cabecera svg {
+  width: 18px;
+  height: 18px;
+  color: var(--forest-700);
+}
+
+.foto-variante-formato {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--forest-700);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.foto-variante-nueva {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--forest-700);
+  color: var(--white);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+html[data-tema="oscuro"] .foto-variante-nueva {
+  color: #0b1a12;
+}
+
+.foto-variante-ayuda {
+  margin: -4px 0 0;
+  color: var(--ink-500);
+  font-size: 0.8rem;
+}
+
+.foto-variante-previa {
+  position: relative;
+  overflow: hidden;
+  border: 1px dashed var(--sage-300);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.foto-variante-previa img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.foto-variante-vacia {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--ink-300);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.foto-variante-vacia svg {
+  width: 28px;
+  height: 28px;
+}
+
+.foto-variante-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.foto-variante-sistema {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Cámara con encuadre ─────────────────────────────────────── */
+
+.camara {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  background: #000000;
+  color: #ffffff;
+}
+
+.camara-barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+}
+
+.camara-titulo {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.camara-titulo span {
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 0.75rem;
+}
+
+.camara-boton {
+  display: grid;
+  place-items: center;
+  width: var(--hit);
+  height: var(--hit);
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.camara-boton:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.camara-boton svg {
+  width: 22px;
+  height: 22px;
+}
+
+.camara-escenario {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.camara-video,
+.camara-previa {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.camara-video.espejo {
+  transform: scaleX(-1);
+}
+
+/* Recuadro de la foto: fuera de él se oscurece; dentro, guías de tercios. */
+.camara-marco {
+  position: absolute;
+  border: 2px solid #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  transition: left 0.25s, top 0.25s, width 0.25s, height 0.25s;
+}
+
+.camara-tercios {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent calc(33.33% - 0.5px), rgba(255, 255, 255, 0.35) calc(33.33% - 0.5px), rgba(255, 255, 255, 0.35) calc(33.33% + 0.5px), transparent calc(33.33% + 0.5px), transparent calc(66.66% - 0.5px), rgba(255, 255, 255, 0.35) calc(66.66% - 0.5px), rgba(255, 255, 255, 0.35) calc(66.66% + 0.5px), transparent calc(66.66% + 0.5px)),
+    linear-gradient(180deg, transparent calc(33.33% - 0.5px), rgba(255, 255, 255, 0.35) calc(33.33% - 0.5px), rgba(255, 255, 255, 0.35) calc(33.33% + 0.5px), transparent calc(33.33% + 0.5px), transparent calc(66.66% - 0.5px), rgba(255, 255, 255, 0.35) calc(66.66% - 0.5px), rgba(255, 255, 255, 0.35) calc(66.66% + 0.5px), transparent calc(66.66% + 0.5px));
+}
+
+.camara-estado {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 14px;
+  margin: 0;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+}
+
+.camara-error p {
+  max-width: 34ch;
+  margin: 0 auto;
+}
+
+.camara-consejo {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.camara-controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 112px;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+}
+
+.camara-disparador {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  padding: 0;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.camara-disparador span {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.12s ease;
+}
+
+.camara-disparador:active span {
+  transform: scale(0.88);
+}
+
+.camara-disparador:disabled {
+  opacity: 0.4;
+}
+
+.camara-accion {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 22px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.camara-accion svg {
+  width: 20px;
+  height: 20px;
+}
+
+.camara-accion-principal {
+  border-color: transparent;
+  background: #6fbf8d;
+  color: #0b1a12;
+}
+
+/* Teléfono en horizontal: controles a la derecha para dejar más alto al video. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .camara {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .camara-barra {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 120px;
+    z-index: 1;
+  }
+
+  .camara-escenario {
+    height: 100%;
+  }
+
+  .camara-controles {
+    flex-direction: column;
+    width: 120px;
+    min-height: 0;
+    height: 100%;
+    padding: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visor-individuo,
+  .visor-figura img,
+  .revelado .galeria-individuos-rejilla > li {
+    animation: none !important;
+  }
+}
