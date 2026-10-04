@@ -1359,6 +1359,21 @@ html[data-tema="oscuro"] .proyecto {
   gap: 10px;
 }
 
+/* Móvil: en 30vh solo caben el título y las cifras. */
+@media (max-width: 767px) {
+  .hero-galeria :is(.hero-inicio-emblema, .hero-inicio-ubicacion, .hero-inicio-texto) {
+    display: none;
+  }
+
+  /* El sol (o la luna) se corre a la derecha y crece un poco, para que no
+     quede tapado por las cifras en la franja baja. */
+  .hero-galeria .paisaje-astro > * {
+    transform-box: view-box;
+    transform-origin: 820px 118px;
+    transform: translate(360px, -6px) scale(1.35);
+  }
+}
+
 /* En pantallas angostas solo caben dos cifras en una fila. */
 @media (max-width: 479px) {
   .hero-galeria-cifras li:nth-child(3) {
@@ -1429,35 +1444,52 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 @media (min-width: 768px) {
+  /* Escritorio: hero completo, con el mismo alto proporcional que el inicio
+     (1440:360) para que el dibujo no se recorte y la luna o el sol se vean enteros. */
   .hero-galeria {
-    --alto-paisaje: clamp(110px, 11vw, 140px);
-    margin-bottom: 36px;
+    --alto-paisaje: clamp(200px, 25vw, 440px);
+    min-height: 0;
+    margin-bottom: 40px;
   }
 
-  /* El texto queda entero sobre el cielo, por encima de la cresta de las lomas. */
   .hero-galeria .hero-inicio-contenido {
-    padding: calc(var(--hit) + 28px) 40px calc(var(--alto-paisaje) * 0.85);
+    padding: calc(var(--hit) + 48px) 40px calc(var(--alto-paisaje) * 0.6);
+    gap: 14px;
   }
-}
 
-/* A todo lo ancho y con tan poco alto el dibujo se recorta por arriba: la
-   cordillera, la neblina, el sol y los árboles altos quedarían cortados en
-   línea recta, así que en la galería de escritorio solo queda la franja de
-   lomas, con su borde ondulado. */
-@media (min-width: 768px) {
-  .hero-galeria :is(.paisaje-capa-1, .paisaje-capa-2, .paisaje-neblina, .paisaje-astro,
-  .paisaje-aves, .paisaje-vaiven) {
-    display: none;
+  .hero-galeria .hero-inicio-texto-bloque {
+    gap: 14px;
+  }
+
+  .hero-galeria .hero-inicio-titulo {
+    font-size: clamp(2.5rem, 1.3rem + 5vw, 4.4rem);
+  }
+
+  .hero-galeria .hero-inicio-emblema {
+    width: 96px;
+  }
+
+  .hero-galeria-cifras li {
+    font-size: 0.85rem;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-galeria .hero-inicio-contenido {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+  }
+
+  .hero-galeria .hero-inicio-emblema {
+    width: min(100%, 230px);
   }
 
   .hero-galeria-cifras {
     justify-content: flex-start;
+  }
+
+  /* Con el texto alineado a la izquierda, las aves volarían sobre él. */
+  .hero-galeria .paisaje-aves {
+    display: none;
   }
 }
 
