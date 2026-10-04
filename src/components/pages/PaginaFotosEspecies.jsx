@@ -87,6 +87,7 @@ export default function PaginaFotosEspecies() {
         acento: 'especies',
         texto: 'Elige la foto principal de cada especie, quita las que sobran o agrega nuevas.',
         cifras,
+        compacto: true,
       }}
       extras={(
         <>

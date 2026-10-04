@@ -8,9 +8,9 @@ import PaisajeHero from './PaisajeHero';
  * vidrio y la acción principal de la página. Más bajo que el de la galería
  * para llegar rápido a la lista.
  */
-export default function HeroGestion({ id, titulo, acento, texto, cifras = null, accion = null }) {
+export default function HeroGestion({ id, titulo, acento, texto = null, cifras = null, accion = null, compacto = false }) {
   return (
-    <header className="hero-inicio hero-galeria hero-gestion">
+    <header className={`hero-inicio hero-galeria hero-gestion${compacto ? ' hero-gestion-compacto' : ''}`}>
       <PaisajeHero />
 
       <div className="hero-inicio-contenido">
@@ -25,7 +25,7 @@ export default function HeroGestion({ id, titulo, acento, texto, cifras = null, 
             <span className="hero-inicio-palabra hero-inicio-acento" style={{ '--i': 1 }}>{acento}</span>
           </h1>
 
-          <p className="hero-inicio-texto">{texto}</p>
+          {texto && <p className="hero-inicio-texto">{texto}</p>}
 
           {cifras && (
             <ul className="hero-galeria-cifras" aria-label="Resumen">
@@ -52,7 +52,8 @@ HeroGestion.propTypes = {
   titulo: PropTypes.string.isRequired,
   /** Palabra final del titular, en serif cursiva. */
   acento: PropTypes.string.isRequired,
-  texto: PropTypes.string.isRequired,
+  /** Párrafo bajo el titular; opcional. */
+  texto: PropTypes.string,
   /** Píldoras de resumen: { Icono, valor, etiqueta }. Ocultas mientras carga. */
   cifras: PropTypes.arrayOf(
     PropTypes.shape({
@@ -63,4 +64,6 @@ HeroGestion.propTypes = {
   ),
   /** Botón de la acción principal (p. ej. "Agregar individuo"). */
   accion: PropTypes.node,
+  /** Versión más baja, para páginas que son sobre todo una lista. */
+  compacto: PropTypes.bool,
 };

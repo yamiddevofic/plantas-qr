@@ -397,7 +397,7 @@ export default function PaginaIndividuos() {
         id: 'individuos-titulo',
         titulo: 'Gestión de',
         acento: 'individuos',
-        texto: 'Registra cada árbol del parque con su código, su foto y su ubicación GPS. También funciona sin conexión.',
+        texto: 'Registra cada árbol con su código, su foto y su ubicación GPS. Funciona sin conexión.',
         cifras,
         accion: !cargando && !error && (
           <Boton variante="primary" clase="gestion-agregar" onClick={() => abrirFormulario()} disabled={especies.length === 0}>

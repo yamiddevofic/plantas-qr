@@ -56,8 +56,9 @@
   }
 }
 
-/* Pantallas muy angostas: la marca, la flecha sola y el tema. */
-@media (max-width: 359px) {
+/* Pantallas angostas: la marca, la flecha sola y el tema (con "Catálogo"
+   escrito, la marca y el botón se pisan por debajo de ~370 px). */
+@media (max-width: 369px) {
   .gestion-volver {
     width: var(--hit);
     padding: 0;
@@ -71,9 +72,39 @@
 
 /* ── Hero ───────────────────────────────────────────────────── */
 
-/* Más bajo que el de la galería: aquí lo importante es la lista. */
+/* Más alto que el de la galería: el paisaje se ve completo y el título, el
+   texto, las cifras y la acción respiran. Móvil ≈ 62 % de la pantalla. */
 .hero-gestion {
-  min-height: 0;
+  --alto-paisaje: clamp(160px, 25svh, 240px);
+  min-height: 62vh;
+  min-height: 62svh;
+  margin-bottom: 28px;
+}
+
+.hero-gestion .hero-inicio-contenido {
+  gap: 14px;
+  /* El contenido queda centrado en el cielo: arriba la barra, abajo las
+     copas del paisaje, que no deben quedar tapadas por la acción. */
+  padding: calc(var(--hit) + 30px) 20px calc(var(--alto-paisaje) * 0.85);
+}
+
+.hero-gestion .hero-inicio-texto-bloque {
+  gap: 14px;
+}
+
+/* En móvil el párrafo sí cabe ahora: se muestra como en el hero de escritorio. */
+@media (max-width: 767px) {
+  .hero-gestion .hero-inicio-texto {
+    display: block;
+  }
+}
+
+/* Párrafo discreto: acompaña al titular sin competir con él. */
+.hero-gestion .hero-inicio-texto {
+  max-width: 34ch;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-500);
 }
 
 .hero-gestion .hero-inicio-titulo {
@@ -108,8 +139,59 @@
 }
 
 @media (min-width: 768px) {
+  .hero-gestion {
+    --alto-paisaje: clamp(220px, 25vw, 440px);
+    min-height: clamp(540px, 66svh, 740px);
+    margin-bottom: 44px;
+  }
+
   .hero-gestion .hero-inicio-titulo {
-    font-size: clamp(2.6rem, 1.3rem + 4vw, 4rem);
+    font-size: clamp(2.6rem, 1.3rem + 4vw, 4.2rem);
+  }
+
+  .hero-gestion .hero-inicio-contenido,
+  .hero-gestion .hero-inicio-texto-bloque {
+    gap: 18px;
+  }
+
+  .hero-gestion .hero-inicio-contenido {
+    padding: calc(var(--hit) + 40px) 40px calc(var(--alto-paisaje) * 0.8);
+  }
+
+  .hero-gestion .hero-inicio-texto {
+    max-width: 44ch;
+    font-size: 0.98rem;
+  }
+}
+
+/* Todo el contenido centrado, también en escritorio (la galería lo alinea a la
+   izquierda; aquí no hay foto ni emblema al lado que lo equilibre). */
+@media (min-width: 1024px) {
+  .hero-gestion .hero-inicio-contenido {
+    text-align: center;
+  }
+
+  .hero-gestion .hero-inicio-texto-bloque {
+    align-items: center;
+  }
+
+  .hero-gestion .hero-galeria-cifras {
+    justify-content: center;
+  }
+}
+
+/* Versión baja, solo en móvil (Fotos de especies): es sobre todo una lista, así
+   que el hero deja ver pronto las tarjetas. En escritorio conserva el alto normal. */
+@media (max-width: 767px) {
+  .hero-gestion.hero-gestion-compacto {
+    --alto-paisaje: clamp(140px, 21svh, 200px);
+    min-height: 48vh;
+    min-height: 48svh;
+    margin-bottom: 24px;
+  }
+
+  .hero-gestion.hero-gestion-compacto .hero-inicio-contenido {
+    padding-bottom: calc(var(--alto-paisaje) * 0.78);
   }
 }
 
