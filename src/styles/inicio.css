@@ -1337,9 +1337,8 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 .hero-galeria {
-  /* Móvil: pantalla completa, como el inicio (el paisaje usa el alto del inicio). */
-  min-height: 100vh;
-  min-height: 100svh;
+  --alto-paisaje: clamp(120px, 19svh, 180px);
+  min-height: 0;
   /* Sube bajo la barra (alto del botón + 2 × 10 px de relleno). */
   margin-top: calc(-1 * (var(--hit) + 20px));
   margin-bottom: 28px;
@@ -1351,7 +1350,7 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 .hero-galeria .hero-inicio-emblema {
-  width: 92px;
+  width: 76px;
 }
 
 .hero-galeria .hero-inicio-titulo {
@@ -1429,12 +1428,7 @@ html[data-tema="oscuro"] .proyecto {
      recorta por arriba y la luna o el sol se ven enteros. */
   .hero-galeria {
     --alto-paisaje: clamp(200px, 25vw, 440px);
-    min-height: 0;
     margin-bottom: 40px;
-  }
-
-  .hero-galeria .hero-inicio-bajar {
-    display: none;
   }
 
   .hero-galeria .hero-inicio-contenido {
