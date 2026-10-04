@@ -33,6 +33,7 @@ import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
 import PiePagina from '../molecules/PiePagina';
+import MapaSinConexion from '../molecules/MapaSinConexion';
 import BannerSincronizacion from '../organisms/BannerSincronizacion';
 import FormularioIndividuo from '../organisms/FormularioIndividuo';
 import TarjetaIndividuo from '../organisms/TarjetaIndividuo';
@@ -413,6 +414,8 @@ export default function PaginaIndividuos() {
                 {especies.map((e) => <option key={e.id} value={e.id}>{e.nombre}</option>)}
               </select>
             </div>
+
+            <MapaSinConexion />
 
             <BannerSincronizacion
               enLinea={enLinea}

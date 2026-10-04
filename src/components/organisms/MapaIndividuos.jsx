@@ -32,7 +32,9 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   const [visible, setVisible] = useState(false);
   const [mapaListo, setMapaListo] = useState(false);
   const [errorMapa, setErrorMapa] = useState(null);
-  const [base, setBase] = useState('mapa');
+  // Sin conexión el mapa de calles no carga (sus teselas vectoriales no se guardan);
+  // el satélite sí puede estar guardado (mapa del parque o zonas ya vistas).
+  const [base, setBase] = useState(() => (navigator.onLine ? 'mapa' : 'satelite'));
   const [relieve3D, setRelieve3D] = useState(false);
 
   const onSeleccionRef = useRef(onSeleccion);

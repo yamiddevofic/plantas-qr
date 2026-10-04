@@ -302,8 +302,14 @@ La app es instalable (PWA) y funciona sin internet con lo que ya se haya visto c
   volver la conexión, con la página de individuos abierta, se pide la contraseña y se
   envían en orden. Si el servidor rechaza alguno (p. ej. código repetido) queda listado
   para revisarlo o descartarlo; el resto se envía igual.
-- Sin conexión, el mapa del formulario solo muestra las zonas ya visitadas; las
-  coordenadas a mano y **Usar mi ubicación** (GPS) funcionan igual.
+- **Mapa satelital del parque sin conexión:** al abrir *Gestión de individuos* con
+  internet, la app guarda en el teléfono las teselas satelitales del parque y sus
+  alrededores (`src/offline/mapaParque.js`, ~100 teselas de z14 a z18, unos MB) en una
+  caché que el service worker no recorta; se renueva cada 60 días o con *Actualizar*.
+  Fuera de esa zona solo se ve lo ya visitado. El mapa de calles no se guarda: sin
+  conexión la ficha abre en satélite.
+- **GPS sin conexión:** funciona (no usa internet), pero sin la ayuda de las antenas
+  tarda más en encontrar satélites; la medición se extiende a 90 s.
 - No funciona sin conexión: crear/editar especies, subir fotos de especies ni generar QR.
 - **App de escritorio:** el manifiesto pide `window-controls-overlay`; en Chrome/Edge la
   app dibuja su propia barra de título del color de la página (botón ⌃ de la barra para

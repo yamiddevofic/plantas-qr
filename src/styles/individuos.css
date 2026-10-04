@@ -698,3 +698,58 @@
   font-size: 0.875rem;
   line-height: 1.45;
 }
+
+/* ── Mapa satelital guardado para usar sin conexión ──────────── */
+.mapa-offline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-md);
+  color: var(--ink-700);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.mapa-offline > svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--ink-500);
+}
+
+.mapa-offline > span {
+  flex: 1;
+  min-width: 0;
+}
+
+.mapa-offline-listo > svg {
+  color: var(--forest-600);
+}
+
+.mapa-offline-meta {
+  color: var(--ink-500);
+}
+
+.mapa-offline-error {
+  color: var(--danger-700);
+}
+
+.mapa-offline-boton {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mapa-offline-boton:hover {
+  border-color: var(--ink-300);
+}
