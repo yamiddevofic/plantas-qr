@@ -705,6 +705,16 @@ html[data-tema="oscuro"] .foto-variante-nueva {
   height: 20px;
 }
 
+/* En pantalla completa el mapa no espera a la animación de aparición de su
+   sección (opacidad 0 hasta entrar en pantalla): si se abre desde el carrusel sin
+   haber bajado hasta el mapa, quedaría invisible. Tampoco debe animarse: un
+   transform en el marco haría que el mapa fijo se pegue al marco y no a la ventana. */
+.detalle-seccion > .mapa-marco-pantalla {
+  opacity: 1 !important;
+  animation: none !important;
+  transform: none !important;
+}
+
 /* Interruptor Satélite / Mapa flotando abajo, por encima de la escala y la
    atribución para no taparlas. */
 .mapa-controles-flotantes {
