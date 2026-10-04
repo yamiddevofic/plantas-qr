@@ -9,7 +9,8 @@
 
 .hero-inicio,
 .home-marca,
-.home-acciones {
+.home-acciones,
+.galeria-header {
   --cielo-1: #d6ede0;
   --cielo-2: #ecf6ee;
   --cielo-3: #fbf1dd;
@@ -36,7 +37,8 @@
 
 html[data-tema="oscuro"] .hero-inicio,
 html[data-tema="oscuro"] .home-marca,
-html[data-tema="oscuro"] .home-acciones {
+html[data-tema="oscuro"] .home-acciones,
+html[data-tema="oscuro"] .galeria-header {
   --cielo-1: #040b08;
   --cielo-2: #08140e;
   --cielo-3: #11241a;
@@ -1294,4 +1296,171 @@ html[data-tema="oscuro"] .proyecto {
     width: 32px;
     height: 32px;
   }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Galería · mismo lenguaje del hero del inicio, en versión compacta
+   ══════════════════════════════════════════════════════════════ */
+
+/* La barra flota transparente sobre el cielo; solo sus botones son de vidrio. */
+.galeria-header {
+  padding: 10px 0;
+  margin-bottom: 0;
+  background: transparent;
+}
+
+.galeria-header :is(.menu-hamburguesa, .boton-tema, .buscador-trigger) {
+  border-color: var(--vidrio-borde);
+  background: var(--vidrio);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.galeria-header-herramientas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* La marca va dentro de la barra fija: se ubica respecto a ella. */
+.galeria-header .home-marca {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+@media (min-width: 1200px) {
+  .galeria-header .home-marca {
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.hero-galeria {
+  --alto-paisaje: clamp(120px, 19svh, 180px);
+  min-height: 0;
+  /* Sube bajo la barra (alto del botón + 2 × 10 px de relleno). */
+  margin-top: calc(-1 * (var(--hit) + 20px));
+  margin-bottom: 28px;
+}
+
+.hero-galeria .hero-inicio-contenido {
+  padding: calc(var(--hit) + 36px) 20px calc(var(--alto-paisaje) * 0.72);
+  gap: 14px;
+}
+
+.hero-galeria .hero-inicio-emblema {
+  width: 76px;
+}
+
+.hero-galeria .hero-inicio-titulo {
+  font-size: clamp(2.5rem, 1.3rem + 5vw, 4.4rem);
+}
+
+.hero-galeria .hero-inicio-texto-bloque {
+  gap: 14px;
+}
+
+.hero-galeria-cifras {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 2px 0 0;
+  list-style: none;
+  animation: inicioSube 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.8s both;
+}
+
+.hero-galeria-cifras li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px 7px 10px;
+  border: 1px solid var(--vidrio-borde);
+  border-radius: var(--radius-pill);
+  background: var(--vidrio);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--ink-700);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.hero-galeria-cifras strong {
+  color: var(--ink-900);
+  font-weight: 800;
+}
+
+.hero-galeria-cifras .icono-inicio {
+  width: 16px;
+  height: 16px;
+  color: var(--forest-700);
+}
+
+/* Mientras carga, el loader no necesita la pantalla entera: el hero ya la llena. */
+.hero-galeria ~ .app-main .cargando-central {
+  min-height: 36vh;
+}
+
+/* Tarjetas: sombra suave y la foto se acerca un poco al pasar el cursor. */
+.planta-card {
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.planta-card .card-image img {
+  transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.4s ease;
+}
+
+@media (hover: hover) {
+  .planta-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .planta-card:hover .card-image img {
+    transform: scale(1.04);
+  }
+}
+
+@media (min-width: 768px) {
+  /* Mismo alto proporcional que el inicio (1440:360): así el dibujo no se
+     recorta por arriba y la luna o el sol se ven enteros. */
+  .hero-galeria {
+    --alto-paisaje: clamp(200px, 25vw, 440px);
+    margin-bottom: 40px;
+  }
+
+  .hero-galeria .hero-inicio-contenido {
+    padding: calc(var(--hit) + 48px) 40px calc(var(--alto-paisaje) * 0.6);
+  }
+
+  .hero-galeria .hero-inicio-emblema {
+    width: 96px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-galeria .hero-inicio-contenido {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+  }
+
+  .hero-galeria .hero-inicio-emblema {
+    width: min(100%, 230px);
+  }
+
+  .hero-galeria-cifras {
+    justify-content: flex-start;
+  }
+
+  /* Con el texto alineado a la izquierda, las aves volarían sobre él. */
+  .hero-galeria .paisaje-aves {
+    display: none;
+  }
+}
+
+/* La entrada de las tarjetas no debe retener su transform final: si no, el
+   desplazamiento al pasar el cursor nunca se ve. */
+.planta-card {
+  animation-fill-mode: backwards;
 }

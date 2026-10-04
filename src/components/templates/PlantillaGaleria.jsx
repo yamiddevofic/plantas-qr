@@ -5,6 +5,9 @@ import BuscadorLupa from '../organisms/BuscadorLupa';
 import EstadoBox from '../atoms/EstadoBox';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
+import BotonTema from '../atoms/BotonTema';
+import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
+import HeroGaleria from '../organisms/HeroGaleria';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import PiePagina from '../molecules/PiePagina';
 import DialogoPassword from '../molecules/DialogoPassword';
@@ -61,21 +64,22 @@ export default function PlantillaGaleria({
       <header
         className={`galeria-header ${headerOculto ? 'galeria-header-oculto' : ''}`.trim()}
       >
+        <a className="home-marca" href="#/" aria-label="PlantaQR, ir al inicio">
+          <EmblemaArbolQr clase="home-marca-icono" />
+          <span>PlantaQR</span>
+        </a>
         <div className="hero-acciones-grupo">
-          <BuscadorLupa plantas={todasLasPlantas} />
+          <div className="galeria-header-herramientas">
+            <BuscadorLupa plantas={todasLasPlantas} />
+            <BotonTema />
+          </div>
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
         </div>
       </header>
 
+      <HeroGaleria plantas={todasLasPlantas} cargando={cargando || Boolean(error)} />
+
       <main id="app-main" className="app-main">
-        <div className="galeria-titular">
-          <h1 id="catalogo-titulo" className="individuos-titulo">Especies</h1>
-          <p className="individuos-intro">
-            {cargando || error
-              ? 'Árboles del Parque Principal de Chitagá'
-              : `${todasLasPlantas.length} ${todasLasPlantas.length === 1 ? 'especie' : 'especies'} del Parque Principal de Chitagá`}
-          </p>
-        </div>
         {cargando ? (
           <div className="cargando-central">
             <ArbolitoLoader etiqueta="Cargando catálogo" />
