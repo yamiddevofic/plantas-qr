@@ -5,19 +5,140 @@
 
 /* ── Galería de individuos (ficha de la especie) ─────────────── */
 
-.galeria-individuos-rejilla {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.galeria-individuos-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
+  margin-bottom: 10px;
+}
+
+.galeria-individuos-cabecera .ficha-individuos-titulo {
   margin: 0;
-  padding: 0;
+}
+
+/* Flechas: solo donde hay cursor; en el celular se desliza con el dedo. */
+.galeria-individuos-flechas {
+  display: none;
+  gap: 8px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .galeria-individuos-flechas {
+    display: flex;
+  }
+}
+
+.galeria-individuos-flechas button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-200);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-900);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, opacity 0.2s;
+}
+
+.galeria-individuos-flechas button:hover:not(:disabled) {
+  border-color: var(--sage-300);
+  background: var(--mint-50);
+}
+
+.galeria-individuos-flechas button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.galeria-individuos-flechas svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* La pista: se desliza en horizontal y se ajusta a cada tarjeta. En móvil
+   llega hasta los bordes de la pantalla y deja asomar la siguiente tarjeta. */
+.galeria-individuos-pista {
+  display: flex;
+  gap: 12px;
+  margin: 0 -18px;
+  padding: 4px 18px 10px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 18px;
+  scrollbar-width: none;
   list-style: none;
 }
 
+.galeria-individuos-pista::-webkit-scrollbar {
+  display: none;
+}
+
+.galeria-individuos-pista > li {
+  flex: 0 0 68%;
+  scroll-snap-align: start;
+}
+
 @media (min-width: 600px) {
-  .galeria-individuos-rejilla {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .galeria-individuos-pista > li {
+    flex-basis: 40%;
   }
+}
+
+@media (min-width: 1024px) {
+  .galeria-individuos-pista {
+    margin: 0;
+    padding: 4px 2px 10px;
+    scroll-padding-inline: 2px;
+  }
+
+  .galeria-individuos-pista > li {
+    flex-basis: calc((100% - 24px) / 3);
+  }
+}
+
+.galeria-individuos-puntos {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.galeria-individuos-puntos button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--line-200);
+  cursor: pointer;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Área táctil mayor que el punto visible. */
+.galeria-individuos-puntos button {
+  position: relative;
+}
+
+.galeria-individuos-puntos button::after {
+  content: '';
+  position: absolute;
+  inset: -10px -4px;
+}
+
+.galeria-individuos-puntos button.activo {
+  width: 22px;
+  background: var(--forest-700);
+}
+
+.galeria-individuos-contador {
+  margin: 6px 0 0;
+  color: var(--ink-500);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 .galeria-individuo {
@@ -112,11 +233,11 @@
   }
 }
 
-.revelar:not(.revelado) .galeria-individuos-rejilla > li {
+.revelar:not(.revelado) .galeria-individuos-pista > li {
   opacity: 0;
 }
 
-.revelado .galeria-individuos-rejilla > li {
+.revelado .galeria-individuos-pista > li {
   animation: inicioSube 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
   animation-delay: calc(0.2s + min(var(--i, 0), 8) * 0.06s);
 }
@@ -552,7 +673,7 @@ html[data-tema="oscuro"] .foto-variante-nueva {
 @media (prefers-reduced-motion: reduce) {
   .visor-individuo,
   .visor-figura img,
-  .revelado .galeria-individuos-rejilla > li {
+  .revelado .galeria-individuos-pista > li {
     animation: none !important;
   }
 }

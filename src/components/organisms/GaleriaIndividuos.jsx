@@ -112,13 +112,22 @@ VisorIndividuo.propTypes = {
   onVer: PropTypes.func.isRequired,
 };
 
+// Con más tarjetas que esto los puntos estorban: se muestra un contador.
+const MAX_PUNTOS = 12;
+
+const reducirMovimiento = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
 /**
- * Galería de fotos de los individuos de la especie. Tocar una foto la abre en
- * grande (con "Ver en el mapa"); un árbol sin foto va directo a su punto del mapa.
+ * Carrusel de fotos de los individuos de la especie: se desliza con el dedo
+ * (con ajuste a cada tarjeta), con flechas en pantallas grandes y puntos de
+ * posición. Tocar una foto la abre en grande (con "Ver en el mapa"); un árbol
+ * sin foto va directo a su punto del mapa.
  */
 export default function GaleriaIndividuos({ individuos, seleccionado = null, onVer }) {
   const conFoto = individuos.filter((f) => f.properties.imagen);
   const [visor, setVisor] = useState(null);
+  const pistaRef = useRef(null);
+  const [posicion, setPosicion] = useState({ actual: 0, atras: false, adelante: false });
 
   const abrir = (feature) => {
     const i = conFoto.indexOf(feature);
@@ -126,12 +135,82 @@ export default function GaleriaIndividuos({ individuos, seleccionado = null, onV
     else onVer(feature);
   };
 
+  // Paso entre tarjetas: ancho de una tarjeta más el espacio entre ellas.
+  const paso = () => {
+    const pista = pistaRef.current;
+    const [a, b] = pista?.children ?? [];
+    if (!a) return 0;
+    return b ? b.offsetLeft - a.offsetLeft : a.offsetWidth;
+  };
+
+  const actualizar = useCallback(() => {
+    const pista = pistaRef.current;
+    if (!pista) return;
+    const p = paso() || 1;
+    const fin = pista.scrollWidth - pista.clientWidth;
+    setPosicion({
+      actual: Math.min(individuos.length - 1, Math.round(pista.scrollLeft / p)),
+      atras: pista.scrollLeft > 4,
+      adelante: pista.scrollLeft < fin - 4,
+    });
+  }, [individuos.length]);
+
+  // Al cambiar de tamaño (y al montarse) se recalculan las flechas.
+  useEffect(() => {
+    const pista = pistaRef.current;
+    if (!pista || typeof ResizeObserver === 'undefined') return undefined;
+    const observador = new ResizeObserver(actualizar);
+    observador.observe(pista);
+    return () => observador.disconnect();
+  }, [actualizar]);
+
+  const irA = useCallback((indice) => {
+    const pista = pistaRef.current;
+    const tarjeta = pista?.children[indice];
+    if (!tarjeta) return;
+    pista.scrollTo({
+      left: tarjeta.offsetLeft - pista.children[0].offsetLeft,
+      behavior: reducirMovimiento() ? 'auto' : 'smooth',
+    });
+  }, []);
+
+  const mover = (direccion) => {
+    pistaRef.current?.scrollBy({ left: direccion * paso(), behavior: reducirMovimiento() ? 'auto' : 'smooth' });
+  };
+
+  // Si se elige un árbol en el mapa, el carrusel lo trae a la vista.
+  useEffect(() => {
+    if (!seleccionado) return;
+    const indice = individuos.findIndex((f) => f.properties.id === seleccionado);
+    if (indice >= 0) irA(indice);
+  }, [seleccionado, individuos, irA]);
+
+  const total = individuos.length;
+
   return (
     <div className="galeria-individuos">
-      <p className="ficha-individuos-titulo">
-        {individuos.length} {individuos.length === 1 ? 'individuo registrado' : 'individuos registrados'} en el parque
-      </p>
-      <ul className="galeria-individuos-rejilla">
+      <div className="galeria-individuos-cabecera">
+        <p className="ficha-individuos-titulo">
+          {total} {total === 1 ? 'individuo registrado' : 'individuos registrados'} en el parque
+        </p>
+        {total > 1 && (
+          <div className="galeria-individuos-flechas">
+            <button type="button" onClick={() => mover(-1)} disabled={!posicion.atras} aria-label="Individuos anteriores">
+              <LuChevronLeft aria-hidden="true" />
+            </button>
+            <button type="button" onClick={() => mover(1)} disabled={!posicion.adelante} aria-label="Individuos siguientes">
+              <LuChevronRight aria-hidden="true" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      <ul
+        ref={pistaRef}
+        className="galeria-individuos-pista"
+        onScroll={actualizar}
+        aria-label="Fotos de los individuos"
+      >
         {individuos.map((feature, i) => {
           const { id, codigoArbol, imagen } = feature.properties;
           const info = detalle(feature.properties);
@@ -156,6 +235,25 @@ export default function GaleriaIndividuos({ individuos, seleccionado = null, onV
           );
         })}
       </ul>
+
+      {total > 1 && (posicion.atras || posicion.adelante) && (
+        total <= MAX_PUNTOS ? (
+          <div className="galeria-individuos-puntos" role="group" aria-label="Posición en el carrusel">
+            {individuos.map((f, i) => (
+              <button
+                key={f.properties.id}
+                type="button"
+                className={i === posicion.actual ? 'activo' : ''}
+                aria-label={`Ir a ${f.properties.codigoArbol}`}
+                aria-current={i === posicion.actual ? 'true' : undefined}
+                onClick={() => irA(i)}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="galeria-individuos-contador" aria-live="polite">{posicion.actual + 1} / {total}</p>
+        )
+      )}
 
       {visor !== null && conFoto[visor] && (
         <VisorIndividuo
