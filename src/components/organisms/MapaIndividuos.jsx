@@ -92,15 +92,23 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
     setBase('satelite');
   }
 
-  // Sale de la pantalla completa y devuelve la capa base que había. Si se cierra
-  // desde la página, también se retira la entrada que se añadió al historial (para
-  // que "atrás" cierre el mapa en vez de salir de la ficha).
-  const salirPantalla = useCallback((retirarHistorial) => {
+  // Sale de la pantalla completa. Devuelve la capa base que había, salvo que la
+  // persona haya elegido otra con el interruptor del mapa grande (`baseAntes` pasa
+  // a null). Si se cierra desde la página, también se retira la entrada que se
+  // añadió al historial (para que "atrás" cierre el mapa en vez de salir de la ficha).
+  const salirPantalla = (retirarHistorial) => {
     setPantalla(false);
-    setBase(baseAntes ?? 'mapa');
+    if (baseAntes) setBase(baseAntes);
     if (retirarHistorial && window.history.state?.plantaqrMapa) window.history.back();
-  }, [baseAntes]);
-  const cerrarPantalla = useCallback(() => salirPantalla(true), [salirPantalla]);
+  };
+  // El efecto de abajo usa siempre la versión más reciente sin volver a montarse.
+  const salirRef = useRef(null);
+  useEffect(() => { salirRef.current = salirPantalla; });
+  const cerrarPantalla = useCallback(() => salirRef.current?.(true), []);
+  const elegirBaseEnPantalla = (id) => {
+    setBaseAntes(null);
+    setBase(id);
+  };
 
   useEffect(() => {
     const contenedor = contenedorRef.current;
@@ -111,7 +119,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
     cuerpo.style.overflow = 'hidden';
     if (!window.history.state?.plantaqrMapa) window.history.pushState({ plantaqrMapa: true }, '');
     const alTeclear = (e) => { if (e.key === 'Escape') cerrarPantalla(); };
-    const alVolver = () => { if (!window.history.state?.plantaqrMapa) salirPantalla(false); };
+    const alVolver = () => { if (!window.history.state?.plantaqrMapa) salirRef.current?.(false); };
     window.addEventListener('keydown', alTeclear);
     window.addEventListener('popstate', alVolver);
     cerrarRef.current?.focus({ preventScroll: true });
@@ -123,7 +131,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
       window.removeEventListener('popstate', alVolver);
       mapaRef.current?.resize();
     };
-  }, [pantalla, cerrarPantalla, salirPantalla]);
+  }, [pantalla, cerrarPantalla]);
 
   const seleccionar = useCallback((feature, { centrar = false } = {}) => {
     const map = mapaRef.current;
@@ -346,10 +354,19 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
           )}
           {errorMapa && <p className="mapa-error" role="status">{errorMapa}</p>}
           {pantalla && (
-            <button ref={cerrarRef} type="button" className="mapa-cerrar-pantalla" onClick={cerrarPantalla}>
-              <LuX aria-hidden="true" />
-              Cerrar mapa
-            </button>
+            <>
+              <button ref={cerrarRef} type="button" className="mapa-cerrar-pantalla" onClick={cerrarPantalla}>
+                <LuX aria-hidden="true" />
+                Cerrar mapa
+              </button>
+              {/* Mismo interruptor de la página; sin relieve 3D, que recentraría la cámara. */}
+              <ControlesMapa
+                clase="mapa-controles-flotantes"
+                base={base}
+                onBase={elegirBaseEnPantalla}
+                deshabilitado={Boolean(errorMapa)}
+              />
+            </>
           )}
         </div>
       </SeccionFicha>

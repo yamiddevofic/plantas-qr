@@ -705,6 +705,22 @@ html[data-tema="oscuro"] .foto-variante-nueva {
   height: 20px;
 }
 
+/* Interruptor Satélite / Mapa flotando abajo, por encima de la escala y la
+   atribución para no taparlas. */
+.mapa-controles-flotantes {
+  position: fixed;
+  left: 50%;
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  z-index: 100000;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+.mapa-controles-flotantes .mapa-segmentado {
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
 /* En este modo el botón de cerrar sustituye al de pantalla completa de MapLibre,
    y los controles se apartan de la muesca del teléfono. */
 .mapa-marco-pantalla .maplibregl-ctrl-fullscreen,
