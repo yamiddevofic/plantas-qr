@@ -2,6 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { combinarLecturas } from '../individuos';
 
 const DURACION_MAXIMA_S = 45;
+// Sin internet el teléfono no recibe la ayuda de las antenas (A-GPS) y tarda más en
+// encontrar los satélites la primera vez.
+const DURACION_SIN_CONEXION_S = 90;
 // Se termina antes si hay suficientes lecturas muy precisas.
 const PRECISION_OBJETIVO_M = 5;
 const LECTURAS_OBJETIVO = 5;
@@ -17,6 +20,7 @@ export default function useMedicionGps({ onEstimacion, onFin }) {
   const [ultima, setUltima] = useState(null); // precisión de la última lectura
   const [estimacion, setEstimacion] = useState(null);
   const [error, setError] = useState(null);
+  const [duracionMaxima, setDuracionMaxima] = useState(DURACION_MAXIMA_S);
 
   const lecturasRef = useRef([]);
   const vigiaRef = useRef(null);
@@ -59,12 +63,14 @@ export default function useMedicionGps({ onEstimacion, onFin }) {
     setError(null);
     setSegundos(0);
     setMidiendo(true);
+    const limite = navigator.onLine ? DURACION_MAXIMA_S : DURACION_SIN_CONEXION_S;
+    setDuracionMaxima(limite);
 
     const inicio = Date.now();
     relojRef.current = setInterval(() => {
       const s = Math.round((Date.now() - inicio) / 1000);
       setSegundos(s);
-      if (s >= DURACION_MAXIMA_S) terminar();
+      if (s >= limite) terminar();
     }, 1000);
 
     vigiaRef.current = navigator.geolocation.watchPosition(
@@ -100,5 +106,5 @@ export default function useMedicionGps({ onEstimacion, onFin }) {
 
   useEffect(() => limpiar, []);
 
-  return { midiendo, segundos, ultima, estimacion, error, iniciar, terminar, cancelar, duracionMaxima: DURACION_MAXIMA_S };
+  return { midiendo, segundos, ultima, estimacion, error, iniciar, terminar, cancelar, duracionMaxima, sinConexion: duracionMaxima === DURACION_SIN_CONEXION_S };
 }

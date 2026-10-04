@@ -16,7 +16,10 @@ const CACHE_APP = `plantaqr-app-${VERSION}`;
 const CACHE_API = 'plantaqr-api-v1';
 const CACHE_FOTOS = 'plantaqr-fotos-v1';
 const CACHE_MAPA = 'plantaqr-mapa-v1';
-const CACHES_VIGENTES = [CACHE_APP, CACHE_API, CACHE_FOTOS, CACHE_MAPA];
+// Mapa satelital del parque descargado a propósito (offline/mapaParque.js): no se
+// recorta ni se borra; cacheFirst lo encuentra con caches.match().
+const CACHE_MAPA_PARQUE = 'plantaqr-mapa-parque-v1';
+const CACHES_VIGENTES = [CACHE_APP, CACHE_API, CACHE_FOTOS, CACHE_MAPA, CACHE_MAPA_PARQUE];
 
 const LIMITE_FOTOS = 250;
 const LIMITE_MAPA = 800;

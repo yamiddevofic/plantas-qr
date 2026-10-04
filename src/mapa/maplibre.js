@@ -5,6 +5,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 // MapLibre 6 ubica su worker relativo a import.meta.url, ruta que deja de existir
 // tras el bundle. Vite empaqueta el worker (con su chunk compartido) y da su URL.
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
+import { SATELITE } from './fuentes';
 
 setWorkerUrl(workerUrl);
 
@@ -18,16 +19,7 @@ export const ESTILOS = {
   oscuro: env.VITE_MAPA_ESTILO_OSCURO || 'https://tiles.openfreemap.org/styles/dark',
 };
 
-// ── Satélite ─────────────────────────────────────────────────────
-// Esri World Imagery. Sobre Chitagá solo hay imagen hasta z18 (en z19 devuelve
-// una tesela "Map data not yet available"), así que se limita la fuente a 18 y
-// MapLibre sobreamplía al acercar más.
-const SATELITE = {
-  tiles: env.VITE_MAPA_SATELITE_TILES || 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  maxzoom: Number(env.VITE_MAPA_SATELITE_MAXZOOM) || 18,
-  attribution: env.VITE_MAPA_SATELITE_ATRIBUCION
-    || 'Imágenes © <a href="https://www.esri.com/" target="_blank" rel="noopener">Esri</a>, Maxar, Earthstar Geographics y la comunidad de usuarios GIS',
-};
+// ── Satélite: configuración en ./fuentes.js ──────────────────────
 
 // Las fuentes tipográficas para las etiquetas CIP-xxx salen de OpenFreeMap,
 // porque el estilo satelital se arma aquí y no trae glifos propios.

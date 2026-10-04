@@ -262,6 +262,7 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
                 </div>
                 <p className="gps-medicion-ayuda">
                   Quédate quieto junto al árbol, con el cielo despejado. La medición termina sola al llegar a ±5 m.
+                  {gps.sinConexion && ' Sin internet el GPS puede tardar hasta un par de minutos en encontrar los satélites.'}
                 </p>
                 <div className="form-acciones-linea">
                   <Boton variante="primary" onClick={gps.terminar} disabled={!gps.estimacion}>Usar esta ubicación</Boton>
