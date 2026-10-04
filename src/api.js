@@ -153,6 +153,9 @@ export function construirFormData(datos) {
   fd.append('ubicacion[latitud]', String(datos.latitud));
   fd.append('ubicacion[longitud]', String(datos.longitud));
   fd.append('ubicacion[descripcion]', datos.ubicacionDescripcion);
+  if (datos.ejemplaresEnParque !== '' && datos.ejemplaresEnParque != null) {
+    fd.append('ejemplaresEnParque', String(datos.ejemplaresEnParque));
+  }
   fd.append('password', datos.password || '');
   if (datos.imagenFile) fd.append('imagen', datos.imagenFile);
   if (Array.isArray(datos.imagenesConservar) && datos.imagenesConservar.length > 0) {
@@ -183,6 +186,16 @@ export async function verificarAdmin(password) {
     body: JSON.stringify({ password }),
   });
   if (!res.ok) throw new Error(await leerError(res, 'Contraseña incorrecta'));
+  return res.json();
+}
+
+export async function actualizarEjemplares(id, ejemplaresEnParque, password) {
+  const res = await fetch(`${BASE}/plantas/${id}/ejemplares`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ejemplaresEnParque, password }),
+  });
+  if (!res.ok) throw new Error(await leerError(res, 'No se pudo guardar el número de ejemplares'));
   return res.json();
 }
 

@@ -757,6 +757,327 @@
 
 }
 
+/* ── Ejemplares por especie (Gestión de individuos) ──────────── */
+
+.ejemplares {
+  border: 1px solid var(--line-100);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.ejemplares-resumen {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 22px;
+}
+
+.ejemplares-resumen::-webkit-details-marker {
+  display: none;
+}
+
+/* Flecha que gira al abrir. */
+.ejemplares-resumen::after {
+  content: '';
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  margin: 0 4px 4px auto;
+  border-right: 2px solid var(--ink-500);
+  border-bottom: 2px solid var(--ink-500);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.ejemplares[open] > .ejemplares-resumen::after {
+  margin-bottom: -4px;
+  transform: rotate(225deg);
+}
+
+.ejemplares-resumen:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
+}
+
+.ejemplares-icono {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: var(--mint-100);
+  color: var(--forest-700);
+}
+
+.ejemplares-icono .icono-inicio {
+  width: 22px;
+  height: 22px;
+}
+
+.ejemplares-titulo {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ejemplares-titulo strong {
+  color: var(--ink-900);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.ejemplares-titulo span {
+  color: var(--ink-500);
+  font-size: 0.85rem;
+}
+
+.ejemplares-lista {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0 8px 8px;
+  list-style: none;
+}
+
+/* Móvil: el nombre arriba; el avance y el contador lado a lado. Mientras se
+   edita, el contador baja a su propia fila para que quepa "Guardar". */
+.ejemplar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "nombre nombre"
+    "avance contador"
+    "error error";
+  align-items: center;
+  gap: 8px 12px;
+  padding: 12px 8px;
+  border-top: 1px solid var(--line-100);
+}
+
+.ejemplar.editando {
+  grid-template-areas:
+    "nombre nombre"
+    "avance avance"
+    "contador contador"
+    "error error";
+}
+
+.ejemplar-nombre { grid-area: nombre; }
+.ejemplar-avance { grid-area: avance; }
+.ejemplar-contador { grid-area: contador; }
+.ejemplar-error { grid-area: error; }
+
+.ejemplar.activo {
+  border-radius: 16px;
+  border-top-color: transparent;
+  background: var(--mint-50);
+  box-shadow: inset 0 0 0 1px var(--forest-600);
+}
+
+.ejemplar.activo + .ejemplar {
+  border-top-color: transparent;
+}
+
+.ejemplar-nombre {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ejemplar-nombre strong {
+  overflow: hidden;
+  color: var(--ink-900);
+  font-size: 0.98rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ejemplar-nombre em {
+  overflow: hidden;
+  color: var(--ink-500);
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ejemplar-nombre:hover strong {
+  color: var(--forest-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ejemplar-nombre:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.ejemplar-avance {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.ejemplar-barra {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--mint-100);
+}
+
+.ejemplar-barra > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--forest-600), var(--leaf-500));
+  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.ejemplar-texto {
+  color: var(--ink-500);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ejemplar-alerta {
+  color: var(--warning-700);
+  font-weight: 600;
+}
+
+.ejemplar-contador {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ejemplar-contador > button:not(.ejemplar-guardar) {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--hit);
+  height: var(--hit);
+  padding: 0;
+  border: 1px solid var(--line-200);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--forest-700);
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.ejemplar-contador > button:not(.ejemplar-guardar):hover:not(:disabled) {
+  border-color: var(--forest-600);
+  background: var(--mint-100);
+}
+
+.ejemplar-contador > button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ejemplar-contador input {
+  width: 4.5ch;
+  min-width: 0;
+  height: var(--hit);
+  padding: 0 4px;
+  border: 1px solid var(--line-200);
+  border-radius: 14px;
+  background: var(--mint-50);
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.ejemplar-contador input::-webkit-outer-spin-button,
+.ejemplar-contador input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.ejemplar-contador input:focus-visible {
+  outline: none;
+  border-color: var(--forest-600);
+  box-shadow: var(--focus-ring);
+}
+
+.ejemplar-contador > button:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
+}
+
+.ejemplar-guardar {
+  min-height: var(--hit);
+  margin-left: auto;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--forest-700);
+  color: var(--surface);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  animation: inicioSube 0.25s ease both;
+}
+
+.ejemplar-guardar:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.ejemplar-error {
+  margin: 0;
+}
+
+/* Tableta y escritorio: una fila por especie, en columnas. */
+@media (min-width: 720px) {
+  .ejemplares-lista {
+    padding: 0 12px 12px;
+  }
+
+  .ejemplar,
+  .ejemplar.editando {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto;
+    grid-template-areas: "nombre avance contador" "error error error";
+    align-items: center;
+    gap: 8px 20px;
+    padding: 10px 10px;
+  }
+
+  .ejemplar-contador {
+    justify-content: flex-end;
+    min-width: 250px;
+  }
+
+  .ejemplar-guardar {
+    margin-left: 4px;
+  }
+
+}
+
 /* ── Pestañas del módulo: Especies · Individuos ─────────────── */
 
 .gestion-pestanas {

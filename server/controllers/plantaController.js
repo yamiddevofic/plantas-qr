@@ -175,6 +175,25 @@ export const actualizarPlanta = async (req, res) => {
   }
 };
 
+/** Solo el conteo de árboles de la especie en el parque (edición rápida). */
+export const actualizarEjemplares = async (req, res) => {
+  try {
+    const cantidad = Number(req.body?.ejemplaresEnParque);
+    if (!Number.isInteger(cantidad) || cantidad < 0 || cantidad > 100000) {
+      return res.status(400).json({ mensaje: 'Los ejemplares deben ser un número entero de 0 en adelante.' });
+    }
+    const planta = await Planta.findByIdAndUpdate(
+      req.params.id,
+      { $set: { ejemplaresEnParque: cantidad } },
+      { new: true, runValidators: true },
+    );
+    if (!planta) return res.status(404).json({ mensaje: 'Planta no encontrada' });
+    res.json(planta);
+  } catch (error) {
+    res.status(400).json({ mensaje: 'Error al actualizar los ejemplares', error: error.message });
+  }
+};
+
 export const eliminarPlanta = async (req, res) => {
   try {
     const planta = await Planta.findById(req.params.id);

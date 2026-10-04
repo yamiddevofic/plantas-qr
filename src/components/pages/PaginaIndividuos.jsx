@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  actualizarEjemplares,
   actualizarIndividuo,
   crearIndividuo,
   eliminarIndividuo,
@@ -31,10 +32,11 @@ import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
-import { IconoArbol, IconoCamara, IconoHoja, IconoLupa, IconoMas } from '../atoms/IconosInicio';
+import { IconoArbol, IconoArbolPlaca, IconoHoja, IconoLupa, IconoMas } from '../atoms/IconosInicio';
 import MapaSinConexion from '../molecules/MapaSinConexion';
 import PestanasGestion from '../molecules/PestanasGestion';
 import BannerSincronizacion from '../organisms/BannerSincronizacion';
+import EjemplaresPorEspecie from '../organisms/EjemplaresPorEspecie';
 import FormularioIndividuo from '../organisms/FormularioIndividuo';
 import TarjetaIndividuo from '../organisms/TarjetaIndividuo';
 import PlantillaGestion from '../templates/PlantillaGestion';
@@ -381,16 +383,52 @@ export default function PaginaIndividuos() {
 
   const hayFiltros = Boolean(busqueda || filtroEspecie);
 
+  // Conteo de campo por especie (ejemplaresEnParque) frente a los árboles ya registrados con GPS.
+  const filasEjemplares = useMemo(() => {
+    const registrados = new Map();
+    for (const f of vista) {
+      const grupo = grupoPorFicha.get(f.properties.especie?._id);
+      if (grupo) registrados.set(grupo, (registrados.get(grupo) ?? 0) + 1);
+    }
+    return especies.map((e) => {
+      const conteos = plantas
+        .filter((p) => e.ids.includes(p._id) && Number.isInteger(p.ejemplaresEnParque))
+        .map((p) => p.ejemplaresEnParque);
+      return {
+        id: e.id,
+        ids: e.ids,
+        nombre: e.nombre,
+        cientifico: e.cientifico,
+        registrados: registrados.get(e.id) ?? 0,
+        ejemplares: conteos.length ? Math.max(...conteos) : null,
+      };
+    });
+  }, [especies, plantas, vista, grupoPorFicha]);
+
+  const guardarEjemplares = useCallback(async (fila, n) => {
+    const actualizadas = await ejecutar(
+      (password) => Promise.all(fila.ids.map((id) => actualizarEjemplares(id, n, password))),
+      `Para cambiar los ejemplares de ${fila.nombre} necesitas la contraseña de administrador.`,
+    );
+    setPlantas((prev) => prev.map((p) => actualizadas.find((a) => a._id === p._id) ?? p));
+    setAviso({ tipo: 'ok', texto: `${fila.nombre}: ${n} ${n === 1 ? 'ejemplar' : 'ejemplares'} en el parque.` });
+  }, [ejecutar]);
+
+  const filtrarEspecie = (id) => {
+    setFiltroEspecie(id);
+    if (id) document.getElementById('individuos-resultados')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const cifras = useMemo(() => {
-    if (cargando || error || !vista.length) return null;
+    if (cargando || error || !especies.length) return null;
     const conEspecie = new Set(vista.map((f) => grupoPorFicha.get(f.properties.especie?._id)).filter(Boolean)).size;
-    const conFoto = vista.filter((f) => f.properties.imagen).length;
+    const enParque = filasEjemplares.reduce((suma, f) => suma + (f.ejemplares ?? f.registrados), 0);
     return [
-      { Icono: IconoArbol, valor: vista.length, etiqueta: vista.length === 1 ? 'árbol' : 'árboles' },
+      { Icono: IconoArbol, valor: vista.length, etiqueta: vista.length === 1 ? 'registrado' : 'registrados' },
+      { Icono: IconoArbolPlaca, valor: enParque, etiqueta: 'en el parque' },
       { Icono: IconoHoja, valor: conEspecie, etiqueta: conEspecie === 1 ? 'especie' : 'especies' },
-      { Icono: IconoCamara, valor: conFoto, etiqueta: 'con foto' },
     ];
-  }, [vista, grupoPorFicha, cargando, error]);
+  }, [vista, grupoPorFicha, cargando, error, especies, filasEjemplares]);
 
   return (
     <PlantillaGestion
@@ -468,7 +506,15 @@ export default function PaginaIndividuos() {
             onDescartar={descartarPendiente}
           />
 
-          <div className="gestion-resumen">
+          <EjemplaresPorEspecie
+            filas={filasEjemplares}
+            filtroActivo={filtroEspecie}
+            onFiltrar={filtrarEspecie}
+            onGuardar={guardarEjemplares}
+            enLinea={enLinea}
+          />
+
+          <div className="gestion-resumen" id="individuos-resultados">
             <p className="gestion-conteo" role="status" aria-live="polite">
               <strong>{visibles.length}</strong> de {vista.length} {vista.length === 1 ? 'individuo' : 'individuos'}
             </p>

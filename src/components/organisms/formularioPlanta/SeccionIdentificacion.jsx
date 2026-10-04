@@ -53,6 +53,19 @@ export default function SeccionIdentificacion({ estado, errores, set }) {
             required
           />
         </CampoFormulario>
+        <CampoFormulario id="f-ejemplares" etiqueta="Ejemplares en el parque" error={errores.ejemplaresEnParque}>
+          <input
+            id="f-ejemplares"
+            className="form-input"
+            type="number"
+            inputMode="numeric"
+            min="0"
+            step="1"
+            placeholder="Ej. 12"
+            value={estado.ejemplaresEnParque}
+            onChange={(e) => set('ejemplaresEnParque', e.target.value)}
+          />
+        </CampoFormulario>
       </div>
     </section>
   );

@@ -10,6 +10,7 @@ import {
   buscarPorFamilia,
   actualizarPlanta,
   eliminarPlanta,
+  actualizarEjemplares,
 } from '../controllers/plantaController.js';
 import upload from '../config/upload.js';
 import qrAuth from '../middleware/qrAuth.js';
@@ -271,6 +272,40 @@ router.get('/:id', obtenerPlantaPorId);
  *       404: { description: No existe }
  */
 router.put('/:id/fotos', upload.fields([{ name: 'fotos', maxCount: 10 }]), qrAuth, actualizarFotosPlanta);
+
+/**
+ * @swagger
+ * /api/plantas/{id}/ejemplares:
+ *   patch:
+ *     summary: Cambia cuántos ejemplares de la especie hay en el parque
+ *     tags: [Plantas]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ejemplaresEnParque:
+ *                 type: integer
+ *                 minimum: 0
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Planta actualizada
+ *       400:
+ *         description: Número no válido
+ *       401:
+ *         description: Falta la contraseña de administrador o es incorrecta
+ */
+router.patch('/:id/ejemplares', qrAuth, actualizarEjemplares);
 
 router.put('/:id', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imagenes', maxCount: 10 }]), qrAuth, actualizarPlanta);
 

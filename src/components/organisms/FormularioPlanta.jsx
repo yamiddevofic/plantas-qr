@@ -90,6 +90,9 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
     for (const [campo, mensaje] of requeridos) {
       if (!String(estado[campo]).trim()) nuevosErrores[campo] = mensaje;
     }
+    if (estado.ejemplaresEnParque !== '' && !(Number.isInteger(Number(estado.ejemplaresEnParque)) && Number(estado.ejemplaresEnParque) >= 0)) {
+      nuevosErrores.ejemplaresEnParque = 'Escribe un número entero de 0 en adelante.';
+    }
     if (estado.latitud === '' || Number.isNaN(Number(estado.latitud))) {
       nuevosErrores.latitud = 'Ingresa una latitud válida.';
     }

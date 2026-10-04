@@ -25,6 +25,7 @@ export function inicialEstado(planta) {
     nombreCientifico: planta?.nombre?.cientifico ?? '',
     familia: planta?.familia ?? '',
     origen: planta?.origen ?? '',
+    ejemplaresEnParque: planta?.ejemplaresEnParque ?? '',
     tipo: planta?.tipo ?? TIPOS[0],
     descripcionGeneral: planta?.descripcion?.general ?? '',
     descripcionHojas: planta?.descripcion?.hojas ?? '',
