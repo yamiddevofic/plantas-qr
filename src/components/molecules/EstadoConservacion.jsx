@@ -18,7 +18,7 @@ const NIVELES = [
  * Tarjeta del estado de conservación: el estado de la ficha, su descripción
  * y un medidor de riesgo que se llena hasta el nivel de la especie.
  */
-export default function EstadoConservacion({ estado, onVerEscala }) {
+export default function EstadoConservacion({ estado, detalle = '', onVerEscala }) {
   const [ref, visible] = useRevelar({ umbral: 0.2 });
   const clase = estadoClass(estado);
   const nivel = NIVELES.findIndex((n) => n.clases.includes(clase));
@@ -26,6 +26,8 @@ export default function EstadoConservacion({ estado, onVerEscala }) {
     ESCALA_CONSERVACION.find((e) => e.clase === clase)?.descripcion ||
     'Estado de conservación de la especie según la escala del catálogo.';
   const texto = String(estado).charAt(0).toUpperCase() + String(estado).slice(1);
+  // El detalle solo reemplaza la descripción si dice algo más que el nivel.
+  const detalleUtil = detalle && detalle.trim().toLowerCase() !== String(estado).trim().toLowerCase() ? detalle : '';
 
   return (
     <section
@@ -67,7 +69,7 @@ export default function EstadoConservacion({ estado, onVerEscala }) {
         </div>
       </div>
 
-      <p className="estado-tarjeta-descripcion">{descripcion}</p>
+      <p className="estado-tarjeta-descripcion">{detalleUtil || descripcion}</p>
 
       {onVerEscala && (
         <button type="button" className="estado-tarjeta-escala" onClick={onVerEscala}>
@@ -81,6 +83,8 @@ export default function EstadoConservacion({ estado, onVerEscala }) {
 EstadoConservacion.propTypes = {
   /** Estado tal como viene en la ficha (p. ej. "vulnerable"). */
   estado: PropTypes.string.isRequired,
+  /** Explicación propia de la especie; reemplaza la descripción genérica del nivel. */
+  detalle: PropTypes.string,
   /** Abre la ventana con la escala de colores; sin él no se muestra el botón. */
   onVerEscala: PropTypes.func,
 };

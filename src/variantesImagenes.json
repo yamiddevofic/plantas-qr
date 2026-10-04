@@ -351,5 +351,677 @@
       800
     ],
     "ancho": 1200
+  },
+  "aguacate-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "aguacate-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "araucaria-excelsa-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "araucaria-excelsa-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "araucaria-excelsa-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-guayabito-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-guayabito-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-guayabito-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-guayabito-k4": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-guayabito-k5": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-guayabito-k6": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-k4": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-k5": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "arrayan-k6": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-de-monte-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-de-monte-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k4": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k5": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k6": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k7": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k8": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cajeto-k9": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "calistemo-lloron-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "calistemo-lloron-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "calistemo-lloron-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "capuli-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "capuli-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "capuli-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "chicala-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "chicala-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "chicala-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cipres-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cipres-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "cipres-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k4": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k5": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k6": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k7": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k8": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "eugenia-k9": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "ficus-benjamina-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "ficus-benjamina-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "ficus-benjamina-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "ficus-benjamina-k4": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "fotinia-glabra-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "fotinia-glabra-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "fotinia-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "fotinia-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "fotinia-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "guanamini-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "guanamini-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "guanamini-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "liquidambar-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "liquidambar-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "magnolio-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "magnolio-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "nispero-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "nispero-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "nispero-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "nispero-k4": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "palma-de-cera-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "palma-de-cera-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "palma-de-cera-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "pino-patula-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "pino-patula-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "pino-romeron-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "pino-romeron-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "pino-romeron-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "pino-romeron-k4": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "pitosporo-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "pitosporo-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "roble-australiano-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "roble-australiano-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "roble-australiano-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "roble-australiano-k4": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "roble-australiano-k5": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "roble-australiano-k6": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "san-joaquin-variegado-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "san-joaquin-variegado-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "san-joaquin-variegado-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "siete-cueros-mutabilis-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "siete-cueros-mutabilis-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "siete-cueros-mutabilis-k3": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "tuya-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "tuya-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "velero-k1": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
+  },
+  "velero-k2": {
+    "recortes": [
+      400,
+      800
+    ],
+    "ancho": 1200
   }
 }

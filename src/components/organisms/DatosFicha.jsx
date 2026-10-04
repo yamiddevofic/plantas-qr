@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import useRevelar from '../../hooks/useRevelar';
-import { IconoArbol, IconoFamilias, IconoGlobo, IconoRegla } from '../atoms/IconosInicio';
+import { IconoArbol, IconoArbolPlaca, IconoFamilias, IconoGlobo, IconoRegla } from '../atoms/IconosInicio';
 
 /** Datos rápidos de la especie en fichas con icono, que se dibujan al aparecer. */
 export default function DatosFicha({ planta }) {
@@ -10,6 +10,13 @@ export default function DatosFicha({ planta }) {
     { Icono: IconoFamilias, etiqueta: 'Familia', valor: planta.familia },
     { Icono: IconoGlobo, etiqueta: 'Origen', valor: planta.origen },
     { Icono: IconoRegla, etiqueta: 'Altura', valor: planta.altura },
+    {
+      Icono: IconoArbolPlaca,
+      etiqueta: 'En el parque',
+      valor: planta.ejemplaresEnParque
+        ? `${planta.ejemplaresEnParque} ${planta.ejemplaresEnParque === 1 ? 'ejemplar' : 'ejemplares'}`
+        : null,
+    },
   ].filter((d) => d.valor);
 
   if (datos.length === 0) return null;

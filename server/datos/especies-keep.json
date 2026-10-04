@@ -1,0 +1,1932 @@
+[
+  {
+    "clave": "myrcia popayanensis",
+    "notasKeep": [
+      "Arrayan"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "myrcia popayanensis",
+        "myrcianthes leucoxyla"
+      ],
+      "comunes": [
+        "arrayan",
+        "arrayan / mirto andino",
+        "mirto andino"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Arrayán",
+        "cientifico": "Myrcia popayanensis"
+      },
+      "familia": "Myrtaceae",
+      "origen": "Nativo de la región andina de Sudamérica (principalmente Colombia, Ecuador y Venezuela)",
+      "tipo": "árbol / arbusto según poda",
+      "descripcion": {
+        "general": "Árbol o arbusto nativo fundamental de los bosques andinos de Colombia, muy reconocido por su madera extremadamente dura, su ramificación densa y su atractivo follaje perenne de hojas pequeñas y brillantes. Es una especie clave en la restauración ecológica y protección de fuentes hídricas.",
+        "hojas": "Simples, opuestas, elípticas a ovadas, pequeñas (generalmente de 2 a 5 cm de largo), con textura coriácea, de color verde oscuro brillante en el haz y con puntos translúcidos glandulares característicos de las mirtáceas al mirarse a contraluz."
+      },
+      "altura": "5 a 15 metros",
+      "usos": [
+        "Protección y regulación hídrica en zonas de nacimiento de agua y márgenes de quebradas.",
+        "Atracción y alimentación de aves e insectos polinizadores nativos gracias a sus frutos y flores.",
+        "Históricamente utilizado en zonas rurales para postes de cercas y mangos de herramientas debido a la extrema resistencia de su madera.",
+        "Ornamental en parques y senderos ecológicos por su copa densa y estricta resistencia."
+      ],
+      "impacto": "Protección y regulación hídrica en zonas de nacimiento de agua y márgenes de quebradas. Atracción y alimentación de aves e insectos polinizadores nativos gracias a sus frutos y flores.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC)",
+      "nombresAlternos": [
+        "Arrayán blanco",
+        "Guaulo",
+        "Mirto",
+        "Palo de hierro"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, de color blanco o crema, dispuestas en panículas terminales o axilares, con numerosos estambres llamativos que desprenden un aroma suave.",
+        "frutos": "Bayas globosas y carnosas que pasan de verde a rojo y finalmente a negro purpúreo al madurar, muy apetecidas por la avifauna local.",
+        "tronco": "Tronco generalmente retorcido o ramificado desde baja altura, con una corteza lisa de color café claro, rojizo o grisáceo que se desprende en delgadas láminas papiláceas, a menudo cubierto de líquenes y musgo en zonas de niebla."
+      },
+      "habitat": {
+        "distribucion": "Nativo de la región andina de Sudamérica (principalmente Colombia, Ecuador y Venezuela). Muy abundante en las cordilleras colombianas.",
+        "altitud": "1,800 a 3,200 m s. n. m. (ampliamente adaptado a los climas fríos y templados de la provincia de Pamplona y las montañas de Chitagá).",
+        "clima": "Frío a templado húmedo, muy resistente a los vientos de montaña y adaptado a suelos ácidos con buen drenaje."
+      },
+      "datosCuriosos": [
+        "Sus hojas, al ser estrujadas, desprenden un aroma característico y agradable debido a la presencia de aceites esenciales esenciales en sus glándulas foliares.",
+        "Es una especie de crecimiento lento pero sumamente longeva y resistente, capaz de soportar las heladas de la alta montaña andina."
+      ],
+      "cuidados": "Requiere una exposición a pleno sol o semisombra. Se propaga principalmente por semillas y prefiere suelos ricos en materia orgánica que retengan humedad pero que tengan un drenaje adecuado para evitar encharcamientos prolongados.",
+      "especiesSimilares": [
+        "Myrteola nummularia (Arrayancito / Polylepis pardo)",
+        "Eugenia myrtifolia (Eugenia de jardín)",
+        "Myrica pubescens (Laurel de cera - por el hábito pero con hojas alternas y aserradas)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "El collage de imágenes confirma las características diagnósticas del Arrayán: la corteza descascarada con líquenes (foto superior izquierda), el follaje tupido de hojas pequeñas, opuestas y elípticas con frutos verdes axilares (foto superior centro), y el porte de copa globosa y densa integrada al paisaje andino urbano y rural."
+      },
+      "ejemplaresEnParque": 12
+    },
+    "fotos": [
+      "/uploads/arrayan-k1.webp",
+      "/uploads/arrayan-k2.webp",
+      "/uploads/arrayan-k3.webp",
+      "/uploads/arrayan-k4.webp",
+      "/uploads/arrayan-k5.webp",
+      "/uploads/arrayan-k6.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "syzygium paniculatum",
+    "notasKeep": [
+      "Desconocida",
+      "Desconocido(19)",
+      "Duraznillo rojo"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "syzygium paniculatum"
+      ],
+      "comunes": [
+        "eugenia"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Eugenia",
+        "cientifico": "Syzygium paniculatum"
+      },
+      "familia": "Myrtaceae",
+      "origen": "Nativo de las selvas costeras de Australia",
+      "tipo": "arbusto",
+      "descripcion": {
+        "general": "Arbusto o árbol pequeño de hoja perenne muy utilizado en el diseño paisajístico de parques urbanos por su follaje denso y compacto, ideal para la creación de setos geométricos y muros vivos. Destaca por el contraste estético entre sus hojas maduras de color verde brillante y sus brotes nuevos de tonos cobrizos o rojizos.",
+        "hojas": "Simples, opuestas, elípticas a lanceoladas, con una textura lisa, coriácea y brillante en el haz; las puntas de las ramas presentan brotes jóvenes de un característico color rojizo-bronceado."
+      },
+      "altura": "1.5 a 3 metros (en este tipo de poda de jardín; libre supera los 6 metros)",
+      "usos": [
+        "Ornamental, siendo una de las especies más utilizadas para la formación de setos rectangulares, borduras densas y topiarias geométricas.",
+        "Barrera visual y rompevientos de porte bajo para delimitar espacios peatonales en plazas públicas.",
+        "Atracción de fauna benéfica como pequeñas aves e insectos polinizadores atraídos por sus flores y frutos."
+      ],
+      "impacto": "Atracción de fauna benéfica como pequeñas aves e insectos polinizadores atraídos por sus flores y frutos.",
+      "estadoConservacion": "en peligro",
+      "estadoConservacionDetalle": "En peligro (EN) en su entorno silvestre original debido a la pérdida de hábitat en Australia, pero sumamente abundante y cultivado globalmente a nivel hortícola.",
+      "nombresAlternos": [
+        "Eugenia de jardín",
+        "Mirtilo de Nueva Holanda"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, de color blanco o crema, agrupadas en racimos terminales con numerosos estambres finos que sobresalen de forma llamativa.",
+        "frutos": "Bayas carnosas de forma ovoide o globosa que adquieren un color rojo oscuro o púrpura brillante al completar su maduración.",
+        "tronco": "Tallos leñosos y delgados, altamente ramificados desde la base, con ramillas jóvenes lisas y de tonalidades marrón-rojizas."
+      },
+      "habitat": {
+        "distribucion": "Nativo de las selvas costeras de Australia, pero introducido de forma muy masiva en parques urbanos, plazas y separadores viales de Colombia.",
+        "altitud": "Se adapta con gran facilidad entre los 1,500 y 2,800 m s. n. m., prosperando con excelente salud en el clima andino de la provincia de Pamplona y Chitagá.",
+        "clima": "Prefiere ambientes frescos con buena exposición solar directa o semisombra ligera; tolera bien la humedad ambiental de la montaña."
+      },
+      "datosCuriosos": [
+        "El ejemplar fotografiado forma parte del seto perimetral que decora la zona de la fuente, demostrando la alta capacidad que tiene esta planta para soportar podas constantes con tijeras de jardinería sin perder la densidad de sus hojas.",
+        "Sus frutos carnosos de color púrpura brillante son comestibles y atraen de manera constante a la avifauna local del parque durante las épocas de fructificación."
+      ],
+      "cuidados": "Requiere una ubicación con buena luz solar para favorecer que los brotes nuevos adquieran el tono cobrizo característico. Exige suelos fértiles con buen drenaje que eviten los encharcamientos prolongados y responde de forma excelente a fertilizaciones nitrogenadas después de cada poda de mantenimiento.",
+      "especiesSimilares": [
+        "Myrcia popayanensis (Arrayán común - de ramificación más rugosa y hojas de tono verde más opaco)",
+        "Photinia x fraseri (Fotinia - de hojas alternas con bordes marcadamente aserrados y brotes rojos mucho más intensos)",
+        "Buxus sempervirens (Bbox / Boj - de hojas mucho más pequeñas, redondeadas y de crecimiento considerablemente más lento)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La textura densa del follaje podado en forma de bloque rectangular rodeando la fuente (foto 2/2) y el detalle en primer plano de las hojas opuestas, agudas y brillantes con pequeños brotes apicales cobrizos (foto 1/2) confirman que se trata de un seto conformado por la especie Syzygium paniculatum."
+      },
+      "ejemplaresEnParque": 45
+    },
+    "fotos": [
+      "/uploads/eugenia-k6.webp",
+      "/uploads/eugenia-k1.webp",
+      "/uploads/eugenia-k2.webp",
+      "/uploads/eugenia-k3.webp",
+      "/uploads/eugenia-k4.webp",
+      "/uploads/eugenia-k5.webp",
+      "/uploads/eugenia-k7.webp",
+      "/uploads/eugenia-k8.webp",
+      "/uploads/eugenia-k9.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "citharexylum subflavescens",
+    "notasKeep": [
+      "Desconocido 1",
+      "Desconocido(21)",
+      "Desconocido(5)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "citharexylum subflavescens"
+      ],
+      "comunes": [
+        "cajeto"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Cajeto",
+        "cientifico": "Citharexylum subflavescens"
+      },
+      "familia": "Verbenaceae",
+      "origen": "Especie nativa de la región andina de Suramérica, presente en las cordilleras de Colombia, Venezuela, Ecuador y Perú",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol nativo de los bosques andinos colombianos, ampliamente apreciado en proyectos de restauración ecológica y paisajismo. Se caracteriza por su crecimiento rápido, su corteza amarillenta y escamosa que se desprende en tiras, y su copa densa que sirve de refugio y alimento para múltiples especies de aves silvestres.",
+        "hojas": "Simples, opuestas, decusadas (dispuestas en cruz), de forma elíptica a oblonga, con márgenes enteros y una textura áspera o coriácea; el haz es verde oscuro lustroso y el envés suele tener una tonalidad más clara con vellosidades finas."
+      },
+      "altura": "15 a 20 metros",
+      "usos": [
+        "Restauración ecológica y conservación de suelos, especialmente útil en la protección de nacimientos de agua y cuencas hidrográficas.",
+        "Alimento para la fauna local (avifauna) gracias a la abundante producción de sus drupas rojas.",
+        "Cercas vivas en entornos rurales y sombrío en sistemas agroforestales.",
+        "Artesanal, ya que su madera ligera y dócil ha sido utilizada tradicionalmente para la fabricación de instrumentos musicales (como guitarras) y cabos de herramientas."
+      ],
+      "impacto": "Restauración ecológica y conservación de suelos, especialmente útil en la protección de nacimientos de agua y cuencas hidrográficas. Alimento para la fauna local (avifauna) gracias a la abundante producción de sus drupas rojas.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC)",
+      "nombresAlternos": [
+        "Quimulá",
+        "Garagay",
+        "Urapo",
+        "Palo guitarra",
+        "Cascarillo"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, fragantes, con corola tubular de color blanco o crema, dispuestas en racimos alargados y pendulares que atraen a gran cantidad de insectos polinizadores.",
+        "frutos": "Drupas globosas y carnosas que cambian de color verde a un rojo brillante y lustroso al madurar (tornándose negras al final), conteniendo semillas duras en su interior.",
+        "tronco": "Tronco cilíndrico, ramificado a mediana altura; su corteza externa es de un tono pardo-amarillento característico y tiene la tendencia a agrietarse y desprenderse en láminas longitudinales largas."
+      },
+      "habitat": {
+        "distribucion": "Especie nativa de la región andina de Suramérica, presente en las cordilleras de Colombia, Venezuela, Ecuador y Perú. Muy común en los bosques nublados de la cordillera Oriental.",
+        "altitud": "1,100 a 2,800 m s. n. m. (perfectamente adaptado a los valles y laderas montañosas de Chitagá y la provincia de Pamplona).",
+        "clima": "Templado a frío y húmedo; tolera bien la nubosidad constante y prefiere suelos con buena humedad."
+      },
+      "datosCuriosos": [
+        "Su nombre científico 'Citharexylum' proviene del griego y significa literalmente 'madera de guitarra', debido al uso tradicional que los pobladores locales daban a su madera para construir instrumentos de cuerda.",
+        "Comparte el nombre común de 'Cajeto' o 'Nacedero' en algunas regiones con el *Trichanthera gigantea* (familia Acanthaceae), pero se diferencian claramente porque el *Citharexylum* desarrolla drupas decorativas de color rojo vivo que tardan varios meses en madurar."
+      ],
+      "cuidados": "Es una planta rústica y de fácil propagación mediante semillas orgánicas. Prospera a pleno sol o semisombra, requiere suelos con buen drenaje pero que retengan humedad, y responde excelentemente a podas sanitarias a inicios de la temporada lluviosa.",
+      "especiesSimilares": [
+        "Citharexylum montanum (Cajeto de monte)",
+        "Trichanthera gigantea (Nacedero / Madre de agua - solo por alcance de nombre común)",
+        "Persea americana (Árbol de Aguacate - por similitud en la textura foliar)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La morfología de la gran hoja fotografiada en primer plano (foto 2/2) —con su marcada nervadura central amarillenta, bordes enteros bien definidos, consistencia coriácea y silueta elíptica-lanceolada— coincide con las características foliares descritas para el género Citharexylum (Cajeto), descartando opciones ornamentales introducidas de hojas similares."
+      },
+      "ejemplaresEnParque": 5
+    },
+    "fotos": [
+      "/uploads/cajeto-k1.webp",
+      "/uploads/cajeto-k2.webp",
+      "/uploads/cajeto-k3.webp",
+      "/uploads/cajeto-k4.webp",
+      "/uploads/cajeto-k5.webp",
+      "/uploads/cajeto-k6.webp",
+      "/uploads/cajeto-k7.webp",
+      "/uploads/cajeto-k8.webp",
+      "/uploads/cajeto-k9.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "senna spectabilis",
+    "notasKeep": [
+      "Desconocido(1)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "cassia spectabilis",
+        "senna spectabilis"
+      ],
+      "comunes": [
+        "vainillo",
+        "velero"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Velero",
+        "cientifico": "Senna spectabilis"
+      },
+      "familia": "Fabaceae",
+      "origen": "Especie nativa de América tropical (desde México hasta Argentina)",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol nativo de porte mediano, de rápido crecimiento y copa redondeada y extendida, muy valorado en el paisaje urbano de Colombia por su floración vistosa. Destaca por sus hojas compuestas de color verde vivo y sus densas panículas de flores amarillas brillantes que cubren la copa de forma espectacular durante sus periodos de mayor esplendor.",
+        "hojas": "Compuestas, paripinnadas, de 20 a 40 cm de largo, dispuestas de forma alterna. Cuentan con 10 a 16 pares de folíolos elípticos u ovados, con el ápice agudo y una superficie lisa de color verde oscuro en el haz."
+      },
+      "altura": "4 a 12 metros",
+      "usos": [
+        "Uso principalmente ornamental y paisajístico en plazas públicas, parques, separadores viales y jardines amplios.",
+        "Atracción de polinizadores: sus flores son intensamente visitadas por abejorros y diversas especies de mariposas nativas.",
+        "Sombreo urbano gracias a la arquitectura aparasolada o globosa de su copa."
+      ],
+      "impacto": "Atracción de polinizadores: sus flores son intensamente visitadas por abejorros y diversas especies de mariposas nativas.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC)",
+      "nombresAlternos": [
+        "Vainillo",
+        "Mucuteno",
+        "Candelillo",
+        "Carnaval",
+        "Flor amarillo"
+      ],
+      "caracteristicas": {
+        "flores": "Grandes, de color amarillo intenso, con cinco pétalos desiguales y redondeados, agrupadas en densos racimos o panículas terminales muy llamativas que sobresalen del follaje.",
+        "frutos": "Legumbres o vainas cilíndricas alargadas de 15 a 30 cm de largo, de color café oscuro o negro al madurar, que cuelgan del árbol y contienen numerosas semillas separadas por tabiques internos.",
+        "tronco": "Tronco generalmente corto y cilíndrico, ramificado a baja altura; corteza lisa a ligeramente rugosa con la edad, de color grisáceo a castaño claro."
+      },
+      "habitat": {
+        "distribucion": "Especie nativa de América tropical (desde México hasta Argentina). Se encuentra ampliamente distribuido en zonas cálidas y templadas de Colombia, estando bien adaptado en valles y plazas andinas como las de la provincia de Pamplona y Chitagá.",
+        "altitud": "0 a 2,200 m s. n. m. (encontrando un límite favorable en las zonas templadas de Chitagá).",
+        "clima": "Cálido a templado, con alta resistencia a la exposición solar directa."
+      },
+      "datosCuriosos": [
+        "El epíteto científico *spectabilis* proviene del latín y significa 'espectacular' o 'notable', en alusión directa al impacto visual que genera el árbol cuando está completamente cubierto de flores amarillas.",
+        "En países como Argentina se le conoce popularmente como 'Carnaval' o 'Carnavalito' debido a que el pico de su floración coincide exactamente con las fechas de dicha festividad."
+      ],
+      "cuidados": "Requiere una exposición a pleno sol para asegurar una floración óptima. Prefiere suelos sueltos, con buen drenaje, ya que es sensible al encharcamiento prolongado en las raíces. Aunque tolera bien los climas templados, los ejemplares jóvenes pueden requerir cierta protección frente a vientos helados extremos de alta montaña.",
+      "especiesSimilares": [
+        "Tecoma stans (Chicalá / Chirlobirlo - con flores acampanadas y hojas aserradas)",
+        "Senna siamea (Casia siamea - de inflorescencias similares pero con sutiles diferencias foliares)",
+        "Cassia fistula (Lluvia de oro - con racimos florales mucho más largos y colgantes)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Se confirma con total certeza el taxón *Senna spectabilis* (Velero). En la vista general (foto 1) se aprecia su hábito de crecimiento típico en entornos públicos, mostrando una copa globosa bien estructurada al lado de la arquitectura local. En la vista de detalle (foto 2) se validan completamente sus características diagnósticas: los racimos terminales de flores de un amarillo intenso y sus hojas paripinnadas compuestas por folíolos simétricos y lanceolados."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/velero-k1.webp",
+      "/uploads/velero-k2.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "grevillea robusta",
+    "notasKeep": [
+      "Desconocido(10)",
+      "Desconocido(3)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "grevillea robusta"
+      ],
+      "comunes": [
+        "roble australiano"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Roble australiano",
+        "cientifico": "Grevillea robusta"
+      },
+      "familia": "Proteaceae",
+      "origen": "Nativo de la franja costera oriental de Australia",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol perennifolio de gran porte y crecimiento rápido, originario de Australia y ampliamente introducido en el paisaje urbano andino de Colombia. Destaca por su silueta esbelta, inicialmente piramidal, y por sus hojas profundamente divididas que recuerdan a las de los helechos, coronando plazas con un follaje ligero y elegante.",
+        "hojas": "Simples pero profundamente laciniadas o pinnatífidas (divididas en lóbulos alargados y estrechos), de 15 a 30 cm de largo; presentan un haz de color verde oscuro brillante y un envés pubescente de tonalidad gris-plateada o blancuzca."
+      },
+      "altura": "15 a 25 metros (en cultivo urbano montañoso)",
+      "usos": [
+        "Ornamental y paisajístico en plazas públicas, parques urbanos y campus universitarios debido a su porte majestuoso y llamativa floración dorada.",
+        "Sombra perenne en sistemas agroforestales (tradicionalmente usado para sombrío de cultivos de café y té).",
+        "Atracción de fauna local, sirviendo como una fuente invaluable de alimento para abejas melíferas y aves insectívoras/frugívoras gracias a su abundante néctar.",
+        "Madera, utilizada en ebanistería fina e instrumentos musicales gracias a su resistencia a la pudrición y su veteado sedoso."
+      ],
+      "impacto": "Sombra perenne en sistemas agroforestales (tradicionalmente usado para sombrío de cultivos de café y té). Atracción de fauna local, sirviendo como una fuente invaluable de alimento para abejas melíferas y aves insectívoras/frugívoras gracias a su abundante néctar.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC) globalmente debido a su masiva domesticación urbana, aunque se considera escaso en sus reductos boscosos nativos de origen.",
+      "nombresAlternos": [
+        "Roble de Australia",
+        "Grevilia",
+        "Árbol de fuego",
+        "Pino de oro",
+        "Roble sedoso"
+      ],
+      "caracteristicas": {
+        "flores": "Muy vistosas y ricas en néctar; se agrupan en densos racimos unilaterales (con forma de peine) de color amarillo dorado o anaranjado brillante que contrastan fuertemente con el follaje a finales de la primavera.",
+        "frutos": "Cápsulas leñosas aplanadas (folículos) de color café al madurar, arqueadas y provistas de una punta curva persistente, que resguardan en su interior dos semillas aladas.",
+        "tronco": "Tronco recto, robusto y cilíndrico, con una corteza rugosa, fisurada y reticulada de color grisáceo a marrón claro."
+      },
+      "habitat": {
+        "distribucion": "Nativo de la franja costera oriental de Australia, pero introducido a nivel mundial en regiones tropicales y subtropicales. Muy común en avenidas y parques principales del interior de Colombia.",
+        "altitud": "Se adapta excelentemente bien en zonas altas andinas entre los 1,000 y 2,800 m s. n. m., acoplándose al clima montañoso de la provincia de Pamplona y Chitagá.",
+        "clima": "Templado a frío húmedo, resistente a periodos moderados de sequía una vez establecido, aunque sus ramas son algo quebradizas ante vientos montañosos extremos."
+      },
+      "datosCuriosos": [
+        "Aunque popularmente se le asocie el término 'pino de oro' por sus flores o 'roble sedoso' por el aspecto de su madera labrada, no guarda parentesco botánico con los pinos auténticos ni con los robles nativos americanos.",
+        "El contacto directo con su savia o el aserrín de su madera puede causar dermatitis o irritaciones alérgicas en la piel de personas sensibles debido a compuestos químicos de defensa de la planta."
+      ],
+      "cuidados": "Requiere una exposición directa a pleno sol y prefiere suelos profundos, ligeros y con un óptimo drenaje para evitar encharcamientos. Se recomienda realizar podas de limpieza estructural en ejemplares jóvenes de parques peatonales para retirar ramas bajas quebradizas antes de las épocas de ventiscas.",
+      "especiesSimilares": [
+        "Grevillea baileyana (Roble blanco australiano - de hojas menos divididas y flores blancas)",
+        "Jacaranda mimosifolia (Gualanday / Jacarandá - de follaje finamente compuesto similar pero con espectaculares flores moradas)",
+        "Delonix regia (Flamboyán / Árbol de fuego verdadero - de hojas compuestas y flores rojas, restringido a climas mucho más cálidos)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "El primer plano del follaje profundamente dividido en segmentos alargados y colgantes similares a frondas de helecho (foto 1/2), junto con el porte erguido de tronco recto y corteza reticulada grisácea en la zona central del parque (foto 2/2), descartan coníferas u otros árboles de hojas enteras y confirman la morfología clásica de Grevillea robusta."
+      },
+      "ejemplaresEnParque": 2
+    },
+    "fotos": [
+      "/uploads/roble-australiano-k1.webp",
+      "/uploads/roble-australiano-k2.webp",
+      "/uploads/roble-australiano-k3.webp",
+      "/uploads/roble-australiano-k4.webp",
+      "/uploads/roble-australiano-k5.webp",
+      "/uploads/roble-australiano-k6.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "photinia x fraseri",
+    "notasKeep": [
+      "Desconocido(11)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "photinia fraseri",
+        "photinia sp.",
+        "photinia sp. (posiblemente p. x fraseri)",
+        "photinia x fraseri"
+      ],
+      "comunes": [
+        "duraznillo rojo",
+        "duraznillo rojo / fotinia",
+        "fotinia",
+        "fotinia / duraznillo rojo"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Fotinia",
+        "cientifico": "Photinia x fraseri"
+      },
+      "familia": "Rosaceae",
+      "origen": "Es un híbrido hortícola de origen cultivado cuyos parentales provienen de Asia (China y Japón)",
+      "tipo": "arbusto",
+      "descripcion": {
+        "general": "Arbusto o árbol pequeño de hoja perenne muy popular en el paisajismo y la jardinería urbana. Es ampliamente reconocido por el contraste de sus brotes nuevos, que nacen con un color rojo brillante e intenso, y que luego maduran hacia un verde oscuro y brillante.",
+        "hojas": "Simples, alternas, de forma elíptica o lanceolada, con una textura dura y coriácea; presentan bordes finamente aserrados y un llamativo color rojo encendido en los brotes nuevos que contrasta con el verde oscuro del follaje maduro."
+      },
+      "altura": "1.5 a 3 metros (en este tipo de poda de jardín; libre puede alcanzar los 5 metros)",
+      "usos": [
+        "Ornamental, ideal para la formación de setos vivos, barreras visuales perimetrales o delimitación de senderos por su follaje bicolor.",
+        "Excelente tolerancia a la poda frecuente de formación para mantener estructuras geométricas compactas."
+      ],
+      "impacto": "Su nombre científico 'Photinia' proviene del griego 'photeinos', que significa brillante, haciendo alusión al aspecto lustroso de sus hojas.",
+      "estadoConservacion": "no determinado",
+      "estadoConservacionDetalle": "No evaluado (NE / Especie cultivada)",
+      "nombresAlternos": [
+        "Duraznillo rojo",
+        "Fotinia de puntas rojas",
+        "Red Robin"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, de color blanco o crema, agrupadas en densas inflorescencias terminales que aparecen a finales de la primavera.",
+        "frutos": "Pequeños pomos globosos de color rojo que se tornan oscuros al madurar, apetecidos por pequeñas aves.",
+        "tronco": "Tallos leñosos, ramificados desde la base para formar una barrera compacta, con corteza lisa de color grisáceo a marrón claro."
+      },
+      "habitat": {
+        "distribucion": "Es un híbrido hortícola de origen cultivado cuyos parentales provienen de Asia (China y Japón). Se encuentra ampliamente distribuido en zonas templadas y de montaña de Colombia.",
+        "altitud": "Se adapta perfectamente a climas templados y fríos (1,500 a 2,800 m s. n. m.), siendo muy común en los jardines y plazas de la provincia de Pamplona.",
+        "clima": "Prefiere climas frescos, tolera heladas ligeras y requiere una muy buena exposición solar para que los brotes nuevos intensifiquen su color rojo."
+      },
+      "datosCuriosos": [
+        "Su nombre científico 'Photinia' proviene del griego 'photeinos', que significa brillante, haciendo alusión al aspecto lustroso de sus hojas.",
+        "El color rojo de las hojas nuevas actúa como un filtro solar natural que protege los tejidos jóvenes de la radiación ultravioleta antes de que desarrollen suficiente clorofila."
+      ],
+      "cuidados": "Requiere suelos fértiles, con buen drenaje y una exposición a pleno sol o semisombra ligera. La poda regular a finales del invierno es clave para estimular la salida de nuevos brotes rojos en la siguiente temporada.",
+      "especiesSimilares": [
+        "Syzygium paniculatum (Eugenia de jardín - descartada por poseer hojas estrictamente opuestas)",
+        "Abatia parviflora (Duraznillo andino - especie nativa de hojas opuestas y flores amarillas en espiga)",
+        "Acalypha wilkesiana (Gasa / Oreja de bronce - de hojas mucho más anchas y variegación perenne)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La estructura del seto vivo podado en bloques que limita la zona del parque con el paisaje montañoso (foto 1/3) y el detalle en primer plano de las hojas de disposición alterna, bordes finamente aserrados y brotes nuevos de un rojo cobrizos brillante (fotos 2/3 y 3/3) corresponden de manera inequívoca a Photinia x fraseri."
+      },
+      "ejemplaresEnParque": 117
+    },
+    "fotos": [
+      "/uploads/fotinia-k1.webp",
+      "/uploads/fotinia-k2.webp",
+      "/uploads/fotinia-k3.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "ficus benjamina",
+    "notasKeep": [
+      "Desconocido(12)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "ficus benjamina"
+      ],
+      "comunes": [
+        "ficus",
+        "ficus / caucho benjamina",
+        "ficus benjamina"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Ficus benjamina",
+        "cientifico": "Ficus benjamina"
+      },
+      "familia": "Moraceae",
+      "origen": "Nativo del sur y sureste de Asia, así como de Australia",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol perennifolio muy popular en el paisajismo urbano de Colombia, reconocido por su copa globosa, densa y de aspecto llorón debido a sus ramas delgadas y péndulas. Posee un sistema de troncos múltiples entrelazados y ramificados desde baja altura que le confieren una estructura sumamente robusta.",
+        "hojas": "Simples, alternas, de forma ovada a elíptica, lisas, coriáceas y brillantes en el haz; terminan en una punta delgada muy pronunciada (ápice acuminado). Al romperse o cortarse, secretan un látex lechoso blanco y pegajoso."
+      },
+      "altura": "4 a 10 metros (mantenido bajo poda constante en el parque; libre supera los 15 metros)",
+      "usos": [
+        "Ornamental y paisajístico en plazas y parques por su facilidad para tolerar podas arquitectónicas y su denso follaje permanente.",
+        "Provisión de sombra densa y fresca en senderos peatonales urbanos.",
+        "Refugio e importante fuente de alimento para aves e insectos locales debido a sus pequeños frutos."
+      ],
+      "impacto": "Provisión de sombra densa y fresca en senderos peatonales urbanos. Refugio e importante fuente de alimento para aves e insectos locales debido a sus pequeños frutos.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC / Especie cultivada masivamente a nivel mundial)",
+      "nombresAlternos": [
+        "Ficus",
+        "Laurel de la India",
+        "Amate",
+        "Matapalo"
+      ],
+      "caracteristicas": {
+        "flores": "No son visibles. Sus flores son diminutas y se desarrollan en el interior de una estructura carnosa y cerrada llamada sicono.",
+        "frutos": "Siconos (falsos frutos o higos pequeños) globosos, sésiles, que cambian de color verde a amarillo o rojo purpúreo al madurar, siendo muy buscados por pequeños pájaros.",
+        "tronco": "Tronco ramificado en múltiples ejes paralelos y verticales de corteza lisa y grisácea, que a menudo desarrollan raíces aéreas que se fusionan con el tallo principal en climas húmedos."
+      },
+      "habitat": {
+        "distribucion": "Nativo del sur y sureste de Asia, así como de Australia, pero ampliamente introducido y cultivado en plazas públicas, parques y avenidas de toda Colombia.",
+        "altitud": "Se adapta muy bien desde el nivel del mar hasta los 2,600 m s. n. m., tolerando con éxito los microclimas de los valles andinos y la provincia de Pamplona.",
+        "clima": "Prefiere climas templados a cálidos y soleados; en zonas de montaña fría se beneficia de ubicaciones resguardadas frente a las heladas fuertes de invierno."
+      },
+      "datosCuriosos": [
+        "Aunque su follaje superior es sumamente decorativo, su sistema de raíces es extremadamente agresivo y extendido, por lo que su siembra actual en entornos urbanos se restringe estrictamente a macetones o centros de grandes zonas verdes para evitar daños en andenes o tuberías.",
+        "El ápice alargado de sus hojas funciona como un canal de drenaje o 'punta de goteo', lo que facilita que el agua de lluvia ruede rápido y la hoja se seque, evitando la proliferación de hongos."
+      ],
+      "cuidados": "Requiere una exposición a pleno sol o semisombra. Exige suelos fértiles con muy buen drenaje y riegos moderados; tolera de manera excelente las podas de mantenimiento estructural para conservar su copa compacta y redondeada.",
+      "especiesSimilares": [
+        "Ficus microcarpa (Laurel de la India de hoja redonda - de hojas más cortas y obtusas)",
+        "Ficus nitida (Laurel de parques - de porte similar pero hojas de morfología apical diferente)",
+        "Ligustrum lucidum (Trueno - descartado por completo por poseer hojas opuestas y frutos en racimos terminales)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La copa globosa densamente ramificada (foto 1/3), la estructura multicaular con múltiples troncos paralelos cubiertos de musgo y líquenes (foto 2/3), y las hojas alternas, elípticas, brillantes con su característica punta alargada (foto 3/3) confirman inequívocamente la identidad de Ficus benjamina."
+      },
+      "ejemplaresEnParque": 2
+    },
+    "fotos": [
+      "/uploads/ficus-benjamina-k1.webp",
+      "/uploads/ficus-benjamina-k2.webp",
+      "/uploads/ficus-benjamina-k3.webp",
+      "/uploads/ficus-benjamina-k4.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "persea americana",
+    "notasKeep": [
+      "Desconocido(13)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "persea americana"
+      ],
+      "comunes": [
+        "aguacate"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Aguacate",
+        "cientifico": "Persea americana"
+      },
+      "familia": "Lauraceae",
+      "origen": "Nativo de Mesoamérica (México y Centroamérica)",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol frutal y ornamental de hoja perenne, muy conocido por la producción de sus frutos comestibles de alta demanda comercial. En etapas juveniles o cultivado en plazas urbanas, destaca como un arbusto o árbol mediano de copa densa y verde brillante, con brotes nuevos que brotan con llamativos tonos rojizos, cobrizos o marrón-anaranjados.",
+        "hojas": "Simples, alternas, agrupadas principalmente hacia el final de las ramas, de forma elíptica o lanceolada, con márgenes enteros y nervadura central clara. Tienen una consistencia cartácea a coriácea, haz verde oscuro brillante y brotes apicales jóvenes tiernos de color cobrizo o rojizo."
+      },
+      "altura": "3 a 6 metros (ejemplar joven en entorno de parque; libre puede superar los 15 metros)",
+      "usos": [
+        "Producción agrícola y frutal intensiva debido a su fruto comestible de alto valor nutricional y comercial.",
+        "Sombra y aporte ornamental en huertos caseros, fincas rurales y zonas verdes de parques públicos.",
+        "Atracción de insectos polinizadores (especialmente abejas) atraídos por la masiva apertura de sus panículas florales."
+      ],
+      "impacto": "Sombra y aporte ornamental en huertos caseros, fincas rurales y zonas verdes de parques públicos. Atracción de insectos polinizadores (especialmente abejas) atraídos por la masiva apertura de sus panículas florales.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC / Especie cultivada extensamente a nivel mundial)",
+      "nombresAlternos": [
+        "Árbol de Aguacate",
+        "Aguacatero",
+        "Palto"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, de color verde-amarillento, agrupadas en panículas o racimos terminales que aparecen en los extremos de las ramas.",
+        "frutos": "Bayas grandes de forma ovalada, piriforme o globosa, con una piel que varía de verde a morado oscuro según la variedad, pulpa verdosa cremosa comestible y una semilla central globosa de gran tamaño.",
+        "tronco": "Tronco recto con corteza ligeramente rugosa o agrietada longitudinalmente de color grisáceo a marrón claro; ramifica a baja altura formando una copa redondeada y densa."
+      },
+      "habitat": {
+        "distribucion": "Nativo de Mesoamérica (México y Centroamérica), pero ampliamente cultivado e introducido en todas las regiones tropicales y subtropicales del mundo, siendo sumamente abundante en fincas, huertos y parques de Colombia.",
+        "altitud": "Se cultiva con éxito desde el nivel del mar hasta los 2,500 m s. n. m. dependiendo de la variedad (las variedades de la raza mexicana y sus híbridos toleran muy bien los microclimas de montaña baja y media de la provincia de Pamplona).",
+        "clima": "Prefiere climas templados a cálidos; los ejemplares jóvenes se benefician de estar protegidos contra las heladas directas y vientos muy secos de alta montaña."
+      },
+      "datosCuriosos": [
+        "Los brotes jóvenes de este árbol presentan una coloración rojiza o cobriza debido a la presencia de antocianinas, unos pigmentos naturales que protegen los tejidos tiernos y la clorofila en desarrollo de la radiación solar directa.",
+        "Tiene un sistema de floración muy particular conocido como dicogamia sincrónica: las flores abren primero como femeninas, cierran por unas horas y vuelven a abrir al día siguiente como masculinas, lo que evita la autopolinización dentro de la misma flor."
+      ],
+      "cuidados": "Requiere una ubicación a pleno sol para un crecimiento óptimo. Exige suelos profundos, sueltos, con un alto contenido de materia orgánica y, de manera muy estricta, un excelente drenaje, ya que sus raíces son sumamente sensibles a la asfixia radicular y al ataque de hongos por encharcamiento.",
+      "especiesSimilares": [
+        "Citharexylum subflavescens (Cajeto - descartado por sus hojas dispuestas en cruz opuesta y textura áspera)",
+        "Magnolia grandiflora (Magnolio - de hojas considerablemente más rígidas, duras y con envés comúnmente pubescente-ferrugíneo)",
+        "Persea caerulea (Aguacatillo de monte - especie silvestre nativa de frutos mucho más pequeños y no comestibles)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "El porte arbóreo globoso de follaje denso en la zona verde del parque (foto 1/2) y el detalle en primer plano de las hojas alternas, lanceoladas, con nervaduras laterales curvas y brotes tiernos apicales de color marrón-cobrizo con yemas florales en desarrollo (foto 2/2) confirman la morfología vegetativa típica de Persea americana."
+      },
+      "ejemplaresEnParque": 2
+    },
+    "fotos": [
+      "/uploads/aguacate-k1.webp",
+      "/uploads/aguacate-k2.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "tibouchina mutabilis",
+    "notasKeep": [
+      "Desconocido(14)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "tibouchina mutabilis"
+      ],
+      "comunes": [
+        "siete cueros mutabilis"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Siete cueros mutabilis",
+        "cientifico": "Tibouchina mutabilis"
+      },
+      "familia": "Melastomataceae",
+      "origen": "Nativo de los bosques atlánticos de Sudamérica (principalmente Brasil)",
+      "tipo": "árbol / arbusto según poda",
+      "descripcion": {
+        "general": "Arbusto o árbol pequeño ornamental muy apreciado en la región andina por su espectacular y singular floración. Su principal característica es que sus flores cambian de color con el paso de los días: abren de color blanco o rosado muy pálido, pasan por tonos lavanda y terminan en un violeta o púrpura intenso, mostrando varios colores al mismo tiempo en el mismo ejemplar.",
+        "hojas": "Simples, opuestas, de forma elíptica a lanceolada, con márgenes enteros y la clásica nervadura foliar acródroma (3 a 5 venas principales paralelas que corren desde la base hasta el ápice). Tienen una textura áspera o ligeramente pubescente en el haz y un color verde vivo."
+      },
+      "altura": "1.5 a 3 metros (en el manejo de parque fotografiado; libre puede alcanzar los 5 metros)",
+      "usos": [
+        "Altamente ornamental y paisajístico debido al espectacular contraste multicolor de sus flores sobre el follaje verde.",
+        "Atracción de insectos polinizadores (abejorros y abejas nativas) atraídos por sus prominentes estambres amarillos.",
+        "Decoración de espacios públicos reducidos o jardines pequeños por su porte bajo y controlado."
+      ],
+      "impacto": "Atracción de insectos polinizadores (abejorros y abejas nativas) atraídos por sus prominentes estambres amarillos.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC / Especie cultivada extensamente)",
+      "nombresAlternos": [
+        "Sietecueros de jardín",
+        "Flor de mayo",
+        "Tibuchina mutabilis"
+      ],
+      "caracteristicas": {
+        "flores": "Grandes, muy vistosas, con 5 pétalos y característicos estambres curvos y largos de color amarillo (visibles en la foto 1/3). Presentan un llamativo comportamiento de cambio de coloración simultánea.",
+        "frutos": "Cápsulas leñosas pequeñas de forma globosa o de copa que se abren al madurar para liberar una gran cantidad de semillas diminutas.",
+        "tronco": "Tronco único y recto en este tipo de poda de jardín; su corteza es delgada, de color marrón rojizo, y tiene la tendencia natural de la familia a desprenderse en delgadas capas o láminas papiláceas."
+      },
+      "habitat": {
+        "distribucion": "Nativo de los bosques atlánticos de Sudamérica (principalmente Brasil), pero ampliamente introducido y cultivado con éxito en los parques y plazas urbanas de la cordillera andina colombiana.",
+        "altitud": "Se adapta de forma excelente en pisos térmicos templados y fríos (1,500 a 2,800 m s. n. m.), integrándose muy bien en la provincia de Pamplona y Chitagá.",
+        "clima": "Prefiere climas frescos y húmedos de montaña; requiere muy buena exposición a la luz solar directa para florecer abundantemente."
+      },
+      "datosCuriosos": [
+        "El cambio de color de las flores es una estrategia evolutiva muy inteligente: avisa a los polinizadores cuáles flores ya fueron polinizadas y ya no tienen néctar (las de color violeta oscuro), redirigiéndolos de manera eficiente hacia las flores nuevas (blancas o rosadas pálidas).",
+        "Su nombre común 'Sietecueros' hace alusión directa a la corteza de sus tallos, la cual se descascara de forma constante en múltiples capas delgadas."
+      ],
+      "cuidados": "Exige una ubicación a pleno sol para asegurar una floración constante y colorida. Requiere suelos sueltos, con muy buen drenaje, ricos en materia orgánica y de tendencia ligeramente ácida; responde excelentemente a podas de formación después de sus picos de floración.",
+      "especiesSimilares": [
+        "Tibouchina lepidota (Sietecueros común - de flores de un solo tono violeta intenso y hojas más alargadas)",
+        "Melastoma malabathricum (Melastoma asiático - de flores rosadas fijas y estambres diferentes)",
+        "Pleroma urvilleanum (Tibuchina de jardín - de hojas aterciopeladas y flores solo púrpuras)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La floración simultánea con tonos violeta y rosado pálido en la misma rama con estambres amarillos extendidos (foto 1/3), el porte arbustivo limpio de un solo eje en el césped del parque (foto 2/3), y el detalle en primer plano de las hojas opuestas con las 3 a 5 nervaduras longitudinales paralelas hundidas típicas de las melastomatáceas (foto 3/3) confirman la especie Tibouchina mutabilis."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/siete-cueros-mutabilis-k1.webp",
+      "/uploads/siete-cueros-mutabilis-k2.webp",
+      "/uploads/siete-cueros-mutabilis-k3.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "magnolia grandiflora",
+    "notasKeep": [
+      "Desconocido(15)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "magnolia grandiflora"
+      ],
+      "comunes": [
+        "magnolio"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Magnolio",
+        "cientifico": "Magnolia grandiflora"
+      },
+      "familia": "Magnoliaceae",
+      "origen": "Nativo del sureste de los Estados Unidos",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol perennifolio nativo del sureste de Norteamérica, muy apreciado en el diseño paisajístico de plazas principales y parques andinos de Colombia. Destaca por su porte simétrico, su ramificación densa y, especialmente, por sus hojas grandes, coriáceas y muy brillantes que aportan una presencia elegante a los espacios urbanos.",
+        "hojas": "Simples, alternas, de gran tamaño (10 a 20 cm de longitud), de forma elíptica u ovada con el margen entero y levemente ondulado; presentan una textura marcadamente coriácea (dura y rígida), con un haz verde oscuro muy brillante y un envés que frecuentemente tiene una tonalidad ferrugínea o parda."
+      },
+      "altura": "8 a 15 metros (en cultivo urbano montañoso)",
+      "usos": [
+        "Altamente ornamental y arquitectónico en parques urbanos y jardines institucionales debido a la belleza permanente de su follaje.",
+        "Sombra permanente y densa ideal para zonas de descanso peatonales en plazas públicas.",
+        "Atracción de polinizadores nativos gracias al potente perfume desprendido por sus flores blancas."
+      ],
+      "impacto": "Sombra permanente y densa ideal para zonas de descanso peatonales en plazas públicas. Atracción de polinizadores nativos gracias al potente perfume desprendido por sus flores blancas.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC / Especie cultivada globalmente)",
+      "nombresAlternos": [
+        "Magnolia"
+      ],
+      "caracteristicas": {
+        "flores": "Grandes, solitarias, de color blanco marfil o crema, en forma de copa, provistas de pétalos gruesos y carnosos con un penetrante aroma cítrico.",
+        "frutos": "Estructuras leñosas ovoides similares a una piña de pino de textura pubescente, de la cual asoman vistosas semillas de color rojo brillante al madurar.",
+        "tronco": "Tronco recto y cilíndrico con corteza lisa grisácea a marrón claro cuando es joven, que tiende a agrietarse en placas finas con los años."
+      },
+      "habitat": {
+        "distribucion": "Nativo del sureste de los Estados Unidos, pero ampliamente introducido y aclimatado en las zonas de cordillera y valles andinos de Colombia.",
+        "altitud": "Se cultiva con gran éxito entre los 1,500 y 2,800 m s. n. m., estando perfectamente adaptado a los entornos urbanos de la provincia de Pamplona y Chitagá.",
+        "clima": "Prefiere climas frescos de montaña con buena humedad y exposición regular a la radiación solar directa para su correcto desarrollo."
+      },
+      "datosCuriosos": [
+        "Este árbol pertenece al género *Magnolia*, el cual representa uno de los linajes de plantas con flores más primitivos del planeta, existiendo registros fósiles de estructuras idénticas de hace más de 20 millones de años.",
+        "La rigidez y el grosor ceroso de sus hojas actúan como una adaptación natural contra la pérdida de agua provocada por los vientos fríos y secos de las cordilleras."
+      ],
+      "cuidados": "Requiere suelos profundos, de tendencia ácida a neutra, ricos en materia orgánica y con excelente drenaje. Aunque tolera bien el clima frío, se beneficia de estar resguardado de heladas directas en sus etapas juveniles.",
+      "especiesSimilares": [
+        "Citharexylum subflavescens (Cajeto - descartado por sus hojas dispuestas en cruz opuesta y rugosidad al tacto)",
+        "Ficus elastica (Caucho ornamental - de hojas más grandes que secretan látex blanco al romperse)",
+        "Persea americana (Árbol de Aguacate - de hojas alternas pero de consistencia mucho más blanda)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La disposición de las hojas alternas amontonadas en las puntas de las ramas (foto 1/2), su textura marcadamente coriácea con márgenes lisos enteros y nervadura central prominente, junto con el porte de copa globosa y ramificación despejada en la zona verde del parque (foto 2/2), corresponden precisamente a las características foliares de Magnolia grandiflora."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/magnolio-k1.webp",
+      "/uploads/magnolio-k2.webp"
+    ],
+    "individuos": [
+      {
+        "lat": 7.138,
+        "lng": -72.664813333,
+        "precisionGpsM": 1.4,
+        "altitudMsnm": 2344
+      }
+    ]
+  },
+  {
+    "clave": "hibiscus rosa-sinensis (variedad variegada / de hoja roja)",
+    "notasKeep": [
+      "Desconocido(16)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "hibiscus rosa-sinensis (variedad variegada / de hoja roja)"
+      ],
+      "comunes": [
+        "san joaquin variegado"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "San Joaquín variegado",
+        "cientifico": "Hibiscus rosa-sinensis (Variedad variegada / de hoja roja)"
+      },
+      "familia": "Malvaceae",
+      "origen": "Nativo de Asia oriental (probablemente China)",
+      "tipo": "arbusto",
+      "descripcion": {
+        "general": "Arbusto perennifolio muy popular en la jardinería ornamental de Colombia. Esta variedad en específico destaca por su follaje multicolor o variegado, donde se mezclan hojas y brotes de tonos rojizos, púrpuras, rosados y verdes, sirviendo como un elemento de gran contraste visual en parques y jardines.",
+        "hojas": "Simples, alternas, de forma ovada a lanceolada, con márgenes marcadamente dentados o aserrados; presentan una coloración variegada muy llamativa con matices de rojo encendido, púrpura y verde claro."
+      },
+      "altura": "1.5 a 3 metros",
+      "usos": [
+        "Altamente ornamental para la formación de setos vivos coloridos, borduras densas o como arbusto aislado por su follaje perenne multicolor.",
+        "Atracción de polinizadores nativos, especialmente colibríes y abejas grandes, gracias a sus llamativas estructuras florales.",
+        "Uso artesanal y medicinal tradicional en algunas regiones (infusiones de pétalos)."
+      ],
+      "impacto": "Atracción de polinizadores nativos, especialmente colibríes y abejas grandes, gracias a sus llamativas estructuras florales.",
+      "estadoConservacion": "no determinado",
+      "estadoConservacionDetalle": "No evaluado (NE / Especie cultivada globalmente)",
+      "nombresAlternos": [
+        "Resucitado",
+        "Hibisco",
+        "Flor de tinto",
+        "Papapo"
+      ],
+      "caracteristicas": {
+        "flores": "Grandes, vistosas, solitarias y en forma de embudo, con una columna estaminal larga y prominente que sobresale en el centro. En los extremos de las ramas se aprecian sus capullos alargados protegidos por un cáliz verde (visibles en las fotos).",
+        "frutos": "Cápsulas redondeadas de cinco cavidades que contienen varias semillas en su interior, aunque en jardinería urbana es poco común verlos debido a las podas continuas.",
+        "tronco": "Tallos leñosos, delgados y muy ramificados desde la base, con corteza lisa de color grisáceo a marrón claro; las ramillas jóvenes son flexibles y de tonalidades rojizas."
+      },
+      "habitat": {
+        "distribucion": "Nativo de Asia oriental (probablemente China), pero ampliamente introducido, cultivado y naturalizado en todas las regiones tropicales y subtropicales del mundo.",
+        "altitud": "0 a 2,500 m s. n. m. (muy bien adaptado a los microclimas protegidos y plazas de los pueblos de la provincia de Pamplona y Chitagá).",
+        "clima": "Prefiere climas templados a cálidos y soleados; en zonas de montaña alta requiere ubicaciones protegidas de los vientos helados directos para evitar que se queme el follaje."
+      },
+      "datosCuriosos": [
+        "El género *Hibiscus* cuenta con cientos de variedades hortícolas; las de follaje rojo o variegado son muy apreciadas en el diseño paisajístico porque mantienen su color vivo durante todo el año, independientemente de la época de floración.",
+        "Es la flor nacional de Malasia y un símbolo cultural de los entornos tropicales y andinos de América Latina."
+      ],
+      "cuidados": "Requiere una exposición a pleno sol para que la intensidad de los colores rojos y púrpuras de sus hojas se mantenga brillante; si se siembra en sombra total, tiende a volverse completamente verde. Exige suelos fértiles con excelente drenaje y riegos moderados.",
+      "especiesSimilares": [
+        "Acalypha wilkesiana (Gasa / Oreja de bronce - de hojas similares pero con inflorescencias en forma de cola de gato)",
+        "Photinia x fraseri (Fotinia - descartada por sus hojas dispuestas de forma diferente y coloración solo en brotes apicales)",
+        "Hibiscus syriacus (Altea / Rosa de Siria - de hojas trilobadas más pequeñas)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La silueta arbustiva compacta al lado del sendero peatonal (foto 1/3), la disposición de las hojas alternas sobre ramas delgadas con capullos florales típicos en las puntas (foto 2/3), y los bordes marcadamente aserrados/dentados con la variegación púrpura-rojiza (foto 3/3) confirman que se trata de una variedad ornamental de Hibiscus."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/san-joaquin-variegado-k1.webp",
+      "/uploads/san-joaquin-variegado-k2.webp",
+      "/uploads/san-joaquin-variegado-k3.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "eriobotrya japonica",
+    "notasKeep": [
+      "Desconocido(17)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "eriobotrya japonica"
+      ],
+      "comunes": [
+        "nispero"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Níspero",
+        "cientifico": "Eriobotrya japonica"
+      },
+      "familia": "Rosaceae",
+      "origen": "Nativo del sudeste de China y Japón",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol frutal y ornamental perennifolio de porte pequeño a mediano, ampliamente cultivado en jardines urbanos y plazas andinas de Colombia. Es muy llamativo por sus hojas grandes, duras y marcadamente corrugadas, las cuales presentan un reverso cubierto por una densa capa de vellosidades de color pardo-dorado o cobrizo.",
+        "hojas": "Simples, alternas, coriáceas, de gran tamaño (15-25 cm de largo), de forma elíptica u oblonga con márgenes ligeramente dentados; el haz es verde oscuro brillante con nervaduras muy hundidas, y el envés tiene una pubescencia densa (tomento) de color café claro o cobrizo."
+      },
+      "altura": "4 a 8 metros",
+      "usos": [
+        "Producción frutal gracias a sus frutos comestibles ricos en azúcares, vitaminas y minerales.",
+        "Ornamental y paisajístico en parques urbanos y jardines por el contraste bicolor de su follaje y su copa densa.",
+        "Sombra permanente de porte bajo idónea para plazas públicas y senderos peatonales."
+      ],
+      "impacto": "Sombra permanente de porte bajo idónea para plazas públicas y senderos peatonales.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC / Especie ampliamente cultivada globalmente)",
+      "nombresAlternos": [
+        "Níspero del Japón",
+        "Nesperón"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, de color blanco o crema, agrupadas en panículas terminales densas y vellosas que desprenden un aroma dulce y agradable.",
+        "frutos": "Pomos ovalados o globosos de piel amarilla o anaranjada al madurar, con pulpa carnosa, agridulce y comestible que resguarda de 1 a 4 semillas grandes y brillantes de color café.",
+        "tronco": "Tronco corto con corteza grisácea y lisa, ramificado a baja altura en múltiples ejes que forman una copa redondeada y densa; las ramillas jóvenes están cubiertas por un vello lanoso."
+      },
+      "habitat": {
+        "distribucion": "Nativo del sudeste de China y Japón, pero introducido y perfectamente adaptado a las regiones templadas y frías de la cordillera de los Andes colombianos.",
+        "altitud": "1,200 a 2,600 m s. n. m., prosperando con gran éxito en el clima de montaña de Chitagá y la provincia de Pamplona.",
+        "clima": "Prefiere climas frescos de montaña; aunque tolera bien las bajas temperaturas, requiere buena radiación solar para asegurar una óptima maduración de sus frutos."
+      },
+      "datosCuriosos": [
+        "A diferencia de la gran mayoría de los árboles frutales comerciales, el níspero del Japón florece a finales del otoño o principios del invierno, y sus frutos maduran a finales del invierno o principios de la primavera.",
+        "El denso vello lanoso que recubre el envés de sus hojas y sus brotes nuevos actúa como un escudo natural que protege los tejidos de los vientos helados de la montaña y evita la pérdida excesiva de humedad."
+      ],
+      "cuidados": "Requiere una exposición a pleno sol o semisombra ligera. Exige suelos profundos, bien drenados y ricos en materia orgánica; responde muy bien a podas sanitarias y de aclareo tras finalizar la cosecha de frutos para mantener la copa compacta.",
+      "especiesSimilares": [
+        "Magnolia grandiflora (Magnolio - descartado por sus hojas de borde completamente liso y flores gigantes)",
+        "Ficus nota (Higuera nativa - de hojas alternas pero de consistencia diferente y sin tomento cobrizo denso)",
+        "Vismia baccifera (Carate / Punta de lanza - de hojas opuestas que secretan látex anaranjado)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "El marcado contraste entre el haz verde oscuro y el envés pubescente de color café-cobrizo con nervaduras paralelas muy prominentes (foto 1/3), la disposición de las hojas en los extremos de las ramas vellosas (foto 2/3), y el porte de copa baja y redondeada en la zona verde del parque (foto 3/3) corresponden de manera inequívoca al Níspero del Japón."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/nispero-k1.webp",
+      "/uploads/nispero-k2.webp",
+      "/uploads/nispero-k3.webp",
+      "/uploads/nispero-k4.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "syzygium cumini",
+    "notasKeep": [
+      "Desconocido(18)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "syzygium cumini"
+      ],
+      "comunes": [
+        "guanamini"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Guanaminí",
+        "cientifico": "Syzygium cumini"
+      },
+      "familia": "Myrtaceae",
+      "origen": "Nativo de la región tropical de Asia (India, Sri Lanka)",
+      "tipo": "árbol / arbusto según poda",
+      "descripcion": {
+        "general": "Árbol pequeño o arbusto perennifolio robusto y muy ramificado, apreciado en el diseño paisajístico de parques andinos. Desarrolla un follaje denso y opaco con hojas firmes que presentan una nervadura central amarillenta muy marcada, y brotes nuevos de tonos rojizos ligeros.",
+        "hojas": "Simples, opuestas, oblongas a elípticas, coriáceas y lisas; el haz es verde oscuro con una nervadura central recta y clara muy conspicua, mientras que los brotes apicales jóvenes nacen protegidos por estípulas cónicas de color marrón rojizo."
+      },
+      "altura": "3 a 6 metros (en entornos urbanos bajo manejo)",
+      "usos": [
+        "Ornamental y arquitectónico en plazas principales y zonas verdes por su copa densa que aporta volumen y estructura al paisaje.",
+        "Sombra de porte bajo en senderos peatonales y parques infantiles.",
+        "Atracción de polinizadores y pequeñas aves frugívoras locales durante su época de fructificación."
+      ],
+      "impacto": "Sombra de porte bajo en senderos peatonales y parques infantiles. Atracción de polinizadores y pequeñas aves frugívoras locales durante su época de fructificación.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC / Especie ampliamente cultivada)",
+      "nombresAlternos": [
+        "Eugenia de hoja grande",
+        "Guanaminí de jardín"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, de color blanco o verdoso, sésiles, agrupadas en inflorescencias que exponen múltiples estambres finos desprendiendo un olor tenue.",
+        "frutos": "Bayas oblongas o elipsoides que viran de color verde a violáceo oscuro o negro brillante al madurar, con pulpa jugosa.",
+        "tronco": "Tronco ramificado a muy baja altura en múltiples ejes ascendentes y torcidos, con corteza áspera de color gris claro a pardo con manchas blanquecinas por líquenes."
+      },
+      "habitat": {
+        "distribucion": "Nativo de la región tropical de Asia (India, Sri Lanka), pero ampliamente introducido y naturalizado con fines ornamentales en los parques urbanos de Colombia.",
+        "altitud": "Se adapta con éxito a climas templados y de montaña baja-media (1,200 a 2,400 m s. n. m.), prosperando en las plazas de la provincia de Pamplona.",
+        "clima": "Prefiere ambientes frescos con humedad relativa moderada, tolerando bien la exposición directa al sol y los vientos locales."
+      },
+      "datosCuriosos": [
+        "A diferencia de las eugenias comunes de jardín que tienen hojas pequeñas y delgadas, esta especie del género Syzygium desarrolla hojas notablemente más anchas y coriáceas, capaces de soportar climas más secos o vientos fuertes sin deshidratarse.",
+        "Pertenece a la misma gran familia botánica que el arrayán nativo, compartiendo la estructura de hojas dispuestas en pares perfectamente opuestos a lo largo de las ramillas leñosas."
+      ],
+      "cuidados": "Requiere suelos bien aireados con drenaje óptimo y buen aporte de materia orgánica. Responde de forma excelente a las podas de aclareo en las ramas internas para permitir el paso de la luz y mantener su copa limpia.",
+      "especiesSimilares": [
+        "Syzygium paniculatum (Eugenia de jardín - de hojas considerablemente más pequeñas y lanceoladas)",
+        "Citharexylum subflavescens (Cajeto - de hojas más alargadas y textura rugosa al tacto)",
+        "Ficus benjamina (Ficus ornamental - descartado por sus hojas alternas con látex blanco)"
+      ],
+      "identificacion": {
+        "confianza": "medio-alto",
+        "observaciones": "La estructura arbustiva multicaular (foto 1/3), la disposición de las hojas en pares opuestos con una nervadura central amarillenta muy recta y brotes jóvenes apicales cobrizos (foto 2/3), junto a las ramillas leñosas de nudos marcados (foto 3/3), son caracteres morfológicos típicos que definen a este miembro de las mirtáceas."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/guanamini-k1.webp",
+      "/uploads/guanamini-k2.webp",
+      "/uploads/guanamini-k3.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "retrophyllum rospigliosii",
+    "notasKeep": [
+      "Desconocido(2)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "retrophyllum rospigliosii"
+      ],
+      "comunes": [
+        "pino romeron"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Pino romerón",
+        "cientifico": "Retrophyllum rospigliosii"
+      },
+      "familia": "Podocarpaceae",
+      "origen": "Nativo de la región andina de Suramérica (Colombia, Venezuela, Ecuador y Perú)",
+      "tipo": "árbol (conífera)",
+      "descripcion": {
+        "general": "Conífera nativa de los Andes de porte mediano a grande, muy valorada en el paisajismo urbano y rural de Colombia. Destaca por su copa densa, globosa y de un color verde oscuro brillante, sostenida por un tronco robusto que ramifica a baja altura en entornos despejados.",
+        "hojas": "Simples, aplanadas, dispuestas de forma opuesta y dísticas (en un solo plano), asemejándose a pequeñas ramitas de romero con un tono verde profundo."
+      },
+      "altura": "15 a 30 metros",
+      "usos": [
+        "Ornamental y paisajístico en parques, plazas públicas y amplias avenidas por su imponente follaje.",
+        "Protección de cuencas hidrográficas y restauración de bosques nativos andinos.",
+        "Históricamente utilizado en ebanistería fina por la excelente calidad de su madera (práctica hoy regulada)."
+      ],
+      "impacto": "Ornamental y paisajístico en parques, plazas públicas y amplias avenidas por su imponente follaje. Protección de cuencas hidrográficas y restauración de bosques nativos andinos.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC) globalmente, aunque protegido a nivel local en varias reservas colombianas debido a la deforestación histórica.",
+      "nombresAlternos": [
+        "Pino colombiano",
+        "Pino de pasto",
+        "Pino chaquiro",
+        "Romerón",
+        "Hayuelo"
+      ],
+      "caracteristicas": {
+        "flores": "No produce flores verdaderas. Al ser una conífera, presenta estructuras reproductivas en forma de estróbilos o conos axilares.",
+        "frutos": "No produce frutos verdaderos. Desarrolla semillas cubiertas por una estructura carnosa ovalada (epimacio) de color verde que se torna rojiza o purpúrea al madurar.",
+        "tronco": "Tronco recto y cilíndrico con corteza de color café grisáceo que se desprende en láminas alargadas con el paso del tiempo."
+      },
+      "habitat": {
+        "distribucion": "Nativo de la región andina de Suramérica (Colombia, Venezuela, Ecuador y Perú). Es un árbol emblemático de los bosques de niebla colombianos.",
+        "altitud": "1,500 a 3,200 m s. n. m. (altamente adaptado a zonas montañosas como la provincia de Pamplona y Chitagá).",
+        "clima": "Frío a templado húmedo, con alta nubosidad y requerimiento de suelos bien drenados."
+      },
+      "datosCuriosos": [
+        "Es una de las pocas coníferas verdaderamente nativas de Colombia, conviviendo activamente en ecosistemas andinos junto a los robles y los frailejones en zonas de transición.",
+        "A diferencia de los pinos introducidos (como el pino pátula), el pino romerón no acidifica los suelos y promueve la retención de agua y el retorno de la fauna local."
+      ],
+      "cuidados": "Requiere suelos profundos, húmedos pero con buen drenaje, y una exposición de semisombra en sus etapas juveniles, tolerando el pleno sol al madurar. Es muy resistente a los vientos fríos de montaña.",
+      "especiesSimilares": [
+        "Podocarpus oleifolius (Pino chaqueño / Chaquiro)",
+        "Prumnopitys montana (Pino hayuelo)",
+        "Retrophyllum piresii (Pino amazónico)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La silueta robusta de copa globosa y densa, el follaje característico de verde oscuro ramificado y su ubicación ornamental en un espacio público andino (frente a la arquitectura tradicional y el local de SuperGIROS) permiten asociar este ejemplar a la especie Retrophyllum rospigliosii."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/pino-romeron-k1.webp",
+      "/uploads/pino-romeron-k2.webp",
+      "/uploads/pino-romeron-k3.webp",
+      "/uploads/pino-romeron-k4.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "myrcia popayanensis (variedad / forma de hoja redonda)",
+    "notasKeep": [
+      "Desconocido(20)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "myrcia popayanensis (variedad / forma de hoja redonda)"
+      ],
+      "comunes": [
+        "arrayan guayabito"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Arrayán guayabito",
+        "cientifico": "Myrcia popayanensis (Variedad / Forma de hoja redonda)"
+      },
+      "familia": "Myrtaceae",
+      "origen": "Nativo de la cordillera de los Andes en el norte de Sudamérica",
+      "tipo": "árbol / arbusto según poda",
+      "descripcion": {
+        "general": "Arbusto o árbol pequeño nativo de los ecosistemas de alta montaña y bosques andinos. Se distingue por su follaje sumamente tupido y compacto, compuesto por hojas pequeñas, notablemente redondeadas, coriáceas y brillantes, cuyos brotes tiernos presentan tonos cobrizos o rojizos muy vistosos.",
+        "hojas": "Simples, opuestas, sésiles o con pecíolo muy corto, de forma orbicular a elíptica redondeada, con el ápice obtuso. Tienen una textura gruesa (coriácea), haz verde oscuro lustroso y brotes apicales de color marrón rojizo."
+      },
+      "altura": "1.5 a 4 metros (en ambientes urbanos o podados)",
+      "usos": [
+        "Ornamental y paisajístico en parques urbanos y jardines institucionales debido a su facilidad para tolerar podas de formación (topiaria).",
+        "Restauración ecológica de microcuencas y laderas andinas degradadas.",
+        "Refugio y fuente de alimento constante para pequeñas aves e insectos polinizadores locales."
+      ],
+      "impacto": "Restauración ecológica de microcuencas y laderas andinas degradadas. Refugio y fuente de alimento constante para pequeñas aves e insectos polinizadores locales.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC)",
+      "nombresAlternos": [
+        "Arrayán de hoja redonda",
+        "Guayabito de monte",
+        "Mirto andino"
+      ],
+      "caracteristicas": {
+        "flores": "Diminutas, de color blanco, agrupadas en pequeñas inflorescencias axilares, provistas de numerosos estambres típicos de la familia Myrtaceae.",
+        "frutos": "Bayas globosas pequeñas que cambian de tonalidades verdes a rojas oscuras y finalmente a negro purpúreo cuando completan su maduración.",
+        "tronco": "Tallos delgados y leñosos de corteza lisa grisácea o ligeramente rojiza, muy ramificados desde la base, lo que le confiere un aspecto natural de bola o seto denso."
+      },
+      "habitat": {
+        "distribucion": "Nativo de la cordillera de los Andes en el norte de Sudamérica. Es un componente común de los bosques altoandinos y bordes de páramo en Colombia.",
+        "altitud": "2,000 a 3,200 m s. n. m. (plenamente adaptado a las condiciones ambientales de Chitagá y las zonas altas de la provincia de Pamplona).",
+        "clima": "Frío y húmedo, tolerando de excelente manera la neblina constante, los vientos fuertes de montaña y los descensos bruscos de temperatura."
+      },
+      "datosCuriosos": [
+        "A diferencia del arrayán común de hojas más alargadas, esta variedad de hojas orbiculares es muy buscada en la jardinería andina porque mantiene una estructura compacta ideal para delimitar senderos sin necesidad de mantenimiento constante.",
+        "Al frotar sus hojas redondeadas se libera un aroma dulce y resinoso muy característico, debido a las glándulas de aceites esenciales esenciales presentes en su superficie foliar."
+      ],
+      "cuidados": "Requiere una ubicación a pleno sol para favorecer la coloración cobriza de sus brotes nuevos. Prefiere suelos orgánicos, de tendencia ácida, húmedos pero con excelente drenaje para evitar la asfixia radicular.",
+      "especiesSimilares": [
+        "Eugenia myrtifolia (Eugenia de jardín - de hojas más alargadas y agudas)",
+        "Myrteola nummularia (Arrayancito de páramo - considerablemente más pequeño)",
+        "Vaccinium meridionale (Agraz silvestre - de hojas alternas y bordes aserrados)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Las tres imágenes corresponden al mismo tipo de planta en el parque; la foto 2/6 muestra en detalle la disposición opuesta, la forma marcadamente redondeada de las hojas y el color cobrizo de los brotes superiores, lo que ratifica que es un miembro de la familia Myrtaceae plenamente asociado al grupo de los arrayanes andinos."
+      },
+      "ejemplaresEnParque": 5
+    },
+    "fotos": [
+      "/uploads/arrayan-guayabito-k1.webp",
+      "/uploads/arrayan-guayabito-k2.webp",
+      "/uploads/arrayan-guayabito-k3.webp",
+      "/uploads/arrayan-guayabito-k4.webp",
+      "/uploads/arrayan-guayabito-k5.webp",
+      "/uploads/arrayan-guayabito-k6.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "tecoma stans",
+    "notasKeep": [
+      "Desconocido(4)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "tecoma stans"
+      ],
+      "comunes": [
+        "chicala"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Chicalá",
+        "cientifico": "Tecoma stans"
+      },
+      "familia": "Bignoniaceae",
+      "origen": "Nativo de América tropical y subtropical (desde el sur de EE",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol o arbusto nativo de porte mediano a pequeño, muy común en parques, avenidas y zonas urbanas de Colombia. Destaca por sus vistosas racimos de flores acampanadas de color amarillo brillante y su follaje verde vivo con hojas compuestas de bordes aserrados.",
+        "hojas": "Compuestas, imparipinnadas, con 5 a 13 folíolos lanceolados con margen marcadamente aserrado/dentado y ápice acuminado."
+      },
+      "altura": "4 a 10 metros",
+      "usos": [
+        "Ornamental y paisajístico en plazas, parques urbanos y jardines por su constante floración.",
+        "Atracción de polinizadores (colibríes y abejas).",
+        "Uso medicinal tradicional en infusión de hojas para la diabetes y aflicciones digestivas."
+      ],
+      "impacto": "Atracción de polinizadores (colibríes y abejas).",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC)",
+      "nombresAlternos": [
+        "Fresno",
+        "Chirlobirlo",
+        "Guaran amarillo",
+        "Flor de San Pedro",
+        "Tronadora"
+      ],
+      "caracteristicas": {
+        "flores": "Grandes, en forma de campana o trompeta, de color amarillo intenso, agrupadas en racimos terminales vistosos.",
+        "frutos": "Cápsulas alargadas y cilíndricas (parecidas a vainas) de 10 a 20 cm de largo que se abren al madurar liberando semillas aladas.",
+        "tronco": "Tronco corto y ramificado desde baja altura, con corteza de color café claro a grisácea, ligeramente agrietada con la edad."
+      },
+      "habitat": {
+        "distribucion": "Nativo de América tropical y subtropical (desde el sur de EE. UU. hasta Argentina). Muy abundante en la región andina colombiana.",
+        "altitud": "0 a 2,800 m s. n. m. (muy adaptado al clima de valle y montaña como el de Chitagá y la provincia de Pamplona).",
+        "clima": "Templado a cálido, muy resistente a periodos de sequía una vez establecido."
+      },
+      "datosCuriosos": [
+        "Es la flor nacional de las Islas Vírgenes de los Estados Unidos y una especie ornamental muy representativa en el diseño urbano de los pueblos andinos de Colombia.",
+        "Sus flores amarillas son una fuente importante de néctar para los colibríes locales durante gran parte del año."
+      ],
+      "cuidados": "Requiere pleno sol para florecer abundantemente. Se adapta a casi cualquier tipo de suelo bien drenado y tolera bien la poda de formación.",
+      "especiesSimilares": [
+        "Handroanthus chrysanthus (Guayacán amarillo)",
+        "Tecoma fulva (Chicalá anaranjado)",
+        "Tabebuia rosea (Guayacán rosado)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Las flores amarillas en trompeta (foto 2/3), las hojas compuestas de folíolos aserrados (foto 1/3) y la silueta en copa globosa decorando el parque (foto 3/3) permiten confirmar sin lugar a dudas la especie Tecoma stans (Chicalá / Fresno)."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/chicala-k1.webp",
+      "/uploads/chicala-k2.webp",
+      "/uploads/chicala-k3.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "liquidambar styraciflua",
+    "notasKeep": [
+      "Desconocido(6)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "liquidambar styraciflua"
+      ],
+      "comunes": [
+        "liquidambar"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Liquidámbar",
+        "cientifico": "Liquidambar styraciflua"
+      },
+      "familia": "Altingiaceae",
+      "origen": "Nativo del este de Norteamérica, México y Centroamérica",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol caducifolio de porte elegante y crecimiento piramidal cuando es joven, muy utilizado como planta ornamental en parques y zonas urbanas de clima frío en Colombia. Es famoso por la forma estrellada de sus hojas lustrosas y, especialmente, por su vistosa coloración otoñal, donde el follaje pasa del verde brillante a tonos amarillos, naranjas, rojos y púrpuras intensos antes de caer.",
+        "hojas": "Simples, alternas, palmeadas con 5 a 7 lóbulos apuntados en forma de estrella, con márgenes finamente aserrados. Son de un color verde biche o brillante muy vivo por el haz (como se observa en la fotografía de detalle) y desprenden un aroma agradable al estrujarlas."
+      },
+      "altura": "10 a 20 metros (en entornos urbanos cultivados)",
+      "usos": [
+        "Uso netamente ornamental y de sombrío en parques principales, separadores viales y proyectos de paisajismo urbano.",
+        "Su resina aromática (bálsamo de liquidámbar) se ha extraído históricamente para uso en perfumería y medicina tradicional.",
+        "Atracción de fauna menor, ya que las semillas de sus frutos colgantes sirven de alimento para diversas aves locales."
+      ],
+      "impacto": "Atracción de fauna menor, ya que las semillas de sus frutos colgantes sirven de alimento para diversas aves locales.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC)",
+      "nombresAlternos": [
+        "Estoraque",
+        "Árbol del ámbar",
+        "Ocozol"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas e insignificantes, de color verde-amarillento, agrupadas en cabezuelas globosas que carecen de pétalos.",
+        "frutos": "Cápsulas leñosas y esféricas cubiertas de espinas blandas, de apariencia similar a una pequeña maza o 'bola con puntas' de unos 2 a 4 cm de diámetro, que cuelgan de un largo pedúnculo y permanecen en el árbol tras la caída de las hojas.",
+        "tronco": "Tronco erguido y cilíndrico; la corteza es de color gris-pardo, profundamente agrietada y con crestas corchosas muy características en las ramas jóvenes."
+      },
+      "habitat": {
+        "distribucion": "Nativo del este de Norteamérica, México y Centroamérica. Ampliamente introducido en la región andina colombiana debido a su alto valor paisajístico en plazas y alamedas.",
+        "altitud": "1,500 a 2,800 m s. n. m. (perfectamente adaptado a los suelos y clima de Chitagá).",
+        "clima": "Templado a frío de montaña."
+      },
+      "datosCuriosos": [
+        "El nombre científico deriva del latín *liquidus* (líquido) y del árabe *ambar* (sustancia aromática), haciendo referencia a la resina dulce y ambarina que brota al herir su corteza.",
+        "Es uno de los pocos árboles exóticos cultivados en Colombia que emula el cambio de color otoñal típico de las zonas templadas del norte del planeta."
+      ],
+      "cuidados": "Requiere suelos profundos, húmedos y preferiblemente ácidos, con buen drenaje. Prefiere exposición a pleno sol para desarrollar sus colores intensos. Posee raíces fuertes, por lo que debe plantarse en zonas abiertas alejado de construcciones o tuberías.",
+      "especiesSimilares": [
+        "Acer palmatum (Arce japonés - de menor porte)",
+        "Acer saccharum (Arce azucarero)",
+        "Platanus occidentalis (Plátano de sombra)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Se confirma el taxón *Liquidambar styraciflua* con total seguridad. En la vista general (foto 1) se aprecia un espécimen joven con su típica estructura cónica y ramificación organizada. En el plano de detalle (foto 2) se validan las hojas palmeadas de 5 lóbulos profundamente marcados, bordes aserrados y una coloración verde claro traslúcida que denota un brote vigoroso y saludable."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/liquidambar-k1.webp",
+      "/uploads/liquidambar-k2.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "pittosporum undulatum",
+    "notasKeep": [
+      "Desconocido(7)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "pittosporum undulatum"
+      ],
+      "comunes": [
+        "pitosporo"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Pitosporo",
+        "cientifico": "Pittosporum undulatum"
+      },
+      "familia": "Pittosporaceae",
+      "origen": "Nativo del este de Australia",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol o arbusto grande de hoja perenne muy utilizado como planta ornamental y de sombra en parques, plazas e hileras urbanas de la zona andina de Colombia. Posee una copa frondosa, ramificada y redonda que genera una sombra tupida. Sus hojas son lustrosas, de bordes suavemente ondulados y acuminadas en la punta. Sus flores son pequeñas, de color blanco-crema y muy aromáticas, seguidas de frutos esféricos de color verde que tornan a un naranja vistoso al madurar.",
+        "hojas": "Simples, alternas o agrupadas en falsos verticilos al final de las ramillas, de forma oblanceolada a elíptica, de 6 a 15 cm de largo, con bordes marcadamente ondulados y superficie brillante."
+      },
+      "altura": "6 a 12 metros",
+      "usos": [
+        "Árbol ornamental y de sombrío en parques principales, alamedas y jardines.",
+        "Formación de cercas vivas y barreras contra el viento.",
+        "Sus flores fragantes son fuente atractiva para abejas y polinizadores."
+      ],
+      "impacto": "Sus flores fragantes son fuente atractiva para abejas y polinizadores.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC)",
+      "nombresAlternos": [
+        "Pitosporo de hojas onduladas",
+        "Pitosporo dulce",
+        "Naranjo de la China",
+        "Pitosporo victoriano",
+        "Laurel de Australia"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, acampanadas, de 1 a 1.5 cm, de color blanco a crema, dispuestas en pequeñas umbelas terminales. Tienen un aroma dulzón muy intenso, similar al azahar.",
+        "frutos": "Cápsulas ovoides o globosas de aproximadamente 1 a 1.5 cm, que inician de color verde (como se observa en la fotografía) y maduran a un color anaranjado brillante, abriéndose en dos valvas para exponer semillas pegajosas.",
+        "tronco": "Tronco erguido, habitualmente dividido desde baja o media altura en varios fustes principales; corteza lisa a ligeramente fisurada de color gris claro a castaño."
+      },
+      "habitat": {
+        "distribucion": "Nativo del este de Australia, ampliamente cultivado e introducido en zonas frías y templadas de Colombia y la región andina (muy frecuente en parques de la provincia de Pamplona y Chitagá).",
+        "altitud": "1,800 a 3,000 m s. n. m. (plenamente adaptado a la altitud de Chitagá).",
+        "clima": "Frío a templado de montaña."
+      },
+      "datosCuriosos": [
+        "El nombre genérico *Pittosporum* proviene del griego *pitta* (pez/resina) y *spora* (semilla), haciendo referencia a la capa de resina viscosa y pegajosa que recubre sus semillas.",
+        "Sus flores desprenden una fragancia intensa especialmente al atardecer y durante la noche."
+      ],
+      "cuidados": "Planta sumamente resistente y rústica. Prefiere exposición a pleno sol o media sombra y tolera bien las podas de formación y los vientos de montaña.",
+      "especiesSimilares": [
+        "Pittosporum tobira (Pitosporo del Japón)",
+        "Daphnopsis caracasana (Lobero / Majagua)",
+        "Myrsine guianensis (Cucharo)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Con la precisión del nombre popular 'pitosporo' usado localmente en el municipio, se confirma *Pittosporum undulatum*. En la vista cercana (foto 1) se distinguen claramente las hojas elípticas con bordes ondulados distintivos agrupadas al final de los brotes y los frutos globosos inmaduros verdosos pedunculados saliendo de los ápices, mientras que en la vista general (foto 2) se aprecia la copa tupida, ramificada y globosa característica de los pitosporos adultos plantados en plazas urbanas."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/pitosporo-k1.webp",
+      "/uploads/pitosporo-k2.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "prunus serotina var. capuli",
+    "notasKeep": [
+      "Desconocido(8)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "prunus serotina var. capuli"
+      ],
+      "comunes": [
+        "capuli"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Capulí",
+        "cientifico": "Prunus serotina var. capuli"
+      },
+      "familia": "Rosaceae",
+      "origen": "Nativo de Norteamérica y ampliamente naturalizado y cultivado en la cordillera de los Andes desde Venezuela hasta Bolivia (muy representativo en los municipios de Norte de Santander como Chitagá y Pamplona)",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol frutal y forestal de tamaño mediano a grande, muy común en zonas frías y templadas de los Andes colombianos. Destaca por sus brotes jóvenes con un distintivo matiz rojizo o cobrizo, sus hojas oblongo-lanceoladas de bordes ligeramente finamente aserrados con un tono verde brillante en el haz, y su corteza pardo-grisácea que se fisura en placas pequeñas a medida que madura.",
+        "hojas": "Simples, alternas, oblongo-lanceoladas, de 6 a 14 cm de largo, con borde finamente aserrado, superficie lustrosa en el haz y ramillas flexibles colgantes. Los brotes nuevos presentan tonos rojizos/bronceados característicos."
+      },
+      "altura": "8 a 15 metros",
+      "usos": [
+        "Consumo de sus frutos frescos, en mermeladas, dulces y bebidas tradicionales.",
+        "Sombra y ornamentación en parques principales, plazas urbanas y linderos de fincas.",
+        "Atracción de avifauna silvestre (pájaros, mirlos y tucanetes).",
+        "Madera de buena densidad para leña, herramientas y carpintería local."
+      ],
+      "impacto": "Sombra y ornamentación en parques principales, plazas urbanas y linderos de fincas. Atracción de avifauna silvestre (pájaros, mirlos y tucanetes).",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC)",
+      "nombresAlternos": [
+        "Cerezo",
+        "Cerezo criollo",
+        "Cerezo de monte"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, de color blanco, dispuestas en racimos alargados y colgantes de 10 a 15 cm.",
+        "frutos": "Drupas globosas de 1 a 2 cm de diámetro, de color rojo oscuro a morado casi negro al madurar, de sabor agridulce y comestibles.",
+        "tronco": "Tronco erguido, a menudo ramificado a media altura en varios fustes principales; corteza áspera, de color café grisáceo con fisuras y lenticelas visibles."
+      },
+      "habitat": {
+        "distribucion": "Nativo de Norteamérica y ampliamente naturalizado y cultivado en la cordillera de los Andes desde Venezuela hasta Bolivia (muy representativo en los municipios de Norte de Santander como Chitagá y Pamplona).",
+        "altitud": "1,800 a 3,100 m s. n. m. (encaja exactamente con la franja altitudinal de Chitagá).",
+        "clima": "Frío a templado de montaña."
+      },
+      "datosCuriosos": [
+        "Sus hojas y semillas contienen pequeños porcentajes de glucósidos cianogénicos que desprenden un aroma a almendras amargas al estrujarlas.",
+        "Es uno de los árboles frutales tradicionales más emblemáticos de los patios y plazas de los pueblos de la provincia de Pamplona y Chitagá."
+      ],
+      "cuidados": "Requiere exposición directa al sol para una buena floración y fructificación. Se adapta a variados tipos de suelo siempre que no se encharquen.",
+      "especiesSimilares": [
+        "Prunus avium (Cerezo dulce)",
+        "Vallea stipularis (Raque / Choche)",
+        "Myrica pubescens (Lauro / Cera)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Las ramillas colgantes con hojas brillantes de borde finamente aserrado y los brotes nuevos rojizo-bronceados (visibles de cerca en la foto 2) son el sello característico del capulí/cerezo (*Prunus serotina var. capuli*). La estructura del tronco ramificado desde poca altura con corteza agrietada gris-castaña (foto 3) y la copa amplia en el entorno del parque (foto 1) reafirman la identificación."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/capuli-k1.webp",
+      "/uploads/capuli-k2.webp",
+      "/uploads/capuli-k3.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "melaleuca viminalis",
+    "notasKeep": [
+      "Desconocido(9)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "callistemon viminalis",
+        "melaleuca viminalis"
+      ],
+      "comunes": [
+        "calistemo",
+        "calistemo / lloron",
+        "calistemo lloron"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Calistemo llorón",
+        "cientifico": "Melaleuca viminalis"
+      },
+      "familia": "Myrtaceae",
+      "origen": "Nativo de Australia (especialmente de los estados de Nueva Gales del Sur y Queensland)",
+      "tipo": "árbol",
+      "descripcion": {
+        "general": "Árbol perennifolio de porte pequeño a mediano, sumamente ornamental y característico por sus largas ramas colgantes y flexibles que recuerdan la silueta de un sauce llorón. Su rasgo más vistoso son sus inflorescencias cilíndricas llenas de estambres de un color rojo brillante que asemejan escobillas o limpiatubos domésticos.",
+        "hojas": "Simples, alternas, sésiles o con pecíolos muy cortos, de forma linear o lanceolada estrecha, de 3 a 7 cm de largo; son de color verde claro, tienen márgenes enteros y desprenden un suave aroma cítrico al ser estrujadas."
+      },
+      "altura": "4 a 8 metros",
+      "usos": [
+        "Altamente ornamental y paisajístico en parques públicos y zonas verdes amplias debido al singular impacto visual de sus ramas colgantes y flores rojas.",
+        "Atracción de fauna local, funcionando como un excelente imán para colibríes, abejas grandes y otros insectos polinizadores atraídos por el abundante néctar de sus estambres.",
+        "Sombra ligera de porte bajo apta para senderos peatonales y plazas públicas."
+      ],
+      "impacto": "Atracción de fauna local, funcionando como un excelente imán para colibríes, abejas grandes y otros insectos polinizadores atraídos por el abundante néctar de sus estambres. Sombra ligera de porte bajo apta para senderos peatonales y plazas públicas.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC / Especie cultivada de forma extensiva a nivel mundial)",
+      "nombresAlternos": [
+        "Limpiatubos",
+        "Escobillón rojo",
+        "Árbol del cepillo",
+        "Chupón"
+      ],
+      "caracteristicas": {
+        "flores": "Agrupadas en densas espigas terminales o axilares de 5 a 10 cm de longitud, compuestas por numerosos estambres libres, largos y de color rojo encendido que rodean el eje de la ramilla.",
+        "frutos": "Cápsulas leñosas, duras y pequeñas en forma de copa, que se disponen de manera apretada a lo largo de los tallos y permanecen unidas a las ramas durante varios años albergando semillas diminutas.",
+        "tronco": "Tronco generalmente ramificado a baja altura en múltiples ejes (como se observa en la foto 3/3); presenta una corteza rugosa, fisurada y agrietada de color café grisáceo, frecuentemente cubierta por líquenes en ambientes montañosos húmedos."
+      },
+      "habitat": {
+        "distribucion": "Nativo de Australia (especialmente de los estados de Nueva Gales del Sur y Queensland), pero ampliamente introducido y aclimatado con fines ornamentales en los parques y plazas urbanas de Colombia.",
+        "altitud": "Se adapta con gran facilidad desde el nivel del mar hasta los 2,600 m s. n. m., prosperando con excelente salud en las condiciones climáticas de la provincia de Pamplona y Chitagá.",
+        "clima": "Prefiere climas templados a frescos; es muy resistente a periodos moderados de sequía una vez establecido y se beneficia de una humedad ambiental regular."
+      },
+      "datosCuriosos": [
+        "Aunque durante mucho tiempo se clasificó bajo el nombre científico de *Callistemon viminalis*, estudios genéticos recientes agruparon a todo este grupo dentro del género *Melaleuca*.",
+        "A diferencia de la mayoría de árboles donde los frutos detienen el crecimiento de la rama, en el calistemo el eje de la ramilla continúa creciendo y produciendo hojas nuevas más allá de la zona donde quedaron fijadas las cápsulas secas de los años anteriores."
+      ],
+      "cuidados": "Exige una ubicación a pleno sol para asegurar una floración masiva y constante. Requiere suelos con buen drenaje, profundos y prefiere riegos moderados; tolera de excelente manera las podas de aclareo o de limpieza tras sus periodos fuertes de floración.",
+      "especiesSimilares": [
+        "Melaleuca citrina / Callistemon citrinus (Limpiatubos común - de porte más arbustivo y ramas rígidas, no colgantes)",
+        "Salix babylonica (Sauce llorón - de silueta similar pero descartado por completo por sus flores verdosas insignificantes)",
+        "Callistemon rigidus (Escobillón rígido - de follaje sumamente punzante y ramas erectas)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La estructura ramificada desde la base con corteza rugosa moteada por líquenes (foto 3/3), las ramas delgadas que caen verticalmente en cascada (foto 1/3) y las inconfundibles inflorescencias de color rojo brillante en forma de escobilla cilíndrica (foto 2/3) confirman con total exactitud la identidad de Melaleuca viminalis."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/calistemo-lloron-k1.webp",
+      "/uploads/calistemo-lloron-k2.webp",
+      "/uploads/calistemo-lloron-k3.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "rhamnus goudotiana",
+    "notasKeep": [
+      "Desconocido_(1)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "rhamnus goudotiana"
+      ],
+      "comunes": [
+        "cajeto de monte"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Cajeto de monte",
+        "cientifico": "Rhamnus goudotiana"
+      },
+      "familia": "Rhamnaceae",
+      "origen": "Especie nativa de Colombia, distribuida a lo largo de las cordilleras andinas",
+      "tipo": "árbol / arbusto según poda",
+      "descripcion": {
+        "general": "Árbol pequeño o arbusto nativo de los bosques altoandinos y bordes de páramo en Colombia. Posee un porte de copa más abierto, irregular y menos denso que el de los pitosporos. Destaca visualmente por el contraste de sus hojas adultas de color verde oscuro con sus brotes terminales y hojas nuevas, los cuales presentan una pubescencia fina de tonalidades café-doradas o rojizas muy llamativas. Sus hojas tienen nervaduras muy marcadas que le dan una textura rugosa.",
+        "hojas": "Simples, alternas, de forma elíptica a ovada, con márgenes finamente aserrados o denticulados. La superficie superior o haz es de color verde oscuro con venación impresa muy notoria (rugosa), mientras que los brotes y hojas jóvenes lucen un color marrón-rojizo debido a una densa vellosidad dorada."
+      },
+      "altura": "3 a 8 metros",
+      "usos": [
+        "Especie clave en proyectos de restauración ecológica y conservación de cuencas hidrográficas en zonas altas.",
+        "Protección y recuperación de suelos degradados o laderas andinas.",
+        "Sus frutos sirven de alimento para la avifauna nativa de los bosques altoandinos."
+      ],
+      "impacto": "Especie clave en proyectos de restauración ecológica y conservación de cuencas hidrográficas en zonas altas. Protección y recuperación de suelos degradados o laderas andinas.",
+      "estadoConservacion": "no determinado",
+      "estadoConservacionDetalle": "No evaluado formalmente (NE), pero protegida localmente dentro de los ecosistemas de bosque andino.",
+      "nombresAlternos": [
+        "Cajeto",
+        "Duraznillo",
+        "Espino de páramo"
+      ],
+      "caracteristicas": {
+        "flores": "Muy pequeñas, de color verde-amarillento o blanquecino, dispuestas en grupos axilares poco vistosos pero atractivos para insectos polinizadores.",
+        "frutos": "Pequeñas drupas globosas que pasan de verde a tonos rojizos y finalmente negros al madurar por completo.",
+        "tronco": "Generalmente delgado, ramificado desde baja altura, con corteza grisácea a marrón claro y ramillas jóvenes cubiertas de un vello color castaño."
+      },
+      "habitat": {
+        "distribucion": "Especie nativa de Colombia, distribuida a lo largo de las cordilleras andinas. Es un componente natural de los bosques de niebla y los entornos subpáramos de la provincia de Pamplona.",
+        "altitud": "2,000 a 3,400 m s. n. m. (plenamente adaptado a los climas fríos andinos como el de Chitagá).",
+        "clima": "Frío de alta montaña, húmedo o de niebla."
+      },
+      "datosCuriosos": [
+        "En los pueblos andinos, el nombre 'cajeto' se comparte a veces con otras especies locales, pero este es el cajeto auténtico de los bosques nublados, caracterizado por su 'vello' dorado en los brotes nuevos.",
+        "Su presencia en los estratos bajos del bosque es un excelente indicador de la salud del ecosistema nativo andino."
+      ],
+      "cuidados": "Requiere de alta humedad ambiental y suelos ricos en materia orgánica. Tolera muy bien las bajas temperaturas y heladas ligeras típicas de las zonas de páramo.",
+      "especiesSimilares": [
+        "Hesperomeles ferruginea (Mortiño / Cerro)",
+        "Myrsine coriacea (Cucharo)",
+        "Palicourea angustifolia (Cafecito de monte)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Se confirma el taxón *Rhamnus goudotiana* a partir de los caracteres visuales expuestos. En la vista general (foto 1) se distingue el hábito arbustivo-arbóreo típico con ramaje extendido y brotes superiores de coloración ocre/rojiza. En el plano de detalle (foto 2) se aprecian perfectamente las hojas elípticas de consistencia subcoriácea, con el margen marcadamente dentado y la textura fuertemente rugosa por la venación hundida, junto a la pubescencia ferrugínea en los pecíolos y tallos jóvenes."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/cajeto-de-monte-k1.webp",
+      "/uploads/cajeto-de-monte-k2.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "pinus patula",
+    "notasKeep": [
+      "Desconocido_(2)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "pinus patula"
+      ],
+      "comunes": [
+        "pino patula"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Pino pátula",
+        "cientifico": "Pinus patula"
+      },
+      "familia": "Pinaceae",
+      "origen": "Nativo de las zonas montañosas de México",
+      "tipo": "árbol (conífera)",
+      "descripcion": {
+        "general": "Conífera de gran porte introducida en Colombia, caracterizada por sus acículas largas y péndulas que le confieren un aspecto llorón o triste. El ejemplar fotografiado ha sido manejado mediante podas de formación arquitectónica (topiaria) para darle una silueta compacta en forma de hongo o sombrilla.",
+        "hojas": "Acículas largas (de 15 a 30 cm de longitud), delgadas, agrupadas en fascículos generalmente de 3 a 5, marcadamente péndulas, colgantes y de un color verde claro brillante."
+      },
+      "altura": "3 a 5 metros (mantenido bajo por poda; sin manejo supera los 30 metros)",
+      "usos": [
+        "Ornamental y paisajístico en plazas principales, parques y áreas verdes urbanas gracias al atractivo estético que ofrece su follaje péndulo bajo poda ornamental.",
+        "Comercial y forestal en plantaciones de gran escala para la obtención de madera y pulpa de papel.",
+        "Protección de laderas contra la erosión eólica en zonas andinas despejadas."
+      ],
+      "impacto": "Protección de laderas contra la erosión eólica en zonas andinas despejadas.",
+      "estadoConservacion": "preocupación menor (LC)",
+      "estadoConservacionDetalle": "Preocupación menor (LC / Especie ampliamente cultivada globalmente)",
+      "nombresAlternos": [
+        "Pino pátula (poda sombrilla)",
+        "Pino llorón",
+        "Pino candelabro",
+        "Pino triste",
+        "Pino mexicano"
+      ],
+      "caracteristicas": {
+        "flores": "No produce flores verdaderas. Posee estructuras reproductivas en forma de estróbilos o conos unisexuales en el mismo árbol.",
+        "frutos": "Conos leñosos (piñas) de forma ovada-cónica, asimétricos, de 7 a 12 cm de largo, agrupados en verticilos que permanecen cerrados en las ramas durante años antes de liberar las semillas aladas.",
+        "tronco": "Tronco recto y cilíndrico; en este ejemplar es corto debido a la altura de la poda. Su corteza es escamosa, agrietada, de color café rojizo a grisácea en la madurez."
+      },
+      "habitat": {
+        "distribucion": "Nativo de las zonas montañosas de México, pero ampliamente introducido y plantado en Colombia con fines de reforestación comercial y paisajismo urbano.",
+        "altitud": "Se adapta excelentemente bien entre los 1,800 y 3,200 m s. n. m., prosperando con gran vigor en el clima de la provincia de Pamplona y Chitagá.",
+        "clima": "Frío a templado húmedo, muy tolerante a las nieblas constantes y resistente a las heladas ligeras de la alta montaña."
+      },
+      "datosCuriosos": [
+        "Su follaje tiene la particularidad de recolectar la humedad de la neblina andina; las gotas de agua corren a lo largo de las largas acículas colgantes cayendo directamente sobre su zona de raíces.",
+        "Aunque es una especie de crecimiento sumamente rápido y muy decorativa bajo poda estricta, en ecosistemas silvestres de alta montaña su dispersión sin control puede desplazar la vegetación nativa debido al sombreado denso y la acumulación de hojarasca ácida."
+      ],
+      "cuidados": "Requiere una ubicación a pleno sol para mantener un follaje denso y vigoroso. Exige suelos de tendencia ácida, sueltos y con muy buen drenaje; resiste bien los vientos fríos andinos y necesita podas de mantenimiento regulares para conservar la geometría de sombrilla.",
+      "especiesSimilares": [
+        "Pinus radiata (Pino monterrey - de acículas más cortas y rígidas, no péndulas)",
+        "Pinus oocarpa (Pino de ocote - de hojas erectas y rígidas)",
+        "Retrophyllum rospigliosii (Pino romerón - descartado por completo por la forma de sus hojas aplanadas)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La llamativa silueta podada en forma de hongo o domo perfecto integrado al diseño del parque (foto 1/2) y el detalle en primer plano de las acículas muy largas, delgadas y completamente péndulas que caen en cascada (foto 2/2) son rasgos morfológicos inequívocos de la especie Pinus patula."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/pino-patula-k1.webp",
+      "/uploads/pino-patula-k2.webp"
+    ],
+    "individuos": [
+      {
+        "lat": 7.137965,
+        "lng": -72.66474,
+        "precisionGpsM": 1.7,
+        "altitudMsnm": 2346
+      }
+    ]
+  },
+  {
+    "clave": "platycladus orientalis",
+    "notasKeep": [
+      "Desconocido_"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "platycladus orientalis"
+      ],
+      "comunes": [
+        "tuya"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Tuya",
+        "cientifico": "Platycladus orientalis"
+      },
+      "familia": "Cupressaceae",
+      "origen": "Nativa del este de Asia (China, Corea y extremo oriental de Rusia)",
+      "tipo": "árbol (conífera)",
+      "descripcion": {
+        "general": "Pequeña conífera perennifolia de crecimiento lento y porte denso, muy utilizada en la jardinería ornamental y el paisajismo urbano andino. Destaca por la disposición vertical y aplanada de sus ramillas, que asemejan pequeños abanicos verdes. Su copa suele ser de forma ovoide o piramidal compacta, manteniendo un color verde brillante o verde-amarillento muy vivo durante todo el año.",
+        "hojas": "Escuamiformes (en forma de escamas), muy pequeñas, imbricadas y dispuestas en 4 filas a lo largo de las ramillas. Se caracterizan por estar organizadas en planos verticales aplanados, compactos y con una coloración verde biche o ligeramente áurea en las puntas (como se observa en la foto de detalle)."
+      },
+      "altura": "2 a 5 metros (en entornos urbanos bajo mantenimiento)",
+      "usos": [
+        "Uso netamente ornamental en plazas principales, cementerios, alamedas y jardines públicos.",
+        "Excelente para el arte topiario, ya que tolera podas rigurosas para esculpir formas esféricas, piramidales u ovaladas compactas.",
+        "Formación de setos bajos, linderos tupidos y pantallas cortavientos en antejardines."
+      ],
+      "impacto": "El término 'Árbol de la vida' proviene de sus acepciones tradicionales en Asia, donde se asociaba con la longevidad y la inmortalidad debido a su naturaleza perenne y la resistencia de su madera aromática.",
+      "estadoConservacion": "casi amenazado",
+      "estadoConservacionDetalle": "Casi amenazada (NT) en su hábitat natural nativo, pero sumamente abundante y segura bajo su estatus global cultivado.",
+      "nombresAlternos": [
+        "Ciprés de abanico",
+        "Árbol de la vida",
+        "Tuya oriental",
+        "Biota"
+      ],
+      "caracteristicas": {
+        "flores": "Especie monoica. Las estructuras reproductoras son conos diminutos poco visibles que aparecen en los extremos de las ramillas a principios de año.",
+        "frutos": "Conos o gálbulos ovalados, carnosos al principio y de un color verde-azuloso o glauco (con una capa cerosa blanquecina), provistos de escamas ganchudas reflejas hacia atrás. Al madurar se vuelven leñosos, de color marrón, y se abren para liberar semillas sin alas.",
+        "tronco": "Tronco erguido, a menudo ramificado muy cerca del suelo en varios fustes verticales; corteza delgada de color marrón-rojizo que se desprende en tiras longitudinales finas con la edad."
+      },
+      "habitat": {
+        "distribucion": "Nativa del este de Asia (China, Corea y extremo oriental de Rusia). Ampliamente distribuida a nivel global como planta ornamental y un elemento tradicional indispensable en los diseños topiarios de parques de la provincia de Pamplona y el municipio de Chitagá.",
+        "altitud": "1,500 a 3,000 m s. n. m. (con una adaptación perfecta a las condiciones ambientales de Chitagá).",
+        "clima": "Templado a frío, muy resistente a las heladas urbanas y a los vientos de montaña."
+      },
+      "datosCuriosos": [
+        "El término 'Árbol de la vida' proviene de sus acepciones tradicionales en Asia, donde se asociaba con la longevidad y la inmortalidad debido a su naturaleza perenne y la resistencia de su madera aromática.",
+        "A diferencia de los cipreses comunes (*Cupressus*), las ramillas de la tuya se disponen de manera estrictamente plana en un solo eje vertical, lo que permite distinguirla de inmediato al tacto y la vista."
+      ],
+      "cuidados": "Planta extremadamente rústica y longeva. Requiere exposición directa a pleno sol para mantener la densidad de su follaje y evitar que las zonas internas se sequen. Prefiere suelos bien drenados, tolerando una amplia variedad de terrenos desde calizos hasta arcillosos. Requiere riegos moderados una vez establecida y soporta podas de mantenimiento estructural en cualquier época del año.",
+      "especiesSimilares": [
+        "Thuja occidentalis (Tuya del Canadá - con conos más alargados y planos horizontales)",
+        "Cupressus sempervirens (Ciprés común - de porte columnar y ramillas cilíndricas)",
+        "Chamaecyparis lawsoniana (Ciprés de Lawson)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Se confirma el taxón *Platycladus orientalis* (Tuya) con total seguridad. En la vista general (foto 1) se aprecia un espécimen clásico cultivado en el parque, manejado con una poda ornamental compacta de porte ovoide-globoso. En la toma de detalle (foto 2) se valida la inconfundible morfología cupresácea de ramillas aplanadas en abanico con hojas escuamiformes imbricadas de color verde brillante, junto con la presencia de pequeños frutos o conos inmaduros de color verde pálido con escamas ganchudas."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/tuya-k1.webp",
+      "/uploads/tuya-k2.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "photinia glabra",
+    "notasKeep": [
+      "Duraznillo rojo(1)"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "photinia glabra"
+      ],
+      "comunes": [
+        "fotinia glabra"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Fotinia glabra",
+        "cientifico": "Photinia glabra"
+      },
+      "familia": "Rosaceae",
+      "origen": "Nativa de Asia oriental (Japón, China y Tailandia)",
+      "tipo": "árbol / arbusto según poda",
+      "descripcion": {
+        "general": "Arbusto grande o árbol pequeño perennifolio, muy apreciado en la jardinería ornamental urbana de la zona andina colombiana. Destaca principalmente por su follaje bicolor dinámico: los brotes nuevos y las hojas jóvenes emergen con un color rojo cobrizo o carmesí muy brillante que gradualmente madura hacia un verde oscuro lustroso, generando un constante contraste visual en la copa.",
+        "hojas": "Simples, alternas, de forma elíptica u oblonga, con márgenes finamente aserrados. Las hojas jóvenes superiores son de un llamativo color rojo brillante y de textura lisa y cerosa (como se ve en la foto de detalle), mientras que las hojas inferiores más viejas son coriáceas y de color verde oscuro brillante."
+      },
+      "altura": "2 a 5 metros",
+      "usos": [
+        "Uso ornamental destacado en parques públicos y plazas para crear manchas de color o puntos focales.",
+        "Formación de setos vivos, cercas densas y pantallas visuales debido a su follaje perenne y tupido.",
+        "Apta para la poda de formación estructural o topiaria (copas globosas perfectas)."
+      ],
+      "impacto": "El nombre genérico *Photinia* proviene de la palabra griega *photeinos*, que significa 'brillante' o 'reluciente', haciendo una clara referencia a la superficie sumamente lustrosa y encerada de sus hojas.",
+      "estadoConservacion": "no determinado",
+      "estadoConservacionDetalle": "No evaluado formalmente (NE), de uso exclusivamente cultivado en la región.",
+      "nombresAlternos": [
+        "Fotinia",
+        "Fotinia de hojas rojas",
+        "Potosi"
+      ],
+      "caracteristicas": {
+        "flores": "Pequeñas, de color blanco o blanco-crema, con cinco pétalos, agrupadas en densas corimbas o panículas terminales anchas que florecen hacia el final de las épocas lluviosas.",
+        "frutos": "Pequeños pomos globosos de unos 5 a 8 mm de diámetro, parecidos a bayas, que pasan de verde a rojo y finalmente a un tono azul-negruzco al madurar.",
+        "tronco": "Tallo central erguido y ramificado densamente desde poca altura, ideal para podas topiarias (formas globosas o rectangulares); corteza lisa de color grisáceo a marrón claro."
+      },
+      "habitat": {
+        "distribucion": "Nativa de Asia oriental (Japón, China y Tailandia). Ampliamente introducida a nivel mundial como planta ornamental y muy frecuente en las zonas verdes, parques y antejardines de la provincia de Pamplona y el municipio de Chitagá.",
+        "altitud": "1,800 a 3,000 m s. n. m. (con excelente adaptación al clima andino de Chitagá).",
+        "clima": "Frío a templado de montaña, muy resistente a las heladas ligeras."
+      },
+      "datosCuriosos": [
+        "El nombre genérico *Photinia* proviene de la palabra griega *photeinos*, que significa 'brillante' o 'reluciente', haciendo una clara referencia a la superficie sumamente lustrosa y encerada de sus hojas.",
+        "Cada vez que se realiza una poda en las puntas de las ramas, el arbusto estimula el crecimiento de nuevos brotes, lo que provoca una intensa 'oleada' de hojas rojas semanas después."
+      ],
+      "cuidados": "Es una planta rústica y adaptable. Prefiere suelos bien drenados y con buen aporte de materia orgánica. Requiere una exposición a pleno sol o media sombra ligera; entre más luz solar directa reciba, más intenso y brillante será el color rojo de sus hojas nuevas. Tolera muy bien las podas frecuentes de mantenimiento.",
+      "especiesSimilares": [
+        "Photinia × fraseri (Fotinia Red Robin - híbrido de hojas nuevas rojas aún más intensas)",
+        "Syzygium paniculatum (Eugenia - de hojas opuestas y brotes rojizos más pequeños)",
+        "Prunus laurocerasus (Laurel cerezo)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "Se confirma el taxón *Photinia glabra* (Fotinia). En la vista general (foto 1) se aprecia un espécimen joven manejado con una poda de copa globosa o de sombrilla en medio del parque, destacando los brotes rojizos en la parte superior. En la vista de detalle (foto 2) se validan completamente sus hojas elípticas alternas, de margen finamente aserrado, con la llamativa coloración roja cobriza traslúcida y brillante típica de los brotes nuevos de este género."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/fotinia-glabra-k1.webp",
+      "/uploads/fotinia-glabra-k2.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "araucaria heterophylla",
+    "notasKeep": [
+      "Pino Araucaria"
+    ],
+    "coincidencias": {
+      "cientificos": [
+        "araucaria excelsa",
+        "araucaria heterophylla",
+        "araucaria sp."
+      ],
+      "comunes": [
+        "araucaria",
+        "araucaria / pino araucaria",
+        "araucaria excelsa",
+        "pino araucaria"
+      ]
+    },
+    "ficha": {
+      "nombre": {
+        "comun": "Araucaria excelsa",
+        "cientifico": "Araucaria heterophylla"
+      },
+      "familia": "Araucariaceae",
+      "origen": "Nativo de la Isla de Norfolk (un pequeño territorio australiano en el océano Pacífico)",
+      "tipo": "árbol (conífera)",
+      "descripcion": {
+        "general": "Conífera perennifolia de porte majestuoso y silueta simétrica y piramidal, muy común como árbol ornamental en plazas principales de pueblos andinos. Destaca por sus ramas horizontales dispuestas en pisos geométricos bien definidos y sus hojas en forma de escamas verdes que cubren densamente las ramillas.",
+        "hojas": "Dimórficas (cambian con la edad); en ramillas jóvenes son curvas, blandas y en forma de aguja delgada (como se aprecia en el primer plano), mientras que en las ramas maduras se vuelven cortas, gruesas y en forma de escama fuertemente imbricada."
+      },
+      "altura": "20 a 35 metros (en zonas de cultivo urbano)",
+      "usos": [
+        "Altamente ornamental y paisajístico, usado de forma focal en el centro de plazas públicas y parques debido a su imponente altura y porte simétrico.",
+        "Históricamente apreciado en su lugar de origen para la fabricación de mástiles de barcos por la rectitud de su tronco.",
+        "Refugio y sitio de anidación para aves locales de mediano y gran porte."
+      ],
+      "impacto": "Refugio y sitio de anidación para aves locales de mediano y gran porte.",
+      "estadoConservacion": "vulnerable",
+      "estadoConservacionDetalle": "Vulnerable (VU) en su hábitat natural silvestre de la Isla de Norfolk, pero sumamente abundante y cultivado globalmente a nivel comercial urbano.",
+      "nombresAlternos": [
+        "Pino de la isla de Norfolk",
+        "Pino de Norfolk",
+        "Araucaria"
+      ],
+      "caracteristicas": {
+        "flores": "No produce flores verdaderas. Como toda conífera, presenta estructuras reproductivas masculinas y femeninas en conos separados (estróbilos).",
+        "frutos": "Conos o piñas globosas globulares grandes (de 10 a 12 cm de diámetro) que tardan cerca de 18 meses en madurar, liberando semillas aladas al abrirse.",
+        "tronco": "Tronco notablemente recto, cilíndrico y vertical, con una corteza rugosa y escamosa de color marrón-grisáceo que desprende resina aromática y muestra las marcas de las ramas antiguas caídas."
+      },
+      "habitat": {
+        "distribucion": "Nativo de la Isla de Norfolk (un pequeño territorio australiano en el océano Pacífico), pero introducido con enorme éxito como árbol ornamental en parques urbanos de Colombia y el mundo.",
+        "altitud": "Se adapta muy bien desde el nivel del mar hasta los 2,600 m s. n. m., prosperando con salud en el clima andino de la provincia de Pamplona y Chitagá.",
+        "clima": "Prefiere climas templados a frescos y húmedos; es muy resistente a los vientos fuertes debido a la flexibilidad de sus ramas horizontales."
+      },
+      "datosCuriosos": [
+        "Aunque popularmente se le llama 'pino de Norfolk', no pertenece a la familia de los pinos verdaderos (Pinaceae), sino a un linaje mucho más antiguo de coníferas del hemisferio sur (Araucariaceae) que convivió con los dinosaurios.",
+        "Su crecimiento es tan regular que en ejemplares jóvenes es fácil calcular su edad aproximada contando los niveles o pisos horizontales de ramas que se extienden desde el tronco central."
+      ],
+      "cuidados": "Requiere una exposición a pleno sol desde sus etapas tempranas. Exige suelos profundos, sueltos y con excelente drenaje; tolera bien los suelos ligeramente ácidos y resiste de buena manera periodos moderados de sequía una vez establecido.",
+      "especiesSimilares": [
+        "Araucaria columnaris (Araucaria de Cook - de silueta mucho más estrecha y tronco inclinado)",
+        "Araucaria bidwillii (Pino de las damas - de hojas notablemente más anchas y punzantes)",
+        "Cryptomeria japonica (Cedro japonés - de follaje similar pero ramificación irregular)"
+      ],
+      "identificacion": {
+        "confianza": "alto",
+        "observaciones": "La inconfundible silueta piramidal con ramas dispuestas en pisos simétricos (foto 1/3), las ramillas flexibles cubiertas de pequeñas hojas curvadas en forma de punzón verde (foto 2/3) y el tronco grueso, vertical y escamoso de base blanqueada en el parque (foto 3/3) confirman la identidad de la especie Araucaria heterophylla."
+      },
+      "ejemplaresEnParque": 1
+    },
+    "fotos": [
+      "/uploads/araucaria-excelsa-k1.webp",
+      "/uploads/araucaria-excelsa-k2.webp",
+      "/uploads/araucaria-excelsa-k3.webp"
+    ],
+    "individuos": [
+      {
+        "lat": 7.138185,
+        "lng": -72.664821667,
+        "precisionGpsM": 1.5,
+        "altitudMsnm": 2346
+      }
+    ]
+  },
+  {
+    "clave": "ceroxylon quindiuense",
+    "notasKeep": [
+      "Palma de cera"
+    ],
+    "soloComplemento": true,
+    "coincidencias": {
+      "cientificos": [
+        "ceroxylon quindiuense"
+      ],
+      "comunes": [
+        "palma de cera",
+        "palma de cera del quindio"
+      ]
+    },
+    "ficha": {
+      "ejemplaresEnParque": 10
+    },
+    "fotos": [
+      "/uploads/palma-de-cera-k1.webp",
+      "/uploads/palma-de-cera-k2.webp",
+      "/uploads/palma-de-cera-k3.webp"
+    ],
+    "individuos": []
+  },
+  {
+    "clave": "cupressus sp. (probablemente c. lusitanica)",
+    "notasKeep": [
+      "Pino"
+    ],
+    "soloComplemento": true,
+    "coincidencias": {
+      "cientificos": [
+        "cupressus sp. (probablemente c. lusitanica)",
+        "cupressus lusitanica",
+        "cupressus sp."
+      ],
+      "comunes": [
+        "cipres"
+      ]
+    },
+    "ficha": {
+      "ejemplaresEnParque": 11
+    },
+    "fotos": [
+      "/uploads/cipres-k1.webp",
+      "/uploads/cipres-k2.webp",
+      "/uploads/cipres-k3.webp"
+    ],
+    "individuos": []
+  }
+]

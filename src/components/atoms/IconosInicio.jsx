@@ -332,9 +332,66 @@ export function IconoLupa({ clase }) {
   );
 }
 
+/** Flor de cinco pétalos: floración. */
+export function IconoFlor({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" />
+      <path className="trazo" pathLength="1" d="M12 9.5c-1.5-2.5-1-5.5 0-6.5 1 1 1.5 4 0 6.5zM14.4 11.2c1.4-2.6 4.3-3.5 5.6-3.1-.3 1.4-2.6 3.4-5.6 3.1zM13.5 14.1c2.9.5 4.6 3 4.5 4.4-1.4.1-4-1.5-4.5-4.4zM10.5 14.1c-.5 2.9-3.1 4.5-4.5 4.4-.1-1.4 1.6-3.9 4.5-4.4zM9.6 11.2c-3 .3-5.3-1.7-5.6-3.1 1.3-.4 4.2.5 5.6 3.1z" />
+      <circle className="trazo" pathLength="1" cx="12" cy="12" r="2.2" />
+    </Icono>
+  );
+}
+
+/** Fruto redondo con hoja: frutos. */
+export function IconoFruto({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <circle className="icono-tinte" cx="12" cy="14" r="6.5" />
+      <circle className="trazo" pathLength="1" cx="12" cy="14" r="6.5" />
+      <path className="trazo" pathLength="1" d="M12 7.5c0-2 .8-3.5 2-4.5M12.6 5.4c1.6-1.7 3.8-1.9 5-1.2-.9 1.6-3 2.3-5 1.2z" />
+    </Icono>
+  );
+}
+
+/** Nube con gotas: clima. */
+export function IconoNube({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M7 15.5a4 4 0 0 1-.4-8 5.5 5.5 0 0 1 10.6 1.4A3.3 3.3 0 0 1 17 15.5z" />
+      <path className="trazo" pathLength="1" d="M7 15.5a4 4 0 0 1-.4-8 5.5 5.5 0 0 1 10.6 1.4A3.3 3.3 0 0 1 17 15.5z" />
+      <path className="trazo" pathLength="1" d="M9 18.5l-.8 2M13 18.5l-.8 2M17 18.5l-.8 2" />
+    </Icono>
+  );
+}
+
+/** Destello: datos curiosos. */
+export function IconoChispa({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M11 3l1.8 5.2L18 10l-5.2 1.8L11 17l-1.8-5.2L4 10l5.2-1.8z" />
+      <path className="trazo" pathLength="1" d="M11 3l1.8 5.2L18 10l-5.2 1.8L11 17l-1.8-5.2L4 10l5.2-1.8z" />
+      <path className="trazo" pathLength="1" d="M18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" />
+    </Icono>
+  );
+}
+
+/** Regadera: cuidados. */
+export function IconoRegadera({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M5 10h9v8.5a1.5 1.5 0 0 1-1.5 1.5h-6A1.5 1.5 0 0 1 5 18.5z" />
+      <path className="trazo" pathLength="1" d="M5 10h9v8.5a1.5 1.5 0 0 1-1.5 1.5h-6A1.5 1.5 0 0 1 5 18.5z" />
+      <path className="trazo" pathLength="1" d="M14 12l5-4M17.5 6.5l3 3M7 10V7.5a2.5 2.5 0 0 1 5 0V10" />
+      <path className="trazo" pathLength="1" d="M20.5 12.5v.01M19.5 14.5v.01M21.5 14.5v.01" />
+    </Icono>
+  );
+}
+
 [
   IconoArbolPlaca, IconoEscanear, IconoFicha, IconoHoja, IconoFamilias, IconoQr,
   IconoUbicacion, IconoAve, IconoArdilla, IconoMariposa, IconoFlecha, IconoBajar,
   IconoArbol, IconoGlobo, IconoRegla, IconoEscudo, IconoLibro, IconoUsos, IconoCorazonHoja,
   IconoMapa, IconoVolver, IconoCandado, IconoCamara, IconoLapiz, IconoPapelera, IconoMas, IconoLupa,
+  IconoFlor, IconoFruto, IconoNube, IconoChispa, IconoRegadera,
 ].forEach((c) => { c.propTypes = tipos; });

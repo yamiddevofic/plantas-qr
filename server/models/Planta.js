@@ -35,6 +35,31 @@ const plantaSchema = new mongoose.Schema(
     imagen: { type: String, trim: true, default: '' },
     imagenes: { type: [String], default: [] },
     ubicaciones: { type: [String], default: [] },
+    // ── Datos ampliados (fichas importadas de las notas de campo) ──
+    nombresAlternos: { type: [String], default: undefined },
+    caracteristicas: {
+      flores: { type: String, trim: true },
+      frutos: { type: String, trim: true },
+      tronco: { type: String, trim: true },
+    },
+    habitat: {
+      distribucion: { type: String, trim: true },
+      altitud: { type: String, trim: true },
+      clima: { type: String, trim: true },
+    },
+    datosCuriosos: { type: [String], default: undefined },
+    cuidados: { type: String, trim: true },
+    especiesSimilares: { type: [String], default: undefined },
+    // Texto completo del estado (p. ej. "En peligro en su hábitat de Australia,
+    // pero muy cultivado"); `estadoConservacion` es el nivel de la escala.
+    estadoConservacionDetalle: { type: String, trim: true },
+    // Uso interno: cómo se identificó la especie. No se muestra en la ficha.
+    identificacion: {
+      confianza: { type: String, trim: true },
+      observaciones: { type: String, trim: true },
+    },
+    // Cuántos árboles de la especie hay en el parque (conteo de campo).
+    ejemplaresEnParque: { type: Number, min: 0 },
     ejemplares: {
       type: [
         {

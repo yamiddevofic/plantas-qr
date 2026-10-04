@@ -5,7 +5,8 @@ import EstadoConservacion from '../molecules/EstadoConservacion';
 import SeccionFicha from '../molecules/SeccionFicha';
 import Chip from '../atoms/Chip';
 import {
-  IconoCorazonHoja, IconoHoja, IconoLibro, IconoUbicacion, IconoUsos,
+  IconoArbol, IconoChispa, IconoCorazonHoja, IconoFlor, IconoFruto, IconoGlobo, IconoHoja,
+  IconoLibro, IconoNube, IconoRegadera, IconoRegla, IconoUbicacion, IconoUsos,
 } from '../atoms/IconosInicio';
 import MapaIndividuos from './MapaIndividuos';
 import GaleriaIndividuos from './GaleriaIndividuos';
@@ -17,8 +18,30 @@ import DatosFicha from './DatosFicha';
  * panel del QR). En móvil ambas se intercalan: primero los datos y el estado.
  */
 export default function ContenidoFicha({ planta, coleccion = null, onVerEstados, lateral = null }) {
-  const { nombre, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion } = planta;
-  const usosLista = normalizarUsos(usos);
+  const {
+    nombre, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion,
+    estadoConservacionDetalle, nombresAlternos, caracteristicas, habitat, datosCuriosos,
+    cuidados, especiesSimilares,
+  } = planta;
+  // Las fichas de las notas de campo traen los usos como frases; las antiguas,
+  // como etiquetas cortas separadas por comas.
+  const usosFrases = Array.isArray(usos) && usos.some((u) => String(u).length > 48);
+  // Lo que ya se dijo en «Importancia ambiental» no se repite en la lista.
+  const usosLista = usosFrases ? usos.filter((u) => !impacto?.includes(u)) : normalizarUsos(usos);
+  const alternos = nombresAlternos ?? [];
+  const similares = especiesSimilares ?? [];
+  const curiosos = datosCuriosos ?? [];
+  const rasgos = [
+    { Icono: IconoHoja, etiqueta: 'Hojas', texto: descripcion?.hojas },
+    { Icono: IconoFlor, etiqueta: 'Flores', texto: caracteristicas?.flores },
+    { Icono: IconoFruto, etiqueta: 'Frutos', texto: caracteristicas?.frutos },
+    { Icono: IconoArbol, etiqueta: 'Tronco', texto: caracteristicas?.tronco },
+  ].filter((r) => r.texto);
+  const clima = [
+    { Icono: IconoGlobo, etiqueta: 'Distribución', texto: habitat?.distribucion },
+    { Icono: IconoRegla, etiqueta: 'Altitud', texto: habitat?.altitud },
+    { Icono: IconoNube, etiqueta: 'Clima', texto: habitat?.clima },
+  ].filter((r) => r.texto);
   const sitios = Array.isArray(ubicaciones) ? ubicaciones : [];
 
   // Individuos registrados (árboles con GPS): su galería de fotos va en "Dónde
@@ -38,15 +61,21 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
   return (
     <div className="ficha-layout">
       <div className="ficha-principal">
-        {(descripcion?.general || descripcion?.hojas || impacto) && (
+        {(descripcion?.general || rasgos.length > 0 || impacto) && (
           <SeccionFicha id="ficha-conoce" antetitulo="Descripción" titulo="Conoce este árbol" icono={IconoLibro}>
             {descripcion?.general && <p className="detalle-parrafo">{descripcion.general}</p>}
-            {descripcion?.hojas && (
-              <div className="detalle-hojas">
-                <IconoHoja />
-                <p><strong>Hojas.</strong> {descripcion.hojas}</p>
+            {alternos.length > 0 && (
+              <div className="detalle-etiquetas">
+                <p className="detalle-etiquetas-titulo">También la llaman</p>
+                <ul>{alternos.map((a) => <li key={a}>{a}</li>)}</ul>
               </div>
             )}
+            {rasgos.map(({ Icono, etiqueta, texto }) => (
+              <div key={etiqueta} className="detalle-hojas">
+                <Icono />
+                <p><strong>{etiqueta}.</strong> {texto}</p>
+              </div>
+            ))}
             {impacto && (
               <div className="detalle-impacto">
                 <span className="detalle-impacto-icono"><IconoCorazonHoja /></span>
@@ -56,14 +85,53 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
                 </div>
               </div>
             )}
+            {similares.length > 0 && (
+              <div className="detalle-etiquetas">
+                <p className="detalle-etiquetas-titulo">Se puede confundir con</p>
+                <ul>{similares.map((a) => <li key={a}>{a}</li>)}</ul>
+              </div>
+            )}
           </SeccionFicha>
         )}
 
         {usosLista.length > 0 && (
-          <SeccionFicha id="ficha-usos" antetitulo="Saberes" titulo="Usos tradicionales" icono={IconoUsos}>
-            <ul className="detalle-usos">
-              {usosLista.map((u, i) => <Chip key={u} indice={i}>{u}</Chip>)}
-            </ul>
+          <SeccionFicha id="ficha-usos" antetitulo="Saberes" titulo={usosFrases ? 'Usos e importancia' : 'Usos tradicionales'} icono={IconoUsos}>
+            {usosFrases ? (
+              <ul className="detalle-lista">
+                {usosLista.map((u, i) => <li key={u} style={{ '--i': i }}><IconoHoja />{u}</li>)}
+              </ul>
+            ) : (
+              <ul className="detalle-usos">
+                {usosLista.map((u, i) => <Chip key={u} indice={i}>{u}</Chip>)}
+              </ul>
+            )}
+          </SeccionFicha>
+        )}
+
+        {clima.length > 0 && (
+          <SeccionFicha id="ficha-habitat" antetitulo="Dónde crece" titulo="Hábitat y clima" icono={IconoGlobo}>
+            <dl className="detalle-habitat">
+              {clima.map(({ Icono, etiqueta, texto }, i) => (
+                <div key={etiqueta} style={{ '--i': i }}>
+                  <dt><Icono />{etiqueta}</dt>
+                  <dd>{texto}</dd>
+                </div>
+              ))}
+            </dl>
+          </SeccionFicha>
+        )}
+
+        {curiosos.length > 0 && (
+          <SeccionFicha id="ficha-curiosos" antetitulo="¿Sabías que…?" titulo="Datos curiosos" icono={IconoChispa}>
+            <ol className="detalle-curiosos">
+              {curiosos.map((dato, i) => <li key={dato} style={{ '--i': i }}>{dato}</li>)}
+            </ol>
+          </SeccionFicha>
+        )}
+
+        {cuidados && (
+          <SeccionFicha id="ficha-cuidados" antetitulo="Jardinería" titulo="Cómo cuidarlo" icono={IconoRegadera}>
+            <p className="detalle-parrafo detalle-cuidados">{cuidados}</p>
           </SeccionFicha>
         )}
 
@@ -97,7 +165,7 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
       <div className="ficha-lateral">
         <DatosFicha planta={planta} />
         {estadoConservacion && (
-          <EstadoConservacion estado={estadoConservacion} onVerEscala={onVerEstados} />
+          <EstadoConservacion estado={estadoConservacion} detalle={estadoConservacionDetalle} onVerEscala={onVerEstados} />
         )}
         {lateral}
       </div>
