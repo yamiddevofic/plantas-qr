@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { LuCamera, LuImage, LuLocateFixed } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
-import { sugerirCodigo } from '../../individuos';
+import { calidadPrecision, sugerirCodigo } from '../../individuos';
+import useMedicionGps from '../../hooks/useMedicionGps';
 import { comprimirFoto } from '../../offline/fotos';
 import Boton from '../atoms/Boton';
 import CampoFormulario from '../molecules/CampoFormulario';
@@ -43,7 +44,6 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
   const [errores, setErrores] = useState({});
   const [mensajeError, setMensajeError] = useState(null);
   const [enviando, setEnviando] = useState(false);
-  const [buscandoGps, setBuscandoGps] = useState(false);
   const [mensajeGps, setMensajeGps] = useState(null);
   const [foto, setFoto] = useState(null);
   const [procesandoFoto, setProcesandoFoto] = useState(false);
@@ -93,35 +93,35 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
     });
   }
 
+  // Medición GPS de varios segundos: el marcador se mueve a medida que afina.
+  const aplicarGps = useCallback((e) => {
+    setEstado((prev) => ({
+      ...prev,
+      latitud: e.latitud,
+      longitud: e.longitud,
+      precisionGpsM: e.precision,
+      altitudMsnm: e.altitud ?? prev.altitudMsnm,
+    }));
+    limpiarErrores('latitud', 'longitud', 'altitudMsnm', 'precisionGpsM');
+  }, []);
+  const gps = useMedicionGps({
+    onEstimacion: aplicarGps,
+    onFin: (e) => {
+      if (!e) {
+        setMensajeGps({ tipo: 'error', texto: 'No llegó ninguna lectura del GPS. Revisa que la ubicación esté activada.' });
+        return;
+      }
+      aplicarGps(e);
+      const { texto } = calidadPrecision(e.precision);
+      setMensajeGps(e.precision > 15
+        ? { tipo: 'aviso', texto: `Precisión ${texto.toLowerCase()} (±${e.precision} m). Arrastra el marcador hasta el árbol en el mapa satelital, o muévete a cielo abierto y vuelve a medir.` }
+        : { tipo: 'ok', texto: `Ubicación tomada del GPS: ±${e.precision} m (${texto.toLowerCase()}), promedio de ${e.usadas} ${e.usadas === 1 ? 'lectura' : 'lecturas'}.` });
+    },
+  });
+
   function usarMiUbicacion() {
-    if (!navigator.geolocation) {
-      setMensajeGps({ tipo: 'error', texto: 'Tu navegador no ofrece geolocalización.' });
-      return;
-    }
-    setBuscandoGps(true);
     setMensajeGps(null);
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        setEstado((prev) => ({
-          ...prev,
-          latitud: Number(coords.latitude.toFixed(7)),
-          longitud: Number(coords.longitude.toFixed(7)),
-          precisionGpsM: Number(coords.accuracy.toFixed(1)),
-          altitudMsnm: coords.altitude != null ? Number(coords.altitude.toFixed(0)) : prev.altitudMsnm,
-        }));
-        limpiarErrores('latitud', 'longitud', 'altitudMsnm', 'precisionGpsM');
-        setMensajeGps({ tipo: 'ok', texto: `Ubicación tomada del GPS (±${coords.accuracy.toFixed(1)} m).` });
-        setBuscandoGps(false);
-      },
-      (error) => {
-        setMensajeGps({
-          tipo: 'error',
-          texto: error.code === 1 ? 'No diste permiso para usar tu ubicación.' : 'No se pudo obtener tu ubicación.',
-        });
-        setBuscandoGps(false);
-      },
-      { enableHighAccuracy: true, timeout: 15000 },
-    );
+    gps.iniciar();
   }
 
   function validar() {
@@ -236,25 +236,54 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
               latitud={estado.latitud}
               longitud={estado.longitud}
               referencias={referencias}
+              precision={Number(estado.precisionGpsM) || null}
               onCambiar={({ latitud, longitud }) => {
-                setEstado((prev) => ({ ...prev, latitud, longitud }));
+                // Colocado a mano: la precisión del GPS ya no aplica.
+                if (gps.midiendo) gps.cancelar();
+                setEstado((prev) => ({ ...prev, latitud, longitud, precisionGpsM: '' }));
                 limpiarErrores('latitud', 'longitud');
               }}
             />
-            <div className="form-acciones-linea">
-              <Boton variante="ghost" onClick={usarMiUbicacion} disabled={buscandoGps}>
-                <LuLocateFixed aria-hidden="true" className="btn-lupa-icono" />
-                {buscandoGps ? 'Buscando señal…' : 'Usar mi ubicación'}
-              </Boton>
-              {mensajeGps && (
-                <p
-                  className={mensajeGps.tipo === 'error' ? 'form-error' : 'form-ok'}
-                  role={mensajeGps.tipo === 'error' ? 'alert' : 'status'}
-                >
-                  {mensajeGps.texto}
+            {gps.midiendo ? (
+              <div className="gps-medicion" role="status" aria-live="polite">
+                <div className="gps-medicion-fila">
+                  <span className="gps-medicion-pulso" aria-hidden="true" />
+                  <span>
+                    <strong>Midiendo con el GPS…</strong> {gps.segundos} s
+                  </span>
+                  {gps.estimacion && (
+                    <span className={`gps-calidad gps-calidad-${calidadPrecision(gps.estimacion.precision).nivel}`}>
+                      ±{gps.estimacion.precision} m · {calidadPrecision(gps.estimacion.precision).texto}
+                    </span>
+                  )}
+                </div>
+                <div className="gps-medicion-barra" aria-hidden="true">
+                  <span style={{ width: `${Math.min(100, (gps.segundos / gps.duracionMaxima) * 100)}%` }} />
+                </div>
+                <p className="gps-medicion-ayuda">
+                  Quédate quieto junto al árbol, con el cielo despejado. La medición termina sola al llegar a ±5 m.
                 </p>
-              )}
-            </div>
+                <div className="form-acciones-linea">
+                  <Boton variante="primary" onClick={gps.terminar} disabled={!gps.estimacion}>Usar esta ubicación</Boton>
+                  <Boton variante="ghost" onClick={gps.cancelar}>Cancelar</Boton>
+                </div>
+              </div>
+            ) : (
+              <div className="form-acciones-linea">
+                <Boton variante="ghost" onClick={usarMiUbicacion}>
+                  <LuLocateFixed aria-hidden="true" className="btn-lupa-icono" />
+                  {estado.precisionGpsM ? 'Volver a medir' : 'Usar mi ubicación'}
+                </Boton>
+                {(mensajeGps || gps.error) && (
+                  <p
+                    className={gps.error || mensajeGps?.tipo === 'error' ? 'form-error' : mensajeGps.tipo === 'aviso' ? 'gps-aviso' : 'form-ok'}
+                    role={gps.error || mensajeGps?.tipo !== 'ok' ? 'alert' : 'status'}
+                  >
+                    {gps.error || mensajeGps.texto}
+                  </p>
+                )}
+              </div>
+            )}
             <div className="form-grid">
               <CampoFormulario id="ind-lat" etiqueta="Latitud" requerido error={errores.latitud}>
                 <input
