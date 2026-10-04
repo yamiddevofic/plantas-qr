@@ -13,6 +13,9 @@ import { IconoCandado, IconoFlecha, IconoVolver } from '../atoms/IconosInicio';
 import CampoPassword from '../molecules/CampoPassword';
 import PaisajeHero from './PaisajeHero';
 
+// En el celular no se enfoca solo: el teclado taparía la tarjeta al entrar.
+const PANTALLA_TACTIL = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
+
 /**
  * Pide la contraseña de administrador antes de mostrar una página de gestión.
  * Con conexión la verifica el servidor; sin conexión, la huella guardada en
@@ -87,7 +90,7 @@ export default function PuertaAdmin({ titulo, children }) {
               valor={password}
               onCambiar={(v) => { setPassword(v); setError(null); }}
               invalido={Boolean(error)}
-              autoFocus
+              autoFocus={!PANTALLA_TACTIL}
             />
             {error && <p className="form-error puerta-error" role="alert">{error}</p>}
             <Boton variante="primary" tipo="submit" clase="puerta-entrar" disabled={verificando || !password}>
