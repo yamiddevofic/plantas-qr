@@ -677,3 +677,48 @@ html[data-tema="oscuro"] .foto-variante-nueva {
     animation: none !important;
   }
 }
+
+/* ── Mapa en pantalla completa ("Ver en el mapa") ────────────── */
+
+.mapa-cerrar-pantalla {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  left: 12px;
+  z-index: 100000;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--hit);
+  padding: 0 18px 0 14px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  color: var(--ink-900);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mapa-cerrar-pantalla svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* En este modo el botón de cerrar sustituye al de pantalla completa de MapLibre,
+   y los controles se apartan de la muesca del teléfono. */
+.mapa-marco-pantalla .maplibregl-ctrl-fullscreen,
+.mapa-marco-pantalla .maplibregl-ctrl-shrink {
+  display: none;
+}
+
+.mapa-marco-pantalla .maplibregl-ctrl-top-right {
+  top: env(safe-area-inset-top, 0px);
+}
+
+/* El cargador también ocupa la pantalla mientras el mapa se abre. */
+.mapa-marco-pantalla .mapa-cargando,
+.mapa-marco-pantalla .mapa-error {
+  position: fixed;
+  z-index: 100000;
+}

@@ -28,9 +28,9 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
 
   const individuos = coleccion?.features ?? [];
 
+  // "Ver en el mapa" abre el mapa en pantalla completa, centrado en ese árbol.
   const verEnMapa = (feature) => {
-    document.getElementById('ficha-mapa')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setPedido({ id: feature.properties.id, vez: Date.now() });
+    setPedido({ id: feature.properties.id, vez: Date.now(), pantallaCompleta: true });
   };
 
   const hayUbicacion = Boolean(ubicacion?.descripcion) || individuos.length > 0 || sitios.length > 0;

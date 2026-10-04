@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { LuX } from 'react-icons/lu';
 import { useTema } from '../../tema.js';
 import {
   CAMARA_3D,
@@ -27,6 +28,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   const limitesRef = useRef(null);
   const popupRef = useRef(null);
   const seleccionRef = useRef(null);
+  const cerrarRef = useRef(null);
 
   const datos = coleccion;
   const estado = coleccion?.features?.length ? 'listo' : 'vacio';
@@ -37,6 +39,14 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   // el satélite sí puede estar guardado (mapa del parque o zonas ya vistas).
   const [base, setBase] = useState(() => (navigator.onLine ? 'mapa' : 'satelite'));
   const [relieve3D, setRelieve3D] = useState(false);
+  // Pantalla completa pedida desde "Ver en el mapa". Se usa el modo pseudo de
+  // MapLibre (la API de pantalla completa del navegador exige un gesto reciente
+  // y no existe en iPhone) y las clases de maplibregl se tocan con classList
+  // porque el contenedor lo gestiona la librería.
+  const [pantalla, setPantalla] = useState(false);
+  const [pedidoAtendido, setPedidoAtendido] = useState(null);
+  // Cargar el mapa ya, aunque la sección aún no esté cerca de la pantalla.
+  const cargar = visible || Boolean(pedido?.pantallaCompleta);
 
   const onSeleccionRef = useRef(onSeleccion);
   useEffect(() => {
@@ -56,7 +66,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
 
   // 2. Solo se descarga MapLibre cuando la sección se acerca al viewport.
   useEffect(() => {
-    if (estado !== 'listo' || visible) return undefined;
+    if (estado !== 'listo' || cargar) return undefined;
     const nodo = seccionRef.current;
     if (!nodo || !('IntersectionObserver' in window)) {
       setVisible(true);
@@ -68,7 +78,44 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
     );
     observador.observe(nodo);
     return () => observador.disconnect();
-  }, [estado, visible]);
+  }, [estado, cargar]);
+
+  // Un pedido nuevo con pantalla completa abre el modo (se ajusta durante el
+  // render, que es lo que React recomienda para derivar estado de props).
+  if (pedido?.pantallaCompleta && pedido.vez !== pedidoAtendido) {
+    setPedidoAtendido(pedido.vez);
+    setPantalla(true);
+  }
+
+  // Cierra la pantalla completa; la entrada que se añadió al historial (para que
+  // "atrás" cierre el mapa en vez de salir de la ficha) se retira aquí.
+  const cerrarPantalla = useCallback(() => {
+    setPantalla(false);
+    if (window.history.state?.plantaqrMapa) window.history.back();
+  }, []);
+
+  useEffect(() => {
+    const contenedor = contenedorRef.current;
+    if (!pantalla || !contenedor) return undefined;
+    contenedor.classList.add('maplibregl-pseudo-fullscreen');
+    const cuerpo = document.body;
+    const overflowPrevio = cuerpo.style.overflow;
+    cuerpo.style.overflow = 'hidden';
+    if (!window.history.state?.plantaqrMapa) window.history.pushState({ plantaqrMapa: true }, '');
+    const alTeclear = (e) => { if (e.key === 'Escape') cerrarPantalla(); };
+    const alVolver = () => { if (!window.history.state?.plantaqrMapa) setPantalla(false); };
+    window.addEventListener('keydown', alTeclear);
+    window.addEventListener('popstate', alVolver);
+    cerrarRef.current?.focus({ preventScroll: true });
+    mapaRef.current?.resize();
+    return () => {
+      contenedor.classList.remove('maplibregl-pseudo-fullscreen');
+      cuerpo.style.overflow = overflowPrevio;
+      window.removeEventListener('keydown', alTeclear);
+      window.removeEventListener('popstate', alVolver);
+      mapaRef.current?.resize();
+    };
+  }, [pantalla, cerrarPantalla]);
 
   const seleccionar = useCallback((feature, { centrar = false } = {}) => {
     const map = mapaRef.current;
@@ -100,7 +147,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
 
   // 3. Crear el mapa una vez que hay datos y la sección es visible.
   useEffect(() => {
-    if (estado !== 'listo' || !visible || !contenedorRef.current) return undefined;
+    if (estado !== 'listo' || !cargar || !contenedorRef.current) return undefined;
     let cancelado = false;
     let map;
 
@@ -183,14 +230,30 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
       seleccionRef.current = null;
       setMapaListo(false);
     };
-  }, [estado, visible, datos, seleccionar]);
+  }, [estado, cargar, datos, seleccionar]);
 
-  // Pedido desde la lista de "Datos rápidos". Quien pide desplaza la página hasta el
-  // mapa, lo que dispara su carga; el pedido se atiende cuando el mapa está listo.
+  // Pedido desde la galería de individuos. Con `pantallaCompleta` el mapa ocupa
+  // toda la ventana y se centra en ese árbol; si no, quien pide desplaza la página
+  // hasta el mapa (lo que dispara su carga). Se atiende cuando el mapa está listo.
   useEffect(() => {
     if (!pedido?.id || !mapaListo) return;
     const feature = datos?.features?.find((f) => f.properties.id === pedido.id);
     if (!feature) return;
+    if (pedido.pantallaCompleta) {
+      const map = mapaRef.current;
+      seleccionar(feature);
+      map.resize();
+      map.easeTo({
+        center: feature.geometry.coordinates,
+        // El punto un poco por debajo del centro: la ficha cabe encima de él. Con la
+        // ventana entera sobra espacio, así que no hace falta bajarlo tanto como en
+        // el mapa pequeño de la página.
+        offset: [0, map.getContainer().clientHeight * 0.1],
+        zoom: Math.max(map.getZoom(), 18.5),
+        duration: prefiereMenosMovimiento() ? 0 : 700,
+      });
+      return;
+    }
     seleccionar(feature, { centrar: true });
     // Se repite el desplazamiento: el primero (desde la lista) puede quedarse corto
     // porque la sección cambia de alto mientras el mapa termina de cargar.
@@ -261,7 +324,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
           deshabilitado={Boolean(errorMapa)}
         />
 
-        <div className="mapa-marco">
+        <div className={`mapa-marco${pantalla ? ' mapa-marco-pantalla' : ''}`}>
           <div
             ref={contenedorRef}
             className="mapa-lienzo"
@@ -274,6 +337,12 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
             </div>
           )}
           {errorMapa && <p className="mapa-error" role="status">{errorMapa}</p>}
+          {pantalla && (
+            <button ref={cerrarRef} type="button" className="mapa-cerrar-pantalla" onClick={cerrarPantalla}>
+              <LuX aria-hidden="true" />
+              Cerrar mapa
+            </button>
+          )}
         </div>
       </SeccionFicha>
     </div>
@@ -283,8 +352,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
 MapaIndividuos.propTypes = {
   /** FeatureCollection de los individuos de la especie. */
   coleccion: PropTypes.object,
-  /** { id, vez }: pide seleccionar y centrar un individuo (vez cambia en cada pedido). */
-  pedido: PropTypes.shape({ id: PropTypes.string, vez: PropTypes.number }),
+  /** { id, vez, pantallaCompleta }: pide seleccionar y centrar un individuo (vez cambia en cada pedido). */
+  pedido: PropTypes.shape({ id: PropTypes.string, vez: PropTypes.number, pantallaCompleta: PropTypes.bool }),
   /** Avisa qué individuo está seleccionado (o null). */
   onSeleccion: PropTypes.func,
   nombreEspecie: PropTypes.string.isRequired,
