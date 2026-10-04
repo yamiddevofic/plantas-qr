@@ -1,19 +1,28 @@
-import { LuDownload, LuQrCode } from 'react-icons/lu';
+import { LuDownload } from 'react-icons/lu';
 import Boton from '../atoms/Boton';
+import { IconoQr } from '../atoms/IconosInicio';
+import useRevelar from '../../hooks/useRevelar';
 
 /** Código QR de la especie: vista previa, descarga e ID copiable. */
 export default function PanelQR({ planta, qr, copiado, onCopiar, descargando, onDescargar, error, exito }) {
+  const [ref, visible] = useRevelar({ umbral: 0.2 });
   return (
-    <section className="detalle-qr" aria-labelledby="ficha-qr-titulo">
+    <section
+      ref={ref}
+      className={`detalle-qr revelar${visible ? ' revelado' : ''}`}
+      aria-labelledby="ficha-qr-titulo"
+    >
       <div className="detalle-qr-codigo">
         {qr ? (
           <img src={qr.imagen} alt={`Código QR de ${planta.nombre.comun}`} width={112} height={112} />
         ) : (
-          <LuQrCode aria-hidden="true" />
+          <IconoQr />
         )}
+        {/* Haz de escaneo, como en el emblema del inicio. */}
+        <span className="detalle-qr-haz" aria-hidden="true" />
       </div>
       <div className="detalle-qr-info">
-        <h3 id="ficha-qr-titulo" className="detalle-qr-titulo">Código QR</h3>
+        <h2 id="ficha-qr-titulo" className="inicio-eyebrow">Código QR</h2>
         <p className="detalle-qr-nota">
           Lleva a esta ficha. Imprímelo junto al árbol para que las visitas lo escaneen.
         </p>

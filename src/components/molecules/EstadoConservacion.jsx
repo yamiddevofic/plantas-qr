@@ -1,23 +1,86 @@
+import PropTypes from 'prop-types';
+import useRevelar from '../../hooks/useRevelar';
 import { ESCALA_CONSERVACION, estadoClass } from '../../constantes';
+import { IconoEscudo } from '../atoms/IconosInicio';
+
+/* Escala de riesgo simplificada para el medidor: de estable a extinta. Cada
+   clase del catálogo cae en un nivel; "datos insuficientes" no marca ninguno. */
+const NIVELES = [
+  { etiqueta: 'Estable', clases: ['estado-bien', 'estado-cultivada'] },
+  { etiqueta: 'Escasa', clases: ['estado-escasa'] },
+  { etiqueta: 'Casi amenazada', clases: ['estado-amenazado'] },
+  { etiqueta: 'Vulnerable', clases: ['estado-vulnerable'] },
+  { etiqueta: 'En peligro', clases: ['estado-peligro'] },
+  { etiqueta: 'Extinta', clases: ['estado-silvestre', 'estado-extinto'] },
+];
 
 /**
- * Píldora del estado de conservación de una especie: color según la
- * escala termómetro del catálogo, con la etiqueta general y el detalle
- * del estado (tooltip con la descripción de la categoría).
+ * Tarjeta del estado de conservación: el estado de la ficha, su descripción
+ * y un medidor de riesgo que se llena hasta el nivel de la especie.
  */
-export default function EstadoConservacion({ estado }) {
+export default function EstadoConservacion({ estado, onVerEscala }) {
+  const [ref, visible] = useRevelar({ umbral: 0.2 });
   const clase = estadoClass(estado);
+  const nivel = NIVELES.findIndex((n) => n.clases.includes(clase));
   const descripcion =
     ESCALA_CONSERVACION.find((e) => e.clase === clase)?.descripcion ||
     'Estado de conservación de la especie según la escala del catálogo.';
+  const texto = String(estado).charAt(0).toUpperCase() + String(estado).slice(1);
 
   return (
-    <span className={`estado-pill ${clase}`} title={descripcion}>
-      <span className="estado-pill-punto" aria-hidden="true" />
-      <span className="estado-pill-texto">
-        <span className="estado-pill-caption">Estado de conservación</span>
-        <span className="estado-pill-valor">{estado}</span>
-      </span>
-    </span>
+    <section
+      ref={ref}
+      className={`estado-tarjeta revelar${visible ? ' revelado' : ''}`}
+      data-nivel={nivel}
+      aria-labelledby="ficha-estado-titulo"
+    >
+      <div className="estado-tarjeta-cabecera">
+        <span className="estado-tarjeta-icono"><IconoEscudo /></span>
+        <div>
+          <h2 id="ficha-estado-titulo" className="inicio-eyebrow">Estado de conservación</h2>
+          <p className="estado-tarjeta-valor">{texto}</p>
+        </div>
+      </div>
+
+      <div
+        className="estado-medidor"
+        role="img"
+        aria-label={
+          nivel >= 0
+            ? `Nivel de riesgo: ${NIVELES[nivel].etiqueta}, ${nivel + 1} de ${NIVELES.length}`
+            : 'Nivel de riesgo sin evaluar'
+        }
+        style={{ '--nivel': nivel }}
+      >
+        <div className="estado-medidor-barra">
+          {NIVELES.map((n, i) => (
+            <span
+              key={n.etiqueta}
+              className={`estado-medidor-tramo${i <= nivel ? ' lleno' : ''}${i === nivel ? ' actual' : ''}`}
+              style={{ '--i': i }}
+            />
+          ))}
+        </div>
+        <div className="estado-medidor-extremos" aria-hidden="true">
+          <span>{NIVELES[0].etiqueta}</span>
+          <span>{NIVELES[NIVELES.length - 1].etiqueta}</span>
+        </div>
+      </div>
+
+      <p className="estado-tarjeta-descripcion">{descripcion}</p>
+
+      {onVerEscala && (
+        <button type="button" className="estado-tarjeta-escala" onClick={onVerEscala}>
+          Ver la escala completa
+        </button>
+      )}
+    </section>
   );
 }
+
+EstadoConservacion.propTypes = {
+  /** Estado tal como viene en la ficha (p. ej. "vulnerable"). */
+  estado: PropTypes.string.isRequired,
+  /** Abre la ventana con la escala de colores; sin él no se muestra el botón. */
+  onVerEscala: PropTypes.func,
+};

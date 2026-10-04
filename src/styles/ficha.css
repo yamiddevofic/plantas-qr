@@ -1,0 +1,856 @@
+/* ══════════════════════════════════════════════════════════════
+   Ficha de la especie · mismo lenguaje del inicio y la galería
+   Va al final del índice para ganar a detalle.css y menu-izquierda.css.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Barra superior de vidrio: volver, buscar, tema y menú ───── */
+
+.detalle-root .hero-acciones {
+  --vidrio: rgba(255, 255, 255, 0.72);
+  /* Verde suave: se ve tanto sobre la foto (móvil) como sobre el fondo blanco. */
+  --vidrio-borde: rgba(45, 106, 79, 0.18);
+  top: calc(14px + env(titlebar-area-height, 0px));
+  left: 14px;
+  right: 14px;
+  z-index: 20;
+}
+
+html[data-tema="oscuro"] .detalle-root .hero-acciones {
+  --vidrio: rgba(21, 31, 26, 0.66);
+  --vidrio-borde: rgba(143, 211, 168, 0.2);
+}
+
+.detalle-root .hero-acciones-grupo {
+  width: 100%;
+}
+
+.boton-volver {
+  display: inline-grid;
+  place-items: center;
+  width: var(--hit);
+  height: var(--hit);
+  margin-right: auto;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-md);
+  color: var(--ink-900);
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.boton-volver .icono-inicio {
+  width: 22px;
+  height: 22px;
+}
+
+@media (hover: hover) {
+  .boton-volver:hover {
+    transform: translateX(-2px);
+  }
+}
+
+.detalle-root .hero-acciones :is(.menu-hamburguesa, .boton-tema, .buscador-trigger, .boton-volver) {
+  border-color: var(--vidrio-borde);
+  background: var(--vidrio);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--ink-900);
+}
+
+/* Escritorio: [menú][volver] …………… [buscar][tema] */
+@media (min-width: 768px) {
+  .detalle-root .hero-acciones {
+    left: 20px;
+    right: 20px;
+  }
+
+  .detalle-root .hero-acciones .hero-acciones-grupo {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .detalle-root .hero-acciones .menu-hamburguesa {
+    order: -2;
+  }
+
+  .detalle-root .hero-acciones .boton-volver {
+    order: -1;
+  }
+}
+
+/* ── Hero con la foto ─────────────────────────────────────────── */
+
+/* Móvil y tablet: la foto ocupa todo el ancho desde arriba, con las esquinas
+   de abajo redondas. Las fotos del catálogo son verticales (3:4): 4:5 casi no
+   las recorta, y en tablet el alto se limita a la pantalla. */
+.detalle-hero-full {
+  width: auto;
+  margin: 0 0 32px;
+  border: none;
+  border-radius: 0 0 28px 28px;
+  box-shadow: 0 30px 60px -30px rgba(8, 20, 14, 0.55);
+}
+
+.detalle-hero-full .detalle-image {
+  aspect-ratio: 4 / 5;
+  max-height: 88svh;
+}
+
+.detalle-image::after {
+  background: linear-gradient(180deg, rgba(8, 20, 14, 0.35) 0%, transparent 22%, transparent 45%, rgba(8, 20, 14, 0.5) 100%);
+}
+
+.detalle-hero-texto {
+  max-width: none;
+  padding: 72px 22px 26px;
+  background: linear-gradient(180deg, transparent, rgba(8, 20, 14, 0.55) 40%, rgba(8, 20, 14, 0.88));
+}
+
+@media (min-width: 768px) and (max-width: 899px) {
+  .detalle-hero-texto {
+    padding: 96px 40px 36px;
+  }
+}
+
+.detalle-hero-inner {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.detalle-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  animation: inicioSube 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s both;
+}
+
+.detalle-hero-eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sage-300);
+}
+
+.detalle-hero-nombre {
+  max-width: 18ch;
+  font-size: clamp(2.1rem, 1.3rem + 3.4vw, 3.8rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  text-wrap: balance;
+  animation: palabraEntra 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s both;
+}
+
+.detalle-hero-cientifico {
+  margin-top: 8px;
+  font-size: clamp(1.05rem, 0.95rem + 0.6vw, 1.4rem);
+  color: rgba(255, 255, 255, 0.86);
+  animation: inicioSube 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.45s both;
+}
+
+.detalle-hero-etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: inicioSube 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.6s both;
+}
+
+.detalle-hero-etiquetas li {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.detalle-hero-etiquetas li::first-letter {
+  text-transform: uppercase;
+}
+
+/* Escritorio: hero dividido. El texto va a la izquierda sobre un fondo suave y
+   la foto vertical se muestra entera a la derecha, sin recortar la copa. */
+@media (min-width: 900px) {
+  .detalle-hero-full {
+    --alto-foto: min(70vh, 620px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 48px;
+    width: min(1180px, calc(100% - 40px));
+    margin: calc(var(--hit) + 28px) auto 56px;
+    padding: 28px;
+    border: 1px solid var(--line-100);
+    border-radius: 32px;
+    background:
+      radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--sage-300) 40%, transparent), transparent 55%),
+      linear-gradient(160deg, var(--mint-50), var(--mint-100));
+    box-shadow: none;
+  }
+
+  html[data-tema="oscuro"] .detalle-hero-full {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(111, 191, 141, 0.12), transparent 55%),
+      linear-gradient(160deg, var(--mint-50), var(--mint-100));
+  }
+
+  .detalle-hero-full .detalle-image {
+    grid-column: 2;
+    grid-row: 1;
+    width: calc(var(--alto-foto) * 0.75);
+    height: var(--alto-foto);
+    max-height: none;
+    aspect-ratio: auto;
+    border-radius: 24px;
+    box-shadow: 0 30px 60px -30px rgba(8, 20, 14, 0.55);
+  }
+
+  /* Sin texto encima, la foto no necesita el degradado oscuro. */
+  .detalle-hero-full .detalle-image::after {
+    display: none;
+  }
+
+  .detalle-hero-texto {
+    position: static;
+    grid-column: 1;
+    grid-row: 1;
+    padding: 12px 0 12px 24px;
+    background: none;
+  }
+
+  .detalle-hero-eyebrow {
+    border-color: var(--line-200);
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    color: var(--ink-700);
+  }
+
+  .detalle-hero-eyebrow::before {
+    background: var(--forest-600);
+  }
+
+  .detalle-hero-nombre {
+    color: var(--ink-900);
+    font-size: clamp(2.6rem, 1.4rem + 2.6vw, 4.4rem);
+  }
+
+  .detalle-hero-cientifico {
+    color: var(--forest-700);
+  }
+
+  .detalle-hero-etiquetas li {
+    border-color: var(--line-200);
+    background: var(--surface);
+    color: var(--ink-700);
+  }
+}
+
+/* Flechas del carrusel: vidrio, un poco más discretas. */
+.galeria-nav {
+  width: 44px;
+  height: 44px;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(8, 20, 14, 0.35);
+  box-shadow: none;
+}
+
+.galeria-nav svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ── Rejilla del contenido ────────────────────────────────────── */
+
+.detalle-contenido {
+  max-width: 1180px;
+  padding: 0 18px 72px;
+}
+
+/* Móvil: las dos columnas se intercalan (display: contents) y el orden pone
+   primero los datos rápidos y el estado, luego la lectura y al final el QR. */
+.ficha-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+.ficha-principal,
+.ficha-lateral {
+  display: contents;
+}
+
+.ficha-datos { order: 1; }
+.estado-tarjeta { order: 2; }
+.ficha-principal > * { order: 3; }
+.detalle-qr { order: 4; }
+
+@media (min-width: 1024px) {
+  .detalle-contenido {
+    padding-inline: 40px;
+  }
+
+  .ficha-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .ficha-principal {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .ficha-lateral {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* La columna lateral acompaña la lectura si cabe entera en la pantalla. */
+@media (min-width: 1024px) and (min-height: 860px) {
+  .ficha-lateral {
+    position: sticky;
+    top: 24px;
+  }
+}
+
+/* ── Encabezado de sección (como en el inicio) ───────────────── */
+
+.detalle-seccion-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.detalle-seccion-icono {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--mint-50);
+  box-shadow: inset 0 0 0 1px var(--line-100);
+  color: var(--forest-700);
+}
+
+.detalle-seccion-icono .icono-inicio {
+  width: 26px;
+  height: 26px;
+}
+
+.detalle-seccion-titulo {
+  margin: 4px 0 0;
+  font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--ink-900);
+  text-wrap: balance;
+}
+
+/* Aparición al hacer scroll: los bloques suben uno tras otro. */
+.revelar:not(.revelado):is(.detalle-seccion, .ficha-datos, .estado-tarjeta, .detalle-qr) > * {
+  opacity: 0;
+}
+
+.revelado:is(.detalle-seccion, .ficha-datos, .estado-tarjeta, .detalle-qr) > * {
+  animation: inicioSube 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.revelado:is(.detalle-seccion, .ficha-datos, .estado-tarjeta, .detalle-qr) > :nth-child(2) { animation-delay: 0.1s; }
+.revelado:is(.detalle-seccion, .ficha-datos, .estado-tarjeta, .detalle-qr) > :nth-child(3) { animation-delay: 0.2s; }
+.revelado:is(.detalle-seccion, .ficha-datos, .estado-tarjeta, .detalle-qr) > :nth-child(n + 4) { animation-delay: 0.3s; }
+
+/* ── Conoce este árbol ────────────────────────────────────────── */
+
+.detalle-parrafo {
+  color: var(--ink-700);
+  font-size: 1.02rem;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.detalle-hojas {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--line-100);
+  border-radius: 18px;
+  background: var(--mint-50);
+  color: var(--ink-700);
+  line-height: 1.6;
+}
+
+.detalle-hojas .icono-inicio {
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  color: var(--forest-700);
+}
+
+.detalle-hojas strong {
+  color: var(--ink-900);
+}
+
+.detalle-impacto {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px solid var(--line-100);
+  border-left: 1px solid var(--line-100);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--sage-300) 45%, transparent), transparent 60%),
+    linear-gradient(160deg, var(--mint-50), var(--mint-100));
+  color: var(--ink-700);
+}
+
+html[data-tema="oscuro"] .detalle-impacto {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(111, 191, 141, 0.14), transparent 60%),
+    linear-gradient(160deg, var(--mint-50), var(--mint-100));
+}
+
+.detalle-impacto-icono {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--forest-700);
+}
+
+.detalle-impacto-icono .icono-inicio {
+  width: 22px;
+  height: 22px;
+}
+
+.detalle-impacto-label {
+  margin-bottom: 4px;
+  color: var(--forest-700);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+/* ── Usos tradicionales ───────────────────────────────────────── */
+
+.detalle-usos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detalle-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 9px 12px;
+  border: 1px solid var(--line-200);
+  background: var(--surface);
+  color: var(--ink-700);
+  font-size: 0.9rem;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.detalle-chip .icono-inicio {
+  width: 16px;
+  height: 16px;
+  color: var(--forest-700);
+}
+
+@media (hover: hover) {
+  .detalle-chip:hover {
+    border-color: var(--sage-300);
+    background: var(--mint-50);
+    transform: translateY(-1px);
+  }
+}
+
+.revelar:not(.revelado) .detalle-chip {
+  opacity: 0;
+}
+
+.revelado .detalle-chip {
+  animation: chipEntra 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
+  animation-delay: calc(0.25s + var(--i, 0) * 0.06s);
+}
+
+@keyframes chipEntra {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── Dónde verlo ──────────────────────────────────────────────── */
+
+.detalle-ubicaciones {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detalle-ubicaciones li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--ink-700);
+  line-height: 1.5;
+}
+
+.detalle-ubicaciones .icono-inicio {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: var(--forest-700);
+}
+
+.ficha-individuos {
+  margin-top: 18px;
+}
+
+.ficha-individuos-titulo {
+  margin-bottom: 10px;
+}
+
+.ficha-individuos ul {
+  display: grid;
+  gap: 8px;
+  border-top: none;
+}
+
+.ficha-individuo {
+  min-height: 68px;
+  padding: 10px 14px 10px 10px;
+  border: 1px solid var(--line-100);
+  border-radius: 18px;
+  background: var(--surface);
+  transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.ficha-individuo-foto {
+  border-radius: 12px;
+}
+
+@media (hover: hover) {
+  .ficha-individuo:hover {
+    border-color: var(--sage-300);
+    background: var(--mint-50);
+    transform: translateY(-1px);
+  }
+}
+
+.ficha-individuo.activo {
+  border-color: var(--forest-700);
+  background: var(--mint-100);
+}
+
+/* ── Datos rápidos ────────────────────────────────────────────── */
+
+.ficha-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ficha-datos-rejilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.ficha-dato {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--line-100);
+  border-radius: 20px;
+  background: var(--mint-50);
+}
+
+.revelar:not(.revelado) .ficha-dato {
+  opacity: 0;
+}
+
+.revelado .ficha-dato {
+  animation: inicioSube 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(0.1s + var(--i, 0) * 0.08s);
+}
+
+.ficha-dato dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-500);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.ficha-dato-icono {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line-200);
+  color: var(--forest-700);
+}
+
+.ficha-dato-icono .icono-inicio {
+  width: 18px;
+  height: 18px;
+}
+
+.ficha-dato dd {
+  margin: 0;
+  color: var(--ink-900);
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.ficha-dato dd::first-letter {
+  text-transform: uppercase;
+}
+
+/* ── Estado de conservación ──────────────────────────────────── */
+
+.estado-tarjeta {
+  --estado: #8a9aa0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--line-100);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--estado) 16%, transparent), transparent 55%),
+    var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+.estado-tarjeta[data-nivel="0"] { --estado: #3fa36b; }
+.estado-tarjeta[data-nivel="1"] { --estado: #c99a1c; }
+.estado-tarjeta[data-nivel="2"] { --estado: #e8a512; }
+.estado-tarjeta[data-nivel="3"] { --estado: #f97316; }
+.estado-tarjeta[data-nivel="4"] { --estado: #d6342f; }
+.estado-tarjeta[data-nivel="5"] { --estado: #8b1c1c; }
+
+html[data-tema="oscuro"] .estado-tarjeta[data-nivel="5"] { --estado: #e0584f; }
+
+.estado-tarjeta-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.estado-tarjeta-icono {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--estado) 16%, transparent);
+  color: color-mix(in srgb, var(--estado) 78%, var(--ink-900));
+}
+
+.estado-tarjeta-icono .icono-inicio {
+  width: 24px;
+  height: 24px;
+}
+
+.estado-tarjeta-valor {
+  margin-top: 4px;
+  color: var(--ink-900);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.estado-medidor-barra {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+}
+
+/* Cada tramo es un paso del termómetro, de verde (estable) a rojo (extinta);
+   se llenan en orden hasta el nivel de la especie. */
+.estado-medidor-tramo {
+  position: relative;
+  height: 10px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--line-200);
+}
+
+.estado-medidor-tramo:nth-child(1) { --c: #3fa36b; }
+.estado-medidor-tramo:nth-child(2) { --c: #c99a1c; }
+.estado-medidor-tramo:nth-child(3) { --c: #e8a512; }
+.estado-medidor-tramo:nth-child(4) { --c: #f97316; }
+.estado-medidor-tramo:nth-child(5) { --c: #d6342f; }
+.estado-medidor-tramo:nth-child(6) { --c: #8b1c1c; }
+
+.estado-medidor-tramo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--c);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.revelado .estado-medidor-tramo.lleno::after {
+  transform: none;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: calc(0.35s + var(--i) * 0.14s);
+}
+
+/* El tramo actual late suave una vez lleno. */
+.revelado .estado-medidor-tramo.actual {
+  overflow: visible;
+  animation: tramoLate 2.4s ease-in-out calc(1.2s + var(--nivel, 0) * 0.14s) infinite;
+}
+
+@keyframes tramoLate {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c) 0%, transparent); }
+  50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 28%, transparent); }
+}
+
+.estado-medidor-extremos {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--ink-500);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.estado-tarjeta-descripcion {
+  color: var(--ink-500);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.estado-tarjeta-escala {
+  align-self: flex-start;
+  min-height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--forest-700);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--forest-700) 40%, transparent);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+/* ── Código QR ───────────────────────────────────────────────── */
+
+.detalle-qr {
+  gap: 18px;
+  margin: 0;
+  padding: 20px;
+  border: 1px solid var(--line-100);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+.detalle-qr-codigo {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px var(--line-200);
+}
+
+.detalle-qr-codigo .icono-inicio {
+  width: 48px;
+  height: 48px;
+  color: var(--ink-300);
+}
+
+.detalle-qr-haz {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 8px;
+  height: 3px;
+  border-radius: 3px;
+  background: #1fbf6a;
+  box-shadow: 0 0 10px #1fbf6a;
+  opacity: 0.85;
+  animation: qrHaz 2.8s ease-in-out infinite;
+}
+
+@keyframes qrHaz {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(100px); }
+}
+
+/* En la columna lateral el código va arriba y el texto debajo, con aire. */
+@media (min-width: 1024px) {
+  .ficha-lateral .detalle-qr {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.detalle-qr-acciones .btn {
+  border-radius: var(--radius-pill);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detalle-qr-haz,
+  .detalle-hero-texto * {
+    animation: none !important;
+  }
+
+  .estado-medidor-tramo.lleno::after {
+    transform: none;
+  }
+}

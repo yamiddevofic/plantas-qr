@@ -168,7 +168,110 @@ export function IconoBajar({ clase }) {
   );
 }
 
+/** Árbol: tipo de planta. */
+export function IconoArbol({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M12 3a5 5 0 0 0-4.8 6.4A4 4 0 0 0 8 17h8a4 4 0 0 0 .8-7.6A5 5 0 0 0 12 3z" />
+      <path className="trazo" pathLength="1" d="M12 3a5 5 0 0 0-4.8 6.4A4 4 0 0 0 8 17h8a4 4 0 0 0 .8-7.6A5 5 0 0 0 12 3z" />
+      <path className="trazo" pathLength="1" d="M12 21v-8M12 15l-3-2.5M12 13.5l2.5-2" />
+    </Icono>
+  );
+}
+
+/** Globo terráqueo: origen. */
+export function IconoGlobo({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <circle className="icono-tinte" cx="12" cy="12" r="8.5" />
+      <circle className="trazo" pathLength="1" cx="12" cy="12" r="8.5" />
+      <path className="trazo" pathLength="1" d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.2 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.2-3.5-8.5S9.6 5.9 12 3.5z" />
+    </Icono>
+  );
+}
+
+/** Regla vertical con flechas: altura. */
+export function IconoRegla({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <rect className="icono-tinte" x="13" y="3" width="6" height="18" rx="1.5" />
+      <rect className="trazo" pathLength="1" x="13" y="3" width="6" height="18" rx="1.5" />
+      <path className="trazo" pathLength="1" d="M13 7h3M13 11h2M13 15h3M13 19h2" />
+      <path className="trazo" pathLength="1" d="M7 4v16M4.5 6.5 7 4l2.5 2.5M4.5 17.5 7 20l2.5-2.5" />
+    </Icono>
+  );
+}
+
+/** Escudo con hoja: estado de conservación. */
+export function IconoEscudo({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M12 3 5 6v5.5c0 4.4 3 8 7 9.5 4-1.5 7-5.1 7-9.5V6z" />
+      <path className="trazo" pathLength="1" d="M12 3 5 6v5.5c0 4.4 3 8 7 9.5 4-1.5 7-5.1 7-9.5V6z" />
+      <path className="trazo" pathLength="1" d="M9 15c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5zM9 15l2.5-2.5" />
+    </Icono>
+  );
+}
+
+/** Libro abierto con un brote: conoce este árbol. */
+export function IconoLibro({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M3 6.5c3-1 6-.6 9 1.5 3-2.1 6-2.5 9-1.5V19c-3-1-6-.6-9 1.5-3-2.1-6-2.5-9-1.5z" />
+      <path className="trazo" pathLength="1" d="M3 6.5c3-1 6-.6 9 1.5 3-2.1 6-2.5 9-1.5V19c-3-1-6-.6-9 1.5-3-2.1-6-2.5-9-1.5z" />
+      <path className="trazo" pathLength="1" d="M12 8v12.5" />
+      <path className="trazo" pathLength="1" d="M12 5.5c0-1.6 1.2-2.6 2.8-2.6 0 1.6-1.2 2.6-2.8 2.6zM12 5.5c0-1.2-.9-2-2.2-2 0 1.2.9 2 2.2 2z" />
+    </Icono>
+  );
+}
+
+/** Mano que sostiene un brote: usos tradicionales. */
+export function IconoUsos({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M12 8.5c-2 0-3.5-1.4-3.5-3.5 2 0 3.5 1.4 3.5 3.5zM12 7.5c0-2.2 1.6-3.8 3.8-3.8 0 2.2-1.6 3.8-3.8 3.8z" />
+      <path className="trazo" pathLength="1" d="M12 12V7.5" />
+      <path className="trazo" pathLength="1" d="M12 8.5c-2 0-3.5-1.4-3.5-3.5 2 0 3.5 1.4 3.5 3.5zM12 7.5c0-2.2 1.6-3.8 3.8-3.8 0 2.2-1.6 3.8-3.8 3.8z" />
+      <path className="trazo" pathLength="1" d="M3 14h3l2.5 1.6h4a1.4 1.4 0 0 1 0 2.8H9.5" />
+      <path className="trazo" pathLength="1" d="M12.6 18.3 18 16.2a1.4 1.4 0 0 1 1.3 2.4L13 21H3" />
+    </Icono>
+  );
+}
+
+/** Corazón con nervadura de hoja: importancia ambiental. */
+export function IconoCorazonHoja({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M12 20s-7.5-4.5-7.5-10.2A4.2 4.2 0 0 1 12 7.2a4.2 4.2 0 0 1 7.5 2.6C19.5 15.5 12 20 12 20z" />
+      <path className="trazo" pathLength="1" d="M12 20s-7.5-4.5-7.5-10.2A4.2 4.2 0 0 1 12 7.2a4.2 4.2 0 0 1 7.5 2.6C19.5 15.5 12 20 12 20z" />
+      <path className="trazo" pathLength="1" d="M12 17V9.5M12 12.5l-2.5-2M12 14.5l2.5-2" />
+    </Icono>
+  );
+}
+
+/** Mapa plegado: ubicación en el mapa. */
+export function IconoMapa({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M3 6.5 8.5 4l7 2.5L21 4v13.5L15.5 20l-7-2.5L3 20z" />
+      <path className="trazo" pathLength="1" d="M3 6.5 8.5 4l7 2.5L21 4v13.5L15.5 20l-7-2.5L3 20z" />
+      <path className="trazo" pathLength="1" d="M8.5 4v13.5M15.5 6.5V20" />
+    </Icono>
+  );
+}
+
+/** Flecha hacia la izquierda (volver). */
+export function IconoVolver({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path d="M19 12H5M11 6l-6 6 6 6" />
+    </Icono>
+  );
+}
+
 [
   IconoArbolPlaca, IconoEscanear, IconoFicha, IconoHoja, IconoFamilias, IconoQr,
   IconoUbicacion, IconoAve, IconoArdilla, IconoMariposa, IconoFlecha, IconoBajar,
+  IconoArbol, IconoGlobo, IconoRegla, IconoEscudo, IconoLibro, IconoUsos, IconoCorazonHoja,
+  IconoMapa, IconoVolver,
 ].forEach((c) => { c.propTypes = tipos; });

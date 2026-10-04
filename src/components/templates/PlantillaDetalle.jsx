@@ -4,6 +4,8 @@ import EstadoBox from '../atoms/EstadoBox';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
+import BotonTema from '../atoms/BotonTema';
+import { IconoVolver } from '../atoms/IconosInicio';
 import GaleriaFotos from '../organisms/GaleriaFotos';
 import Hero from '../organisms/Hero';
 import ContenidoFicha from '../organisms/ContenidoFicha';
@@ -118,7 +120,11 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
 
       <div className="hero-acciones">
         <div className="hero-acciones-grupo">
+          <a className="boton-volver" href="#/galeria" aria-label="Volver a las especies" title="Volver a las especies">
+            <IconoVolver />
+          </a>
           <BuscadorLupa />
+          <BotonTema />
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
         </div>
       </div>
@@ -205,23 +211,35 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, onQrGene
                   alt={`Fotografía de ${nombre.comun} (${nombre.cientifico})`}
                 />
               }
-              corchete="Parque principal de Chitagá"
+              corchete="Parque Principal de Chitagá"
               titulo={nombre.comun}
               subtitulo={nombre.cientifico}
+              badge={
+                (planta.tipo || planta.familia) && (
+                  <ul className="detalle-hero-etiquetas" aria-label="Clasificación">
+                    {planta.tipo && <li>{planta.tipo}</li>}
+                    {planta.familia && <li>{planta.familia}</li>}
+                  </ul>
+                )
+              }
             />
 
             <div className="detalle-contenido">
-              <ContenidoFicha planta={planta} />
-
-              <PanelQR
+              <ContenidoFicha
                 planta={planta}
-                qr={qr}
-                copiado={copiado}
-                onCopiar={copiarId}
-                descargando={descargando}
-                onDescargar={descargarQR}
-                error={errorQR}
-                exito={exitoQR}
+                onVerEstados={onVerEstados}
+                lateral={
+                  <PanelQR
+                    planta={planta}
+                    qr={qr}
+                    copiado={copiado}
+                    onCopiar={copiarId}
+                    descargando={descargando}
+                    onDescargar={descargarQR}
+                    error={errorQR}
+                    exito={exitoQR}
+                  />
+                }
               />
             </div>
           </article>

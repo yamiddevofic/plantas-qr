@@ -16,6 +16,7 @@ import {
 import SeccionFicha from '../molecules/SeccionFicha';
 import ControlesMapa from '../molecules/ControlesMapa';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
+import { IconoMapa } from '../atoms/IconosInicio';
 
 export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido = null, onSeleccion }) {
   const { tema } = useTema();
@@ -247,7 +248,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
 
   return (
     <div ref={seccionRef} className="detalle-mapa">
-      <SeccionFicha id="ficha-mapa" titulo="¿Dónde encontrarlo?">
+      <SeccionFicha id="ficha-mapa" antetitulo="Mapa" titulo="Encuéntralo en el mapa" icono={IconoMapa}>
         <p className="detalle-parrafo detalle-parrafo-suave">
           Toca un punto para ver el árbol; con relieve 3D ves las montañas que rodean el pueblo.
         </p>
