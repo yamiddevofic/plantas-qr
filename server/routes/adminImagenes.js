@@ -11,7 +11,7 @@ const UPLOADS = path.join(__dirname, '..', 'uploads');
 
 const router = express.Router();
 
-const SOLO_ARCHIVOS = /^[\w\-\.]+$/;
+const SOLO_ARCHIVOS = /^[\w\-.]+$/;
 
 router.post('/depurar-verificar', qrAuth, (_req, res) => {
   res.json({ ok: true });
@@ -159,7 +159,7 @@ function escapar(texto) {
 }
 
 router.get('/depurar-plantas', async (_req, res) => {
-  const [plantas, refs] = await Promise.all([Planta.find().lean(), referencias()]);
+  const plantas = await Planta.find().lean();
   const archivos = fs
     .readdirSync(UPLOADS)
     .filter((f) => f !== '.gitkeep' && SOLO_ARCHIVOS.test(f))
@@ -295,7 +295,7 @@ router.post('/depurar-plantas/guardar', qrAuth, async (req, res) => {
     return res.status(400).json({ ok: false, error: 'Datos inválidos' });
   }
   const limpias = refs
-    .filter((r) => typeof r === 'string' && /^\/uploads\/[\w\-\.]+$/.test(r))
+    .filter((r) => typeof r === 'string' && /^\/uploads\/[\w\-.]+$/.test(r))
     .map((r) => {
       const nombre = r.replace('/uploads/', '');
       return fs.existsSync(path.join(UPLOADS, nombre)) ? r : null;

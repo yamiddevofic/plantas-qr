@@ -57,7 +57,7 @@ function parsearBody(body) {
 }
 
 async function resolverImagenes(datos, archivos) {
-  let conservadas = [];
+  let conservadas;
   if (Array.isArray(datos.imagenesConservar)) {
     conservadas = datos.imagenesConservar;
   } else {
