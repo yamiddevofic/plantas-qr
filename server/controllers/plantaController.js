@@ -58,9 +58,15 @@ function parsearBody(body) {
   return datos;
 }
 
-async function resolverImagenes(datos, archivos) {
+/**
+ * Lista final de fotos de una especie. `actuales` son las que ya tiene (al
+ * editar): si la petición no dice cuáles conservar, se conservan todas.
+ */
+async function resolverImagenes(datos, archivos, actuales = []) {
   let conservadas;
-  if (Array.isArray(datos.imagenesConservar)) {
+  if (datos.imagenesConservar === undefined) {
+    conservadas = actuales;
+  } else if (Array.isArray(datos.imagenesConservar)) {
     conservadas = datos.imagenesConservar;
   } else {
     try {
@@ -162,8 +168,16 @@ export const buscarPorFamilia = async (req, res) => {
 export const actualizarPlanta = async (req, res) => {
   try {
     const datos = parsearBody(req.body);
-    if (req.files) {
-      Object.assign(datos, await resolverImagenes(datos, req.files));
+    // Solo se tocan las fotos si la petición trae alguna instrucción sobre ellas:
+    // multer deja `req.files` como objeto vacío aunque no se envíe nada, y
+    // resolver las fotos entonces dejaba la especie sin ninguna.
+    const cambiaFotos = datos.imagenesConservar !== undefined
+      || Boolean(req.files?.imagen?.length || req.files?.imagenes?.length);
+    if (cambiaFotos) {
+      const existente = await Planta.findById(req.params.id).select('imagen imagenes');
+      if (!existente) return res.status(404).json({ mensaje: 'Planta no encontrada' });
+      const actuales = [existente.imagen, ...(existente.imagenes || [])].filter(Boolean);
+      Object.assign(datos, await resolverImagenes(datos, req.files, actuales));
     }
     delete datos.imagenesConservar;
     datos.usos = limpiarUsos(datos.usos);
