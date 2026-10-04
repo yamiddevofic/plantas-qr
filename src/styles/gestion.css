@@ -195,6 +195,35 @@
   }
 }
 
+/* Escritorio: también la versión baja, un poco más que el encabezado completo,
+   y con la flecha que lleva a la lista (en móvil la lista ya se ve debajo). */
+.hero-gestion-bajar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hero-gestion.hero-gestion-compacto {
+    /* El mismo alto del dibujo que el encabezado completo (25 vw): con menos, la
+       luna o el sol quedan cortados. Lo que se recorta es el aire alrededor del texto. */
+    min-height: clamp(400px, 50svh, 520px);
+    margin-bottom: 40px;
+  }
+
+  .hero-gestion.hero-gestion-compacto .hero-inicio-contenido {
+    gap: 12px;
+    padding-top: calc(var(--hit) + 26px);
+    padding-bottom: calc(var(--alto-paisaje) * 0.4);
+  }
+
+  .hero-gestion.hero-gestion-compacto .hero-inicio-texto-bloque {
+    gap: 12px;
+  }
+
+  .hero-gestion-bajar {
+    display: grid;
+  }
+}
+
 /* ── Contenido ──────────────────────────────────────────────── */
 
 .gestion-main {
