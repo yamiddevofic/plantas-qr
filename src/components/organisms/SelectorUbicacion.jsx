@@ -33,7 +33,8 @@ function coordenadasValidas(latitud, longitud) {
 
 /**
  * Mapa satelital para fijar la ubicación de un individuo: un toque coloca el
- * marcador, que además se puede arrastrar. Los otros individuos se muestran
+ * marcador, que además se puede arrastrar. `onCambiar` recibe también el zoom
+ * del mapa, con el que se estima la precisión del punto marcado. Los otros individuos se muestran
  * como puntos de referencia. MapLibre se descarga bajo demanda.
  */
 export default function SelectorUbicacion({ latitud, longitud, onCambiar, referencias = [], precision = null }) {
@@ -79,12 +80,12 @@ export default function SelectorUbicacion({ latitud, longitud, onCambiar, refere
         if (inicial) marcador.addTo(map);
         marcador.on('dragend', () => {
           const { lng, lat } = marcador.getLngLat();
-          alCambiarRef.current({ latitud: redondear(lat), longitud: redondear(lng) });
+          alCambiarRef.current({ latitud: redondear(lat), longitud: redondear(lng), zoom: map.getZoom() });
         });
 
         map.on('click', (e) => {
           marcador.setLngLat(e.lngLat).addTo(map);
-          alCambiarRef.current({ latitud: redondear(e.lngLat.lat), longitud: redondear(e.lngLat.lng) });
+          alCambiarRef.current({ latitud: redondear(e.lngLat.lat), longitud: redondear(e.lngLat.lng), zoom: map.getZoom() });
         });
 
         map.on('style.load', () => {

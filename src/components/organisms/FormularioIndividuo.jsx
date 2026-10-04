@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { LuLocateFixed } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
-import { calidadPrecision, sugerirCodigo } from '../../individuos';
+import { altitudMasCercana, calidadPrecision, precisionDeMarcado, sugerirCodigo } from '../../individuos';
+import { altitudDelTerreno } from '../../mapa/altitud';
 import useMedicionGps from '../../hooks/useMedicionGps';
 import { recortarFoto } from '../../offline/fotos';
 import Boton from '../atoms/Boton';
@@ -48,6 +49,10 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
   const [mensajeError, setMensajeError] = useState(null);
   const [enviando, setEnviando] = useState(false);
   const [mensajeGps, setMensajeGps] = useState(null);
+  // Cada marca en el mapa lanza una consulta de altitud; solo vale la última.
+  const consultaAltitud = useRef(0);
+  // La precisión viene del GPS (o ya venía guardada) y no de un toque en el mapa.
+  const [medidoConGps, setMedidoConGps] = useState(() => esEdicion && Boolean(individuo?.properties.precisionGpsM));
   // Dos fotos por individuo: móvil (vertical 4:5) y escritorio (horizontal 16:9).
   const [fotos, setFotos] = useState({ movil: null, escritorio: null });
   const [procesando, setProcesando] = useState(null);
@@ -98,6 +103,7 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
 
   // Medición GPS de varios segundos: el marcador se mueve a medida que afina.
   const aplicarGps = useCallback((e) => {
+    setMedidoConGps(true);
     setEstado((prev) => ({
       ...prev,
       latitud: e.latitud,
@@ -122,7 +128,38 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
     },
   });
 
+  // Al marcar el mapa: precisión según el zoom y altitud del terreno (o, sin
+  // internet, la del árbol registrado más cercano). Todo editable después.
+  async function completarMarcado({ latitud, longitud, zoom }) {
+    const numero = consultaAltitud.current + 1;
+    consultaAltitud.current = numero;
+    const precision = precisionDeMarcado(zoom, latitud);
+    setMedidoConGps(false);
+    setMensajeGps(null);
+    setEstado((prev) => ({ ...prev, latitud, longitud, precisionGpsM: precision ?? '' }));
+    limpiarErrores('latitud', 'longitud', 'precisionGpsM');
+
+    let altitud = await altitudDelTerreno(latitud, longitud);
+    let origen = 'del terreno';
+    if (altitud == null) {
+      const cercano = altitudMasCercana([longitud, latitud], referencias);
+      if (cercano) {
+        altitud = cercano.altitud;
+        origen = `de ${cercano.codigo}, a ${Math.round(cercano.metros)} m`;
+      }
+    }
+    if (consultaAltitud.current !== numero) return; // marcaron otro punto o escribieron la altitud
+    if (altitud == null) {
+      setMensajeGps({ tipo: 'aviso', texto: `Punto marcado (precisión estimada ±${precision} m). No se pudo calcular la altitud: escríbela si la conoces.` });
+      return;
+    }
+    setEstado((prev) => ({ ...prev, altitudMsnm: altitud }));
+    limpiarErrores('altitudMsnm');
+    setMensajeGps({ tipo: 'ok', texto: `Punto marcado: altitud ${altitud} m (${origen}, aproximada) y precisión ±${precision} m según el zoom. Puedes corregirlas abajo.` });
+  }
+
   function usarMiUbicacion() {
+    consultaAltitud.current += 1; // el GPS manda: una consulta de altitud pendiente ya no aplica
     setMensajeGps(null);
     gps.iniciar();
   }
@@ -240,11 +277,9 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
               longitud={estado.longitud}
               referencias={referencias}
               precision={Number(estado.precisionGpsM) || null}
-              onCambiar={({ latitud, longitud }) => {
-                // Colocado a mano: la precisión del GPS ya no aplica.
+              onCambiar={(punto) => {
                 if (gps.midiendo) gps.cancelar();
-                setEstado((prev) => ({ ...prev, latitud, longitud, precisionGpsM: '' }));
-                limpiarErrores('latitud', 'longitud');
+                completarMarcado(punto);
               }}
             />
             {gps.midiendo ? (
@@ -276,7 +311,7 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
               <div className="form-acciones-linea">
                 <Boton variante="ghost" onClick={usarMiUbicacion}>
                   <LuLocateFixed aria-hidden="true" className="btn-lupa-icono" />
-                  {estado.precisionGpsM ? 'Volver a medir' : 'Usar mi ubicación'}
+                  {medidoConGps ? 'Volver a medir' : 'Usar mi ubicación'}
                 </Boton>
                 {(mensajeGps || gps.error) && (
                   <p
@@ -320,7 +355,10 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
                   step="any"
                   inputMode="decimal"
                   value={estado.altitudMsnm}
-                  onChange={(e) => set('altitudMsnm', e.target.value)}
+                  onChange={(e) => {
+                    consultaAltitud.current += 1; // lo escrito a mano no se pisa con una consulta pendiente
+                    set('altitudMsnm', e.target.value);
+                  }}
                 />
               </CampoFormulario>
               <CampoFormulario id="ind-prec" etiqueta="Precisión GPS (± m)" error={errores.precisionGpsM}>

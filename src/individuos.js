@@ -96,3 +96,47 @@ export function calidadPrecision(metros) {
   if (metros <= 20) return { nivel: 'regular', texto: 'Regular' };
   return { nivel: 'mala', texto: 'Baja' };
 }
+
+// ── Marcado a mano en el mapa ────────────────────────────────────
+// Al fijar un punto tocando el mapa no hay GPS que informe su margen de error:
+// se estima por el zoom (cuánto terreno cubre la punta del dedo o del cursor).
+
+/** Metros que abarca un píxel del mapa a ese zoom y latitud (MapLibre, teselas de 512 px). */
+export function metrosPorPixel(zoom, latitud) {
+  return (78271.51696 * Math.cos((latitud * Math.PI) / 180)) / 2 ** zoom;
+}
+
+/**
+ * Precisión estimada (± m) de un punto marcado en el mapa: unos 10 px de
+ * "puntería". Nunca baja de 1 m: la imagen satelital misma no es más exacta.
+ */
+export function precisionDeMarcado(zoom, latitud) {
+  if (!Number.isFinite(zoom) || !Number.isFinite(latitud)) return null;
+  return Math.max(1, Number((metrosPorPixel(zoom, latitud) * 10).toFixed(1)));
+}
+
+/** Distancia en metros entre dos puntos [lng, lat]. */
+export function distanciaMetros([lng1, lat1], [lng2, lat2]) {
+  const rad = (g) => (g * Math.PI) / 180;
+  const a = Math.sin(rad(lat2 - lat1) / 2) ** 2
+    + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(rad(lng2 - lng1) / 2) ** 2;
+  return 2 * 6371000 * Math.asin(Math.sqrt(a));
+}
+
+/**
+ * Altitud del individuo registrado más cercano (con altitud) a `maxM` metros o
+ * menos: respaldo cuando no hay internet para consultar el terreno.
+ * @returns {{altitud:number, codigo:string, metros:number}|null}
+ */
+export function altitudMasCercana(punto, features, maxM = 200) {
+  let mejor = null;
+  for (const f of features) {
+    const altitud = f.properties?.altitudMsnm;
+    if (!Number.isFinite(altitud)) continue;
+    const metros = distanciaMetros(punto, f.geometry.coordinates);
+    if (metros <= maxM && (!mejor || metros < mejor.metros)) {
+      mejor = { altitud, codigo: f.properties.codigoArbol, metros };
+    }
+  }
+  return mejor;
+}
