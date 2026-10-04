@@ -1,5 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#173f2f"/>
-  <path d="M46 18C46 18 22 19.5 17.5 23.5S19 44 19 44s20.5 4 25-0.5S46 18 46 18z" fill="#2d6a4f"/>
-  <path d="M20.5 41.5C20.5 41.5 29 34 34 29" stroke="#b7e4c7" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d6ede0"/>
+      <stop offset="0.55" stop-color="#ecf6ee"/>
+      <stop offset="1" stop-color="#fbf1dd"/>
+    </linearGradient>
+    <radialGradient id="resplandor" cx="0.5" cy="0.72" r="0.55">
+      <stop offset="0" stop-color="#ffd88a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffd88a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#cielo)"/>
+  <rect width="512" height="512" rx="112" fill="url(#resplandor)"/>
+  <g transform="translate(-40.37 -27.48) scale(3.4462)">
+  <ellipse cx="80" cy="134" rx="40" ry="5" fill="#173f2f" fill-opacity="0.14"/>
+  <path fill="#7a5434" d="M76 135c1.6-11 1.8-22 .4-33l-9-9 2.6-2.4 7.4 7.2c.3-3 .3-6 0-9h5.6c-.3 2.8-.3 5.7 0 8.6l8.2-8.4 2.6 2.4-10 10c-1.4 11.2-1.2 22.2.4 33.6z"/>
+  <circle cx="54" cy="80" r="20" fill="#2d6a4f"/>
+  <circle cx="106" cy="80" r="20" fill="#2d6a4f"/>
+  <circle cx="80" cy="86" r="19" fill="#3b815e"/>
+  <circle cx="80" cy="60" r="30" fill="#4f9d74"/>
+  <circle cx="69" cy="49" r="9" fill="#d7f2e0" fill-opacity="0.55"/>
+  <circle cx="51" cy="74" r="5" fill="#d7f2e0" fill-opacity="0.55"/>
+  <path d="M93 93c3 4 6 7 11 9" fill="none" stroke="#7a5434" stroke-width="1.6" stroke-linecap="round"/>
+  <g transform="translate(100 100) rotate(-6)">
+    <rect x="0.6" y="1.6" width="32" height="32" rx="5" fill="#000" fill-opacity="0.12"/>
+    <rect width="32" height="32" rx="5" fill="#ffffff"/>
+    
+    <g transform="translate(4.1 4.1)">
+      <rect width="10.2" height="10.2" rx="1.2" fill="#173f2f"/>
+      <rect x="1.7" y="1.7" width="6.8" height="6.8" rx="0.6" fill="#ffffff"/>
+      <rect x="3.4" y="3.4" width="3.4" height="3.4" rx="0.4" fill="#173f2f"/>
+    </g>
+    <g transform="translate(17.7 4.1)">
+      <rect width="10.2" height="10.2" rx="1.2" fill="#173f2f"/>
+      <rect x="1.7" y="1.7" width="6.8" height="6.8" rx="0.6" fill="#ffffff"/>
+      <rect x="3.4" y="3.4" width="3.4" height="3.4" rx="0.4" fill="#173f2f"/>
+    </g>
+    <g transform="translate(4.1 17.7)">
+      <rect width="10.2" height="10.2" rx="1.2" fill="#173f2f"/>
+      <rect x="1.7" y="1.7" width="6.8" height="6.8" rx="0.6" fill="#ffffff"/>
+      <rect x="3.4" y="3.4" width="3.4" height="3.4" rx="0.4" fill="#173f2f"/>
+    </g>
+    <rect x="17.7" y="4.1" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="14.299999999999999" y="7.5" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="17.7" y="10.899999999999999" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="14.299999999999999" y="14.299999999999999" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="4.1" y="17.7" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="10.899999999999999" y="17.7" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="17.7" y="17.7" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="24.5" y="17.7" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="7.5" y="21.1" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="14.299999999999999" y="21.1" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="21.1" y="21.1" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="17.7" y="24.5" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="24.5" y="24.5" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="21.1" y="14.299999999999999" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/><rect x="24.5" y="10.899999999999999" width="3.4" height="3.4" rx="0.5" fill="#173f2f"/>
+    <rect x="2" y="14.8" width="28" height="2.4" rx="1.2" fill="#1fbf6a"/>
+    <path d="M-4 4v-6a2 2 0 0 1 2-2h6M28-4h6a2 2 0 0 1 2 2v6M36 28v6a2 2 0 0 1-2 2h-6M4 36h-6a2 2 0 0 1-2-2v-6" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  </g>
 </svg>

@@ -1,17 +1,20 @@
 import PropTypes from 'prop-types';
-import { LuTreeDeciduous } from 'react-icons/lu';
+import EmblemaArbolQr from './EmblemaArbolQr';
 
 /**
- * Marca visual del parque (hoja). El color se resuelve con tokens CSS
- * (--forest-700), de modo que sigue la paleta del sistema aunque el
- * proyecto cambie de tema o paleta. El dimensionado se delega al CSS
- * mediante `clase` (p. ej. .hero-brand-mark).
+ * Marca visual de PlantaQR: el emblema del inicio (árbol con su placa QR), el
+ * mismo dibujo del ícono de la app. El tamaño lo pone el CSS mediante `clase`
+ * (p. ej. .hero-brand-mark).
  */
 export default function BrandMark({ clase = 'hero-brand-mark' }) {
-  return <LuTreeDeciduous aria-hidden="true" className={clase} />;
+  return (
+    <span className={clase} aria-hidden="true">
+      <EmblemaArbolQr />
+    </span>
+  );
 }
 
 BrandMark.propTypes = {
-  /** Clase(s) que dimensionan el SVG (p. ej. `.hero-brand-mark`). */
+  /** Clase(s) que dimensionan la marca (p. ej. `.hero-brand-mark`). */
   clase: PropTypes.string,
 };

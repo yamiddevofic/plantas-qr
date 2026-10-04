@@ -11,6 +11,7 @@
     "generar-variantes": "node server/scripts/generarVariantes.js",
     "verificar-imagenes": "node server/scripts/verificarImagenes.js",
     "capturar-og": "node server/scripts/capturarOg.js",
+    "generar-iconos": "node server/scripts/generarIconos.js",
     "cargar-individuos-cipres": "node server/scripts/cargarIndividuosCipres.js",
     "build": "vite build",
     "lint": "eslint .",
