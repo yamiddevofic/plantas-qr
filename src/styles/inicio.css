@@ -1343,10 +1343,10 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 .hero-galeria {
-  /* Móvil: ~44vh con título, cifras y el paisaje abajo. */
-  --alto-paisaje: clamp(130px, 20svh, 190px);
-  min-height: 44vh;
-  min-height: 44svh;
+  /* Móvil: ~62vh con título, cifras, el paisaje abajo y la flecha para bajar. */
+  --alto-paisaje: clamp(140px, 22svh, 210px);
+  min-height: 62vh;
+  min-height: 62svh;
   /* Sube bajo la barra (alto del botón + 2 × 10 px de relleno). */
   margin-top: calc(-1 * (var(--hit) + 20px));
   margin-bottom: 24px;

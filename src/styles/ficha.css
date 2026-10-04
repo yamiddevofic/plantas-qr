@@ -91,8 +91,18 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
 }
 
 .detalle-hero-full .detalle-image {
+  /* El ancho va fijo: si no, cuando el alto máximo recorta (tablets en vertical),
+     la proporción 4:5 encoge también el ancho y queda una franja blanca al lado. */
+  width: 100%;
   aspect-ratio: 4 / 5;
   max-height: 88svh;
+}
+
+/* Con foto de escritorio la imagen va dentro de un <picture>: sin esto, en móvil
+   y tablet el <picture> no tiene alto, la foto queda con su alto natural y, si
+   no es justo 4:5, asoma el fondo (una franja blanca) debajo o a los lados. */
+.detalle-image-dirigida picture {
+  display: contents;
 }
 
 .detalle-image::after {
@@ -220,9 +230,6 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
     position: absolute;
   }
 
-  .detalle-image-dirigida picture {
-    display: contents;
-  }
 
   .detalle-hero-texto {
     padding: 120px 48px 40px;

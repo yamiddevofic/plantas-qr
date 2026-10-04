@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { IconoFamilias, IconoHoja, IconoQr } from '../atoms/IconosInicio';
+import { IconoBajar, IconoFamilias, IconoHoja, IconoQr } from '../atoms/IconosInicio';
 import PaisajeHero from './PaisajeHero';
 
 /**
@@ -52,6 +52,16 @@ export default function HeroGaleria({ plantas, cargando = false }) {
           )}
         </div>
       </div>
+
+      {/* Botón y no enlace: un href="#..." cambiaría el hash y el router lo tomaría por una ruta. */}
+      <button
+        type="button"
+        className="hero-inicio-bajar"
+        aria-label="Ir a las especies"
+        onClick={() => document.getElementById('app-main')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+      >
+        <IconoBajar />
+      </button>
     </header>
   );
 }
