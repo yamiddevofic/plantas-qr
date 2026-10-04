@@ -71,9 +71,17 @@ export default function HeroInicio({ onConocerProyecto, plantas = null }) {
         </div>
       </div>
 
-      <a className="hero-inicio-bajar" href="#como-funciona" aria-label="Ir a cómo funciona">
+      {/* Botón y no enlace: un href="#..." cambiaría el hash y el router lo tomaría por una ruta. */}
+      <button
+        type="button"
+        className="hero-inicio-bajar"
+        aria-label="Ir a cómo funciona"
+        onClick={() =>
+          document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      >
         <IconoBajar />
-      </a>
+      </button>
     </header>
   );
 }
