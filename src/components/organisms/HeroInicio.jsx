@@ -1,81 +1,79 @@
-import { useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { LuArrowRight } from 'react-icons/lu';
-import ImagenPlanta from '../atoms/ImagenPlanta';
 import Boton from '../atoms/Boton';
+import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
+import { IconoBajar, IconoFlecha, IconoUbicacion } from '../atoms/IconosInicio';
+import PaisajeHero from './PaisajeHero';
 import BuscadorInicio from './BuscadorInicio';
 
-const TITULO = 'Cada árbol, una historia';
-const VELOCIDAD_MS = 70;
+/* El titular entra palabra por palabra; la segunda línea va en cursiva serif. */
+const LINEA_1 = ['Cada', 'árbol,'];
+const LINEA_2 = ['una', 'historia'];
 
 /**
- * Hero profesional de la página de inicio: foto aérea del Parque Principal
- * con degradado, un mensaje que explica de una sola mirada qué es el
- * proyecto y dos llamados a la acción (proyecto y galería).
+ * Hero de la página de inicio: paisaje andino del parque dibujado en SVG (se
+ * adapta al modo claro/oscuro), el emblema animado del árbol con su QR, el
+ * mensaje del proyecto y los llamados a la acción.
  */
 export default function HeroInicio({ onConocerProyecto, plantas = null }) {
-  const [visibles, setVisibles] = useState(() =>
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches ? TITULO.length : 0
-  );
-  const [cursor, setCursor] = useState(() =>
-    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  );
-
-  useEffect(() => {
-    if (visibles >= TITULO.length) return;
-    let indice = visibles;
-    const intervalo = setInterval(() => {
-      indice += 1;
-      setVisibles(indice);
-      if (indice >= TITULO.length) {
-        clearInterval(intervalo);
-        setTimeout(() => setCursor(false), 1200);
-      }
-    }, VELOCIDAD_MS);
-    return () => clearInterval(intervalo);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <header className="hero-inicio">
-      <ImagenPlanta
-        src="/parque.webp"
-        alt="Parque Principal de Chitagá con la Parroquia San Juan Nepomuceno al fondo"
-        ancho={1240}
-        alto={640}
-        prioridad="high"
-        cargando="eager"
-      />
-      <div className="hero-inicio-degradado" aria-hidden="true" />
+      <PaisajeHero />
+
       <div className="hero-inicio-contenido">
-        {/* Rótulo de libreta de campo: dónde está el parque, en vez de una etiqueta genérica. */}
-        <p className="hero-inicio-ubicacion">
-          <span>Chitagá, Norte de Santander</span>
-          <span className="hero-inicio-coordenadas" aria-label="Latitud 7 grados 8 minutos 18 segundos norte, longitud 72 grados 39 minutos 54 segundos oeste, 2.345 metros sobre el nivel del mar">
-            7°08′18″ N · 72°39′54″ O · 2.345 m
-          </span>
-        </p>
-        <h1 className="hero-inicio-titulo" aria-label={TITULO}>
-          <span aria-hidden="true">{TITULO.slice(0, visibles)}</span>
-          {cursor && <span className="hero-inicio-cursor" aria-hidden="true" />}
-        </h1>
-        <p className="hero-inicio-texto">
-          Escanea el código QR de cualquier árbol del parque para descubrir su
-          ficha: familia, origen, usos y estado de conservación.
-        </p>
-        {/* Solo móvil: en escritorio el buscador va junto al botón de menú (PaginaInicio). */}
-        <div className="hero-inicio-buscador">
-          <BuscadorInicio plantas={plantas} />
+        <div className="hero-inicio-emblema">
+          <EmblemaArbolQr />
         </div>
-        <div className="hero-inicio-acciones">
-          <Boton variante="primary" onClick={onConocerProyecto}>
-            Conoce nuestro proyecto
-            <LuArrowRight aria-hidden="true" />
-          </Boton>
-          <a className="hero-inicio-enlace" href="#/galeria">Ver las especies</a>
+
+        <div className="hero-inicio-texto-bloque">
+          <p className="hero-inicio-ubicacion">
+            <IconoUbicacion />
+            <span>Chitagá, Norte de Santander</span>
+            <span className="hero-inicio-altitud">2.345 m s. n. m.</span>
+          </p>
+
+          <h1 className="hero-inicio-titulo">
+            <span className="hero-inicio-linea">
+              {LINEA_1.map((palabra, i) => (
+                <Fragment key={palabra}>
+                  <span className="hero-inicio-palabra" style={{ '--i': i }}>{palabra}</span>{' '}
+                </Fragment>
+              ))}
+            </span>
+            <span className="hero-inicio-linea hero-inicio-acento">
+              {LINEA_2.map((palabra, i) => (
+                <Fragment key={palabra}>
+                  <span className="hero-inicio-palabra" style={{ '--i': i + LINEA_1.length }}>{palabra}</span>{' '}
+                </Fragment>
+              ))}
+            </span>
+          </h1>
+
+          <p className="hero-inicio-texto">
+            Escanea el código QR de cualquier árbol del parque y descubre su
+            ficha: familia, origen, usos y estado de conservación.
+          </p>
+
+          {/* Solo móvil: en escritorio el buscador va junto al botón de menú (PaginaInicio). */}
+          <div className="hero-inicio-buscador">
+            <BuscadorInicio plantas={plantas} />
+          </div>
+
+          <div className="hero-inicio-acciones">
+            <Boton enlace href="#/galeria" variante="primary" clase="hero-inicio-cta">
+              Ver especies
+              <IconoFlecha />
+            </Boton>
+            <button type="button" className="hero-inicio-secundario" onClick={onConocerProyecto}>
+              El proyecto
+            </button>
+          </div>
         </div>
       </div>
-      <p className="hero-inicio-pie" aria-hidden="true">Parroquia San Juan Nepomuceno</p>
+
+      <a className="hero-inicio-bajar" href="#como-funciona" aria-label="Ir a cómo funciona">
+        <IconoBajar />
+      </a>
     </header>
   );
 }

@@ -3,11 +3,13 @@ import { LuHouse, LuInfo, LuMapPin, LuMoon, LuSun } from 'react-icons/lu';
 import { fetchPlantas } from '../../api';
 import SeccionParque from '../organisms/SeccionParque';
 import HeroInicio from '../organisms/HeroInicio';
+import ComoFunciona from '../organisms/ComoFunciona';
 import BuscadorInicio from '../organisms/BuscadorInicio';
 import SeccionContacto from '../molecules/SeccionContacto';
 import PopoverContacto from '../molecules/PopoverContacto';
 import BotonMenu from '../atoms/BotonMenu';
-import ArbolitoLoader from '../atoms/ArbolitoLoader';
+import BotonTema from '../atoms/BotonTema';
+import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import ItemInstalarApp from '../molecules/ItemInstalarApp';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
@@ -59,8 +61,14 @@ export default function PaginaInicio() {
         <BuscadorInicio plantas={plantas} />
       </div>
 
+      <a className="home-marca" href="#/" aria-label="PlantaQR, inicio">
+        <EmblemaArbolQr clase="home-marca-icono" />
+        <span>PlantaQR</span>
+      </a>
+
       <div className="home-acciones">
         <div className="hero-acciones-grupo">
+          <BotonTema />
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
         </div>
       </div>
@@ -107,13 +115,8 @@ export default function PaginaInicio() {
       <main id="app-main">
         <HeroInicio onConocerProyecto={conocerProyecto} plantas={plantas} />
 
-        {datos ? (
-          <SeccionParque especies={datos.especies} familias={datos.familias} abierto />
-        ) : (
-          <div className="about-cargando">
-            <ArbolitoLoader etiqueta="Cargando datos del parque" />
-          </div>
-        )}
+        <ComoFunciona />
+        <SeccionParque especies={datos?.especies ?? null} familias={datos?.familias ?? null} />
       </main>
 
       <PiePagina />

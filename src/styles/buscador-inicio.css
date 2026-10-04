@@ -14,7 +14,6 @@
 /* Móvil: dentro del hero, entre la frase y los botones. */
 .hero-inicio-buscador {
   width: min(100%, 520px);
-  margin-top: 28px;
 }
 
 /* El buscador del hero queda en la mitad baja de la pantalla: la lista se abre
@@ -48,23 +47,26 @@
   gap: 8px;
   min-height: 48px;
   padding: 0 6px 0 14px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(45, 106, 79, 0.16);
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   color: var(--ink-500);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 12px 30px -14px rgba(23, 63, 47, 0.4);
   transition: box-shadow 0.18s ease, background-color 0.18s ease;
 }
 
 html[data-tema="oscuro"] .buscador-inicio-barra {
-  background: rgba(21, 31, 26, 0.92);
-  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(21, 31, 26, 0.82);
+  border-color: rgba(143, 211, 168, 0.2);
+  box-shadow: 0 12px 30px -14px rgba(0, 0, 0, 0.7);
 }
 
 .buscador-inicio-barra.abierto,
 .buscador-inicio-barra:focus-within {
   background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(183, 228, 199, 0.55), 0 14px 36px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 0 0 3px rgba(111, 191, 141, 0.35), 0 14px 36px -12px rgba(23, 63, 47, 0.45);
 }
 
 .buscador-inicio-lupa {
