@@ -1,0 +1,682 @@
+/* ══════════════════════════════════════════════════════════════
+   Páginas de administración · Gestión de individuos y Fotos de especies
+   Mismo lenguaje que la galería: barra de vidrio, hero con el paisaje y
+   tarjetas. Móvil primero: filas compactas; desde 640 px, rejilla de
+   tarjetas con la foto arriba.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Barra: marca · [Catálogo] [tema] ───────────────────────── */
+
+/* A diferencia de la galería, no se queda fija: sus botones de vidrio
+   tapaban la búsqueda y las tarjetas al bajar. */
+.gestion-header {
+  position: relative;
+}
+
+.gestion-header-acciones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gestion-header .boton-tema {
+  border-color: var(--vidrio-borde);
+  background: var(--vidrio);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.gestion-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--hit);
+  padding: 0 16px 0 12px;
+  border: 1px solid var(--vidrio-borde);
+  border-radius: var(--radius-pill);
+  background: var(--vidrio);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--ink-900);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  animation: inicioAparece 0.6s ease both;
+}
+
+.gestion-volver .icono-inicio {
+  width: 18px;
+  height: 18px;
+}
+
+@media (hover: hover) {
+  .gestion-volver:hover {
+    transform: translateX(-2px);
+  }
+}
+
+/* Pantallas muy angostas: la marca, la flecha sola y el tema. */
+@media (max-width: 359px) {
+  .gestion-volver {
+    width: var(--hit);
+    padding: 0;
+    justify-content: center;
+  }
+
+  .gestion-volver span {
+    display: none;
+  }
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+
+/* Más bajo que el de la galería: aquí lo importante es la lista. */
+.hero-gestion {
+  min-height: 0;
+}
+
+.hero-gestion .hero-inicio-titulo {
+  font-size: clamp(2rem, 1.3rem + 3.2vw, 3.2rem);
+}
+
+/* La galería esconde la línea de ubicación en móvil; aquí avisa de que es
+   una zona de administración, así que se queda. */
+@media (max-width: 767px) {
+  .hero-gestion .hero-inicio-ubicacion {
+    display: inline-flex;
+    font-size: 0.78rem;
+  }
+}
+
+.hero-gestion-accion {
+  animation: inicioSube 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.95s both;
+}
+
+.gestion-agregar.btn {
+  min-height: 50px;
+  padding-inline: 22px 26px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 14px 30px -14px rgba(23, 63, 47, 0.6);
+  font-size: 0.98rem;
+}
+
+.gestion-agregar .icono-inicio {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.2;
+}
+
+@media (min-width: 768px) {
+  .hero-gestion .hero-inicio-titulo {
+    font-size: clamp(2.6rem, 1.3rem + 4vw, 4rem);
+  }
+}
+
+/* ── Contenido ──────────────────────────────────────────────── */
+
+.gestion-main {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.hero-gestion ~ .gestion-main .cargando-central {
+  min-height: 30vh;
+}
+
+.gestion-panel {
+  display: grid;
+  /* minmax(0, …): sin esto la columna crece con el texto más largo (selector
+     de especies, nombres sin cortar) y la página se sale de la pantalla. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  animation: inicioSube 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Barra de búsqueda: una tarjeta con el campo y el filtro. */
+.gestion-filtros {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--line-100);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.gestion-busqueda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--hit);
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: var(--mint-50);
+  color: var(--ink-500);
+  transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+}
+
+.gestion-busqueda:focus-within {
+  border-color: var(--forest-600);
+  background: var(--surface);
+  box-shadow: var(--focus-ring);
+}
+
+.gestion-busqueda .icono-inicio {
+  width: 20px;
+  height: 20px;
+}
+
+.gestion-busqueda input {
+  flex: 1;
+  min-width: 0;
+  height: calc(var(--hit) + 4px);
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.gestion-busqueda input::placeholder {
+  color: var(--ink-500);
+}
+
+.gestion-select {
+  width: 100%;
+  min-width: 0;
+  min-height: calc(var(--hit) + 4px);
+  padding: 0 40px 0 14px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  /* Flecha propia: la del sistema no sigue el tema. */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b8a7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 18px,
+    var(--mint-50);
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 0.95rem;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.gestion-select:focus-visible {
+  outline: none;
+  border-color: var(--forest-600);
+  box-shadow: var(--focus-ring);
+}
+
+@media (min-width: 640px) {
+  .gestion-filtros {
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 260px);
+  }
+}
+
+.gestion-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  margin-top: 4px;
+}
+
+.gestion-conteo {
+  margin: 0;
+  color: var(--ink-500);
+  font-size: 0.85rem;
+}
+
+.gestion-conteo strong {
+  color: var(--ink-900);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.gestion-limpiar {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--forest-700);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Avisos del módulo (mapa sin conexión y sincronización) como tarjetas. */
+.gestion-panel .mapa-offline {
+  padding: 12px 12px 12px 14px;
+  border-color: var(--line-100);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.gestion-panel .mapa-offline > svg {
+  color: var(--forest-600);
+}
+
+.gestion-panel .mapa-offline-boton {
+  min-height: 40px;
+  padding: 0 16px;
+  border-color: transparent;
+  background: var(--mint-100);
+  color: var(--forest-700);
+  font-weight: 700;
+}
+
+/* Móvil: el texto a lo ancho y el botón debajo, en vez de un párrafo de cinco líneas. */
+@media (max-width: 479px) {
+  .gestion-panel .mapa-offline {
+    flex-wrap: wrap;
+  }
+
+  .gestion-panel .mapa-offline > span {
+    flex: 1 1 calc(100% - 30px);
+  }
+
+  .gestion-panel .mapa-offline-boton {
+    margin-left: 28px;
+  }
+}
+
+.gestion-panel .sincronizacion {
+  border-radius: 18px;
+}
+
+/* ── Tarjetas ───────────────────────────────────────────────── */
+
+.gestion-lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Móvil: [foto] [datos] [acciones] en una fila. */
+.gestion-tarjeta {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  grid-template-areas: "foto cuerpo acciones";
+  align-items: center;
+  gap: 14px;
+  padding: 10px 8px 10px 10px;
+  border: 1px solid var(--line-100);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  animation: inicioSube 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 0.04s);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+@media (hover: hover) {
+  .gestion-tarjeta:hover {
+    border-color: var(--line-200);
+    box-shadow: var(--shadow-md);
+  }
+
+  .gestion-tarjeta:hover .gestion-tarjeta-foto img {
+    transform: scale(1.05);
+  }
+}
+
+.gestion-tarjeta-foto {
+  grid-area: foto;
+  position: relative;
+  width: 76px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 16px;
+  background: linear-gradient(160deg, var(--mint-50), var(--mint-100));
+}
+
+.gestion-tarjeta-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.gestion-tarjeta-sin-foto {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--forest-600);
+}
+
+.gestion-tarjeta-sin-foto .icono-inicio {
+  width: 34%;
+  height: 34%;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.gestion-tarjeta-cuerpo {
+  grid-area: cuerpo;
+  display: grid;
+  /* Sin esto la columna toma el ancho de las coordenadas (sin cortes) y el
+     texto se mete bajo los botones. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  min-width: 0;
+}
+
+.gestion-tarjeta-cuerpo p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gestion-tarjeta-titulo {
+  color: var(--ink-900);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.gestion-tarjeta-especie {
+  color: var(--ink-700);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.gestion-tarjeta-especie a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.gestion-tarjeta-especie a:hover {
+  color: var(--forest-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gestion-tarjeta-cientifico {
+  color: var(--ink-500);
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+}
+
+.gestion-tarjeta-familia {
+  color: var(--ink-500);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.gestion-tarjeta-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-500);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gestion-tarjeta-meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.gestion-tarjeta-meta span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gestion-tarjeta-meta .icono-inicio {
+  width: 15px;
+  height: 15px;
+  color: var(--forest-600);
+}
+
+.gestion-tarjeta-acciones {
+  grid-area: acciones;
+  display: flex;
+  gap: 4px;
+}
+
+.gestion-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: var(--hit);
+  height: var(--hit);
+  padding: 0;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--ink-700);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, transform 0.15s;
+}
+
+.gestion-boton .icono-inicio {
+  width: 20px;
+  height: 20px;
+}
+
+/* En móvil solo el icono: la etiqueta queda para lectores de pantalla. */
+.gestion-boton span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.gestion-boton:hover {
+  background: var(--mint-100);
+  color: var(--forest-700);
+}
+
+.gestion-boton:active {
+  transform: scale(0.96);
+}
+
+.gestion-boton-peligro:hover {
+  background: var(--danger-50);
+  color: var(--danger-700);
+}
+
+.gestion-boton:focus-visible,
+.gestion-limpiar:focus-visible,
+.gestion-volver:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
+}
+
+/* Insignias sobre la foto. */
+.gestion-insignia-pendiente,
+.gestion-insignia-fotos {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100% - 12px);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.gestion-insignia-pendiente {
+  background: var(--warning-50);
+  color: var(--warning-700);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.gestion-insignia-fotos {
+  background: rgba(14, 33, 24, 0.66);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+}
+
+.gestion-insignia-fotos.vacia {
+  background: var(--warning-50);
+  color: var(--warning-700);
+}
+
+.gestion-insignia-fotos .icono-inicio {
+  width: 13px;
+  height: 13px;
+}
+
+/* Celulares angostos: foto algo menor y los dos botones uno sobre otro,
+   para dejar más espacio al texto. */
+@media (max-width: 399px) {
+  .gestion-tarjeta {
+    grid-template-columns: 68px minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+
+  .gestion-tarjeta-foto {
+    width: 68px;
+  }
+
+  .gestion-tarjeta-acciones {
+    flex-direction: column;
+  }
+}
+
+/* En la fila móvil la foto es chica: la insignia ocupa su borde inferior. */
+@media (max-width: 639px) {
+  .gestion-insignia-pendiente,
+  .gestion-insignia-fotos {
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    justify-content: center;
+    padding: 2px 4px;
+    font-size: 0.62rem;
+  }
+
+  .gestion-insignia-fotos .icono-inicio {
+    display: none;
+  }
+}
+
+/* Tableta y escritorio: rejilla de tarjetas con la foto arriba. */
+@media (min-width: 640px) {
+  .gestion-lista {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+    gap: 18px;
+  }
+
+  .gestion-tarjeta {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "foto foto"
+      "cuerpo acciones";
+    align-items: end;
+    gap: 14px 8px;
+    padding: 10px 10px 14px;
+    border-radius: 26px;
+  }
+
+  @media (hover: hover) {
+    .gestion-tarjeta:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  .gestion-tarjeta-foto {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+  }
+
+  .gestion-tarjeta-cuerpo {
+    padding-left: 6px;
+  }
+
+  .gestion-tarjeta-titulo {
+    font-size: 1.08rem;
+  }
+
+  .gestion-insignia-pendiente,
+  .gestion-insignia-fotos {
+    left: 10px;
+    bottom: 10px;
+    padding: 4px 10px;
+    font-size: 0.74rem;
+  }
+
+  /* Fotos de especies: el botón dice "Editar fotos" y va a lo ancho. */
+  .especie-tarjeta {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "foto"
+      "cuerpo"
+      "acciones";
+    align-items: stretch;
+  }
+
+  .especie-tarjeta .gestion-tarjeta-acciones {
+    padding: 0 4px;
+  }
+
+  .especie-tarjeta .gestion-boton {
+    flex: 1;
+    padding: 0 16px;
+    border: 1px solid var(--line-200);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    color: var(--forest-700);
+  }
+
+  .especie-tarjeta .gestion-boton:hover {
+    border-color: transparent;
+    background: var(--mint-100);
+  }
+
+  .especie-tarjeta .gestion-boton span {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gestion-tarjeta,
+  .gestion-panel,
+  .gestion-volver,
+  .hero-gestion-accion {
+    animation: none !important;
+  }
+
+  .gestion-tarjeta,
+  .gestion-tarjeta-foto img {
+    transition: none;
+  }
+}

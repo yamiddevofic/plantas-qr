@@ -281,9 +281,60 @@ export function IconoVolver({ clase }) {
   );
 }
 
+/** Cámara con una hoja en el lente: fotos de las especies. */
+export function IconoCamara({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path className="icono-tinte" d="M3 8.5A2.5 2.5 0 0 1 5.5 6h2l1.5-2h6l1.5 2h2A2.5 2.5 0 0 1 21 8.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z" />
+      <path className="trazo" pathLength="1" d="M3 8.5A2.5 2.5 0 0 1 5.5 6h2l1.5-2h6l1.5 2h2A2.5 2.5 0 0 1 21 8.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z" />
+      <circle className="trazo" pathLength="1" cx="12" cy="13" r="4" />
+      <path className="trazo" pathLength="1" d="M10.6 14.4c0-1.8.9-2.8 2.8-2.8 0 1.8-.9 2.8-2.8 2.8z" />
+    </Icono>
+  );
+}
+
+/** Lápiz: editar. */
+export function IconoLapiz({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path d="M15.5 4.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z" />
+      <path d="M13.5 6.5l3 3" />
+    </Icono>
+  );
+}
+
+/** Papelera: eliminar. */
+export function IconoPapelera({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path d="M4 7h16M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2" />
+      <path d="M6 7l.9 12a2 2 0 0 0 2 1.8h6.2a2 2 0 0 0 2-1.8L18 7M10 11v6M14 11v6" />
+    </Icono>
+  );
+}
+
+/** Más: agregar. */
+export function IconoMas({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <path d="M12 5v14M5 12h14" />
+    </Icono>
+  );
+}
+
+/** Lupa: buscar. */
+export function IconoLupa({ clase }) {
+  return (
+    <Icono clase={clase}>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M16 16l4 4" />
+    </Icono>
+  );
+}
+
 [
   IconoArbolPlaca, IconoEscanear, IconoFicha, IconoHoja, IconoFamilias, IconoQr,
   IconoUbicacion, IconoAve, IconoArdilla, IconoMariposa, IconoFlecha, IconoBajar,
   IconoArbol, IconoGlobo, IconoRegla, IconoEscudo, IconoLibro, IconoUsos, IconoCorazonHoja,
-  IconoMapa, IconoVolver, IconoCandado,
+  IconoMapa, IconoVolver, IconoCandado, IconoCamara, IconoLapiz, IconoPapelera, IconoMas, IconoLupa,
 ].forEach((c) => { c.propTypes = tipos; });

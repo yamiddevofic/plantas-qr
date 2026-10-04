@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { LuArrowLeft, LuPlus, LuSearch } from 'react-icons/lu';
 import {
   actualizarIndividuo,
   crearIndividuo,
@@ -32,11 +31,12 @@ import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
-import PiePagina from '../molecules/PiePagina';
+import { IconoArbol, IconoCamara, IconoHoja, IconoLupa, IconoMas } from '../atoms/IconosInicio';
 import MapaSinConexion from '../molecules/MapaSinConexion';
 import BannerSincronizacion from '../organisms/BannerSincronizacion';
 import FormularioIndividuo from '../organisms/FormularioIndividuo';
 import TarjetaIndividuo from '../organisms/TarjetaIndividuo';
+import PlantillaGestion from '../templates/PlantillaGestion';
 
 const sinTildes = (t) => String(t ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
@@ -380,127 +380,135 @@ export default function PaginaIndividuos() {
 
   const hayFiltros = Boolean(busqueda || filtroEspecie);
 
+  const cifras = useMemo(() => {
+    if (cargando || error || !vista.length) return null;
+    const conEspecie = new Set(vista.map((f) => grupoPorFicha.get(f.properties.especie?._id)).filter(Boolean)).size;
+    const conFoto = vista.filter((f) => f.properties.imagen).length;
+    return [
+      { Icono: IconoArbol, valor: vista.length, etiqueta: vista.length === 1 ? 'árbol' : 'árboles' },
+      { Icono: IconoHoja, valor: conEspecie, etiqueta: conEspecie === 1 ? 'especie' : 'especies' },
+      { Icono: IconoCamara, valor: conFoto, etiqueta: 'con foto' },
+    ];
+  }, [vista, grupoPorFicha, cargando, error]);
+
   return (
-    <div className="app">
-      <a className="skip-link" href="#app-main">Saltar al contenido</a>
-
-      <header className="individuos-cabecera">
-        <a className="individuos-volver" href="#/galeria">
-          <LuArrowLeft aria-hidden="true" />
-          Catálogo
-        </a>
-      </header>
-
-      <main id="app-main" className="individuos-main" aria-labelledby="individuos-titulo">
-        <div className="individuos-titular">
-          <div>
-            <h1 id="individuos-titulo" className="individuos-titulo">Individuos</h1>
-            <p className="individuos-intro">
-              Árboles del parque con su código y ubicación GPS.
-            </p>
-          </div>
-          {!cargando && !error && (
-            <Boton variante="primary" clase="individuos-agregar" onClick={() => abrirFormulario()} disabled={especies.length === 0}>
-              <LuPlus aria-hidden="true" />
-              Agregar
-            </Boton>
-          )}
-        </div>
-
-        {cargando ? (
-          <div className="cargando-central"><ArbolitoLoader etiqueta="Cargando individuos" /></div>
-        ) : error ? (
-          <EstadoBox icono="⚠️" titulo="No pudimos cargar los individuos" texto={error} clase="error-box" alerta>
-            <Boton variante="retry" onClick={() => setRecargar((n) => n + 1)}>Reintentar</Boton>
-          </EstadoBox>
-        ) : (
-          <section className="individuos-panel">
-            <div className="individuos-filtros">
-              <label className="individuos-busqueda">
-                <LuSearch aria-hidden="true" />
-                <input
-                  type="search"
-                  placeholder="Buscar código, especie o parque"
-                  aria-label="Buscar individuos"
-                  value={busqueda}
-                  onChange={(e) => setBusqueda(e.target.value)}
-                />
-              </label>
-              <select
-                className="individuos-select"
-                aria-label="Filtrar por especie"
-                value={filtroEspecie}
-                onChange={(e) => setFiltroEspecie(e.target.value)}
-              >
-                <option value="">Todas las especies</option>
-                {especies.map((e) => <option key={e.id} value={e.id}>{e.nombre}</option>)}
-              </select>
-            </div>
-
-            <MapaSinConexion />
-
-            <BannerSincronizacion
-              enLinea={enLinea}
-              cola={cola}
-              sincronizando={sincronizando}
-              onSincronizar={sincronizar}
-              onDescartar={descartarPendiente}
+    <PlantillaGestion
+      hero={{
+        id: 'individuos-titulo',
+        titulo: 'Gestión de',
+        acento: 'individuos',
+        texto: 'Registra cada árbol del parque con su código, su foto y su ubicación GPS. También funciona sin conexión.',
+        cifras,
+        accion: !cargando && !error && (
+          <Boton variante="primary" clase="gestion-agregar" onClick={() => abrirFormulario()} disabled={especies.length === 0}>
+            <IconoMas />
+            Agregar individuo
+          </Boton>
+        ),
+      }}
+      extras={(
+        <>
+          {formulario && (
+            <FormularioIndividuo
+              individuo={formulario.individuo}
+              especies={especies}
+              individuos={vista}
+              parquePorDefecto={parqueMasUsado(vista)}
+              onClose={() => setFormulario(null)}
+              onGuardar={guardar}
             />
-
-            <p className="individuos-conteo" role="status" aria-live="polite">
-              {visibles.length} de {vista.length} {vista.length === 1 ? 'individuo' : 'individuos'}
-            </p>
-
-            {aviso && (
-              <p
-                className={aviso.tipo === 'error' ? 'toolbar-note toolbar-note-error' : 'toolbar-note'}
-                role={aviso.tipo === 'error' ? 'alert' : 'status'}
-              >
-                {aviso.texto}
-              </p>
-            )}
-
-            {vista.length === 0 ? (
-              <EstadoBox
-                icono="🌱"
-                titulo="Aún no hay individuos registrados"
-                texto="Agrega el primero para que aparezca en el mapa de su especie."
-              />
-            ) : visibles.length === 0 && hayFiltros ? (
-              <EstadoBox icono="🔎" titulo="Ningún individuo coincide" texto="Prueba con otro código, especie o parque.">
-                <Boton variante="primary" onClick={() => { setBusqueda(''); setFiltroEspecie(''); }}>
-                  Limpiar filtros
-                </Boton>
-              </EstadoBox>
-            ) : (
-              <ul className="individuos-lista">
-                {visibles.map((feature) => (
-                  <TarjetaIndividuo
-                    key={feature.properties.id}
-                    feature={feature}
-                    onEditar={abrirFormulario}
-                    onEliminar={eliminar}
-                  />
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
-      </main>
-
-      <PiePagina />
-
-      {formulario && (
-        <FormularioIndividuo
-          individuo={formulario.individuo}
-          especies={especies}
-          individuos={vista}
-          parquePorDefecto={parqueMasUsado(vista)}
-          onClose={() => setFormulario(null)}
-          onGuardar={guardar}
-        />
+          )}
+          {dialogo}
+        </>
       )}
-      {dialogo}
-    </div>
+    >
+      {cargando ? (
+        <div className="cargando-central"><ArbolitoLoader etiqueta="Cargando individuos" /></div>
+      ) : error ? (
+        <EstadoBox icono="⚠️" titulo="No pudimos cargar los individuos" texto={error} clase="error-box" alerta>
+          <Boton variante="retry" onClick={() => setRecargar((n) => n + 1)}>Reintentar</Boton>
+        </EstadoBox>
+      ) : (
+        <section className="gestion-panel" aria-label="Árboles registrados">
+          <div className="gestion-filtros">
+            <label className="gestion-busqueda">
+              <IconoLupa />
+              <input
+                type="search"
+                placeholder="Buscar código, especie o parque"
+                aria-label="Buscar individuos"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+              />
+            </label>
+            <select
+              className="gestion-select"
+              aria-label="Filtrar por especie"
+              value={filtroEspecie}
+              onChange={(e) => setFiltroEspecie(e.target.value)}
+            >
+              <option value="">Todas las especies</option>
+              {especies.map((e) => <option key={e.id} value={e.id}>{e.nombre}</option>)}
+            </select>
+          </div>
+
+          <MapaSinConexion />
+
+          <BannerSincronizacion
+            enLinea={enLinea}
+            cola={cola}
+            sincronizando={sincronizando}
+            onSincronizar={sincronizar}
+            onDescartar={descartarPendiente}
+          />
+
+          <div className="gestion-resumen">
+            <p className="gestion-conteo" role="status" aria-live="polite">
+              <strong>{visibles.length}</strong> de {vista.length} {vista.length === 1 ? 'individuo' : 'individuos'}
+            </p>
+            {hayFiltros && (
+              <button type="button" className="gestion-limpiar" onClick={() => { setBusqueda(''); setFiltroEspecie(''); }}>
+                Limpiar filtros
+              </button>
+            )}
+          </div>
+
+          {aviso && (
+            <p
+              className={aviso.tipo === 'error' ? 'toolbar-note toolbar-note-error' : 'toolbar-note'}
+              role={aviso.tipo === 'error' ? 'alert' : 'status'}
+            >
+              {aviso.texto}
+            </p>
+          )}
+
+          {vista.length === 0 ? (
+            <EstadoBox
+              icono="🌱"
+              titulo="Aún no hay individuos registrados"
+              texto="Agrega el primero para que aparezca en el mapa de su especie."
+            />
+          ) : visibles.length === 0 && hayFiltros ? (
+            <EstadoBox icono="🔎" titulo="Ningún individuo coincide" texto="Prueba con otro código, especie o parque.">
+              <Boton variante="primary" onClick={() => { setBusqueda(''); setFiltroEspecie(''); }}>
+                Limpiar filtros
+              </Boton>
+            </EstadoBox>
+          ) : (
+            <ul className="gestion-lista">
+              {visibles.map((feature, i) => (
+                <TarjetaIndividuo
+                  key={feature.properties.id}
+                  feature={feature}
+                  indice={i}
+                  onEditar={abrirFormulario}
+                  onEliminar={eliminar}
+                />
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
+    </PlantillaGestion>
   );
 }

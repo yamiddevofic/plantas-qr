@@ -1,67 +1,76 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuPencil, LuTrash2 } from 'react-icons/lu';
+import { IconoArbol, IconoLapiz, IconoPapelera, IconoRegla, IconoUbicacion } from '../atoms/IconosInicio';
 
 const numero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 });
 
-/** Fila de un individuo: foto, código y especie, ubicación y acciones. */
-export default function TarjetaIndividuo({ feature, onEditar, onEliminar }) {
+/**
+ * Tarjeta de un individuo: foto, código y especie, ubicación y acciones. En
+ * móvil es una fila compacta; desde tableta, una tarjeta con la foto arriba.
+ */
+export default function TarjetaIndividuo({ feature, onEditar, onEliminar, indice = 0 }) {
   const { codigoArbol, imagen, especie, pendiente, altitudMsnm } = feature.properties;
   const [longitud, latitud] = feature.geometry.coordinates;
   const [fotoRota, setFotoRota] = useState(false);
 
   return (
-    <li className="individuo-fila">
-      {imagen && !fotoRota ? (
-        <img
-          className="individuo-foto"
-          src={imagen}
-          alt={`Fotografía del árbol ${codigoArbol}`}
-          loading="lazy"
-          decoding="async"
-          onError={() => setFotoRota(true)}
-        />
-      ) : (
-        <span className="individuo-foto individuo-foto-vacia" aria-hidden="true">🌳</span>
-      )}
-
-      <div className="individuo-datos">
-        <p className="individuo-codigo">
-          {codigoArbol}
-          {pendiente && (
-            <span className="individuo-pendiente">{pendiente === 'foto' ? 'Foto sin subir' : 'Sin enviar'}</span>
-          )}
-        </p>
-        <p className="individuo-especie">
-          {especie ? <a href={`#/planta/${especie._id}`}>{especie.nombre?.comun}</a> : 'Especie no disponible'}
-          {especie?.nombre?.cientifico && <em> {especie.nombre.cientifico}</em>}
-        </p>
-        <p className="individuo-meta">
-          {latitud.toFixed(5)}, {longitud.toFixed(5)}
-          {altitudMsnm != null && (
-            <span className="individuo-meta-extra"> · {numero.format(altitudMsnm)} msnm</span>
-          )}
-        </p>
+    <li className="gestion-tarjeta individuo-tarjeta" style={{ '--i': Math.min(indice, 12) }}>
+      <div className="gestion-tarjeta-foto">
+        {imagen && !fotoRota ? (
+          <img
+            src={imagen}
+            alt={`Fotografía del árbol ${codigoArbol}`}
+            loading="lazy"
+            decoding="async"
+            onError={() => setFotoRota(true)}
+          />
+        ) : (
+          <span className="gestion-tarjeta-sin-foto" aria-hidden="true"><IconoArbol /></span>
+        )}
+        {pendiente && (
+          <span className="gestion-insignia-pendiente">{pendiente === 'foto' ? 'Foto sin subir' : 'Sin enviar'}</span>
+        )}
       </div>
 
-      <div className="individuo-acciones">
+      <div className="gestion-tarjeta-cuerpo">
+        <p className="gestion-tarjeta-titulo">{codigoArbol}</p>
+        <p className="gestion-tarjeta-especie">
+          {especie ? <a href={`#/planta/${especie._id}`}>{especie.nombre?.comun}</a> : 'Especie no disponible'}
+        </p>
+        {especie?.nombre?.cientifico && <p className="gestion-tarjeta-cientifico"><em>{especie.nombre.cientifico}</em></p>}
+        <ul className="gestion-tarjeta-meta" aria-label="Ubicación">
+          <li>
+            <IconoUbicacion />
+            <span>{latitud.toFixed(5)}, {longitud.toFixed(5)}</span>
+          </li>
+          {altitudMsnm != null && (
+            <li className="gestion-tarjeta-altitud">
+              <IconoRegla />
+              <span>{numero.format(altitudMsnm)} msnm</span>
+            </li>
+          )}
+        </ul>
+      </div>
+
+      <div className="gestion-tarjeta-acciones">
         <button
           type="button"
-          className="individuo-accion"
+          className="gestion-boton"
           onClick={() => onEditar(feature)}
           aria-label={`Editar ${codigoArbol}`}
           title="Editar"
         >
-          <LuPencil aria-hidden="true" />
+          <IconoLapiz />
+          <span>Editar</span>
         </button>
         <button
           type="button"
-          className="individuo-accion individuo-accion-peligro"
+          className="gestion-boton gestion-boton-peligro"
           onClick={() => onEliminar(feature)}
           aria-label={`Eliminar ${codigoArbol}`}
           title="Eliminar"
         >
-          <LuTrash2 aria-hidden="true" />
+          <IconoPapelera />
         </button>
       </div>
     </li>
@@ -72,4 +81,6 @@ TarjetaIndividuo.propTypes = {
   feature: PropTypes.object.isRequired,
   onEditar: PropTypes.func.isRequired,
   onEliminar: PropTypes.func.isRequired,
+  /** Posición en la lista, para escalonar la entrada. */
+  indice: PropTypes.number,
 };

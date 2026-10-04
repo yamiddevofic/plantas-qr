@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { LuArrowLeft, LuPencil, LuSearch } from 'react-icons/lu';
 import { actualizarFotosPlanta, fetchPlantas } from '../../api';
 import useAccionProtegida from '../../hooks/useAccionProtegida';
 import useEnLinea from '../../hooks/useEnLinea';
@@ -8,16 +7,12 @@ import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
-import PiePagina from '../molecules/PiePagina';
+import { IconoCamara, IconoFicha, IconoHoja, IconoLupa } from '../atoms/IconosInicio';
 import EditorFotosEspecie from '../organisms/EditorFotosEspecie';
+import TarjetaFotosEspecie from '../organisms/TarjetaFotosEspecie';
+import PlantillaGestion from '../templates/PlantillaGestion';
 
 const sinTildes = (t) => String(t ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-
-function Miniatura({ src, alt }) {
-  const [rota, setRota] = useState(false);
-  if (!src || rota) return <span className="individuo-foto individuo-foto-vacia" aria-hidden="true">🌿</span>;
-  return <img className="individuo-foto" src={src} alt={alt} loading="lazy" decoding="async" onError={() => setRota(true)} />;
-}
 
 export default function PaginaFotosEspecies() {
   const [plantas, setPlantas] = useState([]);
@@ -72,35 +67,52 @@ export default function PaginaFotosEspecies() {
     setEditando(null);
   }, [editando, ejecutar]);
 
+  const cifras = useMemo(() => {
+    if (cargando || error || !plantas.length) return null;
+    const conteos = plantas.map((p) => listaImagenes(p).length);
+    const total = conteos.reduce((a, n) => a + n, 0);
+    const sinFoto = conteos.filter((n) => n === 0).length;
+    return [
+      { Icono: IconoHoja, valor: plantas.length, etiqueta: plantas.length === 1 ? 'ficha' : 'fichas' },
+      { Icono: IconoCamara, valor: total, etiqueta: total === 1 ? 'foto' : 'fotos' },
+      ...(sinFoto ? [{ Icono: IconoFicha, valor: sinFoto, etiqueta: 'sin foto' }] : []),
+    ];
+  }, [plantas, cargando, error]);
+
   return (
-    <div className="app">
-      <a className="skip-link" href="#app-main">Saltar al contenido</a>
-
-      <header className="individuos-cabecera">
-        <a className="individuos-volver" href="#/galeria">
-          <LuArrowLeft aria-hidden="true" />
-          Catálogo
-        </a>
-      </header>
-
-      <main id="app-main" className="individuos-main" aria-labelledby="fotos-especies-titulo">
-        <div className="individuos-titular">
-          <div>
-            <h1 id="fotos-especies-titulo" className="individuos-titulo">Fotos de especies</h1>
-            <p className="individuos-intro">Elige la foto principal, quita las que sobran o agrega nuevas.</p>
-          </div>
-        </div>
-
-        {cargando ? (
-          <div className="cargando-central"><ArbolitoLoader etiqueta="Cargando especies" /></div>
-        ) : error ? (
-          <EstadoBox icono="⚠️" titulo="No pudimos cargar las especies" texto={error} clase="error-box" alerta>
-            <Boton variante="retry" onClick={() => setRecargar((n) => n + 1)}>Reintentar</Boton>
-          </EstadoBox>
-        ) : (
-          <section className="individuos-panel">
-            <label className="individuos-busqueda">
-              <LuSearch aria-hidden="true" />
+    <PlantillaGestion
+      hero={{
+        id: 'fotos-especies-titulo',
+        titulo: 'Fotos de',
+        acento: 'especies',
+        texto: 'Elige la foto principal de cada especie, quita las que sobran o agrega nuevas.',
+        cifras,
+      }}
+      extras={(
+        <>
+          {editando && (
+            <EditorFotosEspecie
+              planta={editando}
+              enLinea={enLinea}
+              onClose={() => setEditando(null)}
+              onGuardar={guardar}
+            />
+          )}
+          {dialogo}
+        </>
+      )}
+    >
+      {cargando ? (
+        <div className="cargando-central"><ArbolitoLoader etiqueta="Cargando especies" /></div>
+      ) : error ? (
+        <EstadoBox icono="⚠️" titulo="No pudimos cargar las especies" texto={error} clase="error-box" alerta>
+          <Boton variante="retry" onClick={() => setRecargar((n) => n + 1)}>Reintentar</Boton>
+        </EstadoBox>
+      ) : (
+        <section className="gestion-panel" aria-label="Especies del catálogo">
+          <div className="gestion-filtros">
+            <label className="gestion-busqueda">
+              <IconoLupa />
               <input
                 type="search"
                 placeholder="Buscar especie o familia"
@@ -109,56 +121,34 @@ export default function PaginaFotosEspecies() {
                 onChange={(e) => setBusqueda(e.target.value)}
               />
             </label>
+          </div>
 
-            <p className="individuos-conteo" role="status" aria-live="polite">
-              {visibles.length} de {plantas.length} {plantas.length === 1 ? 'ficha' : 'fichas'}
+          <div className="gestion-resumen">
+            <p className="gestion-conteo" role="status" aria-live="polite">
+              <strong>{visibles.length}</strong> de {plantas.length} {plantas.length === 1 ? 'ficha' : 'fichas'}
             </p>
+          </div>
 
-            {aviso && <p className="toolbar-note" role="status">{aviso}</p>}
+          {aviso && <p className="toolbar-note" role="status">{aviso}</p>}
 
-            <ul className="individuos-lista">
-              {visibles.map((planta) => {
-                const fotos = listaImagenes(planta);
-                return (
-                  <li key={planta._id} className="individuo-fila">
-                    <Miniatura src={fotos[0]} alt={`Foto principal de ${planta.nombre.comun}`} />
-                    <div className="individuo-datos">
-                      <p className="individuo-codigo">{planta.nombre.comun}</p>
-                      <p className="individuo-especie"><em>{planta.nombre.cientifico}</em></p>
-                      <p className="individuo-meta">
-                        {fotos.length === 0 ? 'Sin fotos' : `${fotos.length} ${fotos.length === 1 ? 'foto' : 'fotos'}`}
-                      </p>
-                    </div>
-                    <div className="individuo-acciones">
-                      <button
-                        type="button"
-                        className="individuo-accion"
-                        onClick={() => { setAviso(null); setEditando(planta); }}
-                        aria-label={`Editar fotos de ${planta.nombre.comun}`}
-                        title="Editar fotos"
-                      >
-                        <LuPencil aria-hidden="true" />
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
+          {visibles.length === 0 ? (
+            <EstadoBox icono="🔎" titulo="Ninguna especie coincide" texto="Prueba con otro nombre o familia.">
+              <Boton variante="primary" onClick={() => setBusqueda('')}>Limpiar búsqueda</Boton>
+            </EstadoBox>
+          ) : (
+            <ul className="gestion-lista">
+              {visibles.map((planta, i) => (
+                <TarjetaFotosEspecie
+                  key={planta._id}
+                  planta={planta}
+                  indice={i}
+                  onEditar={(p) => { setAviso(null); setEditando(p); }}
+                />
+              ))}
             </ul>
-          </section>
-        )}
-      </main>
-
-      <PiePagina />
-
-      {editando && (
-        <EditorFotosEspecie
-          planta={editando}
-          enLinea={enLinea}
-          onClose={() => setEditando(null)}
-          onGuardar={guardar}
-        />
+          )}
+        </section>
       )}
-      {dialogo}
-    </div>
+    </PlantillaGestion>
   );
 }
