@@ -80,7 +80,7 @@ export default function BuscadorInicio({ plantas }) {
   const resultados = useMemo(() => {
     if (!consulta) return sugerencias;
     return catalogo
-      .filter((p) => normalizar(`${p.nombre?.comun} ${p.nombre?.cientifico} ${p.familia} ${p.tipo}`).includes(consulta))
+      .filter((p) => normalizar(`${p.nombre?.comun} ${p.nombre?.cientifico} ${p.familia} ${p.tipo} ${(p.nombresAlternos ?? []).join(' ')}`).includes(consulta))
       .slice(0, MAX_RESULTADOS);
   }, [catalogo, consulta, sugerencias]);
 

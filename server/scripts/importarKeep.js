@@ -137,6 +137,16 @@ async function main() {
         // ficha y el impacto escrito antes se conservan.
         const comunes = { ...entrada.ficha };
         if (!comunes.impacto) delete comunes.impacto;
+        // Si la ficha cambia de nombre, lo que se llamaba antes ("Cajeto / Tilo")
+        // pasa a nombres alternos para no perderlo ni dejar de encontrarla.
+        if (comunes.nombre) {
+          const nuevo = normalizar(comunes.nombre.comun);
+          const previos = String(principal.nombre?.comun ?? '').split('/').map((x) => x.trim());
+          comunes.nombresAlternos = unicos(
+            [...(comunes.nombresAlternos ?? []), ...(principal.nombresAlternos ?? []), ...previos]
+              .filter((nombre) => normalizar(nombre) !== nuevo),
+          );
+        }
         for (const ficha of fichas) {
           ficha.set(comunes);
           if (ficha === principal) {

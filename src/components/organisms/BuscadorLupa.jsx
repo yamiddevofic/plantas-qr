@@ -55,6 +55,7 @@ export default function BuscadorLupa({ plantas }) {
           normalizar(p.nombre?.cientifico),
           normalizar(p.familia),
           normalizar(p.tipo),
+          normalizar((p.nombresAlternos ?? []).join(' ')),
         ].join(' ');
         return campos.includes(q);
       })
