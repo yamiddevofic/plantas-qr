@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import { IconoFamilias, IconoHoja, IconoQr } from '../atoms/IconosInicio';
 import PaisajeHero from './PaisajeHero';
 
 /**
- * Encabezado de la galería con el mismo lenguaje del inicio: paisaje SVG del
- * parque (claro/oscuro), titular con acento serif, emblema animado y cifras
- * del catálogo. Más bajo que el hero del inicio para llegar rápido a las fichas.
+ * Encabezado de la galería con el mismo lenguaje del inicio: franja de ~30vh
+ * con el paisaje SVG del parque (claro/oscuro), titular con acento serif y
+ * cifras del catálogo, para llegar rápido a las fichas.
  */
 export default function HeroGaleria({ plantas, cargando = false }) {
   const cifras = useMemo(() => {
@@ -25,25 +24,11 @@ export default function HeroGaleria({ plantas, cargando = false }) {
       <PaisajeHero />
 
       <div className="hero-inicio-contenido">
-        <div className="hero-inicio-emblema">
-          <EmblemaArbolQr />
-        </div>
-
         <div className="hero-inicio-texto-bloque">
-          <p className="hero-inicio-ubicacion">
-            <IconoHoja />
-            <span>Catálogo del Parque Principal</span>
-          </p>
-
           <h1 id="catalogo-titulo" className="hero-inicio-titulo">
             <span className="hero-inicio-palabra" style={{ '--i': 0 }}>Nuestras</span>{' '}
             <span className="hero-inicio-palabra hero-inicio-acento" style={{ '--i': 1 }}>especies</span>
           </h1>
-
-          <p className="hero-inicio-texto">
-            Cada árbol del parque de Chitagá con su ficha: toca una especie para
-            conocer su familia, origen, usos y estado de conservación.
-          </p>
 
           {cifras && (
             <ul className="hero-galeria-cifras" aria-label="Resumen del catálogo">

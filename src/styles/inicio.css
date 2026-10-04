@@ -1337,28 +1337,33 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 .hero-galeria {
-  --alto-paisaje: clamp(120px, 19svh, 180px);
-  min-height: 0;
+  /* Franja de ~30vh: título, cifras y el paisaje abajo. */
+  --alto-paisaje: clamp(100px, 15svh, 130px);
+  min-height: 30vh;
+  min-height: 30svh;
   /* Sube bajo la barra (alto del botón + 2 × 10 px de relleno). */
   margin-top: calc(-1 * (var(--hit) + 20px));
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .hero-galeria .hero-inicio-contenido {
-  padding: calc(var(--hit) + 36px) 20px calc(var(--alto-paisaje) * 0.72);
-  gap: 14px;
-}
-
-.hero-galeria .hero-inicio-emblema {
-  width: 76px;
+  padding: calc(var(--hit) + 28px) 20px calc(var(--alto-paisaje) * 0.6);
+  gap: 10px;
 }
 
 .hero-galeria .hero-inicio-titulo {
-  font-size: clamp(2.5rem, 1.3rem + 5vw, 4.4rem);
+  font-size: clamp(2.1rem, 1.3rem + 3.6vw, 3.4rem);
 }
 
 .hero-galeria .hero-inicio-texto-bloque {
-  gap: 14px;
+  gap: 10px;
+}
+
+/* En pantallas angostas solo caben dos cifras en una fila. */
+@media (max-width: 479px) {
+  .hero-galeria-cifras li:nth-child(3) {
+    display: none;
+  }
 }
 
 .hero-galeria-cifras {
@@ -1382,7 +1387,7 @@ html[data-tema="oscuro"] .proyecto {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   color: var(--ink-700);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
 }
 
@@ -1424,38 +1429,35 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 @media (min-width: 768px) {
-  /* Mismo alto proporcional que el inicio (1440:360): así el dibujo no se
-     recorta por arriba y la luna o el sol se ven enteros. */
   .hero-galeria {
-    --alto-paisaje: clamp(200px, 25vw, 440px);
-    margin-bottom: 40px;
+    --alto-paisaje: clamp(110px, 11vw, 140px);
+    margin-bottom: 36px;
   }
 
+  /* El texto queda entero sobre el cielo, por encima de la cresta de las lomas. */
   .hero-galeria .hero-inicio-contenido {
-    padding: calc(var(--hit) + 48px) 40px calc(var(--alto-paisaje) * 0.6);
+    padding: calc(var(--hit) + 28px) 40px calc(var(--alto-paisaje) * 0.85);
   }
+}
 
-  .hero-galeria .hero-inicio-emblema {
-    width: 96px;
+/* A todo lo ancho y con tan poco alto el dibujo se recorta por arriba: la
+   cordillera, la neblina, el sol y los árboles altos quedarían cortados en
+   línea recta, así que en la galería de escritorio solo queda la franja de
+   lomas, con su borde ondulado. */
+@media (min-width: 768px) {
+  .hero-galeria :is(.paisaje-capa-1, .paisaje-capa-2, .paisaje-neblina, .paisaje-astro,
+  .paisaje-aves, .paisaje-vaiven) {
+    display: none;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-galeria .hero-inicio-contenido {
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
-  }
-
-  .hero-galeria .hero-inicio-emblema {
-    width: min(100%, 230px);
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .hero-galeria-cifras {
     justify-content: flex-start;
-  }
-
-  /* Con el texto alineado a la izquierda, las aves volarían sobre él. */
-  .hero-galeria .paisaje-aves {
-    display: none;
   }
 }
 
