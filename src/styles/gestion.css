@@ -634,6 +634,12 @@
   outline-offset: 2px;
 }
 
+/* Botón de archivo deshabilitado (sin conexión no se cambia la foto desde el formulario). */
+.form-archivo:has(input:disabled) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 /* Insignias sobre la foto. */
 .gestion-insignia-pendiente,
 .gestion-insignia-fotos {
@@ -656,6 +662,18 @@
   background: var(--warning-50);
   color: var(--warning-700);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.gestion-insignia-pendiente.arriba {
+  top: 6px;
+  bottom: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gestion-insignia-pendiente.rechazada {
+  background: var(--danger-50);
+  color: var(--danger-700);
 }
 
 .gestion-insignia-fotos {
@@ -706,6 +724,13 @@
 
   .gestion-insignia-fotos .icono-inicio {
     display: none;
+  }
+
+  /* "Sin enviar" ocupa casi todo el ancho de la foto: menos relleno y letra. */
+  .gestion-insignia-pendiente.arriba {
+    padding: 2px;
+    font-size: 0.58rem;
+    letter-spacing: -0.01em;
   }
 }
 

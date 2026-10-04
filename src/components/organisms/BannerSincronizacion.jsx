@@ -3,18 +3,27 @@ import { LuCloudOff, LuRefreshCw } from 'react-icons/lu';
 import Boton from '../atoms/Boton';
 
 const ETIQUETA = { crear: 'Nuevo', editar: 'Cambio', eliminar: 'Eliminación', foto: 'Foto' };
+const TEXTO_SIN_CONEXION = 'Puedes seguir registrando y editando árboles: se guardan en este dispositivo y se envían cuando vuelva internet.';
 
 /**
  * Estado de la conexión y de los cambios guardados sin enviar. Los que el
  * servidor rechazó se listan aparte para poder descartarlos.
  */
-export default function BannerSincronizacion({ enLinea, cola, sincronizando, onSincronizar, onDescartar }) {
+export default function BannerSincronizacion({
+  enLinea,
+  cola,
+  sincronizando,
+  onSincronizar,
+  onDescartar,
+  etiquetas = ETIQUETA,
+  textoSinConexion = TEXTO_SIN_CONEXION,
+}) {
   const porEnviar = cola.filter((op) => !op.error);
   const rechazados = cola.filter((op) => op.error);
   if (enLinea && cola.length === 0) return null;
 
-  const nombre = (op) => op.datos?.codigoArbol ?? op.codigoArbol ?? op.id;
-  const etiqueta = (op) => (op.tipo === 'foto' && op.variante === 'escritorio' ? 'Foto de escritorio' : ETIQUETA[op.tipo]);
+  const nombre = (op) => op.datos?.codigoArbol ?? op.codigoArbol ?? op.nombre ?? op.id;
+  const etiqueta = (op) => (op.tipo === 'foto' && op.variante === 'escritorio' ? 'Foto de escritorio' : etiquetas[op.tipo]);
   const clave = (op) => `${op.tipo}-${op.id}-${op.variante ?? ''}`;
 
   return (
@@ -23,8 +32,7 @@ export default function BannerSincronizacion({ enLinea, cola, sincronizando, onS
         <p className="sincronizacion-estado" role="status">
           <LuCloudOff aria-hidden="true" />
           <span>
-            <strong>Sin conexión.</strong> Puedes seguir registrando y editando árboles: se guardan en
-            este dispositivo y se envían cuando vuelva internet.
+            <strong>Sin conexión.</strong> {textoSinConexion}
           </span>
         </p>
       )}
@@ -66,4 +74,8 @@ BannerSincronizacion.propTypes = {
   sincronizando: PropTypes.bool,
   onSincronizar: PropTypes.func.isRequired,
   onDescartar: PropTypes.func.isRequired,
+  /** Nombre en pantalla de cada tipo de operación (por defecto, el de individuos). */
+  etiquetas: PropTypes.objectOf(PropTypes.string),
+  /** Qué se puede seguir haciendo sin conexión. */
+  textoSinConexion: PropTypes.string,
 };

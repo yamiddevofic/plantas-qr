@@ -9,8 +9,14 @@ import SeccionDescripcion from './formularioPlanta/SeccionDescripcion';
 import SeccionFotografia from './formularioPlanta/SeccionFotografia';
 import SeccionIdentificacion from './formularioPlanta/SeccionIdentificacion';
 import { inicialEstado } from './formularioPlanta/datosPlanta';
+import { esIdLocal } from '../../offline/colaEspecies';
 
-export default function FormularioPlanta({ planta, onClose, onGuardado }) {
+/**
+ * Modal para agregar o editar una especie. Con `onEncolar` y sin conexión (o si
+ * la red se cae al enviar) el cambio no se pierde: se entrega a `onEncolar({ datos,
+ * planta })` para guardarlo en el dispositivo; la contraseña se pide al sincronizar.
+ */
+export default function FormularioPlanta({ planta, onClose, onGuardado, enLinea = true, onEncolar = null }) {
   const [estado, setEstado] = useState(() => inicialEstado(planta));
   const [plantaEditable, setPlantaEditable] = useState(planta || null);
   const [imagenFile, setImagenFile] = useState(null);
@@ -118,8 +124,22 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
     };
     datosPendientes.current = datos;
     setEnviando(true);
+    if (!enLinea && onEncolar) {
+      await encolar(datos);
+      return;
+    }
     setPasswordError(null);
     setPasswordDialogoAbierto(true);
+  }
+
+  // Sin conexión: se guarda en el dispositivo y la página lo envía cuando vuelva internet.
+  async function encolar(datos) {
+    try {
+      await onEncolar({ datos, planta: plantaEditable });
+    } catch (error) {
+      setMensajeError(error.message);
+      setEnviando(false);
+    }
   }
 
   async function confirmarGuardado(password) {
@@ -133,6 +153,13 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
       setPasswordDialogoAbierto(false);
       onGuardado(guardada);
     } catch (error) {
+      if (error.sinRed && onEncolar) {
+        // La red se cayó al enviar: el cambio no se pierde.
+        setPasswordDialogoAbierto(false);
+        setPasswordCargando(false);
+        await encolar(datos);
+        return;
+      }
       if (/contraseña/i.test(error.message)) {
         setPasswordError(error.message);
       } else {
@@ -181,11 +208,19 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
 
           <SeccionFotografia
             esEdicion={esEdicion}
+            bloqueada={esEdicion && !enLinea && !esIdLocal(plantaEditable._id)}
             previa={previa}
             imagenFile={imagenFile}
             onElegir={elegirImagen}
             onQuitar={() => { setImagenFile(null); setPrevia(plantaEditable?.imagen || ''); }}
           />
+
+          {!enLinea && onEncolar && (
+            <p className="form-ayuda" role="status">
+              Sin conexión: los cambios se guardan en este dispositivo y se envían cuando vuelva
+              internet (ahí se pedirá la contraseña de administrador).
+            </p>
+          )}
 
           {mensajeError && <p className="form-error form-error-bloque" role="alert" aria-live="assertive">{mensajeError}</p>}
 
@@ -195,7 +230,7 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
             </Boton>
             <Boton variante="primary" tipo="submit" disabled={enviando}>
               {enviando
-                ? 'Verificando…'
+                ? (enLinea ? 'Verificando…' : 'Guardando…')
                 : esEdicion
                   ? 'Guardar cambios'
                   : 'Agregar especie'}

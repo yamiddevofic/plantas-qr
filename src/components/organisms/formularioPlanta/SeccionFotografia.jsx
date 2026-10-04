@@ -1,7 +1,7 @@
 import Boton from '../../atoms/Boton';
 import { PLACEHOLDER } from '../../../constantes';
 
-export default function SeccionFotografia({ esEdicion, previa, imagenFile, onElegir, onQuitar }) {
+export default function SeccionFotografia({ esEdicion, previa, imagenFile, onElegir, onQuitar, bloqueada = false }) {
   return (
     <section className="form-seccion" aria-label="Imagen">
       <h3 className="form-seccion-titulo">Fotografía</h3>
@@ -19,6 +19,7 @@ export default function SeccionFotografia({ esEdicion, previa, imagenFile, onEle
               type="file"
               accept="image/jpeg,image/png,image/gif,image/webp"
               onChange={onElegir}
+              disabled={bloqueada}
             />
           </label>
           {imagenFile && (
@@ -26,7 +27,11 @@ export default function SeccionFotografia({ esEdicion, previa, imagenFile, onEle
               Quitar foto nueva
             </Boton>
           )}
-          <p className="form-ayuda">JPG, PNG, GIF o WebP · máx. 5 MB</p>
+          <p className="form-ayuda">
+            {bloqueada
+              ? 'Sin conexión no se cambia la foto desde aquí: usa «Fotos» en la lista de especies.'
+              : 'JPG, PNG, GIF o WebP · máx. 5 MB'}
+          </p>
         </div>
       </div>
     </section>

@@ -2,6 +2,9 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { listaImagenes } from '../../constantes';
 import { IconoCamara, IconoHoja, IconoLapiz, IconoPapelera } from '../atoms/IconosInicio';
+import { esIdLocal } from '../../offline/colaEspecies';
+
+const ESTADO_PENDIENTE = { crear: 'Nueva', editar: 'Sin enviar', fotos: 'Sin enviar' };
 
 function Foto({ src, alt }) {
   const [rota, setRota] = useState(false);
@@ -18,6 +21,8 @@ Foto.propTypes = { src: PropTypes.string, alt: PropTypes.string.isRequired };
 export default function TarjetaEspecie({ planta, onEditar, onFotos, onEliminar, indice = 0 }) {
   const fotos = listaImagenes(planta);
   const nombre = planta.nombre.comun;
+  // Una especie creada sin conexión aún no tiene ficha en el servidor.
+  const local = esIdLocal(planta._id);
 
   return (
     <li className="gestion-tarjeta especie-tarjeta" style={{ '--i': Math.min(indice, 12) }}>
@@ -27,11 +32,16 @@ export default function TarjetaEspecie({ planta, onEditar, onFotos, onEliminar, 
           <IconoCamara />
           {fotos.length === 0 ? 'Sin fotos' : `${fotos.length} ${fotos.length === 1 ? 'foto' : 'fotos'}`}
         </span>
+        {planta.pendiente && (
+          <span className={`gestion-insignia-pendiente arriba${planta.errorSincronizacion ? ' rechazada' : ''}`}>
+            {planta.errorSincronizacion ? 'No aceptada' : ESTADO_PENDIENTE[planta.pendiente]}
+          </span>
+        )}
       </div>
 
       <div className="gestion-tarjeta-cuerpo">
         <p className="gestion-tarjeta-titulo">
-          <a href={`#/planta/${planta._id}`}>{nombre}</a>
+          {local ? nombre : <a href={`#/planta/${planta._id}`}>{nombre}</a>}
         </p>
         <p className="gestion-tarjeta-cientifico"><em>{planta.nombre.cientifico}</em></p>
         {planta.familia && <p className="gestion-tarjeta-familia">{planta.familia}</p>}
@@ -42,7 +52,7 @@ export default function TarjetaEspecie({ planta, onEditar, onFotos, onEliminar, 
           <IconoLapiz />
           <span>Editar</span>
         </button>
-        <button type="button" className="gestion-boton gestion-boton-texto" onClick={() => onFotos(planta)} aria-label={`Fotos de ${nombre}`} title="Fotos">
+        <button type="button" className="gestion-boton gestion-boton-texto" onClick={() => onFotos(planta)} aria-label={`Fotos de ${nombre}`} title={local ? 'Podrás editar las fotos cuando se envíe la especie' : 'Fotos'} disabled={local}>
           <IconoCamara />
           <span>Fotos</span>
         </button>

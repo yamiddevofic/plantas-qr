@@ -1,14 +1,34 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { actualizarFotosPlanta, eliminarPlanta, fetchPlantas } from '../../api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { actualizarFotosPlanta, actualizarPlanta, crearPlanta, eliminarPlanta, fetchPlantas } from '../../api';
 import useAccionProtegida from '../../hooks/useAccionProtegida';
 import useEnLinea from '../../hooks/useEnLinea';
 import { listaImagenes } from '../../constantes';
+import {
+  aplicarColaEspecies,
+  borrarFotosDeOperacion,
+  claveFotoEspecie,
+  clavesDeFotos,
+  descartar,
+  descartarOperacion,
+  encolarCrear,
+  encolarEditar,
+  encolarEliminar,
+  encolarFotos,
+  esIdLocal,
+  guardarColaEspecies,
+  leerColaEspecies,
+  marcarErrorOperacion,
+  nuevoIdLocal,
+  reasignarId,
+} from '../../offline/colaEspecies';
+import { comprimirFoto, guardarFoto, leerFoto } from '../../offline/fotos';
 import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
 import { IconoCamara, IconoFicha, IconoHoja, IconoLupa, IconoMas } from '../atoms/IconosInicio';
 import PestanasGestion from '../molecules/PestanasGestion';
+import BannerSincronizacion from '../organisms/BannerSincronizacion';
 import EditorFotosEspecie from '../organisms/EditorFotosEspecie';
 import FormularioPlanta from '../organisms/FormularioPlanta';
 import TarjetaEspecie from '../organisms/TarjetaEspecie';
@@ -16,9 +36,14 @@ import PlantillaGestion from '../templates/PlantillaGestion';
 
 const sinTildes = (t) => String(t ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
+const ETIQUETAS = { crear: 'Nueva', editar: 'Cambio', fotos: 'Fotos', eliminar: 'Eliminación' };
+const TEXTO_SIN_CONEXION = 'Puedes seguir agregando, editando y eliminando especies y organizando sus fotos: se guardan en este dispositivo y se envían cuando vuelva internet.';
+
 /**
  * Gestión de especies: agregar, editar los datos, ordenar las fotos y eliminar
- * las especies del catálogo. Comparte módulo (pestañas) con Gestión de individuos.
+ * las especies del catálogo. Comparte módulo (pestañas) con Gestión de individuos
+ * y, como ella, funciona sin conexión: los cambios se guardan en el dispositivo
+ * (offline/colaEspecies.js) y se envían, con la contraseña, cuando vuelve internet.
  */
 export default function PaginaEspecies() {
   const [plantas, setPlantas] = useState([]);
@@ -26,11 +51,24 @@ export default function PaginaEspecies() {
   const [error, setError] = useState(null);
   const [recargar, setRecargar] = useState(0);
   const [busqueda, setBusqueda] = useState('');
-  // { modo: 'datos' | 'fotos', planta } — null si no hay nada abierto.
+  // { modo: 'datos' | 'fotos', planta, iniciales? } — null si no hay nada abierto.
   const [abierto, setAbierto] = useState(null);
   const [aviso, setAviso] = useState(null);
+  const [cola, setCola] = useState(leerColaEspecies);
+  const [sincronizando, setSincronizando] = useState(false);
+  // Fotos aún sin enviar, guardadas en el dispositivo: clave de IndexedDB → URL temporal.
+  const [fotosLocales, setFotosLocales] = useState({});
   const enLinea = useEnLinea();
+  const colaRef = useRef(cola);
+  const sincronizandoRef = useRef(false);
+  const autoIntentadoRef = useRef(false);
   const { ejecutar, dialogo } = useAccionProtegida();
+
+  // La cola vive en el dispositivo para sobrevivir a cerrar la página sin conexión.
+  useEffect(() => {
+    colaRef.current = cola;
+    guardarColaEspecies(cola);
+  }, [cola]);
 
   useEffect(() => {
     aplicarSeo({
@@ -56,36 +94,131 @@ export default function PaginaEspecies() {
     return () => { cancelado = true; };
   }, [recargar]);
 
+  const clavesFotos = cola.flatMap(clavesDeFotos).sort().join('|');
+  useEffect(() => {
+    let cancelado = false;
+    const urls = {};
+    (async () => {
+      for (const clave of clavesFotos ? clavesFotos.split('|') : []) {
+        try {
+          const blob = await leerFoto(clave);
+          if (blob) urls[clave] = URL.createObjectURL(blob);
+        } catch {
+          // Sin IndexedDB no hay vista previa; la operación sigue en la cola.
+        }
+      }
+      if (cancelado) Object.values(urls).forEach((u) => URL.revokeObjectURL(u));
+      else setFotosLocales(urls);
+    })();
+    return () => {
+      cancelado = true;
+      Object.values(urls).forEach((u) => URL.revokeObjectURL(u));
+    };
+  }, [clavesFotos]);
+
+  // Lo guardado en el servidor más los cambios aún sin enviar.
+  const vista = useMemo(() => aplicarColaEspecies(plantas, cola, fotosLocales), [plantas, cola, fotosLocales]);
+
   const visibles = useMemo(() => {
     const texto = sinTildes(busqueda.trim());
-    return [...plantas]
+    return [...vista]
       .sort((a, b) => a.nombre.comun.localeCompare(b.nombre.comun, 'es'))
       .filter((p) => !texto || sinTildes(`${p.nombre.comun} ${p.nombre.cientifico} ${p.familia}`).includes(texto));
-  }, [plantas, busqueda]);
+  }, [vista, busqueda]);
 
-  const reemplazar = (planta) => setPlantas((prev) => {
+  const reemplazar = useCallback((planta) => setPlantas((prev) => {
     const indice = prev.findIndex((p) => p._id === planta._id);
     if (indice === -1) return [planta, ...prev];
     const copia = [...prev];
     copia[indice] = planta;
     return copia;
-  });
+  }), []);
+
+  // Actualiza la lista desde el servidor sin pantalla de carga.
+  const refrescar = useCallback(async () => {
+    try {
+      setPlantas(await fetchPlantas());
+    } catch {
+      // Sin red: se conserva lo que ya hay en pantalla.
+    }
+  }, []);
 
   const abrir = (modo, planta = null) => {
     setAviso(null);
     setAbierto({ modo, planta });
   };
 
+  // Si la especie ya tiene un cambio de fotos sin enviar, el editor arranca desde él
+  // (las fotos nuevas salen del dispositivo).
+  const abrirFotos = async (planta) => {
+    setAviso(null);
+    const op = cola.find((o) => o.tipo === 'fotos' && o.id === planta._id);
+    if (!op) {
+      setAbierto({ modo: 'fotos', planta, iniciales: null });
+      return;
+    }
+    const iniciales = [];
+    for (const ref of op.orden) {
+      const nueva = /^nueva:(\d+)$/.exec(ref);
+      if (!nueva) {
+        iniciales.push({ clave: ref, ref });
+        continue;
+      }
+      const blob = await leerFoto(claveFotoEspecie(op.id, Number(nueva[1]))).catch(() => null);
+      if (blob) iniciales.push({ clave: `guardada-${op.id}-${nueva[1]}`, archivo: blob });
+    }
+    setAbierto({ modo: 'fotos', planta, iniciales });
+  };
+
+  const soltarFotosPendientes = (id) => {
+    colaRef.current.filter((op) => op.id === id).forEach((op) => borrarFotosDeOperacion(op));
+  };
+
+  // ── Fotos ──────────────────────────────────────────────────────
+
   const guardarFotos = useCallback(async (orden, archivos) => {
     const { planta } = abierto;
-    const actualizada = await ejecutar(
-      (password) => actualizarFotosPlanta(planta._id, orden, archivos, password),
-      `Para guardar las fotos de ${planta.nombre.comun} necesitas la contraseña de administrador.`,
-    );
+    const nombre = planta.nombre.comun;
+
+    // Sin conexión (o si se corta al enviar): quedan en el dispositivo hasta poder enviarlas.
+    const guardarEnCola = async () => {
+      const previa = colaRef.current.find((op) => op.tipo === 'fotos' && op.id === planta._id);
+      if (previa) await borrarFotosDeOperacion(previa);
+      for (const [i, archivo] of archivos.entries()) await guardarFoto(claveFotoEspecie(planta._id, i), archivo);
+      setCola((c) => encolarFotos(c, planta._id, nombre, orden, archivos.length));
+      setAviso({ tipo: 'ok', texto: `Fotos de ${nombre} guardadas en este dispositivo; se enviarán cuando haya conexión.` });
+      setAbierto(null);
+    };
+
+    if (!enLinea) {
+      await guardarEnCola();
+      return;
+    }
+    let actualizada;
+    try {
+      actualizada = await ejecutar(
+        (password) => actualizarFotosPlanta(planta._id, orden, archivos, password),
+        `Para guardar las fotos de ${nombre} necesitas la contraseña de administrador.`,
+      );
+    } catch (e) {
+      if (e.sinRed) {
+        await guardarEnCola();
+        return;
+      }
+      throw e;
+    }
+    // Si había un cambio de fotos sin enviar, este lo reemplaza.
+    const previa = colaRef.current.find((op) => op.tipo === 'fotos' && op.id === planta._id);
+    if (previa) {
+      await borrarFotosDeOperacion(previa);
+      setCola((c) => descartarOperacion(c, previa));
+    }
     reemplazar(actualizada);
     setAviso({ tipo: 'ok', texto: `Fotos de ${actualizada.nombre.comun} guardadas.` });
     setAbierto(null);
-  }, [abierto, ejecutar]);
+  }, [abierto, enLinea, ejecutar, reemplazar]);
+
+  // ── Datos de la especie ────────────────────────────────────────
 
   const datosGuardados = (planta) => {
     const nueva = !plantas.some((p) => p._id === planta._id);
@@ -94,34 +227,168 @@ export default function PaginaEspecies() {
     setAbierto(null);
   };
 
+  // Sin conexión (o red caída al enviar): el formulario entrega aquí lo escrito.
+  const encolarDatos = useCallback(async ({ datos, planta }) => {
+    const { imagenFile, ...sinFoto } = datos;
+    delete sinFoto.password;
+    const esNueva = !planta;
+    const id = planta?._id ?? nuevoIdLocal();
+    const aunSinEnviar = esNueva || esIdLocal(id);
+    let foto;
+    if (imagenFile && aunSinEnviar) {
+      await guardarFoto(claveFotoEspecie(id, 'principal'), await comprimirFoto(imagenFile));
+      foto = true;
+    }
+    setCola((c) => (esNueva ? encolarCrear(c, id, sinFoto, foto === true) : encolarEditar(c, id, sinFoto, foto)));
+    const omitida = Boolean(imagenFile) && !aunSinEnviar;
+    setAviso({
+      tipo: 'ok',
+      texto: `${sinFoto.nombreComun} guardada en este dispositivo; se enviará cuando haya conexión.${omitida ? ' La foto nueva no se guardó: agrégala con «Fotos».' : ''}`,
+    });
+    setAbierto(null);
+  }, []);
+
+  // ── Eliminar ───────────────────────────────────────────────────
+
   const eliminar = async (planta) => {
     setAviso(null);
+    const nombre = planta.nombre.comun;
+    const eliminarEnCola = () => {
+      soltarFotosPendientes(planta._id);
+      setCola((c) => encolarEliminar(c, planta._id, nombre));
+      setAviso({
+        tipo: 'ok',
+        texto: esIdLocal(planta._id) ? `${nombre} descartada.` : `${nombre} se eliminará cuando haya conexión.`,
+      });
+    };
+
+    // Sin red no se puede validar la contraseña (se pedirá al sincronizar), así que
+    // la confirmación es local. Lo mismo si la especie tiene cambios sin enviar.
+    const pendiente = cola.some((op) => op.id === planta._id);
+    if (!enLinea || pendiente) {
+      const texto = esIdLocal(planta._id)
+        ? `¿Descartar ${nombre}? Aún no se había enviado.`
+        : `¿Eliminar ${nombre} del catálogo? Se aplicará al sincronizar.`;
+      if (window.confirm(texto)) eliminarEnCola();
+      return;
+    }
+
     try {
       await ejecutar(
         (password) => eliminarPlanta(planta._id, password),
-        `Vas a eliminar ${planta.nombre.comun} del catálogo, con sus fotos y su código QR. Esta acción no se puede deshacer; confirma con la contraseña de administrador.`,
+        `Vas a eliminar ${nombre} del catálogo, con sus fotos y su código QR. Esta acción no se puede deshacer; confirma con la contraseña de administrador.`,
         { confirmar: true },
       );
       setPlantas((prev) => prev.filter((p) => p._id !== planta._id));
-      setAviso({ tipo: 'ok', texto: `${planta.nombre.comun} eliminada del catálogo.` });
+      setAviso({ tipo: 'ok', texto: `${nombre} eliminada del catálogo.` });
     } catch (e) {
-      if (!e.cancelado) setAviso({ tipo: 'error', texto: e.message });
+      if (e.sinRed) eliminarEnCola();
+      else if (!e.cancelado) setAviso({ tipo: 'error', texto: e.message });
     }
   };
 
+  // ── Sincronizar ────────────────────────────────────────────────
+
+  // Envía la cola en orden. Un rechazo del servidor (400, 409: la especie tiene
+  // árboles…) marca esa operación y sigue con las demás; si falta la red o la
+  // contraseña es incorrecta se detiene y lo gestiona quien llama.
+  const sincronizar = useCallback(async () => {
+    if (sincronizandoRef.current) return;
+    sincronizandoRef.current = true;
+    setSincronizando(true);
+    try {
+      const pendientes = colaRef.current.filter((op) => !op.error).length;
+      if (!pendientes) return;
+      const { enviados, rechazados } = await ejecutar(async (password) => {
+        let restante = colaRef.current;
+        let ok = 0;
+        let rechazadas = 0;
+        for (let op = restante.find((o) => !o.error); op; op = restante.find((o) => !o.error)) {
+          try {
+            if (op.tipo === 'crear') {
+              const foto = op.foto ? await leerFoto(claveFotoEspecie(op.id, 'principal')) : null;
+              const creada = await crearPlanta({ ...op.datos, imagenFile: foto, password });
+              restante = reasignarId(descartarOperacion(restante, op), op.id, creada._id);
+              setPlantas((prev) => [creada, ...prev.filter((p) => p._id !== creada._id)]);
+            } else if (op.tipo === 'editar') {
+              reemplazar(await actualizarPlanta(op.id, { ...op.datos, password }));
+              restante = descartarOperacion(restante, op);
+            } else if (op.tipo === 'fotos') {
+              const archivos = [];
+              for (let i = 0; i < (op.nuevas ?? 0); i += 1) {
+                const blob = await leerFoto(claveFotoEspecie(op.id, i));
+                if (!blob) throw new Error('Falta una foto guardada en este dispositivo.');
+                archivos.push(blob);
+              }
+              reemplazar(await actualizarFotosPlanta(op.id, op.orden, archivos, password));
+              restante = descartarOperacion(restante, op);
+            } else {
+              await eliminarPlanta(op.id, password);
+              setPlantas((prev) => prev.filter((p) => p._id !== op.id));
+              restante = descartarOperacion(restante, op);
+            }
+            await borrarFotosDeOperacion(op);
+            ok += 1;
+          } catch (e) {
+            if (e.sinRed || /contraseña/i.test(e.message)) throw e;
+            // Eliminar algo que ya no existe es, a efectos prácticos, un éxito.
+            if (op.tipo === 'eliminar' && /no encontrada/i.test(e.message)) {
+              restante = descartarOperacion(restante, op);
+              ok += 1;
+            } else {
+              restante = marcarErrorOperacion(restante, op, e.message);
+              rechazadas += 1;
+            }
+          }
+          colaRef.current = restante;
+          guardarColaEspecies(restante);
+          setCola(restante);
+        }
+        return { enviados: ok, rechazados: rechazadas };
+      }, `Hay ${pendientes} ${pendientes === 1 ? 'cambio guardado' : 'cambios guardados'} sin conexión. Ingresa la contraseña de administrador para enviarlos.`);
+      await refrescar();
+      setAviso({
+        tipo: rechazados ? 'error' : 'ok',
+        texto: `${enviados} ${enviados === 1 ? 'cambio enviado' : 'cambios enviados'}${rechazados ? `; ${rechazados} rechazado${rechazados === 1 ? '' : 's'} por el servidor (revísalos abajo)` : ''}.`,
+      });
+    } catch (e) {
+      if (e.sinRed) setAviso({ tipo: 'error', texto: 'Se perdió la conexión; los cambios siguen guardados y se enviarán después.' });
+      else if (!e.cancelado) setAviso({ tipo: 'error', texto: e.message });
+    } finally {
+      sincronizandoRef.current = false;
+      setSincronizando(false);
+    }
+  }, [ejecutar, refrescar, reemplazar]);
+
+  // Al volver la conexión (o al abrir la página con ella) se ofrece enviar lo pendiente.
+  const hayPorEnviar = cola.some((op) => !op.error);
+  useEffect(() => {
+    if (!enLinea) {
+      autoIntentadoRef.current = false;
+    } else if (hayPorEnviar && !cargando && !abierto && !autoIntentadoRef.current) {
+      autoIntentadoRef.current = true;
+      sincronizar();
+    }
+  }, [enLinea, hayPorEnviar, cargando, abierto, sincronizar]);
+
+  const descartarPendiente = (id) => {
+    soltarFotosPendientes(id);
+    setCola((c) => descartar(c, id));
+  };
+
   const cifras = useMemo(() => {
-    if (cargando || error || !plantas.length) return null;
-    const conteos = plantas.map((p) => listaImagenes(p).length);
+    if (cargando || error || !vista.length) return null;
+    const conteos = vista.map((p) => listaImagenes(p).length);
     const total = conteos.reduce((a, n) => a + n, 0);
     const sinFoto = conteos.filter((n) => n === 0).length;
     // El catálogo antiguo tiene varias fichas por especie: se cuentan especies distintas.
-    const especies = new Set(plantas.map((p) => sinTildes(p.nombre.cientifico).trim())).size;
+    const especies = new Set(vista.map((p) => sinTildes(p.nombre.cientifico).trim())).size;
     return [
       { Icono: IconoHoja, valor: especies, etiqueta: especies === 1 ? 'especie' : 'especies' },
       { Icono: IconoCamara, valor: total, etiqueta: total === 1 ? 'foto' : 'fotos' },
       ...(sinFoto ? [{ Icono: IconoFicha, valor: sinFoto, etiqueta: 'sin foto' }] : []),
     ];
-  }, [plantas, cargando, error]);
+  }, [vista, cargando, error]);
 
   return (
     <PlantillaGestion
@@ -145,6 +412,7 @@ export default function PaginaEspecies() {
           {abierto?.modo === 'fotos' && (
             <EditorFotosEspecie
               planta={abierto.planta}
+              iniciales={abierto.iniciales}
               enLinea={enLinea}
               onClose={() => setAbierto(null)}
               onGuardar={guardarFotos}
@@ -153,6 +421,9 @@ export default function PaginaEspecies() {
           {abierto?.modo === 'datos' && (
             <FormularioPlanta
               planta={abierto.planta}
+              // Una especie creada sin conexión aún no existe en el servidor: se edita en la cola.
+              enLinea={enLinea && !esIdLocal(abierto.planta?._id)}
+              onEncolar={encolarDatos}
               onClose={() => setAbierto(null)}
               onGuardado={datosGuardados}
             />
@@ -184,9 +455,19 @@ export default function PaginaEspecies() {
             </label>
           </div>
 
+          <BannerSincronizacion
+            enLinea={enLinea}
+            cola={cola}
+            sincronizando={sincronizando}
+            onSincronizar={sincronizar}
+            onDescartar={descartarPendiente}
+            etiquetas={ETIQUETAS}
+            textoSinConexion={TEXTO_SIN_CONEXION}
+          />
+
           <div className="gestion-resumen">
             <p className="gestion-conteo" role="status" aria-live="polite">
-              <strong>{visibles.length}</strong> de {plantas.length} {plantas.length === 1 ? 'ficha' : 'fichas'}
+              <strong>{visibles.length}</strong> de {vista.length} {vista.length === 1 ? 'ficha' : 'fichas'}
             </p>
           </div>
 
@@ -199,7 +480,7 @@ export default function PaginaEspecies() {
             </p>
           )}
 
-          {plantas.length === 0 ? (
+          {vista.length === 0 ? (
             <EstadoBox icono="🌱" titulo="Aún no hay especies" texto="Agrega la primera para que aparezca en el catálogo.">
               <Boton variante="primary" onClick={() => abrir('datos')}>Agregar especie</Boton>
             </EstadoBox>
@@ -215,7 +496,7 @@ export default function PaginaEspecies() {
                   planta={planta}
                   indice={i}
                   onEditar={(p) => abrir('datos', p)}
-                  onFotos={(p) => abrir('fotos', p)}
+                  onFotos={abrirFotos}
                   onEliminar={eliminar}
                 />
               ))}

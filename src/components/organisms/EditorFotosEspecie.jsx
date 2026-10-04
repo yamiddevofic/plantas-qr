@@ -11,12 +11,15 @@ let contador = 0;
 /**
  * Modal para ordenar, quitar y agregar fotos de una especie. La primera foto es
  * la principal (tarjeta de la galería y portada de la ficha).
- * `onGuardar(orden, archivosNuevos)` devuelve una promesa.
+ * `onGuardar(orden, archivosNuevos)` devuelve una promesa. Sin conexión se puede
+ * guardar igual: la página lo deja en el dispositivo y lo envía cuando vuelva internet.
+ * `iniciales` (opcional) arranca el editor desde un cambio ya guardado sin enviar:
+ * lista de { clave, ref } (foto que ya tenía) o { clave, archivo } (foto nueva).
  */
-export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar }) {
+export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar, iniciales = null }) {
   const dialogoRef = useModal(onClose);
   // Cada elemento: { clave, ref } para fotos que ya tenía o { clave, archivo } para nuevas.
-  const [fotos, setFotos] = useState(() => listaImagenes(planta).map((ref) => ({ clave: ref, ref })));
+  const [fotos, setFotos] = useState(() => iniciales ?? listaImagenes(planta).map((ref) => ({ clave: ref, ref })));
   const [procesando, setProcesando] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState(null);
@@ -28,8 +31,8 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
   }, [fotos]);
   useEffect(() => () => Object.values(previas).forEach((u) => URL.revokeObjectURL(u)), [previas]);
 
-  const cambios = fotos.length !== listaImagenes(planta).length
-    || fotos.some((f, i) => f.archivo || f.ref !== listaImagenes(planta)[i]);
+  const base = iniciales ? iniciales.map((f) => f.ref) : listaImagenes(planta);
+  const cambios = fotos.length !== base.length || fotos.some((f, i) => f.archivo || f.ref !== base[i]);
 
   async function agregar(e) {
     const archivos = [...(e.target.files || [])];
@@ -124,13 +127,18 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
           </label>
         </div>
 
-        {!enLinea && <p className="form-error" role="status">Sin conexión: puedes preparar los cambios, pero se guardan solo con internet.</p>}
+        {!enLinea && (
+          <p className="form-ayuda" role="status">
+            Sin conexión: los cambios de fotos se guardan en este dispositivo y se envían cuando vuelva
+            internet (ahí se pedirá la contraseña de administrador).
+          </p>
+        )}
         {error && <p className="form-error form-error-bloque" role="alert">{error}</p>}
 
         <footer className="form-acciones">
           <Boton variante="ghost" onClick={onClose} disabled={enviando}>Cancelar</Boton>
-          <Boton variante="primary" onClick={guardar} disabled={enviando || procesando || !cambios || !enLinea}>
-            {enviando ? 'Guardando…' : 'Guardar fotos'}
+          <Boton variante="primary" onClick={guardar} disabled={enviando || procesando || !cambios}>
+            {enviando ? 'Guardando…' : (enLinea ? 'Guardar fotos' : 'Guardar en este dispositivo')}
           </Boton>
         </footer>
       </div>
@@ -143,4 +151,10 @@ EditorFotosEspecie.propTypes = {
   enLinea: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onGuardar: PropTypes.func.isRequired,
+  /** Cambio de fotos ya guardado sin enviar, para seguir editándolo. */
+  iniciales: PropTypes.arrayOf(PropTypes.shape({
+    clave: PropTypes.string.isRequired,
+    ref: PropTypes.string,
+    archivo: PropTypes.object,
+  })),
 };
