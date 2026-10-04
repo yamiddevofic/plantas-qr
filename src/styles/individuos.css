@@ -198,76 +198,125 @@
 
 .fotos-rejilla {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 12px;
   margin: 16px 0;
   padding: 0;
   list-style: none;
 }
 
+/* Cada foto es una tarjeta: la imagen arriba y los botones, con texto, debajo
+   (antes eran círculos sueltos sobre la foto y se perdían en claro y oscuro). */
 .fotos-item {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  border-radius: var(--radius-md);
+  border: 1px solid var(--line-200);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.fotos-item.es-principal {
+  border-color: var(--forest-600);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--forest-600) 35%, transparent);
+}
+
+.fotos-item-foto {
+  position: relative;
   background: var(--mint-100);
 }
 
-.fotos-item img {
+.fotos-item-foto img {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
 }
 
-.fotos-principal,
 .fotos-nueva {
   position: absolute;
   left: 8px;
   top: 8px;
-  padding: 3px 8px;
+  padding: 3px 10px;
   border-radius: var(--radius-pill);
-  background: rgba(15, 30, 22, 0.78);
-  color: var(--white);
-  font-size: 0.7rem;
+  background: var(--forest-700);
+  color: var(--surface);
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
-.fotos-principal + .fotos-nueva {
-  top: 34px;
-}
-
-.fotos-nueva {
-  background: var(--forest-700);
-}
-
 .fotos-item-acciones {
-  position: absolute;
-  right: 6px;
-  top: 6px;
   display: flex;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
 }
 
-.fotos-item-acciones button {
+/* Si no caben lado a lado, cada botón ocupa todo el ancho de la tarjeta. */
+.fotos-accion,
+.fotos-estado-principal {
   display: inline-flex;
+  flex: 1 1 88px;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--ink-900);
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--forest-700);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fotos-accion {
   cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
 }
 
-.fotos-item-acciones button:hover {
-  background: var(--white);
+.fotos-accion svg,
+.fotos-estado-principal svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
-.fotos-item-acciones button:focus-visible {
+.fotos-accion:hover {
+  border-color: var(--forest-600);
+  background: var(--mint-100);
+}
+
+.fotos-accion:active {
+  transform: scale(0.97);
+}
+
+/* La foto principal no tiene botón: dice que ya lo es, con la estrella llena. */
+.fotos-estado-principal {
+  border-color: transparent;
+  background: var(--forest-700);
+  color: var(--surface);
+}
+
+.fotos-estado-principal svg {
+  fill: currentColor;
+}
+
+.fotos-accion-quitar {
+  border-color: color-mix(in srgb, var(--danger-700) 45%, transparent);
+  color: var(--danger-700);
+}
+
+.fotos-accion-quitar:hover {
+  border-color: var(--danger-700);
+  background: var(--danger-50);
+}
+
+.fotos-accion:focus-visible {
   outline: 3px solid var(--leaf-500);
-  outline-offset: 1px;
+  outline-offset: 2px;
 }
 
 /* ── Puerta de administrador ──────────────────────────────────── */

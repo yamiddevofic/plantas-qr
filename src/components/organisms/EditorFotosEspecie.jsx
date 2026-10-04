@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuCamera, LuImage, LuStar, LuX } from 'react-icons/lu';
+import { LuCamera, LuImage, LuStar, LuTrash2, LuX } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
 import { listaImagenes } from '../../constantes';
 import { comprimirFoto } from '../../offline/fotos';
@@ -77,25 +77,33 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
           </Boton>
         </header>
 
-        <p className="form-ayuda">La primera foto es la principal: aparece en la galería y como portada de la ficha.</p>
+        <p className="form-ayuda">La foto destacada (la marcada «Principal») aparece en la galería y como portada de la ficha. Toca «Destacar» en otra para cambiarla.</p>
 
         {fotos.length === 0 ? (
           <p className="fotos-vacio">Esta especie no tiene fotos.</p>
         ) : (
           <ul className="fotos-rejilla">
             {fotos.map((f, i) => (
-              <li key={f.clave} className="fotos-item">
-                <img src={f.archivo ? previas[f.clave] : f.ref} alt={`Foto ${i + 1} de ${planta.nombre.comun}`} />
-                {i === 0 && <span className="fotos-principal">Principal</span>}
-                {f.archivo && <span className="fotos-nueva">Nueva</span>}
+              <li key={f.clave} className={`fotos-item${i === 0 ? ' es-principal' : ''}`}>
+                <div className="fotos-item-foto">
+                  <img src={f.archivo ? previas[f.clave] : f.ref} alt={`Foto ${i + 1} de ${planta.nombre.comun}`} />
+                  {f.archivo && <span className="fotos-nueva">Nueva</span>}
+                </div>
                 <div className="fotos-item-acciones">
-                  {i > 0 && (
-                    <button type="button" onClick={() => hacerPrincipal(f.clave)} aria-label={`Usar la foto ${i + 1} como principal`} title="Usar como principal">
+                  {i === 0 ? (
+                    <span className="fotos-estado-principal">
                       <LuStar aria-hidden="true" />
+                      Principal
+                    </span>
+                  ) : (
+                    <button type="button" className="fotos-accion" onClick={() => hacerPrincipal(f.clave)} aria-label={`Destacar la foto ${i + 1}: usarla como principal`}>
+                      <LuStar aria-hidden="true" />
+                      Destacar
                     </button>
                   )}
-                  <button type="button" onClick={() => quitar(f.clave)} aria-label={`Quitar la foto ${i + 1}`} title="Quitar">
-                    <LuX aria-hidden="true" />
+                  <button type="button" className="fotos-accion fotos-accion-quitar" onClick={() => quitar(f.clave)} aria-label={`Quitar la foto ${i + 1}`}>
+                    <LuTrash2 aria-hidden="true" />
+                    Quitar
                   </button>
                 </div>
               </li>
