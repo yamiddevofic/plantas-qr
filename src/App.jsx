@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useHashRoute } from './router';
 import PaginaGaleria from './components/pages/PaginaGaleria';
 import PaginaDetalle from './components/pages/PaginaDetalle';
-import PaginaFotosEspecies from './components/pages/PaginaFotosEspecies';
+import PaginaEspecies from './components/pages/PaginaEspecies';
 import PaginaIndividuos from './components/pages/PaginaIndividuos';
 import PaginaInicio from './components/pages/PaginaInicio';
 import BarraTitulo from './components/atoms/BarraTitulo';
@@ -32,8 +32,8 @@ export default function App() {
     pagina = <PaginaDetalle key={route.id} plantaId={route.id} />;
   } else if (route.nombre === 'galeria') {
     pagina = <PaginaGaleria />;
-  } else if (route.nombre === 'especies-fotos') {
-    pagina = <PuertaAdmin titulo="Fotos de especies"><PaginaFotosEspecies /></PuertaAdmin>;
+  } else if (route.nombre === 'especies') {
+    pagina = <PuertaAdmin titulo="Gestión de especies"><PaginaEspecies /></PuertaAdmin>;
   } else if (route.nombre === 'individuos') {
     pagina = <PuertaAdmin titulo="Gestión de individuos"><PaginaIndividuos /></PuertaAdmin>;
   }

@@ -33,6 +33,7 @@ import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
 import { IconoArbol, IconoCamara, IconoHoja, IconoLupa, IconoMas } from '../atoms/IconosInicio';
 import MapaSinConexion from '../molecules/MapaSinConexion';
+import PestanasGestion from '../molecules/PestanasGestion';
 import BannerSincronizacion from '../organisms/BannerSincronizacion';
 import FormularioIndividuo from '../organisms/FormularioIndividuo';
 import TarjetaIndividuo from '../organisms/TarjetaIndividuo';
@@ -422,6 +423,8 @@ export default function PaginaIndividuos() {
         </>
       )}
     >
+      <PestanasGestion actual="individuos" />
+
       {cargando ? (
         <div className="cargando-central"><ArbolitoLoader etiqueta="Cargando individuos" /></div>
       ) : error ? (

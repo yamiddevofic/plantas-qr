@@ -29,7 +29,10 @@ export function inicialEstado(planta) {
     descripcionGeneral: planta?.descripcion?.general ?? '',
     descripcionHojas: planta?.descripcion?.hojas ?? '',
     altura: planta?.altura ?? '',
-    usos: normalizarUsos(planta?.usos).join(', '),
+    // Un uso por línea: así sobreviven las frases que llevan comas.
+    usos: (planta?.usos?.some((u) => String(u).includes(',') || String(u).length > 48)
+      ? planta.usos
+      : normalizarUsos(planta?.usos)).join('\n'),
     impacto: planta?.impacto ?? '',
     estadoConservacion: planta?.estadoConservacion ?? ESTADOS_CONSERVACION[0],
     latitud: planta?.ubicacion?.latitud ?? '',

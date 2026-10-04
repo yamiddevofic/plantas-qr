@@ -19,16 +19,14 @@ export default function PlantillaGaleria({
   filtros,
   generando,
   puedeGenerar,
-  onCrear,
   onRegenerarTodos,
-  onEditarImagenes,
+  onGestionarEspecies,
   onArchivos,
   onVerEstados,
   mensajeQR,
   sinResultados,
   plantas,
   todasLasPlantas,
-  formularioAbierto,
   qrDialogo,
   puertaAdmin,
 }) {
@@ -98,8 +96,7 @@ export default function PlantillaGaleria({
               filtros={filtros}
               generando={generando}
               puedeGenerar={puedeGenerar}
-              onCrear={onCrear}
-              onEditarImagenes={onEditarImagenes}
+              onGestionarEspecies={onGestionarEspecies}
               onArchivos={onArchivos}
               onVerEstados={onVerEstados}
               onRegenerarTodos={onRegenerarTodos}
@@ -139,18 +136,6 @@ export default function PlantillaGaleria({
               </div>
             </section>
 
-            <Boton
-              variante="primary"
-              clase={`fab ${formularioAbierto ? 'abierto' : ''}`.trim()}
-              onClick={onCrear}
-              aria-label="Agregar nueva especie"
-              title="Agregar nueva especie"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true" focusable="false">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-            </Boton>
           </>
         )}
       </main>

@@ -62,7 +62,7 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
     <div className="ficha-layout">
       <div className="ficha-principal">
         {(descripcion?.general || rasgos.length > 0 || impacto) && (
-          <SeccionFicha id="ficha-conoce" antetitulo="Descripción" titulo="Conoce este árbol" icono={IconoLibro}>
+          <SeccionFicha id="ficha-conoce" antetitulo="Descripción" titulo="Conoce este árbol" icono={IconoLibro} clase="ficha-antes-curiosos">
             {descripcion?.general && <p className="detalle-parrafo">{descripcion.general}</p>}
             {alternos.length > 0 && (
               <div className="detalle-etiquetas">
@@ -95,7 +95,7 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
         )}
 
         {usosLista.length > 0 && (
-          <SeccionFicha id="ficha-usos" antetitulo="Saberes" titulo={usosFrases ? 'Usos e importancia' : 'Usos tradicionales'} icono={IconoUsos}>
+          <SeccionFicha id="ficha-usos" antetitulo="Saberes" titulo={usosFrases ? 'Usos e importancia' : 'Usos tradicionales'} icono={IconoUsos} clase="ficha-antes-curiosos">
             {usosFrases ? (
               <ul className="detalle-lista">
                 {usosLista.map((u, i) => <li key={u} style={{ '--i': i }}><IconoHoja />{u}</li>)}
@@ -109,7 +109,7 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
         )}
 
         {clima.length > 0 && (
-          <SeccionFicha id="ficha-habitat" antetitulo="Dónde crece" titulo="Hábitat y clima" icono={IconoGlobo}>
+          <SeccionFicha id="ficha-habitat" antetitulo="Dónde crece" titulo="Hábitat y clima" icono={IconoGlobo} clase="ficha-antes-curiosos">
             <dl className="detalle-habitat">
               {clima.map(({ Icono, etiqueta, texto }, i) => (
                 <div key={etiqueta} style={{ '--i': i }}>
@@ -121,13 +121,6 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
           </SeccionFicha>
         )}
 
-        {curiosos.length > 0 && (
-          <SeccionFicha id="ficha-curiosos" antetitulo="¿Sabías que…?" titulo="Datos curiosos" icono={IconoChispa}>
-            <ol className="detalle-curiosos">
-              {curiosos.map((dato, i) => <li key={dato} style={{ '--i': i }}>{dato}</li>)}
-            </ol>
-          </SeccionFicha>
-        )}
 
         {cuidados && (
           <SeccionFicha id="ficha-cuidados" antetitulo="Jardinería" titulo="Cómo cuidarlo" icono={IconoRegadera}>
@@ -164,6 +157,13 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
 
       <div className="ficha-lateral">
         <DatosFicha planta={planta} />
+        {curiosos.length > 0 && (
+          <SeccionFicha id="ficha-curiosos" antetitulo="¿Sabías que…?" titulo="Datos curiosos" icono={IconoChispa} clase="ficha-curiosos">
+            <ol className="detalle-curiosos">
+              {curiosos.map((dato, i) => <li key={dato} style={{ '--i': i }}>{dato}</li>)}
+            </ol>
+          </SeccionFicha>
+        )}
         {estadoConservacion && (
           <EstadoConservacion estado={estadoConservacion} detalle={estadoConservacionDetalle} onVerEscala={onVerEstados} />
         )}

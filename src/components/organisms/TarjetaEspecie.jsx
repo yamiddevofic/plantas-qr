@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { listaImagenes } from '../../constantes';
-import { IconoCamara, IconoHoja, IconoLapiz } from '../atoms/IconosInicio';
+import { IconoCamara, IconoHoja, IconoLapiz, IconoPapelera } from '../atoms/IconosInicio';
 
 function Foto({ src, alt }) {
   const [rota, setRota] = useState(false);
@@ -11,8 +11,11 @@ function Foto({ src, alt }) {
 
 Foto.propTypes = { src: PropTypes.string, alt: PropTypes.string.isRequired };
 
-/** Tarjeta de una ficha en "Fotos de especies": foto principal, nombres y cuántas fotos tiene. */
-export default function TarjetaFotosEspecie({ planta, onEditar, indice = 0 }) {
+/**
+ * Tarjeta de una especie en Gestión de especies: foto principal, nombres,
+ * cuántas fotos tiene y las acciones (editar datos, fotos, eliminar).
+ */
+export default function TarjetaEspecie({ planta, onEditar, onFotos, onEliminar, indice = 0 }) {
   const fotos = listaImagenes(planta);
   const nombre = planta.nombre.comun;
 
@@ -27,30 +30,35 @@ export default function TarjetaFotosEspecie({ planta, onEditar, indice = 0 }) {
       </div>
 
       <div className="gestion-tarjeta-cuerpo">
-        <p className="gestion-tarjeta-titulo">{nombre}</p>
+        <p className="gestion-tarjeta-titulo">
+          <a href={`#/planta/${planta._id}`}>{nombre}</a>
+        </p>
         <p className="gestion-tarjeta-cientifico"><em>{planta.nombre.cientifico}</em></p>
         {planta.familia && <p className="gestion-tarjeta-familia">{planta.familia}</p>}
       </div>
 
       <div className="gestion-tarjeta-acciones">
-        <button
-          type="button"
-          className="gestion-boton"
-          onClick={() => onEditar(planta)}
-          aria-label={`Editar fotos de ${nombre}`}
-          title="Editar fotos"
-        >
+        <button type="button" className="gestion-boton gestion-boton-texto" onClick={() => onEditar(planta)} aria-label={`Editar datos de ${nombre}`} title="Editar datos">
           <IconoLapiz />
-          <span>Editar fotos</span>
+          <span>Editar</span>
+        </button>
+        <button type="button" className="gestion-boton gestion-boton-texto" onClick={() => onFotos(planta)} aria-label={`Fotos de ${nombre}`} title="Fotos">
+          <IconoCamara />
+          <span>Fotos</span>
+        </button>
+        <button type="button" className="gestion-boton gestion-boton-peligro" onClick={() => onEliminar(planta)} aria-label={`Eliminar ${nombre}`} title="Eliminar">
+          <IconoPapelera />
         </button>
       </div>
     </li>
   );
 }
 
-TarjetaFotosEspecie.propTypes = {
+TarjetaEspecie.propTypes = {
   planta: PropTypes.object.isRequired,
   onEditar: PropTypes.func.isRequired,
+  onFotos: PropTypes.func.isRequired,
+  onEliminar: PropTypes.func.isRequired,
   /** Posición en la lista, para escalonar la entrada. */
   indice: PropTypes.number,
 };

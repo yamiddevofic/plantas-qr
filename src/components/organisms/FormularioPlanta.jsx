@@ -106,8 +106,9 @@ export default function FormularioPlanta({ planta, onClose, onGuardado }) {
     if (!validar()) return;
     const datos = {
       ...estado,
+      // Una línea por uso; si todo va en una sola línea, se separa por comas.
       usos: estado.usos
-        .split(',')
+        .split(estado.usos.includes('\n') ? '\n' : ',')
         .map((u) => u.trim())
         .filter(Boolean),
       imagenFile,

@@ -290,9 +290,13 @@ router.put('/:id', upload.fields([{ name: 'imagen', maxCount: 1 }, { name: 'imag
  *     responses:
  *       200:
  *         description: Planta eliminada
+ *       401:
+ *         description: Falta la contraseña de administrador o es incorrecta
  *       404:
  *         description: Planta no encontrada
+ *       409:
+ *         description: La especie tiene individuos registrados
  */
-router.delete('/:id', eliminarPlanta);
+router.delete('/:id', qrAuth, eliminarPlanta);
 
 export default router;

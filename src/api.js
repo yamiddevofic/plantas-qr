@@ -186,8 +186,12 @@ export async function verificarAdmin(password) {
   return res.json();
 }
 
-export async function eliminarPlanta(id) {
-  const res = await fetch(`${BASE}/plantas/${id}`, { method: 'DELETE' });
-  if (!res.ok) throw new Error('Error al eliminar planta');
+export async function eliminarPlanta(id, password) {
+  const res = await fetch(`${BASE}/plantas/${id}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  });
+  if (!res.ok) throw new Error(await leerError(res, 'Error al eliminar la especie'));
   return res.json();
 }

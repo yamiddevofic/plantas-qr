@@ -1,4 +1,6 @@
 import Planta from '../models/Planta.js';
+import Individuo from '../models/Individuo.js';
+import QR from '../models/QR.js';
 import Imagen, { guardarImagenes, idDeImagen } from '../models/Imagen.js';
 
 function limpiarUsos(usos) {
@@ -175,8 +177,18 @@ export const actualizarPlanta = async (req, res) => {
 
 export const eliminarPlanta = async (req, res) => {
   try {
-    const planta = await Planta.findByIdAndDelete(req.params.id);
+    const planta = await Planta.findById(req.params.id);
     if (!planta) return res.status(404).json({ mensaje: 'Planta no encontrada' });
+    // Los individuos apuntan a la especie: borrarla los dejaría sin ficha.
+    const arboles = await Individuo.countDocuments({ especieId: planta._id });
+    if (arboles > 0) {
+      return res.status(409).json({
+        mensaje: `${planta.nombre.comun} tiene ${arboles} ${arboles === 1 ? 'árbol registrado' : 'árboles registrados'}. Elimínalos o cámbialos de especie en Gestión de individuos antes de borrarla.`,
+      });
+    }
+    await Planta.deleteOne({ _id: planta._id });
+    await QR.deleteMany({ plantaId: planta._id });
+    await limpiarHuerfanas([planta.imagen, ...(planta.imagenes || [])].filter(Boolean));
     res.json({ mensaje: 'Planta eliminada correctamente' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al eliminar planta', error: error.message });

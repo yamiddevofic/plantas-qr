@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchPlantas, fetchQRs, generarTodosQRs, verificarAdmin } from '../../api';
 import { aplicarSeo } from '../../seo';
 import PlantillaGaleria from '../templates/PlantillaGaleria';
-import FormularioPlanta from '../organisms/FormularioPlanta';
 import LeyendaEstados from '../molecules/LeyendaEstados';
 
 export default function PaginaGaleria() {
@@ -15,7 +14,6 @@ export default function PaginaGaleria() {
   const [mensajeQR, setMensajeQR] = useState(null);
   const [filtroFamilia, setFiltroFamilia] = useState('');
   const [filtroTipo, setFiltroTipo] = useState('');
-  const [formulario, setFormulario] = useState(null);
   const [qrDialogoAbierto, setQrDialogoAbierto] = useState(false);
   const [qrDialogoError, setQrDialogoError] = useState(null);
   const [puertaAdmin, setPuertaAdmin] = useState(null);
@@ -97,8 +95,6 @@ export default function PaginaGaleria() {
     setQrDialogoAbierto(true);
   };
 
-  const abrirCrear = () => setFormulario({ modo: 'crear', planta: null });
-  const cerrarFormulario = () => setFormulario(null);
 
   const abrirPuerta = (destino) => () => {
     setPuertaAdminError(null);
@@ -122,16 +118,6 @@ export default function PaginaGaleria() {
     setPuertaAdminCargando(false);
   };
 
-  const handleGuardado = (plantaGuardada) => {
-    setPlantas((prev) => {
-      const indice = prev.findIndex((p) => p._id === plantaGuardada._id);
-      if (indice === -1) return [plantaGuardada, ...prev];
-      const copia = [...prev];
-      copia[indice] = plantaGuardada;
-      return copia;
-    });
-    cerrarFormulario();
-  };
 
   const familias = useMemo(
     () => [...new Set(plantas.map((p) => p.familia).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es')),
@@ -177,16 +163,14 @@ export default function PaginaGaleria() {
         }}
         generando={qrsGenerando}
         puedeGenerar={plantas.length > 0}
-        onCrear={abrirCrear}
         onRegenerarTodos={abrirDialogoQR}
-        onEditarImagenes={() => { window.location.hash = '#/especies-fotos'; }}
+        onGestionarEspecies={() => { window.location.hash = '#/especies'; }}
         onArchivos={abrirPuerta({ url: '/depurar-imagenes' })}
         onVerEstados={() => setLeyendaAbierta(true)}
         mensajeQR={mensajeQR}
         sinResultados={sinResultados}
         plantas={plantasFiltradas}
         todasLasPlantas={plantas}
-        formularioAbierto={Boolean(formulario)}
         qrDialogo={{
           abierto: qrDialogoAbierto,
           error: qrDialogoError,
@@ -201,13 +185,6 @@ export default function PaginaGaleria() {
           alConfirmar: confirmarPuerta,
         }}
       />
-      {formulario && (
-        <FormularioPlanta
-          planta={formulario.planta}
-          onClose={cerrarFormulario}
-          onGuardado={handleGuardado}
-        />
-      )}
       {leyendaAbierta && <LeyendaEstados onCerrar={() => setLeyendaAbierta(false)} />}
     </>
   );

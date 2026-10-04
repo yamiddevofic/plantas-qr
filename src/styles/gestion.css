@@ -712,7 +712,123 @@
     font-size: 0.74rem;
   }
 
-  /* Fotos de especies: el botón dice "Editar fotos" y va a lo ancho. */
+}
+
+/* ── Pestañas del módulo: Especies · Individuos ─────────────── */
+
+.gestion-pestanas {
+  display: flex;
+  gap: 4px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 20px;
+  padding: 4px;
+  border: 1px solid var(--line-100);
+  border-radius: var(--radius-pill);
+  background: var(--mint-50);
+  animation: inicioSube 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.gestion-pestana {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--hit);
+  padding: 0 20px 0 16px;
+  border-radius: var(--radius-pill);
+  color: var(--ink-500);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.gestion-pestana .icono-inicio {
+  width: 18px;
+  height: 18px;
+}
+
+.gestion-pestana:hover {
+  color: var(--forest-700);
+}
+
+.gestion-pestana[aria-current="page"] {
+  background: var(--surface);
+  box-shadow: var(--shadow-md), inset 0 0 0 1px var(--line-200);
+  color: var(--forest-700);
+}
+
+.gestion-pestana:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
+}
+
+/* ── Tarjeta de especie: tres acciones (Editar · Fotos · Eliminar) ── */
+
+.especie-tarjeta .gestion-tarjeta-titulo a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.especie-tarjeta .gestion-tarjeta-titulo a:hover {
+  color: var(--forest-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Móvil: la fila de botones va debajo de la foto y los datos. */
+.especie-tarjeta {
+  grid-template-columns: 76px minmax(0, 1fr);
+  grid-template-areas:
+    "foto cuerpo"
+    "acciones acciones";
+  row-gap: 10px;
+  padding: 10px;
+}
+
+.especie-tarjeta .gestion-tarjeta-acciones {
+  gap: 8px;
+}
+
+.gestion-boton-texto {
+  flex: 1;
+  padding: 0 14px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--forest-700);
+}
+
+.gestion-boton-texto:hover {
+  border-color: transparent;
+}
+
+.gestion-boton.gestion-boton-texto span {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+}
+
+.especie-tarjeta .gestion-boton-peligro {
+  flex: 0 0 var(--hit);
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-pill);
+}
+
+@media (max-width: 399px) {
+  .especie-tarjeta {
+    grid-template-columns: 68px minmax(0, 1fr);
+  }
+
+  .especie-tarjeta .gestion-tarjeta-acciones {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 640px) {
   .especie-tarjeta {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
@@ -720,36 +836,19 @@
       "cuerpo"
       "acciones";
     align-items: stretch;
+    padding: 10px 10px 12px;
   }
 
   .especie-tarjeta .gestion-tarjeta-acciones {
-    padding: 0 4px;
-  }
-
-  .especie-tarjeta .gestion-boton {
-    flex: 1;
-    padding: 0 16px;
-    border: 1px solid var(--line-200);
-    border-radius: var(--radius-pill);
-    background: var(--surface);
-    color: var(--forest-700);
-  }
-
-  .especie-tarjeta .gestion-boton:hover {
-    border-color: transparent;
-    background: var(--mint-100);
-  }
-
-  .especie-tarjeta .gestion-boton span {
-    position: static;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    clip: auto;
+    padding: 0 2px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gestion-pestanas {
+    animation: none !important;
+  }
+
   .gestion-tarjeta,
   .gestion-panel,
   .gestion-volver,

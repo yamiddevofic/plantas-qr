@@ -36,10 +36,11 @@ export default function SeccionDescripcion({ estado, errores, set }) {
           />
         </CampoFormulario>
         <CampoFormulario id="f-usos" etiqueta="Usos tradicionales" error={errores.usos}>
-          <input
+          <textarea
             id="f-usos"
-            className="form-input"
-            placeholder="Separados por comas (ej. medicinal, sombra)"
+            className="form-textarea"
+            rows={3}
+            placeholder={'Uno por línea (ej. medicinal, sombra)'}
             value={estado.usos}
             onChange={(e) => set('usos', e.target.value)}
           />

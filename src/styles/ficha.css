@@ -265,8 +265,12 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
 
 .ficha-datos { order: 1; }
 .estado-tarjeta { order: 2; }
-.ficha-principal > * { order: 3; }
-.detalle-qr { order: 4; }
+.ficha-principal > .ficha-antes-curiosos { order: 3; }
+/* Los datos curiosos viven en la columna lateral (escritorio), pero en móvil
+   siguen a la descripción, los usos y el hábitat. */
+.ficha-curiosos { order: 4; }
+.ficha-principal > * { order: 5; }
+.detalle-qr { order: 6; }
 
 @media (min-width: 1024px) {
   .detalle-contenido {
@@ -959,4 +963,31 @@ html[data-tema="oscuro"] .estado-tarjeta[data-nivel="5"] { --estado: #e0584f; }
 /* Datos rápidos impares (5 con "En el parque"): el último a lo ancho. */
 .ficha-datos-rejilla > .ficha-dato:last-child:nth-child(odd) {
   grid-column: 1 / -1;
+}
+
+/* En la columna lateral (escritorio) los datos curiosos van en una columna y
+   con el título algo más chico. */
+@media (min-width: 1024px) {
+  /* En la columna lateral manda el orden del documento: datos rápidos,
+     datos curiosos, estado y QR. */
+  .ficha-lateral > * {
+    order: 0;
+  }
+
+  .ficha-lateral .detalle-curiosos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ficha-lateral .detalle-curiosos > :last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+
+  .ficha-lateral .ficha-curiosos .detalle-seccion-titulo {
+    font-size: 1.3rem;
+  }
+
+  .ficha-lateral .detalle-curiosos li {
+    padding: 16px 16px 16px 58px;
+    font-size: 0.95rem;
+  }
 }

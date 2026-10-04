@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import {
-  LuCirclePlus,
+  
   LuHouse,
   LuImage,
-  LuImages,
+  LuSprout,
   LuMoon,
   LuQrCode,
   LuShieldAlert,
   LuSlidersHorizontal,
   LuSun,
-  LuTreePine,
+  
 } from 'react-icons/lu';
 import BarraFiltros from './BarraFiltros';
 import ItemInstalarApp from '../molecules/ItemInstalarApp';
@@ -32,8 +32,7 @@ export default function MenuHerramientas({
   generando,
   puedeGenerar,
   onRegenerarTodos,
-  onCrear,
-  onEditarImagenes,
+  onGestionarEspecies,
   onArchivos,
   onVerEstados,
 }) {
@@ -88,29 +87,11 @@ export default function MenuHerramientas({
 
           <GrupoMenu titulo="Herramientas">
             <ItemMenu
-              icono={<LuCirclePlus aria-hidden="true" />}
-              etiqueta="Agregar nueva especie"
-              descripcion="Registrar una planta en el catálogo"
+              icono={<LuSprout aria-hidden="true" />}
+              etiqueta="Gestionar especies"
+              descripcion="Especies, sus fotos y los árboles registrados"
               onClick={() => {
-                onCrear();
-                onCerrar();
-              }}
-            />
-            <ItemMenu
-              icono={<LuTreePine aria-hidden="true" />}
-              etiqueta="Gestionar individuos"
-              descripcion="Agregar, editar o eliminar árboles y su ubicación"
-              onClick={() => {
-                window.location.hash = '#/individuos';
-                onCerrar();
-              }}
-            />
-            <ItemMenu
-              icono={<LuImages aria-hidden="true" />}
-              etiqueta="Editar imágenes de especies"
-              descripcion="Ver y cambiar las fotos de cada planta"
-              onClick={() => {
-                onEditarImagenes();
+                onGestionarEspecies();
                 onCerrar();
               }}
             />
