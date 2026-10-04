@@ -6,6 +6,20 @@ import ArbolitoLoader from '../atoms/ArbolitoLoader';
 const CENTRO_PARQUE = [-72.66495, 7.13825];
 const ZOOM_PARQUE = 18;
 const FUENTE_REFERENCIAS = 'referencias';
+const FUENTE_PRECISION = 'precision-gps';
+const VACIO = { type: 'FeatureCollection', features: [] };
+
+/** Círculo (polígono de 64 lados) de `metros` alrededor de [lng, lat]. */
+function circulo([lng, lat], metros) {
+  const puntos = [];
+  const dLat = metros / 111320;
+  const dLng = metros / (111320 * Math.cos((lat * Math.PI) / 180));
+  for (let i = 0; i <= 64; i += 1) {
+    const a = (i / 64) * 2 * Math.PI;
+    puntos.push([lng + dLng * Math.cos(a), lat + dLat * Math.sin(a)]);
+  }
+  return { type: 'FeatureCollection', features: [{ type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [puntos] } }] };
+}
 
 const redondear = (n) => Number(n.toFixed(7));
 
@@ -22,7 +36,7 @@ function coordenadasValidas(latitud, longitud) {
  * marcador, que además se puede arrastrar. Los otros individuos se muestran
  * como puntos de referencia. MapLibre se descarga bajo demanda.
  */
-export default function SelectorUbicacion({ latitud, longitud, onCambiar, referencias = [] }) {
+export default function SelectorUbicacion({ latitud, longitud, onCambiar, referencias = [], precision = null }) {
   const contenedorRef = useRef(null);
   const mapaRef = useRef(null);
   const marcadorRef = useRef(null);
@@ -74,6 +88,20 @@ export default function SelectorUbicacion({ latitud, longitud, onCambiar, refere
         });
 
         map.on('style.load', () => {
+          // Margen de error del GPS: debajo de los puntos y del marcador.
+          map.addSource(FUENTE_PRECISION, { type: 'geojson', data: VACIO });
+          map.addLayer({
+            id: 'precision-relleno',
+            type: 'fill',
+            source: FUENTE_PRECISION,
+            paint: { 'fill-color': '#b7e4c7', 'fill-opacity': 0.22 },
+          });
+          map.addLayer({
+            id: 'precision-borde',
+            type: 'line',
+            source: FUENTE_PRECISION,
+            paint: { 'line-color': '#b7e4c7', 'line-width': 1.5, 'line-dasharray': [2, 2] },
+          });
           map.addSource(FUENTE_REFERENCIAS, {
             type: 'geojson',
             data: { type: 'FeatureCollection', features: referenciasRef.current },
@@ -112,6 +140,14 @@ export default function SelectorUbicacion({ latitud, longitud, onCambiar, refere
     referenciasRef.current = referencias;
     mapaRef.current?.getSource?.(FUENTE_REFERENCIAS)?.setData({ type: 'FeatureCollection', features: referencias });
   }, [referencias, listo]);
+
+  // Círculo de precisión del GPS alrededor del punto (si lo hay).
+  useEffect(() => {
+    const fuente = mapaRef.current?.getSource?.(FUENTE_PRECISION);
+    if (!fuente) return;
+    const punto = coordenadasValidas(latitud, longitud);
+    fuente.setData(punto && precision > 0 ? circulo(punto, precision) : VACIO);
+  }, [latitud, longitud, precision, listo]);
 
   // Las coordenadas escritas a mano (o tomadas del GPS) mueven el marcador.
   useEffect(() => {
@@ -153,4 +189,6 @@ SelectorUbicacion.propTypes = {
   onCambiar: PropTypes.func.isRequired,
   /** Features GeoJSON de otros individuos, dibujados como puntos de referencia. */
   referencias: PropTypes.arrayOf(PropTypes.object),
+  /** Precisión del GPS en metros: se dibuja como círculo alrededor del marcador. */
+  precision: PropTypes.number,
 };

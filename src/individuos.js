@@ -52,3 +52,47 @@ export function parqueMasUsado(features) {
   }
   return mejor;
 }
+
+// ── GPS: combinar varias lecturas ────────────────────────────────
+// La primera lectura del teléfono suele venir del WiFi o las antenas (decenas o
+// cientos de metros de error); el GPS real afina en unos segundos. Se usan solo
+// las lecturas cercanas a la mejor y se promedian dando más peso a las más precisas.
+
+/**
+ * @param {{latitud:number, longitud:number, precision:number, altitud?:number|null}[]} lecturas
+ * @returns {{latitud:number, longitud:number, precision:number, altitud:number|null, usadas:number}|null}
+ */
+export function combinarLecturas(lecturas) {
+  const validas = lecturas.filter((l) => Number.isFinite(l.latitud) && Number.isFinite(l.longitud) && l.precision > 0);
+  if (!validas.length) return null;
+  const mejor = Math.min(...validas.map((l) => l.precision));
+  const limite = Math.max(mejor * 1.5, mejor + 3);
+  const buenas = validas.filter((l) => l.precision <= limite);
+  let suma = 0;
+  let lat = 0;
+  let lng = 0;
+  for (const l of buenas) {
+    const peso = 1 / (l.precision * l.precision);
+    suma += peso;
+    lat += l.latitud * peso;
+    lng += l.longitud * peso;
+  }
+  const alturas = buenas.map((l) => l.altitud).filter((a) => Number.isFinite(a));
+  return {
+    latitud: Number((lat / suma).toFixed(7)),
+    longitud: Number((lng / suma).toFixed(7)),
+    // Se informa la precisión de la mejor lectura: el promedio no se vende como más exacto.
+    precision: Number(mejor.toFixed(1)),
+    altitud: alturas.length ? Math.round(alturas.reduce((a, b) => a + b, 0) / alturas.length) : null,
+    usadas: buenas.length,
+  };
+}
+
+/** Calificación de una precisión en metros, para mostrarla en pantalla. */
+export function calidadPrecision(metros) {
+  if (!Number.isFinite(metros)) return { nivel: 'mala', texto: 'Sin señal' };
+  if (metros <= 5) return { nivel: 'excelente', texto: 'Excelente' };
+  if (metros <= 10) return { nivel: 'buena', texto: 'Buena' };
+  if (metros <= 20) return { nivel: 'regular', texto: 'Regular' };
+  return { nivel: 'mala', texto: 'Baja' };
+}

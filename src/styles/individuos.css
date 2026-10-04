@@ -602,3 +602,99 @@
 .puerta-admin-form .form-error {
   margin: 0;
 }
+
+/* ── Medición GPS ─────────────────────────────────────────────── */
+.gps-medicion {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 14px;
+  padding: 14px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-md);
+}
+
+.gps-medicion-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: 0.9375rem;
+}
+
+.gps-medicion-pulso {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--forest-600);
+  animation: gpsPulso 1.2s ease-out infinite;
+}
+
+@keyframes gpsPulso {
+  0% { box-shadow: 0 0 0 0 rgba(53, 118, 90, 0.5); }
+  100% { box-shadow: 0 0 0 10px rgba(53, 118, 90, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gps-medicion-pulso {
+    animation: none;
+  }
+}
+
+.gps-calidad {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gps-calidad-excelente,
+.gps-calidad-buena {
+  background: var(--mint-100);
+  color: var(--forest-700);
+}
+
+.gps-calidad-regular {
+  background: var(--warning-50);
+  color: var(--warning-700);
+}
+
+.gps-calidad-mala {
+  background: var(--danger-50);
+  color: var(--danger-700);
+}
+
+.gps-medicion-barra {
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--line-100);
+}
+
+.gps-medicion-barra span {
+  display: block;
+  height: 100%;
+  background: var(--forest-600);
+  transition: width 1s linear;
+}
+
+.gps-medicion-ayuda {
+  margin: 0;
+  color: var(--ink-500);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.gps-medicion .form-acciones-linea {
+  margin: 0;
+}
+
+.gps-aviso {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--warning-50);
+  color: var(--warning-700);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}

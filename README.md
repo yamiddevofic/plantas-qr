@@ -272,8 +272,11 @@ tocar la base de datos. Se abre desde el menú de la galería → **Gestionar in
 - **Listado** con búsqueda (código, especie, parque) y filtro por especie. Las fichas
   históricas de una misma especie se agrupan por nombre científico.
 - **Formulario** con la ubicación elegida en un mapa satelital (toque o marcador
-  arrastrable), coordenadas numéricas, o **Usar mi ubicación** (GPS del dispositivo:
-  rellena también precisión y altitud). Los demás individuos se ven como puntos de
+  arrastrable), coordenadas numéricas, o **Usar mi ubicación**. El GPS se mide hasta
+  45 s (`watchPosition`): se muestra la precisión en vivo, se descartan las lecturas
+  lejanas a la mejor y se promedian las buenas (peso 1/precisión²); termina solo con 5
+  lecturas de ±5 m o menos. El margen de error se dibuja como círculo y, si queda en más
+  de ±15 m, se pide ajustar el marcador a mano. Rellena también precisión y altitud. Los demás individuos se ven como puntos de
   referencia. Al elegir la especie se sugiere el siguiente código libre (`CIP-011`).
 - **Contraseña de administrador:** se pide al entrar (ver *Acceso de administrador*).
   **Eliminar** siempre pide confirmarla.
