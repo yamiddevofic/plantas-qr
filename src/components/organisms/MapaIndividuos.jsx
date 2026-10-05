@@ -35,9 +35,10 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   const [visible, setVisible] = useState(false);
   const [mapaListo, setMapaListo] = useState(false);
   const [errorMapa, setErrorMapa] = useState(null);
-  // Sin conexión el mapa de calles no carga (sus teselas vectoriales no se guardan);
-  // el satélite sí puede estar guardado (mapa del parque o zonas ya vistas).
-  const [base, setBase] = useState(() => (navigator.onLine ? 'mapa' : 'satelite'));
+  // Abre en satélite: se ven los árboles sobre el terreno real, y además funciona sin
+  // conexión (el mapa de calles no: sus teselas vectoriales no se guardan). La
+  // persona puede pasar a calles con el interruptor del mapa.
+  const [base, setBase] = useState('satelite');
   const [relieve3D, setRelieve3D] = useState(false);
   // Pantalla completa pedida desde "Ver en el mapa". Se usa el modo pseudo de
   // MapLibre (la API de pantalla completa del navegador exige un gesto reciente
