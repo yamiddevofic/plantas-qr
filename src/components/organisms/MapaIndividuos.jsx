@@ -297,6 +297,9 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
     let cancelado = false;
     let map;
     let detenerAnimacion = () => {};
+    let cancelarCierrePopup = () => {};
+    // Popup fijado con un clic: no se cierra al salir el cursor.
+    let fijado = false;
 
     import('../../mapa/maplibre.js')
       .then((lib) => {
@@ -332,6 +335,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
           closeOnClick: false,
         });
         popupRef.current.on('close', () => {
+          fijado = false;
           marcar(map, seleccionRef.current, false);
           seleccionRef.current = null;
           onSeleccionRef.current?.(null);
@@ -352,16 +356,44 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
           marcar(map, seleccionRef.current, true);
           setMapaListo(true);
         });
+        // Con ratón el popup se abre al pasar sobre el punto (sin clic) y se cierra
+        // al salir, salvo que el cursor pase al popup o la persona haga clic en el
+        // punto, que lo deja fijo. En pantallas táctiles se abre con un toque.
+        const conRaton = window.matchMedia?.('(hover: hover) and (pointer: fine)').matches ?? false;
+        let cierre = null;
+        const cancelarCierre = () => { clearTimeout(cierre); cierre = null; };
+        const programarCierre = () => {
+          cancelarCierre();
+          cierre = setTimeout(() => { if (!fijado) popupRef.current?.remove(); }, 300);
+        };
+        cancelarCierrePopup = cancelarCierre;
+        popupRef.current.on('open', () => {
+          const el = popupRef.current.getElement();
+          el.addEventListener('mouseenter', cancelarCierre);
+          el.addEventListener('mouseleave', () => { if (conRaton) programarCierre(); });
+        });
         // Un toque cerca de un punto lo abre (con margen para el dedo); en el
         // vacío, cierra el popup.
         map.on('click', (e) => {
+          if (e.originalEvent.target.closest?.('.maplibregl-popup')) return;
           const feature = individuoEn(map, e.point);
-          if (feature) seleccionar(feature, { centrar: true });
-          else popupRef.current?.remove();
+          if (feature) {
+            fijado = true;
+            seleccionar(feature, { centrar: true });
+          } else popupRef.current?.remove();
         });
         let resaltado = null;
         map.on('mousemove', (e) => {
-          const id = individuoEn(map, e.point, 10)?.properties.id ?? null;
+          // Sobre el popup el cursor sigue «dentro»: no se programa el cierre.
+          if (e.originalEvent.target.closest?.('.maplibregl-popup')) return;
+          const feature = individuoEn(map, e.point, 10);
+          const id = feature?.properties.id ?? null;
+          if (conRaton) {
+            if (feature) {
+              cancelarCierre();
+              if (id !== seleccionRef.current) seleccionar(feature);
+            } else if (seleccionRef.current && !fijado) programarCierre();
+          }
           if (id === resaltado) return;
           resaltar(map, resaltado, false);
           resaltar(map, id, true);
@@ -385,6 +417,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
       marcadorYoRef.current?.remove();
       marcadorYoRef.current = null;
       detenerAnimacion();
+      cancelarCierrePopup();
       map?.remove();
       mapaRef.current = null;
       seleccionRef.current = null;
