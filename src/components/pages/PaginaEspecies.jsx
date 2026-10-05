@@ -398,7 +398,6 @@ export default function PaginaEspecies() {
         acento: 'especies',
         texto: 'Agrega, edita o elimina las especies del catálogo y organiza sus fotos.',
         cifras,
-        compacto: true,
         bajar: true,
         accion: !cargando && !error && (
           <Boton variante="primary" clase="gestion-agregar" onClick={() => abrir('datos')}>

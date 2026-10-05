@@ -5,12 +5,11 @@ import PaisajeHero from './PaisajeHero';
 /**
  * Encabezado de las páginas de administración, con el lenguaje de la galería:
  * paisaje SVG del parque, titular con acento serif, cifras en píldoras de
- * vidrio y la acción principal de la página. Más bajo que el de la galería
- * para llegar rápido a la lista.
+ * vidrio y la acción principal de la página. Mide lo mismo que el del inicio.
  */
-export default function HeroGestion({ id, titulo, acento, texto = null, cifras = null, accion = null, compacto = false, bajar = false }) {
+export default function HeroGestion({ id, titulo, acento, texto = null, cifras = null, accion = null, bajar = false }) {
   return (
-    <header className={`hero-inicio hero-galeria hero-gestion${compacto ? ' hero-gestion-compacto' : ''}`}>
+    <header className="hero-inicio hero-galeria hero-gestion">
       <PaisajeHero />
 
       <div className="hero-inicio-contenido">
@@ -76,8 +75,6 @@ HeroGestion.propTypes = {
   ),
   /** Botón de la acción principal (p. ej. "Agregar individuo"). */
   accion: PropTypes.node,
-  /** Versión más baja, para páginas que son sobre todo una lista. */
-  compacto: PropTypes.bool,
-  /** Flecha que baja a la lista (solo escritorio, donde el encabezado es alto). */
+  /** Flecha que baja a la lista, como la del inicio. */
   bajar: PropTypes.bool,
 };

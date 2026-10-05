@@ -438,8 +438,6 @@ export default function PaginaIndividuos() {
         acento: 'individuos',
         texto: 'Registra cada árbol con su código, foto y ubicación GPS, también sin conexión.',
         cifras,
-        // Mismo encabezado que Gestión de especies: al cambiar de pestaña no se nota diferencia.
-        compacto: true,
         bajar: true,
         accion: !cargando && !error && (
           <Boton variante="primary" clase="gestion-agregar" onClick={() => abrirFormulario()} disabled={especies.length === 0}>

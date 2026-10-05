@@ -1343,10 +1343,11 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 .hero-galeria {
-  /* Móvil: ~62vh con título, cifras, el paisaje abajo y la flecha para bajar. */
-  --alto-paisaje: clamp(140px, 22svh, 210px);
-  min-height: 62vh;
-  min-height: 62svh;
+  /* Mismo alto que el hero del inicio: pantalla completa en móvil. El catálogo y
+     las páginas de gestión comparten esta regla. */
+  --alto-paisaje: clamp(170px, 27svh, 260px);
+  min-height: 100vh;
+  min-height: 100svh;
   /* Sube bajo la barra (alto del botón + 2 × 10 px de relleno). */
   margin-top: calc(-1 * (var(--hit) + 20px));
   margin-bottom: 24px;
@@ -1358,7 +1359,7 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 .hero-galeria .hero-inicio-titulo {
-  font-size: clamp(2.1rem, 1.3rem + 3.6vw, 3.4rem);
+  font-size: clamp(2.7rem, 1.4rem + 6.2vw, 5.4rem);
 }
 
 .hero-galeria .hero-inicio-texto-bloque {
@@ -1371,13 +1372,6 @@ html[data-tema="oscuro"] .proyecto {
   transform-box: view-box;
   transform-origin: 820px 118px;
   transform: translate(260px, -48px) scale(1.2);
-}
-
-/* Móvil: en la franja solo caben el título y las cifras. */
-@media (max-width: 767px) {
-  .hero-galeria :is(.hero-inicio-ubicacion, .hero-inicio-texto) {
-    display: none;
-  }
 }
 
 /* En pantallas angostas solo caben dos cifras en una fila. */
@@ -1408,7 +1402,7 @@ html[data-tema="oscuro"] .proyecto {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   color: var(--ink-700);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
@@ -1418,8 +1412,8 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 .hero-galeria-cifras .icono-inicio {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   color: var(--forest-700);
 }
 
@@ -1450,11 +1444,12 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 @media (min-width: 768px) {
-  /* Escritorio: hero completo, con el mismo alto proporcional que el inicio
-     (1440:360) para que el dibujo no se recorte y la luna o el sol se vean enteros. */
+  /* Escritorio: el mismo alto que el inicio (entre 640 y 940 px según la pantalla) y
+     el mismo alto proporcional del dibujo (1440:360), para que no se recorte y la
+     luna o el sol se vean enteros. */
   .hero-galeria {
-    --alto-paisaje: clamp(200px, 25vw, 440px);
-    min-height: 0;
+    --alto-paisaje: clamp(240px, 25vw, 440px);
+    min-height: clamp(640px, 100svh, 940px);
     margin-bottom: 40px;
   }
 
@@ -1468,7 +1463,7 @@ html[data-tema="oscuro"] .proyecto {
   }
 
   .hero-galeria .hero-inicio-titulo {
-    font-size: clamp(2.5rem, 1.3rem + 5vw, 4.4rem);
+    font-size: clamp(2.7rem, 1.4rem + 6.2vw, 5.4rem);
   }
 
   .hero-galeria .paisaje-astro > * {
@@ -1476,7 +1471,8 @@ html[data-tema="oscuro"] .proyecto {
   }
 
   .hero-galeria-cifras li {
-    font-size: 0.85rem;
+    padding: 8px 16px 8px 12px;
+    font-size: 0.98rem;
   }
 }
 

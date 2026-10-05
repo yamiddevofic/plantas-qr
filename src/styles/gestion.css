@@ -72,12 +72,9 @@
 
 /* ── Hero ───────────────────────────────────────────────────── */
 
-/* Más alto que el de la galería: el paisaje se ve completo y el título, el
-   texto, las cifras y la acción respiran. Móvil ≈ 62 % de la pantalla. */
+/* El alto (pantalla completa, como el inicio) y el paisaje vienen de .hero-galeria
+   (inicio.css); aquí solo cambia lo propio de las páginas de gestión. */
 .hero-gestion {
-  --alto-paisaje: clamp(160px, 25svh, 240px);
-  min-height: 62vh;
-  min-height: 62svh;
   margin-bottom: 28px;
 }
 
@@ -92,32 +89,12 @@
   gap: 14px;
 }
 
-/* En móvil el párrafo sí cabe ahora: se muestra como en el hero de escritorio. */
-@media (max-width: 767px) {
-  .hero-gestion .hero-inicio-texto {
-    display: block;
-  }
-}
-
-/* Párrafo discreto: acompaña al titular sin competir con él. */
+/* Párrafo y titular con el tamaño del inicio: el hero ocupa la pantalla completa. */
 .hero-gestion .hero-inicio-texto {
-  max-width: 34ch;
-  font-size: 0.88rem;
-  line-height: 1.5;
-  color: var(--ink-500);
-}
-
-.hero-gestion .hero-inicio-titulo {
-  font-size: clamp(2rem, 1.3rem + 3.2vw, 3.2rem);
-}
-
-/* La galería esconde la línea de ubicación en móvil; aquí avisa de que es
-   una zona de administración, así que se queda. */
-@media (max-width: 767px) {
-  .hero-gestion .hero-inicio-ubicacion {
-    display: inline-flex;
-    font-size: 0.78rem;
-  }
+  max-width: 36ch;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--ink-700);
 }
 
 .hero-gestion-accion {
@@ -140,13 +117,7 @@
 
 @media (min-width: 768px) {
   .hero-gestion {
-    --alto-paisaje: clamp(220px, 25vw, 440px);
-    min-height: clamp(540px, 66svh, 740px);
     margin-bottom: 44px;
-  }
-
-  .hero-gestion .hero-inicio-titulo {
-    font-size: clamp(2.6rem, 1.3rem + 4vw, 4.2rem);
   }
 
   .hero-gestion .hero-inicio-contenido,
@@ -159,8 +130,8 @@
   }
 
   .hero-gestion .hero-inicio-texto {
-    max-width: 44ch;
-    font-size: 0.98rem;
+    max-width: 46ch;
+    font-size: 1.12rem;
   }
 }
 
@@ -177,64 +148,6 @@
 
   .hero-gestion .hero-galeria-cifras {
     justify-content: center;
-  }
-}
-
-/* Versión baja, solo en móvil (Fotos de especies): es sobre todo una lista, así
-   que el hero deja ver pronto las tarjetas. En escritorio conserva el alto normal. */
-@media (max-width: 767px) {
-  .hero-gestion.hero-gestion-compacto {
-    --alto-paisaje: clamp(140px, 21svh, 200px);
-    min-height: 48vh;
-    min-height: 48svh;
-    margin-bottom: 24px;
-  }
-
-  .hero-gestion.hero-gestion-compacto .hero-inicio-contenido {
-    padding-bottom: calc(var(--alto-paisaje) * 0.78);
-  }
-}
-
-/* Pantallas muy angostas: el título cabe en una línea en las dos páginas, para
-   que al cambiar de pestaña el encabezado no cambie de alto. */
-@media (max-width: 379px) {
-  .hero-gestion .hero-inicio-titulo {
-    font-size: 1.75rem;
-  }
-}
-
-@media (max-width: 339px) {
-  .hero-gestion .hero-inicio-titulo {
-    font-size: 1.5rem;
-  }
-}
-
-/* Escritorio: encabezado casi a pantalla completa con la flecha que lleva a la
-   lista (en móvil la lista ya se ve debajo y se queda bajo). */
-.hero-gestion-bajar {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .hero-gestion.hero-gestion-compacto {
-    /* Casi pantalla completa: el título queda centrado en el cielo, con el
-       paisaje entero debajo, y la flecha invita a bajar a la lista. */
-    min-height: 95vh;
-    min-height: 95svh;
-    margin-bottom: 40px;
-  }
-
-  .hero-gestion.hero-gestion-compacto .hero-inicio-contenido {
-    gap: 14px;
-    padding-bottom: calc(var(--alto-paisaje) * 0.8);
-  }
-
-  .hero-gestion.hero-gestion-compacto .hero-inicio-texto-bloque {
-    gap: 14px;
-  }
-
-  .hero-gestion-bajar {
-    display: grid;
   }
 }
 
