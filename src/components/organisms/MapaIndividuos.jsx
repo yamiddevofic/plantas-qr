@@ -5,7 +5,7 @@ import { useTema } from '../../tema.js';
 import {
   CAMARA_3D,
   CAPA_PUNTOS,
-  ZOOM_INICIAL_MAX,
+  VISTA_INICIAL,
   POSICION_SELECCION_Y,
   agregarCapas,
   aplicarRelieve,
@@ -178,18 +178,10 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
         limitesRef.current = limites;
 
         const vista = vistaRef.current;
-        const offsetInicialY = -contenedorRef.current.clientHeight * 0.05;
         map = new lib.Map({
           container: contenedorRef.current,
           style: vista.base === 'satelite' ? lib.estiloSatelite() : lib.ESTILOS[vista.tema] || lib.ESTILOS.claro,
-          bounds: limites,
-          bearing: 90,
-          fitBoundsOptions: {
-            padding: 48,
-            maxZoom: ZOOM_INICIAL_MAX,
-            bearing: 90,
-            offset: [0, offsetInicialY],
-          },
+          ...VISTA_INICIAL,
           maxZoom: 20,
           maxPitch: 75,
           cooperativeGestures: true,
@@ -310,15 +302,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
         center: limitesRef.current?.getCenter(),
         duration,
       });
-    } else if (limitesRef.current) {
-      map.fitBounds(limitesRef.current, {
-        padding: 48,
-        maxZoom: ZOOM_INICIAL_MAX,
-        pitch: 0,
-        bearing: 90,
-        offset: [0, -map.getContainer().clientHeight * 0.05],
-        duration,
-      });
+    } else {
+      map.easeTo({ ...VISTA_INICIAL, pitch: 0, duration });
     }
   }, [relieve3D, base]);
 

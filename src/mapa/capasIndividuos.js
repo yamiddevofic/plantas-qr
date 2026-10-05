@@ -8,7 +8,9 @@ const FUENTE_SOMBRA = 'terreno-sombra';
 const CAPA_SOMBRA = 'terreno-sombreado';
 export const CAPA_PUNTOS = 'individuos-puntos';
 const CAPA_ETIQUETAS = 'individuos-etiquetas';
-export const ZOOM_INICIAL_MAX = 17;
+// Vista con la que abre el mapa de la ficha: sobre el parque, con el este hacia arriba
+// (bearing 90) y un zoom en el que la escala marca 20 m en unos 65 px.
+export const VISTA_INICIAL = { center: [-72.6647875, 7.1382373], zoom: 18, bearing: 90 };
 export const POSICION_SELECCION_Y = 0.45;
 
 // Cámara al activar el relieve: algo más lejos e inclinada para que entren las
