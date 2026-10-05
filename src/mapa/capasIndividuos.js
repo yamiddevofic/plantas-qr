@@ -83,30 +83,6 @@ export function detalleIndividuo({ altitudMsnm, precisionGpsM }) {
   return partes.join(' · ');
 }
 
-/** Distancia en metros entre dos puntos [lng, lat] (haversine). */
-export function distanciaMetros([lng1, lat1], [lng2, lat2]) {
-  const rad = Math.PI / 180;
-  const dLat = (lat2 - lat1) * rad;
-  const dLng = (lng2 - lng1) * rad;
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) ** 2;
-  return 2 * 6371000 * Math.asin(Math.sqrt(a));
-}
-
-/** El individuo más cercano a `punto` ([lng, lat]) y su distancia en metros. */
-export function masCercano(features, punto) {
-  let mejor = null;
-  for (const feature of features) {
-    const metros = distanciaMetros(punto, feature.geometry.coordinates);
-    if (!mejor || metros < mejor.metros) mejor = { feature, metros };
-  }
-  return mejor;
-}
-
-export function textoDistancia(metros) {
-  if (metros < 5) return 'Estás junto a este árbol';
-  return metros < 1000 ? `A ${Math.round(metros)} m de ti` : `A ${numero.format(metros / 1000)} km de ti`;
-}
-
 // Contenido de los popups con nodos DOM (textContent), nunca HTML interpolado.
 // Estructura común: foto a todo el ancho arriba y un cuerpo con los textos.
 
@@ -155,13 +131,12 @@ function agregarEnlace(cuerpo, enlace) {
 }
 
 /** Popup de la ficha: el individuo (su foto, código y datos del GPS). */
-export function contenidoPopup(props, nombreEspecie, { enlace = null, distancia = null } = {}) {
+export function contenidoPopup(props, nombreEspecie, { enlace = null } = {}) {
   const { raiz, cuerpo } = armarPopup(props.imagen, `Fotografía del árbol ${props.codigoArbol}`, '');
   cuerpo.append(crearNodo('p', 'mapa-popup-titulo', props.codigoArbol));
   if (nombreEspecie) cuerpo.append(crearNodo('p', 'mapa-popup-subtitulo', nombreEspecie));
   const detalle = detalleIndividuo(props);
   if (detalle) cuerpo.append(crearNodo('p', 'mapa-popup-detalle', detalle));
-  agregarPastillas(cuerpo, [distancia && { texto: distancia, clase: 'mapa-popup-pastilla-cerca' }]);
   if (enlace) agregarEnlace(cuerpo, enlace);
   return raiz;
 }
@@ -170,7 +145,7 @@ export function contenidoPopup(props, nombreEspecie, { enlace = null, distancia 
  * Popup del mapa general: presenta la especie (foto, nombres, familia) para
  * entrar a su ficha; el árbol tocado queda como dato secundario.
  */
-export function contenidoPopupEspecie(props, especie, { enlace = null, distancia = null } = {}) {
+export function contenidoPopupEspecie(props, especie, { enlace = null } = {}) {
   const nombre = especie?.nombre?.comun || 'Especie sin nombre';
   const { raiz, cuerpo } = armarPopup(especie?.imagen || props.imagen, `Fotografía de ${nombre}`, 'mapa-popup-de-especie');
   const titulo = crearNodo('p', 'mapa-popup-titulo');
@@ -184,10 +159,7 @@ export function contenidoPopupEspecie(props, especie, { enlace = null, distancia
   if (especie?.nombre?.cientifico) cuerpo.append(crearNodo('p', 'mapa-popup-cientifico', especie.nombre.cientifico));
   const clasificacion = [especie?.familia, especie?.tipo].filter(Boolean).join(' · ');
   if (clasificacion) cuerpo.append(crearNodo('p', 'mapa-popup-detalle', clasificacion));
-  agregarPastillas(cuerpo, [
-    { texto: `Árbol ${props.codigoArbol}` },
-    distancia && { texto: distancia, clase: 'mapa-popup-pastilla-cerca' },
-  ]);
+  agregarPastillas(cuerpo, [{ texto: `Árbol ${props.codigoArbol}` }]);
   if (enlace) agregarEnlace(cuerpo, enlace);
   return raiz;
 }

@@ -327,11 +327,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.mapa-popup-pastilla-cerca {
-  background: color-mix(in srgb, var(--clay-500) 14%, transparent);
-  color: var(--clay-500);
-}
-
 .mapa-popup-enlace {
   display: flex;
   align-items: center;
@@ -432,17 +427,6 @@ html[data-tema="oscuro"] .mapa-marco .maplibregl-ctrl-scale {
   }
 }
 
-
-
-/* Punto azul de «tu ubicación». */
-.mapa-yo {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #2f7cf6;
-  border: 3px solid #fff;
-  box-shadow: 0 0 0 6px rgba(47, 124, 246, 0.25), 0 1px 4px rgba(0, 0, 0, 0.4);
-}
 
 
 /* Leyenda del mapa general: recuadro flotante arriba a la izquierda, dentro del

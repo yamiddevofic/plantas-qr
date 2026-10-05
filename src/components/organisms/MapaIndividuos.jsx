@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuChevronDown, LuLocateFixed, LuX } from 'react-icons/lu';
+import { LuChevronDown, LuX } from 'react-icons/lu';
 import { useTema } from '../../tema.js';
 import { obtenerVistaMapa } from '../../api';
 import {
@@ -16,10 +16,8 @@ import {
   individuoEn,
   mapaEnPantallaCompleta,
   marcar,
-  masCercano,
   prefiereMenosMovimiento,
   resaltar,
-  textoDistancia,
 } from '../../mapa/capasIndividuos';
 import SeccionFicha from '../molecules/SeccionFicha';
 import ControlesMapa from '../molecules/ControlesMapa';
@@ -29,8 +27,7 @@ import { IconoMapa } from '../atoms/IconosInicio';
 /**
  * Mapa de individuos. En la ficha muestra los de una especie (`nombreEspecie`);
  * con `general` muestra los de todas, y el popup de cada árbol enlaza a la ficha
- * de su especie. En ambos, «El más cercano a mí» ubica a la persona y abre el
- * árbol más próximo.
+ * de su especie.
  */
 export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', general = false, pedido = null, onSeleccion, controlRef = null }) {
   const { tema } = useTema();
@@ -48,8 +45,6 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
   // La persona ya movió el mapa: la vista guardada que llegue tarde no la pisa.
   const movidoRef = useRef(false);
   const [aviso, setAviso] = useState(null);
-  const marcadorYoRef = useRef(null);
-  const [ubicando, setUbicando] = useState(false);
   // La leyenda del mapa general abre desplegada salvo en pantallas bajas.
   const [leyendaAbierta, setLeyendaAbierta] = useState(() => !window.matchMedia?.('(max-height: 560px)').matches);
 
@@ -199,7 +194,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
     };
   }, [pantalla, cerrarPantalla]);
 
-  const seleccionar = useCallback((elegido, { centrar = false, distancia = null } = {}) => {
+  const seleccionar = useCallback((elegido, { centrar = false } = {}) => {
     const map = mapaRef.current;
     if (!map || !elegido) return;
     const id = elegido.properties.id;
@@ -210,8 +205,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
     const especie = feature.properties.especie;
     const enlace = general && especie?._id ? `#/planta/${especie._id}` : null;
     const contenido = general
-      ? contenidoPopupEspecie(feature.properties, especie, { enlace, distancia })
-      : contenidoPopup(feature.properties, nombreEspecie, { distancia });
+      ? contenidoPopupEspecie(feature.properties, especie, { enlace })
+      : contenidoPopup(feature.properties, nombreEspecie, { enlace });
 
     if (seleccionRef.current !== id) marcar(map, seleccionRef.current, false);
     marcar(map, id, true);
@@ -234,62 +229,6 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
       });
     }
   }, [datos, general, nombreEspecie]);
-
-  // «El más cercano a mí»: pide la ubicación, la marca en el mapa y abre el
-  // individuo más próximo. `silencioso` (al abrir, con el permiso ya concedido)
-  // no muestra errores.
-  const irAlMasCercano = useCallback(({ silencioso = false } = {}) => {
-    if (!navigator.geolocation) {
-      if (!silencioso) setAviso('Tu navegador no permite conocer tu ubicación.');
-      return;
-    }
-    setUbicando(true);
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        setUbicando(false);
-        const map = mapaRef.current;
-        const lib = libRef.current;
-        if (!map || !lib || !datos?.features?.length) return;
-        const yo = [coords.longitude, coords.latitude];
-        if (!marcadorYoRef.current) {
-          const punto = document.createElement('div');
-          punto.className = 'mapa-yo';
-          punto.setAttribute('aria-label', 'Tu ubicación');
-          marcadorYoRef.current = new lib.Marker({ element: punto, pitchAlignment: 'map' });
-        }
-        marcadorYoRef.current.setLngLat(yo).addTo(map);
-        const cercano = masCercano(datos.features, yo);
-        if (!cercano) return;
-        movidoRef.current = true;
-        seleccionar(cercano.feature, { distancia: textoDistancia(cercano.metros) });
-        map.easeTo({
-          center: cercano.feature.geometry.coordinates,
-          offset: [0, map.getContainer().clientHeight * (mapaEnPantallaCompleta(map) ? 0.1 : POSICION_SELECCION_Y)],
-          zoom: Math.max(map.getZoom(), 18.5),
-          duration: prefiereMenosMovimiento() ? 0 : 900,
-        });
-      },
-      (error) => {
-        setUbicando(false);
-        if (silencioso) return;
-        setAviso(error.code === error.PERMISSION_DENIED
-          ? 'Para encontrar el árbol más cercano, permite el acceso a tu ubicación.'
-          : 'No pudimos obtener tu ubicación. Inténtalo de nuevo.');
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 },
-    );
-  }, [datos, seleccionar]);
-
-  // En el mapa general, si la persona ya dio permiso de ubicación, se abre de
-  // una vez el árbol más cercano (sin volver a preguntar).
-  const autoUbicadoRef = useRef(false);
-  useEffect(() => {
-    if (!general || !mapaListo || autoUbicadoRef.current) return;
-    autoUbicadoRef.current = true;
-    navigator.permissions?.query({ name: 'geolocation' })
-      .then((permiso) => { if (permiso.state === 'granted') irAlMasCercano({ silencioso: true }); })
-      .catch(() => {});
-  }, [general, mapaListo, irAlMasCercano]);
 
   // 3. Crear el mapa una vez que hay datos y la sección es visible.
   useEffect(() => {
@@ -414,8 +353,6 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
       cancelado = true;
       popupRef.current?.remove();
       popupRef.current = null;
-      marcadorYoRef.current?.remove();
-      marcadorYoRef.current = null;
       detenerAnimacion();
       cancelarCierrePopup();
       map?.remove();
@@ -505,7 +442,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
       >
         <p className="detalle-parrafo detalle-parrafo-suave">
           {general
-            ? `${titulo}. Toca un punto para ver el árbol y abrir la ficha de su especie, o busca el más cercano a ti.`
+            ? `${titulo}. Toca un punto para ver el árbol y abrir la ficha de su especie,.`
             : 'Toca un punto para ver el árbol; con relieve 3D ves las montañas que rodean el pueblo.'}
         </p>
 
@@ -515,17 +452,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
           relieve3D={relieve3D}
           onRelieve={() => setRelieve3D((v) => !v)}
           deshabilitado={Boolean(errorMapa)}
-        >
-          <button
-            type="button"
-            className="mapa-control mapa-control-relieve"
-            disabled={Boolean(errorMapa) || !mapaListo || ubicando}
-            onClick={() => irAlMasCercano()}
-          >
-            <LuLocateFixed aria-hidden="true" />
-            {ubicando ? 'Buscando tu ubicación…' : 'El más cercano a mí'}
-          </button>
-        </ControlesMapa>
+        />
 
         <div className={`mapa-marco${pantalla ? ' mapa-marco-pantalla' : ''}`}>
           <div
