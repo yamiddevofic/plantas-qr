@@ -284,7 +284,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   }, [base, tema]);
 
   // 5. Relieve 3D: terreno + cielo y cámara inclinada; al apagarlo, vuelta a la
-  //    vista cenital encuadrando los individuos.
+  //    vista inicial (inclinada sobre el parque).
   const relievePrevioRef = useRef(relieve3D);
   useEffect(() => {
     const map = mapaRef.current;
@@ -303,7 +303,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
         duration,
       });
     } else {
-      map.easeTo({ ...VISTA_INICIAL, pitch: 0, duration });
+      map.easeTo({ ...VISTA_INICIAL, duration });
     }
   }, [relieve3D, base]);
 
