@@ -45,8 +45,9 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
   // La persona ya movió el mapa: la vista guardada que llegue tarde no la pisa.
   const movidoRef = useRef(false);
   const [aviso, setAviso] = useState(null);
-  // La leyenda del mapa general abre desplegada salvo en pantallas bajas.
-  const [leyendaAbierta, setLeyendaAbierta] = useState(() => !window.matchMedia?.('(max-height: 560px)').matches);
+  // La leyenda del mapa general abre desplegada en escritorio y plegada en móvil
+  // (y en pantallas bajas), donde el mapa ocupa toda la pantalla.
+  const [leyendaAbierta, setLeyendaAbierta] = useState(() => !window.matchMedia?.('(max-width: 767px), (max-height: 560px)').matches);
 
   // Cada individuo lleva el color de su especie, igual en el mapa general y en
   // el de la ficha; la leyenda solo se muestra en el general.

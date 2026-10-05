@@ -498,11 +498,6 @@ html[data-tema="oscuro"] .mapa-marco .maplibregl-ctrl-scale {
   animation: leyendaAbre 200ms ease-out;
 }
 
-/* En móvil la leyenda no se muestra: el mapa ocupa toda la pantalla. */
-@media (max-width: 767px) {
-  .mapa-leyenda { display: none; }
-}
-
 @keyframes leyendaAbre {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: none; }
