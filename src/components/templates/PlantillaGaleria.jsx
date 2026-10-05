@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import MenuHerramientas from '../organisms/MenuHerramientas';
 import ListaPlantas from '../organisms/ListaPlantas';
 import MapaIndividuos from '../organisms/MapaIndividuos';
+import SeccionFicha from '../molecules/SeccionFicha';
+import { IconoArbol } from '../atoms/IconosInicio';
 import BuscadorLupa from '../organisms/BuscadorLupa';
 import EstadoBox from '../atoms/EstadoBox';
 import Boton from '../atoms/Boton';
@@ -119,6 +121,7 @@ export default function PlantillaGaleria({
             <MapaIndividuos coleccion={individuos} general />
 
             <section id="catalogo" aria-labelledby="catalogo-titulo">
+              <SeccionFicha id="catalogo-titulo" antetitulo="Catálogo" titulo="Galería de especies" icono={IconoArbol} clase="catalogo-cabecera" />
               <div className="catalogo-contenido">
               <CatalogoSinConexion />
               {plantas.length === 0 ? (

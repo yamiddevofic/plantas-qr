@@ -556,3 +556,6 @@ html[data-tema="oscuro"] .mapa-marco .maplibregl-ctrl-scale {
   color: var(--ink-500);
   font-variant-numeric: tabular-nums;
 }
+
+/* Título «Galería de especies», bajo el mapa general: separa y titula la lista. */
+.catalogo-cabecera .detalle-seccion-cabecera { margin-bottom: 24px; }
