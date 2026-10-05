@@ -5,18 +5,20 @@ import { useTema } from '../../tema.js';
 import { obtenerVistaMapa } from '../../api';
 import {
   CAMARA_3D,
-  CAPA_PUNTOS,
   VISTA_INICIAL,
   POSICION_SELECCION_Y,
   agregarCapas,
+  animarPuntos,
   aplicarRelieve,
   colorearPorEspecie,
   contenidoPopup,
   contenidoPopupEspecie,
+  individuoEn,
   mapaEnPantallaCompleta,
   marcar,
   masCercano,
   prefiereMenosMovimiento,
+  resaltar,
   textoDistancia,
 } from '../../mapa/capasIndividuos';
 import SeccionFicha from '../molecules/SeccionFicha';
@@ -292,6 +294,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
     if (estado !== 'listo' || !cargar || !contenedorRef.current) return undefined;
     let cancelado = false;
     let map;
+    let detenerAnimacion = () => {};
 
     import('../../mapa/maplibre.js')
       .then((lib) => {
@@ -318,10 +321,13 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
         // queda por encima del marcador.
         popupRef.current = new lib.Popup({
           anchor: 'bottom',
-          offset: 14,
+          offset: 18,
           maxWidth: '260px',
           focusAfterOpen: false,
           autoPan: false,
+          // El clic en el mapa lo resuelve el manejador de abajo: con closeOnClick
+          // el mismo clic que abre otro árbol cerraba el popup y había que tocar dos veces.
+          closeOnClick: false,
         });
         popupRef.current.on('close', () => {
           marcar(map, seleccionRef.current, false);
@@ -344,9 +350,23 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
           marcar(map, seleccionRef.current, true);
           setMapaListo(true);
         });
-        map.on('click', CAPA_PUNTOS, (e) => seleccionar(e.features?.[0], { centrar: true }));
-        map.on('mouseenter', CAPA_PUNTOS, () => { map.getCanvas().style.cursor = 'pointer'; });
-        map.on('mouseleave', CAPA_PUNTOS, () => { map.getCanvas().style.cursor = ''; });
+        // Un toque cerca de un punto lo abre (con margen para el dedo); en el
+        // vacío, cierra el popup.
+        map.on('click', (e) => {
+          const feature = individuoEn(map, e.point);
+          if (feature) seleccionar(feature, { centrar: true });
+          else popupRef.current?.remove();
+        });
+        let resaltado = null;
+        map.on('mousemove', (e) => {
+          const id = individuoEn(map, e.point, 10)?.properties.id ?? null;
+          if (id === resaltado) return;
+          resaltar(map, resaltado, false);
+          resaltar(map, id, true);
+          resaltado = id;
+          map.getCanvas().style.cursor = id ? 'pointer' : '';
+        });
+        detenerAnimacion = animarPuntos(map);
         map.on('movestart', (e) => { if (e.originalEvent) movidoRef.current = true; });
         map.on('error', (e) => console.warn('MapLibre:', e.error?.message || e));
       })
@@ -362,6 +382,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
       popupRef.current = null;
       marcadorYoRef.current?.remove();
       marcadorYoRef.current = null;
+      detenerAnimacion();
       map?.remove();
       mapaRef.current = null;
       seleccionRef.current = null;

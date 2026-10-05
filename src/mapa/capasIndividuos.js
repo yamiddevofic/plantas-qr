@@ -107,49 +107,63 @@ export function textoDistancia(metros) {
   return metros < 1000 ? `A ${Math.round(metros)} m de ti` : `A ${numero.format(metros / 1000)} km de ti`;
 }
 
-// Contenido del popup con nodos DOM (textContent), nunca HTML interpolado.
-// `enlace` (ficha de la especie) y `distancia` (texto) son opcionales.
-export function contenidoPopup(props, nombreEspecie, { enlace = null, distancia = null } = {}) {
-  const raiz = document.createElement('div');
-  raiz.className = 'mapa-popup';
-  if (props.imagen) {
-    const imagen = document.createElement('img');
-    imagen.className = 'mapa-popup-imagen';
-    imagen.src = props.imagen;
-    imagen.alt = `Fotografía del árbol ${props.codigoArbol}`;
+// Contenido de los popups con nodos DOM (textContent), nunca HTML interpolado.
+// Estructura común: foto a todo el ancho arriba y un cuerpo con los textos.
+
+function crearNodo(etiqueta, clase, texto) {
+  const nodo = document.createElement(etiqueta);
+  nodo.className = clase;
+  if (texto != null) nodo.textContent = texto;
+  return nodo;
+}
+
+function armarPopup(foto, alt, clase) {
+  const raiz = crearNodo('div', `mapa-popup ${clase}`.trim());
+  if (foto) {
+    const imagen = crearNodo('img', 'mapa-popup-imagen');
+    imagen.src = foto;
+    imagen.alt = alt;
+    // El popup solo existe cuando ya se abrió el individuo: cargar de inmediato.
     imagen.loading = 'eager';
     imagen.decoding = 'async';
-    imagen.addEventListener('error', () => imagen.remove(), { once: true });
+    imagen.addEventListener('error', () => {
+      imagen.remove();
+      raiz.classList.add('mapa-popup-sin-foto');
+    }, { once: true });
     raiz.append(imagen);
+  } else {
+    raiz.classList.add('mapa-popup-sin-foto');
   }
-  const codigo = document.createElement('p');
-  codigo.className = 'mapa-popup-codigo';
-  codigo.textContent = props.codigoArbol;
-  const especie = document.createElement('p');
-  especie.className = 'mapa-popup-especie';
-  especie.textContent = nombreEspecie;
-  raiz.append(codigo, especie);
-  if (distancia) agregarTexto(raiz, 'mapa-popup-distancia', distancia);
-  const detalle = detalleIndividuo(props);
-  if (detalle) agregarTexto(raiz, 'mapa-popup-detalle', detalle);
-  if (enlace) agregarEnlace(raiz, enlace);
-  return raiz;
+  const cuerpo = crearNodo('div', 'mapa-popup-cuerpo');
+  raiz.append(cuerpo);
+  return { raiz, cuerpo };
 }
 
-function agregarTexto(raiz, clase, texto) {
-  const p = document.createElement('p');
-  p.className = clase;
-  p.textContent = texto;
-  raiz.append(p);
-  return p;
+function agregarPastillas(cuerpo, pastillas) {
+  const lista = pastillas.filter(Boolean);
+  if (!lista.length) return;
+  const fila = crearNodo('div', 'mapa-popup-pastillas');
+  for (const { texto, clase = '' } of lista) fila.append(crearNodo('span', `mapa-popup-pastilla ${clase}`.trim(), texto));
+  cuerpo.append(fila);
 }
 
-function agregarEnlace(raiz, enlace) {
-  const ir = document.createElement('a');
-  ir.className = 'mapa-popup-enlace';
+function agregarEnlace(cuerpo, enlace) {
+  const ir = crearNodo('a', 'mapa-popup-enlace', 'Ver ficha de la especie');
   ir.href = enlace;
-  ir.textContent = 'Ver ficha de la especie →';
-  raiz.append(ir);
+  ir.append(crearNodo('span', 'mapa-popup-enlace-flecha', '→'));
+  cuerpo.append(ir);
+}
+
+/** Popup de la ficha: el individuo (su foto, código y datos del GPS). */
+export function contenidoPopup(props, nombreEspecie, { enlace = null, distancia = null } = {}) {
+  const { raiz, cuerpo } = armarPopup(props.imagen, `Fotografía del árbol ${props.codigoArbol}`, '');
+  cuerpo.append(crearNodo('p', 'mapa-popup-titulo', props.codigoArbol));
+  if (nombreEspecie) cuerpo.append(crearNodo('p', 'mapa-popup-subtitulo', nombreEspecie));
+  const detalle = detalleIndividuo(props);
+  if (detalle) cuerpo.append(crearNodo('p', 'mapa-popup-detalle', detalle));
+  agregarPastillas(cuerpo, [distancia && { texto: distancia, clase: 'mapa-popup-pastilla-cerca' }]);
+  if (enlace) agregarEnlace(cuerpo, enlace);
+  return raiz;
 }
 
 /**
@@ -157,27 +171,42 @@ function agregarEnlace(raiz, enlace) {
  * entrar a su ficha; el árbol tocado queda como dato secundario.
  */
 export function contenidoPopupEspecie(props, especie, { enlace = null, distancia = null } = {}) {
-  const raiz = document.createElement('div');
-  raiz.className = 'mapa-popup mapa-popup-especie-ficha';
-  const foto = especie?.imagen || props.imagen;
-  if (foto) {
-    const imagen = document.createElement('img');
-    imagen.className = 'mapa-popup-imagen';
-    imagen.src = foto;
-    imagen.alt = `Fotografía de ${especie?.nombre?.comun || 'la especie'}`;
-    imagen.loading = 'eager';
-    imagen.decoding = 'async';
-    imagen.addEventListener('error', () => imagen.remove(), { once: true });
-    raiz.append(imagen);
+  const nombre = especie?.nombre?.comun || 'Especie sin nombre';
+  const { raiz, cuerpo } = armarPopup(especie?.imagen || props.imagen, `Fotografía de ${nombre}`, 'mapa-popup-de-especie');
+  const titulo = crearNodo('p', 'mapa-popup-titulo');
+  if (props.color) {
+    const punto = crearNodo('span', 'mapa-popup-color');
+    punto.style.background = props.color;
+    titulo.append(punto);
   }
-  agregarTexto(raiz, 'mapa-popup-codigo', especie?.nombre?.comun || 'Especie sin nombre');
-  if (especie?.nombre?.cientifico) agregarTexto(raiz, 'mapa-popup-cientifico', especie.nombre.cientifico);
+  titulo.append(document.createTextNode(nombre));
+  cuerpo.append(titulo);
+  if (especie?.nombre?.cientifico) cuerpo.append(crearNodo('p', 'mapa-popup-cientifico', especie.nombre.cientifico));
   const clasificacion = [especie?.familia, especie?.tipo].filter(Boolean).join(' · ');
-  if (clasificacion) agregarTexto(raiz, 'mapa-popup-detalle', clasificacion);
-  agregarTexto(raiz, 'mapa-popup-detalle', `Árbol ${props.codigoArbol}`);
-  if (distancia) agregarTexto(raiz, 'mapa-popup-distancia', distancia);
-  if (enlace) agregarEnlace(raiz, enlace);
+  if (clasificacion) cuerpo.append(crearNodo('p', 'mapa-popup-detalle', clasificacion));
+  agregarPastillas(cuerpo, [
+    { texto: `Árbol ${props.codigoArbol}` },
+    distancia && { texto: distancia, clase: 'mapa-popup-pastilla-cerca' },
+  ]);
+  if (enlace) agregarEnlace(cuerpo, enlace);
   return raiz;
+}
+
+/**
+ * El individuo bajo `punto` (píxeles del lienzo), con un margen de `radio` px
+ * alrededor para que tocar con el dedo no exija precisión; si hay varios, el
+ * más cercano al toque.
+ */
+export function individuoEn(map, punto, radio = 16) {
+  if (!map.getLayer(CAPA_PUNTOS)) return null;
+  const caja = [[punto.x - radio, punto.y - radio], [punto.x + radio, punto.y + radio]];
+  let mejor = null;
+  for (const f of map.queryRenderedFeatures(caja, { layers: [CAPA_PUNTOS] })) {
+    const p = map.project(f.geometry.coordinates);
+    const d = (p.x - punto.x) ** 2 + (p.y - punto.y) ** 2;
+    if (!mejor || d < mejor.d) mejor = { f, d };
+  }
+  return mejor?.f ?? null;
 }
 
 // Durante un setStyle la fuente desaparece unos instantes; sin esta guarda
@@ -186,35 +215,67 @@ export function marcar(map, id, seleccionado) {
   if (id && map?.getSource(FUENTE)) map.setFeatureState({ source: FUENTE, id }, { seleccionado });
 }
 
+/** Resalta (o no) el individuo bajo el cursor. */
+export function resaltar(map, id, activo) {
+  if (id && map?.getSource(FUENTE)) map.setFeatureState({ source: FUENTE, id }, { hover: activo });
+}
+
 export function mapaEnPantallaCompleta(map) {
   const elementoPantallaCompleta = document.fullscreenElement || document.webkitFullscreenElement;
   return elementoPantallaCompleta === map.getContainer()
     || map.getContainer().classList.contains('maplibregl-pseudo-fullscreen');
 }
 
+// Radio base de los puntos por zoom (normal y seleccionado). La animación lo
+// multiplica por un factor (entrada) y el halo lo usa para su pulso.
+const RADIO = { z14: 4.5, z19: 11, z14Sel: 7, z19Sel: 15 };
+const CAPA_HALO = 'individuos-halo';
+
+function radioPuntos(factor = 1, extra = 0) {
+  const sel = ['boolean', ['feature-state', 'seleccionado'], false];
+  const hover = ['boolean', ['feature-state', 'hover'], false];
+  const en = (normal, seleccionado) => ['*', factor, ['+', extra, ['case', sel, seleccionado, hover, normal * 1.3, normal]]];
+  return ['interpolate', ['linear'], ['zoom'], 14, en(RADIO.z14, RADIO.z14Sel), 19, en(RADIO.z19, RADIO.z19Sel)];
+}
+
 export function agregarCapas(map, datos, base) {
   if (map.getSource(FUENTE)) return;
   const sobreSatelite = base === 'satelite';
   // Sobre la foto aérea el verde bosque se pierde entre la vegetación: se usa
-  // menta clara con borde oscuro y etiquetas blancas.
+  // menta clara y etiquetas blancas.
   const relleno = sobreSatelite ? '#b7e4c7' : token('--forest-700', '#2d6a4f');
-  const borde = sobreSatelite ? '#173f2f' : token('--surface', '#ffffff');
   const texto = sobreSatelite ? '#ffffff' : token('--ink-900', '#1f2a24');
   const halo = sobreSatelite ? 'rgba(15, 22, 18, 0.85)' : token('--surface', '#ffffff');
   const seleccionado = ['boolean', ['feature-state', 'seleccionado'], false];
+  // Mapa general: el color de la especie. En la ficha, menta/verde y naranja al
+  // seleccionar.
+  const color = ['case', ['has', 'color'], ['get', 'color'], seleccionado, token('--clay-500', '#c2653c'), relleno];
 
   map.addSource(FUENTE, { type: 'geojson', data: datos, promoteId: 'id' });
+  // Halo que late alrededor de cada punto (más fuerte en el seleccionado).
+  map.addLayer({
+    id: CAPA_HALO,
+    type: 'circle',
+    source: FUENTE,
+    paint: {
+      'circle-color': color,
+      'circle-radius': radioPuntos(1, 4),
+      'circle-opacity': ['case', seleccionado, 0.35, 0],
+      'circle-pitch-alignment': 'map',
+    },
+  });
   map.addLayer({
     id: CAPA_PUNTOS,
     type: 'circle',
     source: FUENTE,
     paint: {
-      // Mapa general: el color de la especie, y la selección se marca con un
-      // borde blanco grueso (el naranja de selección se confundiría con la paleta).
-      'circle-color': ['case', ['has', 'color'], ['get', 'color'], seleccionado, token('--clay-500', '#c2653c'), relleno],
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 14, ['case', seleccionado, 6, 3.5], 19, ['case', seleccionado, 13, 9]],
-      'circle-stroke-color': ['case', ['all', ['has', 'color'], seleccionado], '#ffffff', borde],
-      'circle-stroke-width': ['case', ['all', ['has', 'color'], seleccionado], 4, 2],
+      'circle-color': color,
+      'circle-radius': radioPuntos(),
+      // Borde blanco con una sombra oscura difusa debajo (circle-blur no aplica al
+      // borde, así que la sombra la da el halo): se lee sobre foto y sobre calles.
+      'circle-stroke-color': '#ffffff',
+      'circle-stroke-width': ['case', seleccionado, 3.5, 2.5],
+      'circle-stroke-opacity': 0.95,
       // Con la cámara inclinada los puntos se ven como discos sobre el suelo.
       'circle-pitch-alignment': 'map',
     },
@@ -228,11 +289,66 @@ export function agregarCapas(map, datos, base) {
       'text-field': ['get', 'codigoArbol'],
       'text-font': ['Noto Sans Regular'],
       'text-size': 11,
-      'text-offset': [0, 1.3],
+      'text-offset': [0, 1.5],
       'text-anchor': 'top',
     },
     paint: { 'text-color': texto, 'text-halo-color': halo, 'text-halo-width': 1.5 },
   });
+}
+
+const salidaRebote = (t) => {
+  const c = 1.70158;
+  return 1 + (c + 1) * (t - 1) ** 3 + c * (t - 1) ** 2;
+};
+
+/**
+ * Anima los puntos: aparecen con un pequeño rebote y un halo late alrededor de
+ * cada uno (suave en todos, marcado en el seleccionado). Solo corre mientras el
+ * mapa está en pantalla y sin «reducir movimiento». Devuelve la función que la
+ * detiene.
+ */
+export function animarPuntos(map) {
+  if (prefiereMenosMovimiento()) return () => {};
+  const PERIODO = 2200;
+  const ENTRADA = 650;
+  let inicio = null;
+  let cuadro = 0;
+  let ultimo = 0;
+  let enPantalla = true;
+  let entradaHecha = false;
+  const seleccionado = ['boolean', ['feature-state', 'seleccionado'], false];
+
+  const paso = (ahora) => {
+    cuadro = requestAnimationFrame(paso);
+    if (!enPantalla || ahora - ultimo < 33) return; // ~30 cuadros por segundo
+    ultimo = ahora;
+    if (!map.getLayer(CAPA_PUNTOS) || !map.getLayer(CAPA_HALO)) return; // cambiando de estilo
+    inicio ??= ahora;
+    const t = ahora - inicio;
+    const entrada = t < ENTRADA ? Math.max(0.01, salidaRebote(t / ENTRADA)) : 1;
+    const pulso = (t % PERIODO) / PERIODO;
+    if (!entradaHecha) {
+      map.setPaintProperty(CAPA_PUNTOS, 'circle-radius', radioPuntos(entrada));
+      entradaHecha = entrada === 1;
+    }
+    map.setPaintProperty(CAPA_HALO, 'circle-radius', radioPuntos(entrada * (1 + pulso * 1.2), 2));
+    map.setPaintProperty(CAPA_HALO, 'circle-opacity', ['case', seleccionado, 0.55 * (1 - pulso), 0.28 * (1 - pulso)]);
+  };
+  cuadro = requestAnimationFrame(paso);
+
+  const observador = 'IntersectionObserver' in window
+    ? new IntersectionObserver(([e]) => { enPantalla = e.isIntersecting; })
+    : null;
+  observador?.observe(map.getContainer());
+  // Tras cambiar de estilo las capas son nuevas: se repite la entrada.
+  const reiniciar = () => { inicio = null; entradaHecha = false; };
+  map.on('style.load', reiniciar);
+
+  return () => {
+    cancelAnimationFrame(cuadro);
+    observador?.disconnect();
+    map.off('style.load', reiniciar);
+  };
 }
 
 export function aplicarRelieve(map, lib, activo, base) {
@@ -250,7 +366,7 @@ export function aplicarRelieve(map, lib, activo, base) {
         type: 'hillshade',
         source: FUENTE_SOMBRA,
         paint: { 'hillshade-exaggeration': 0.35, 'hillshade-shadow-color': '#173f2f' },
-      }, CAPA_PUNTOS);
+      }, CAPA_HALO);
     }
   } else {
     map.setTerrain(null);
