@@ -49,7 +49,7 @@ function fijarDatosEstructurados(datos) {
 }
 
 function absoluta(ruta) {
-  if (!ruta) return `${SITIO}/og.jpg`;
+  if (!ruta) return `${SITIO}/og.jpg?v=2`;
   return ruta.startsWith('http') ? ruta : `${SITIO}${ruta}`;
 }
 
