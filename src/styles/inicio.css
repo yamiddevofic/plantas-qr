@@ -1367,11 +1367,13 @@ html[data-tema="oscuro"] .proyecto {
 }
 
 /* El sol (o la luna) se corre a la derecha y crece un poco: no queda tapado
-   por el texto y ocupa el lado libre del hero. */
+   por el texto y ocupa el lado libre del hero. En móvil el dibujo se recorta por
+   los lados (preserveAspectRatio slice), así que el desplazamiento es corto:
+   con más, el astro quedaría fuera de la pantalla. */
 .hero-galeria .paisaje-astro > * {
   transform-box: view-box;
   transform-origin: 820px 118px;
-  transform: translate(260px, -48px) scale(1.2);
+  transform: translate(120px, -44px) scale(1.2);
 }
 
 /* En pantallas angostas solo caben dos cifras en una fila. */
