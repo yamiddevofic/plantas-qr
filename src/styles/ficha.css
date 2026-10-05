@@ -276,7 +276,8 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
 /* Los datos curiosos viven en la columna lateral (escritorio), pero en móvil
    siguen a la descripción, los usos y el hábitat. */
 .ficha-curiosos { order: 4; }
-.ficha-principal > * { order: 5; }
+.ficha-principal > *,
+.ficha-layout > .detalle-mapa { order: 5; }
 .detalle-qr { order: 6; }
 
 @media (min-width: 1024px) {
@@ -301,6 +302,11 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
     display: flex;
     flex-direction: column;
     gap: 20px;
+  }
+
+  /* El mapa abarca las dos columnas. */
+  .ficha-layout > .detalle-mapa {
+    grid-column: 1 / -1;
   }
 }
 

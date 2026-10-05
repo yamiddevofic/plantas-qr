@@ -146,13 +146,6 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
             )}
           </SeccionFicha>
         )}
-
-        <MapaIndividuos
-          coleccion={coleccion}
-          nombreEspecie={nombre.comun}
-          pedido={pedido}
-          onSeleccion={setSeleccionado}
-        />
       </div>
 
       <div className="ficha-lateral">
@@ -169,6 +162,14 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
         )}
         {lateral}
       </div>
+
+      {/* Fuera de las columnas: en escritorio el mapa ocupa el ancho de las dos. */}
+      <MapaIndividuos
+        coleccion={coleccion}
+        nombreEspecie={nombre.comun}
+        pedido={pedido}
+        onSeleccion={setSeleccionado}
+      />
     </div>
   );
 }
