@@ -10,6 +10,7 @@ import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import HeroGaleria from '../organisms/HeroGaleria';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import PiePagina from '../molecules/PiePagina';
+import CatalogoSinConexion from '../molecules/CatalogoSinConexion';
 import DialogoPassword from '../molecules/DialogoPassword';
 
 export default function PlantillaGaleria({
@@ -114,6 +115,7 @@ export default function PlantillaGaleria({
 
             <section id="catalogo" aria-labelledby="catalogo-titulo">
               <div className="catalogo-contenido">
+              <CatalogoSinConexion />
               {plantas.length === 0 ? (
                 <EstadoBox
                   icono="🌳"

@@ -79,3 +79,8 @@
   }
 }
 
+
+/* Aviso del catálogo guardado para usar sin conexión (usa .mapa-offline). */
+.catalogo-offline {
+  margin: 0 0 20px;
+}

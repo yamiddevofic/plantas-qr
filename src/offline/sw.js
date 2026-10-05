@@ -6,6 +6,7 @@
      primero y cae al index.html guardado, así la SPA abre sin conexión.
    - /api (solo GET): red primero con límite de espera; si falla, la última copia.
    - /uploads (fotos): la copia guardada primero; lo que se ve una vez queda disponible.
+     Sin red y sin esa copia, se sirve otro tamaño de la misma foto si lo hay.
    - Teselas de mapa y tipografías: la copia guardada primero (con tope de entradas).
    Las escrituras (POST/PUT/DELETE) nunca pasan por aquí: la app las pone en cola. */
 
@@ -21,7 +22,8 @@ const CACHE_MAPA = 'plantaqr-mapa-v1';
 const CACHE_MAPA_PARQUE = 'plantaqr-mapa-parque-v1';
 const CACHES_VIGENTES = [CACHE_APP, CACHE_API, CACHE_FOTOS, CACHE_MAPA, CACHE_MAPA_PARQUE];
 
-const LIMITE_FOTOS = 250;
+// Cabe el catálogo descargado a propósito (offline/catalogo.js): unas 300 fotos.
+const LIMITE_FOTOS = 1500;
 const LIMITE_MAPA = 800;
 const ESPERA_API_MS = 4000;
 
@@ -72,6 +74,22 @@ async function cacheFirst(request, nombreCache, { limite, aceptarOpaca = false }
   return respuesta;
 }
 
+/** Foto del catálogo: la guardada o, sin red, otro tamaño de la misma foto. */
+async function foto(request) {
+  try {
+    return await cacheFirst(request, CACHE_FOTOS, { limite: LIMITE_FOTOS });
+  } catch (error) {
+    const base = new URL(request.url).pathname.match(/^(.*?)(?:-\d+)?\.webp$/)?.[1];
+    if (base) {
+      for (const sufijo of ['-800', '', '-400']) {
+        const otra = await caches.match(`${base}${sufijo}.webp`);
+        if (otra) return otra;
+      }
+    }
+    throw error;
+  }
+}
+
 function redPrimeroConLimite(request, nombreCache) {
   const red = fetch(request).then((respuesta) => {
     if (respuesta.ok) guardar(nombreCache, request, respuesta.clone());
@@ -111,7 +129,7 @@ self.addEventListener('fetch', (event) => {
     if (url.pathname.startsWith('/api/')) {
       event.respondWith(redPrimeroConLimite(request, CACHE_API));
     } else if (url.pathname.startsWith('/uploads/')) {
-      event.respondWith(cacheFirst(request, CACHE_FOTOS, { limite: LIMITE_FOTOS }));
+      event.respondWith(foto(request));
     } else if (request.mode === 'navigate') {
       event.respondWith(navegacion(request));
     } else if (url.pathname.startsWith('/assets/') || PRECACHE.includes(url.pathname)) {
