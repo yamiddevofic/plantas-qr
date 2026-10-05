@@ -109,6 +109,25 @@
   background: var(--mint-50);
 }
 
+/* Confirmación al fijar la vista de todos los mapas, flotando arriba al centro. */
+.mapa-aviso {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  max-width: calc(100% - 120px);
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--forest-700);
+  color: var(--page-bg);
+  font-size: var(--step-0);
+  font-weight: 600;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
 .mapa-lista-titulo {
   margin: 18px 0 8px;
   font-size: 0.68rem;

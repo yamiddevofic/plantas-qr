@@ -14,6 +14,7 @@ import qrRoutes from './routes/qrRoutes.js';
 import adminImagenesRoutes from './routes/adminImagenes.js';
 import individuoRoutes from './routes/individuoRoutes.js';
 import imagenRoutes from './routes/imagenRoutes.js';
+import configuracionRoutes from './routes/configuracionRoutes.js';
 
 dotenv.config();
 
@@ -130,6 +131,7 @@ app.use('/api/plantas', plantaRoutes);
 app.use('/api/individuos', individuoRoutes);
 app.use('/api/imagenes', imagenRoutes);
 app.use('/api/qr', qrRoutes);
+app.use('/api/configuracion', configuracionRoutes);
 app.use(adminImagenesRoutes);
 
 const indexFile = path.join(distPath, 'index.html');

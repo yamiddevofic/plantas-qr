@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { LuX } from 'react-icons/lu';
 import { useTema } from '../../tema.js';
+import { obtenerVistaMapa } from '../../api';
 import {
   CAMARA_3D,
   CAPA_PUNTOS,
@@ -19,7 +20,7 @@ import ControlesMapa from '../molecules/ControlesMapa';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import { IconoMapa } from '../atoms/IconosInicio';
 
-export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido = null, onSeleccion }) {
+export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido = null, onSeleccion, controlRef = null }) {
   const { tema } = useTema();
   const contenedorRef = useRef(null);
   const seccionRef = useRef(null);
@@ -29,6 +30,12 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   const popupRef = useRef(null);
   const seleccionRef = useRef(null);
   const cerrarRef = useRef(null);
+  // Vista con la que abre el mapa: la que fijó el administrador para todas las
+  // fichas o, mientras llega (o si no hay), la de la app.
+  const vistaInicialRef = useRef(VISTA_INICIAL);
+  // La persona ya movió el mapa: la vista guardada que llegue tarde no la pisa.
+  const movidoRef = useRef(false);
+  const [aviso, setAviso] = useState(null);
 
   const datos = coleccion;
   const estado = coleccion?.features?.length ? 'listo' : 'vacio';
@@ -63,6 +70,44 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   }, [base, tema, relieve3D]);
 
   const total = datos?.features?.length ?? 0;
+
+  useEffect(() => {
+    let cancelado = false;
+    obtenerVistaMapa().then((vista) => {
+      if (cancelado || !vista) return;
+      vistaInicialRef.current = vista;
+      const map = mapaRef.current;
+      if (map && !movidoRef.current && !seleccionRef.current && !vistaRef.current.relieve3D) map.jumpTo(vista);
+    });
+    return () => { cancelado = true; };
+  }, []);
+
+  // El menú de la ficha lee la cámara actual para fijarla como vista de todos los mapas.
+  useImperativeHandle(controlRef, () => ({
+    camara() {
+      const map = mapaRef.current;
+      if (!map) return null;
+      const { lng, lat } = map.getCenter();
+      const redondear = (n, d) => Number(n.toFixed(d));
+      return {
+        center: [redondear(lng, 7), redondear(lat, 7)],
+        zoom: redondear(map.getZoom(), 2),
+        bearing: redondear(map.getBearing(), 1),
+        pitch: redondear(map.getPitch(), 1),
+      };
+    },
+    avisar: setAviso,
+    fijada(vista) {
+      vistaInicialRef.current = vista;
+      setAviso('Listo: todos los mapas de las fichas abrirán con esta vista.');
+    },
+  }), []);
+
+  useEffect(() => {
+    if (!aviso) return undefined;
+    const t = setTimeout(() => setAviso(null), 5000);
+    return () => clearTimeout(t);
+  }, [aviso]);
 
   // 1. Los datos (GeoJSON de los individuos) llegan de ContenidoFicha, que también
   //    los lista en "Datos rápidos".
@@ -181,7 +226,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
         map = new lib.Map({
           container: contenedorRef.current,
           style: vista.base === 'satelite' ? lib.estiloSatelite() : lib.ESTILOS[vista.tema] || lib.ESTILOS.claro,
-          ...VISTA_INICIAL,
+          ...vistaInicialRef.current,
           maxZoom: 20,
           maxPitch: 75,
           cooperativeGestures: true,
@@ -222,6 +267,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
         map.on('click', CAPA_PUNTOS, (e) => seleccionar(e.features?.[0], { centrar: true }));
         map.on('mouseenter', CAPA_PUNTOS, () => { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', CAPA_PUNTOS, () => { map.getCanvas().style.cursor = ''; });
+        map.on('movestart', (e) => { if (e.originalEvent) movidoRef.current = true; });
         map.on('error', (e) => console.warn('MapLibre:', e.error?.message || e));
       })
       .catch((error) => {
@@ -303,7 +349,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
         duration,
       });
     } else {
-      map.easeTo({ ...VISTA_INICIAL, duration });
+      map.easeTo({ ...vistaInicialRef.current, duration });
     }
   }, [relieve3D, base]);
 
@@ -339,6 +385,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
             </div>
           )}
           {errorMapa && <p className="mapa-error" role="status">{errorMapa}</p>}
+          {aviso && <p className="mapa-aviso" role="status">{aviso}</p>}
           {pantalla && (
             <>
               <button ref={cerrarRef} type="button" className="mapa-cerrar-pantalla" onClick={cerrarPantalla}>
@@ -368,4 +415,6 @@ MapaIndividuos.propTypes = {
   /** Avisa qué individuo está seleccionado (o null). */
   onSeleccion: PropTypes.func,
   nombreEspecie: PropTypes.string.isRequired,
+  /** Ref que recibe { camara(), avisar(texto), fijada(vista) } para fijar la vista de todos los mapas. */
+  controlRef: PropTypes.shape({ current: PropTypes.any }),
 };

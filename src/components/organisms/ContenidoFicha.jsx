@@ -17,7 +17,7 @@ import DatosFicha from './DatosFicha';
  * usos, ubicación y mapa) y la lateral (datos rápidos, estado y `lateral`, el
  * panel del QR). En móvil ambas se intercalan: primero los datos y el estado.
  */
-export default function ContenidoFicha({ planta, coleccion = null, onVerEstados, lateral = null }) {
+export default function ContenidoFicha({ planta, coleccion = null, onVerEstados, lateral = null, controlMapaRef = null }) {
   const {
     nombre, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion,
     estadoConservacionDetalle, nombresAlternos, caracteristicas, habitat, datosCuriosos,
@@ -169,6 +169,7 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
         nombreEspecie={nombre.comun}
         pedido={pedido}
         onSeleccion={setSeleccionado}
+        controlRef={controlMapaRef}
       />
     </div>
   );
@@ -182,4 +183,6 @@ ContenidoFicha.propTypes = {
   onVerEstados: PropTypes.func,
   /** Contenido extra al final de la columna lateral (el panel del QR). */
   lateral: PropTypes.node,
+  /** Ref para leer la cámara del mapa (fijar la vista de todos los mapas). */
+  controlMapaRef: PropTypes.shape({ current: PropTypes.any }),
 };

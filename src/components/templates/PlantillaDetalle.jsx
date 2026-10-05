@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { LuHouse, LuMoon, LuRefreshCcw, LuShieldAlert, LuSun, LuTreeDeciduous } from 'react-icons/lu';
+import { useRef, useState } from 'react';
+import { LuHouse, LuMapPin, LuMoon, LuRefreshCcw, LuShieldAlert, LuSun, LuTreeDeciduous } from 'react-icons/lu';
 import EstadoBox from '../atoms/EstadoBox';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
@@ -19,7 +19,7 @@ import ItemMenu from '../atoms/ItemMenu';
 import PiePagina from '../molecules/PiePagina';
 import DialogoPassword from '../molecules/DialogoPassword';
 import { listaImagenes } from '../../constantes';
-import { generarQR } from '../../api';
+import { generarQR, guardarVistaMapa } from '../../api';
 import { useTema } from '../../tema.js';
 
 // Fecha de la foto, que va en su URL (?v=<ms>); las antiguas sin fecha cuentan como primeras.
@@ -46,6 +46,10 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, coleccio
   const [protegiendo, setProtegiendo] = useState(false);
   const [errorPassword, setErrorPassword] = useState(null);
   const [copiado, setCopiado] = useState(false);
+  // Cámara del mapa capturada al elegir «Fijar vista del mapa», pendiente de la contraseña.
+  const controlMapaRef = useRef(null);
+  const [vistaPendiente, setVistaPendiente] = useState(null);
+  const hayMapa = Boolean(coleccion?.features?.length);
   const { tema, alternar } = useTema();
   const esOscuro = tema === 'oscuro';
 
@@ -95,7 +99,26 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, coleccio
     setAccionDialogo('descargar');
   }
 
+  function fijarVistaMapa() {
+    setMenuAbierto(false);
+    const control = controlMapaRef.current;
+    if (!control) return;
+    const camara = control.camara();
+    if (!camara) {
+      // El mapa se carga al acercarse a él: se lleva a la persona hasta allí.
+      document.getElementById('ficha-mapa')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      control.avisar('Ubica el mapa como quieras que se vea y vuelve a elegir «Fijar vista del mapa».');
+      return;
+    }
+    setVistaPendiente(camara);
+    setAccionDialogo('vista');
+  }
+
   const textosDialogo = {
+    vista: {
+      titulo: 'Fijar vista del mapa',
+      descripcion: 'El mapa de todas las fichas abrirá con la posición, el zoom, la rotación y la inclinación que tiene ahora. Se requiere la contraseña de administrador.',
+    },
     regenerar: {
       titulo: 'Regenerar código QR',
       descripcion: 'Genera de nuevo el código QR de esta especie. Solo quien conoce la contraseña de administrador puede realizarlo.',
@@ -110,6 +133,13 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, coleccio
     setProtegiendo(true);
     setErrorPassword(null);
     try {
+      if (accionDialogo === 'vista') {
+        const vista = await guardarVistaMapa(vistaPendiente, password);
+        controlMapaRef.current?.fijada(vista);
+        setVistaPendiente(null);
+        setAccionDialogo(null);
+        return;
+      }
       const actualizado = await generarQR(planta._id, password);
       onQrGenerado?.(actualizado);
       if (accionDialogo === 'descargar') {
@@ -171,6 +201,14 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, coleccio
               setMenuAbierto(false);
             }}
           />
+          {hayMapa && (
+            <ItemMenu
+              icono={<LuMapPin aria-hidden="true" />}
+              etiqueta="Fijar vista del mapa"
+              descripcion="Usar la vista actual del mapa en todas las fichas (requiere contraseña)"
+              onClick={fijarVistaMapa}
+            />
+          )}
           <ItemMenu
             icono={<LuShieldAlert aria-hidden="true" />}
             etiqueta="Estados de conservación"
@@ -243,6 +281,7 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, coleccio
                 planta={planta}
                 coleccion={coleccion}
                 onVerEstados={onVerEstados}
+                controlMapaRef={controlMapaRef}
                 lateral={
                   <PanelQR
                     planta={planta}

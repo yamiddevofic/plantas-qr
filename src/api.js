@@ -195,3 +195,26 @@ export function actualizarEjemplares(id, ejemplaresEnParque, password) {
 export function eliminarPlanta(id, password) {
   return enviarIndividuo(`${BASE}/plantas/${id}`, 'DELETE', { password }, 'Error al eliminar la especie');
 }
+
+// Vista con la que abre el mapa de todas las fichas. Se pide una vez por carga
+// de la app y se comparte entre fichas; null si el administrador no la ha definido.
+let vistaMapaPedida = null;
+
+export function obtenerVistaMapa() {
+  vistaMapaPedida ??= fetch(`${BASE}/configuracion/vista-mapa`)
+    .then((res) => (res.ok ? res.json() : null))
+    .catch(() => null);
+  return vistaMapaPedida;
+}
+
+export async function guardarVistaMapa(vista, password) {
+  const res = await fetch(`${BASE}/configuracion/vista-mapa`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...vista, password }),
+  });
+  if (!res.ok) throw new Error(await leerError(res, 'No se pudo guardar la vista del mapa'));
+  const guardada = await res.json();
+  vistaMapaPedida = Promise.resolve(guardada);
+  return guardada;
+}
