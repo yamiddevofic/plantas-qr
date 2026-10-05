@@ -24,23 +24,28 @@ export function prefiereMenosMovimiento() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 }
 
-// Mapa general: un color por especie. Verdes, naranjas, amarillos y azules
-// alternados para que especies vecinas en la lista no se parezcan; todos se
-// leen sobre la foto aérea con el borde oscuro de los puntos.
+// Un color por especie, igual en el mapa general y en el de la ficha. Verdes,
+// naranjas, amarillos y azules; todos se leen sobre la foto aérea con el borde
+// blanco de los puntos.
 export const PALETA_ESPECIES = [
-  '#52b788', // verde
-  '#f4a261', // naranja
-  '#4ea8de', // azul
-  '#ffd166', // amarillo
-  '#95d5b2', // verde claro
-  '#e76f51', // naranja rojizo
-  '#90e0ef', // azul claro
-  '#f9c74f', // amarillo dorado
-  '#2d6a4f', // verde bosque
-  '#fb8500', // naranja intenso
-  '#3a86ff', // azul intenso
-  '#d9ed92', // verde lima
+  '#52b788', '#f4a261', '#ffd166', '#4ea8de',
+  '#95d5b2', '#e76f51', '#f9c74f', '#90e0ef',
+  '#2d6a4f', '#fb8500', '#e9c46a', '#3a86ff',
+  '#74c69d', '#ff9f1c', '#ffe066', '#48cae4',
+  '#40916c', '#d9622b', '#ffba08', '#2a9df4',
+  '#d9ed92', '#f79d65', '#f1fa8c', '#5390d9',
 ];
+
+/**
+ * Color de una especie, derivado de su id (hash FNV-1a): es el mismo en el mapa
+ * general y en la ficha sin que esta conozca las demás especies. Con más
+ * especies que colores, algunas comparten tono.
+ */
+export function colorDeEspecie(id) {
+  let h = 2166136261;
+  for (const c of String(id)) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+  return PALETA_ESPECIES[(h >>> 0) % PALETA_ESPECIES.length];
+}
 
 /**
  * Añade a cada individuo el color y el nombre de su especie (propiedades planas:
@@ -57,14 +62,15 @@ export function colorearPorEspecie(coleccion) {
     else especies.set(especie._id, { id: especie._id, nombre: especie.nombre?.comun || 'Especie sin nombre', total: 1 });
   }
   const leyenda = [...especies.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
-  leyenda.forEach((e, i) => { e.color = PALETA_ESPECIES[i % PALETA_ESPECIES.length]; });
+  leyenda.forEach((e) => { e.color = colorDeEspecie(e.id); });
   const colores = new Map(leyenda.map((e) => [e.id, e.color]));
   return {
     coleccion: {
       ...coleccion,
-      features: (coleccion?.features ?? [])
-        .filter((f) => colores.has(f.properties.especie?._id))
-        .map((f) => ({ ...f, properties: { ...f.properties, color: colores.get(f.properties.especie._id) } })),
+      features: (coleccion?.features ?? []).map((f) => {
+        const color = colores.get(f.properties.especie?._id);
+        return color ? { ...f, properties: { ...f.properties, color } } : f;
+      }),
     },
     leyenda,
   };

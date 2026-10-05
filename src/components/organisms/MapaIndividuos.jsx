@@ -48,11 +48,15 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
   // La leyenda del mapa general abre desplegada salvo en pantallas bajas.
   const [leyendaAbierta, setLeyendaAbierta] = useState(() => !window.matchMedia?.('(max-height: 560px)').matches);
 
-  // En el mapa general cada especie lleva su color (y la leyenda lo explica).
-  const { coleccion: datos, leyenda } = useMemo(
-    () => (general ? colorearPorEspecie(coleccion) : { coleccion, leyenda: [] }),
-    [coleccion, general],
-  );
+  // Cada individuo lleva el color de su especie, igual en el mapa general y en
+  // el de la ficha; la leyenda solo se muestra en el general.
+  const { coleccion: datos, leyenda } = useMemo(() => {
+    const coloreada = colorearPorEspecie(coleccion);
+    if (!general) return { coleccion: coloreada.coleccion, leyenda: [] };
+    // En el general solo se muestran individuos con especie (el popup enlaza a ella).
+    const features = coloreada.coleccion.features.filter((f) => f.properties.color);
+    return { coleccion: { ...coloreada.coleccion, features }, leyenda: coloreada.leyenda };
+  }, [coleccion, general]);
   const estado = datos?.features?.length ? 'listo' : 'vacio';
   const [visible, setVisible] = useState(false);
   const [mapaListo, setMapaListo] = useState(false);
@@ -60,7 +64,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
   // Abre en satélite: se ven los árboles sobre el terreno real, y además funciona sin
   // conexión (el mapa de calles no: sus teselas vectoriales no se guardan). La
   // persona puede pasar a calles con el interruptor del mapa.
-  const [base, setBase] = useState('satelite');
+  // El mapa general abre en calles; el de la ficha, en satélite.
+  const [base, setBase] = useState(general ? 'mapa' : 'satelite');
   const [relieve3D, setRelieve3D] = useState(false);
   // Pantalla completa pedida desde "Ver en el mapa". Se usa el modo pseudo de
   // MapLibre (la API de pantalla completa del navegador exige un gesto reciente
