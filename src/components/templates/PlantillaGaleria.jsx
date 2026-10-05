@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import MenuHerramientas from '../organisms/MenuHerramientas';
 import ListaPlantas from '../organisms/ListaPlantas';
+import MapaIndividuos from '../organisms/MapaIndividuos';
 import BuscadorLupa from '../organisms/BuscadorLupa';
 import EstadoBox from '../atoms/EstadoBox';
 import Boton from '../atoms/Boton';
@@ -28,6 +29,7 @@ export default function PlantillaGaleria({
   sinResultados,
   plantas,
   todasLasPlantas,
+  individuos = null,
   qrDialogo,
   puertaAdmin,
 }) {
@@ -112,6 +114,9 @@ export default function PlantillaGaleria({
                 {mensajeQR}
               </p>
             )}
+
+            {/* Mapa general: todos los árboles del parque, enlazados a su ficha. */}
+            <MapaIndividuos coleccion={individuos} general />
 
             <section id="catalogo" aria-labelledby="catalogo-titulo">
               <div className="catalogo-contenido">

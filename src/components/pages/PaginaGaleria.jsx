@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchPlantas, fetchQRs, generarTodosQRs, verificarAdmin } from '../../api';
+import { fetchIndividuos, fetchPlantas, fetchQRs, generarTodosQRs, verificarAdmin } from '../../api';
 import { aplicarSeo } from '../../seo';
 import PlantillaGaleria from '../templates/PlantillaGaleria';
 import LeyendaEstados from '../molecules/LeyendaEstados';
@@ -20,6 +20,19 @@ export default function PaginaGaleria() {
   const [puertaAdminCargando, setPuertaAdminCargando] = useState(false);
   const [puertaAdminError, setPuertaAdminError] = useState(null);
   const [leyendaAbierta, setLeyendaAbierta] = useState(false);
+  // Individuos de todas las especies para el mapa general. Si fallan, el
+  // catálogo sigue sin mapa.
+  const [individuos, setIndividuos] = useState(null);
+
+  useEffect(() => {
+    const control = new AbortController();
+    fetchIndividuos(undefined, { signal: control.signal })
+      .then(setIndividuos)
+      .catch((e) => {
+        if (e.name !== 'AbortError') console.warn('Individuos no disponibles:', e.message);
+      });
+    return () => control.abort();
+  }, []);
 
   useEffect(() => {
     aplicarSeo({
@@ -171,6 +184,7 @@ export default function PaginaGaleria() {
         sinResultados={sinResultados}
         plantas={plantasFiltradas}
         todasLasPlantas={plantas}
+        individuos={individuos}
         qrDialogo={{
           abierto: qrDialogoAbierto,
           error: qrDialogoError,

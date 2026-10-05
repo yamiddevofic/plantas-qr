@@ -6,7 +6,7 @@ const BASES = [
   { id: 'mapa', etiqueta: 'Mapa', Icono: LuMap },
 ];
 
-export default function ControlesMapa({ base, onBase, relieve3D = false, onRelieve, deshabilitado, clase = '' }) {
+export default function ControlesMapa({ base, onBase, relieve3D = false, onRelieve, deshabilitado, clase = '', children = null }) {
   return (
     <div className={`mapa-controles ${clase}`.trim()}>
       <div className="mapa-segmentado" role="group" aria-label="Tipo de mapa">
@@ -36,6 +36,7 @@ export default function ControlesMapa({ base, onBase, relieve3D = false, onRelie
           Relieve 3D
         </button>
       )}
+      {children}
     </div>
   );
 }
@@ -49,4 +50,6 @@ ControlesMapa.propTypes = {
   deshabilitado: PropTypes.bool,
   /** Clase extra para ubicar los controles (p. ej. flotando en pantalla completa). */
   clase: PropTypes.string,
+  /** Botones extra al final (p. ej. «El más cercano a mí»). */
+  children: PropTypes.node,
 };

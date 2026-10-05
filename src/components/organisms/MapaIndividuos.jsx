@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuX } from 'react-icons/lu';
+import { LuLocateFixed, LuX } from 'react-icons/lu';
 import { useTema } from '../../tema.js';
 import { obtenerVistaMapa } from '../../api';
 import {
@@ -10,17 +10,27 @@ import {
   POSICION_SELECCION_Y,
   agregarCapas,
   aplicarRelieve,
+  colorearPorEspecie,
   contenidoPopup,
+  contenidoPopupEspecie,
   mapaEnPantallaCompleta,
   marcar,
+  masCercano,
   prefiereMenosMovimiento,
+  textoDistancia,
 } from '../../mapa/capasIndividuos';
 import SeccionFicha from '../molecules/SeccionFicha';
 import ControlesMapa from '../molecules/ControlesMapa';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import { IconoMapa } from '../atoms/IconosInicio';
 
-export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido = null, onSeleccion, controlRef = null }) {
+/**
+ * Mapa de individuos. En la ficha muestra los de una especie (`nombreEspecie`);
+ * con `general` muestra los de todas, y el popup de cada árbol enlaza a la ficha
+ * de su especie. En ambos, «El más cercano a mí» ubica a la persona y abre el
+ * árbol más próximo.
+ */
+export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', general = false, pedido = null, onSeleccion, controlRef = null }) {
   const { tema } = useTema();
   const contenedorRef = useRef(null);
   const seccionRef = useRef(null);
@@ -36,9 +46,15 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   // La persona ya movió el mapa: la vista guardada que llegue tarde no la pisa.
   const movidoRef = useRef(false);
   const [aviso, setAviso] = useState(null);
+  const marcadorYoRef = useRef(null);
+  const [ubicando, setUbicando] = useState(false);
 
-  const datos = coleccion;
-  const estado = coleccion?.features?.length ? 'listo' : 'vacio';
+  // En el mapa general cada especie lleva su color (y la leyenda lo explica).
+  const { coleccion: datos, leyenda } = useMemo(
+    () => (general ? colorearPorEspecie(coleccion) : { coleccion, leyenda: [] }),
+    [coleccion, general],
+  );
+  const estado = datos?.features?.length ? 'listo' : 'vacio';
   const [visible, setVisible] = useState(false);
   const [mapaListo, setMapaListo] = useState(false);
   const [errorMapa, setErrorMapa] = useState(null);
@@ -179,11 +195,19 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
     };
   }, [pantalla, cerrarPantalla]);
 
-  const seleccionar = useCallback((feature, { centrar = false } = {}) => {
+  const seleccionar = useCallback((elegido, { centrar = false, distancia = null } = {}) => {
     const map = mapaRef.current;
-    if (!map || !feature) return;
-    const id = feature.properties.id;
+    if (!map || !elegido) return;
+    const id = elegido.properties.id;
+    // MapLibre entrega las propiedades anidadas (la especie) como texto: se usa la
+    // feature original del GeoJSON.
+    const feature = datos?.features?.find((f) => f.properties.id === id) ?? elegido;
     const coordenadas = feature.geometry.coordinates;
+    const especie = feature.properties.especie;
+    const enlace = general && especie?._id ? `#/planta/${especie._id}` : null;
+    const contenido = general
+      ? contenidoPopupEspecie(feature.properties, especie, { enlace, distancia })
+      : contenidoPopup(feature.properties, nombreEspecie, { distancia });
 
     if (seleccionRef.current !== id) marcar(map, seleccionRef.current, false);
     marcar(map, id, true);
@@ -192,7 +216,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
 
     popupRef.current
       .setLngLat(coordenadas)
-      .setDOMContent(contenidoPopup(feature.properties, nombreEspecie));
+      .setDOMContent(contenido);
     if (!popupRef.current.isOpen()) popupRef.current.addTo(map);
 
     if (centrar && !mapaEnPantallaCompleta(map)) {
@@ -205,7 +229,63 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
         duration: prefiereMenosMovimiento() ? 0 : 600,
       });
     }
-  }, [nombreEspecie]);
+  }, [datos, general, nombreEspecie]);
+
+  // «El más cercano a mí»: pide la ubicación, la marca en el mapa y abre el
+  // individuo más próximo. `silencioso` (al abrir, con el permiso ya concedido)
+  // no muestra errores.
+  const irAlMasCercano = useCallback(({ silencioso = false } = {}) => {
+    if (!navigator.geolocation) {
+      if (!silencioso) setAviso('Tu navegador no permite conocer tu ubicación.');
+      return;
+    }
+    setUbicando(true);
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        setUbicando(false);
+        const map = mapaRef.current;
+        const lib = libRef.current;
+        if (!map || !lib || !datos?.features?.length) return;
+        const yo = [coords.longitude, coords.latitude];
+        if (!marcadorYoRef.current) {
+          const punto = document.createElement('div');
+          punto.className = 'mapa-yo';
+          punto.setAttribute('aria-label', 'Tu ubicación');
+          marcadorYoRef.current = new lib.Marker({ element: punto, pitchAlignment: 'map' });
+        }
+        marcadorYoRef.current.setLngLat(yo).addTo(map);
+        const cercano = masCercano(datos.features, yo);
+        if (!cercano) return;
+        movidoRef.current = true;
+        seleccionar(cercano.feature, { distancia: textoDistancia(cercano.metros) });
+        map.easeTo({
+          center: cercano.feature.geometry.coordinates,
+          offset: [0, map.getContainer().clientHeight * (mapaEnPantallaCompleta(map) ? 0.1 : POSICION_SELECCION_Y)],
+          zoom: Math.max(map.getZoom(), 18.5),
+          duration: prefiereMenosMovimiento() ? 0 : 900,
+        });
+      },
+      (error) => {
+        setUbicando(false);
+        if (silencioso) return;
+        setAviso(error.code === error.PERMISSION_DENIED
+          ? 'Para encontrar el árbol más cercano, permite el acceso a tu ubicación.'
+          : 'No pudimos obtener tu ubicación. Inténtalo de nuevo.');
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 },
+    );
+  }, [datos, seleccionar]);
+
+  // En el mapa general, si la persona ya dio permiso de ubicación, se abre de
+  // una vez el árbol más cercano (sin volver a preguntar).
+  const autoUbicadoRef = useRef(false);
+  useEffect(() => {
+    if (!general || !mapaListo || autoUbicadoRef.current) return;
+    autoUbicadoRef.current = true;
+    navigator.permissions?.query({ name: 'geolocation' })
+      .then((permiso) => { if (permiso.state === 'granted') irAlMasCercano({ silencioso: true }); })
+      .catch(() => {});
+  }, [general, mapaListo, irAlMasCercano]);
 
   // 3. Crear el mapa una vez que hay datos y la sección es visible.
   useEffect(() => {
@@ -280,6 +360,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
       cancelado = true;
       popupRef.current?.remove();
       popupRef.current = null;
+      marcadorYoRef.current?.remove();
+      marcadorYoRef.current = null;
       map?.remove();
       mapaRef.current = null;
       seleccionRef.current = null;
@@ -358,10 +440,17 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
   const titulo = `${total} ${total === 1 ? 'individuo' : 'individuos'} en el parque`;
 
   return (
-    <div ref={seccionRef} className="detalle-mapa">
-      <SeccionFicha id="ficha-mapa" antetitulo="Mapa" titulo="Encuéntralo en el mapa" icono={IconoMapa}>
+    <div ref={seccionRef} className={`detalle-mapa${general ? ' mapa-general' : ''}`}>
+      <SeccionFicha
+        id={general ? 'galeria-mapa' : 'ficha-mapa'}
+        antetitulo={general ? 'Mapa del parque' : 'Mapa'}
+        titulo={general ? 'Explora los árboles en el mapa' : 'Encuéntralo en el mapa'}
+        icono={IconoMapa}
+      >
         <p className="detalle-parrafo detalle-parrafo-suave">
-          Toca un punto para ver el árbol; con relieve 3D ves las montañas que rodean el pueblo.
+          {general
+            ? `${titulo}. Toca un punto para ver el árbol y abrir la ficha de su especie, o busca el más cercano a ti.`
+            : 'Toca un punto para ver el árbol; con relieve 3D ves las montañas que rodean el pueblo.'}
         </p>
 
         <ControlesMapa
@@ -370,14 +459,24 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
           relieve3D={relieve3D}
           onRelieve={() => setRelieve3D((v) => !v)}
           deshabilitado={Boolean(errorMapa)}
-        />
+        >
+          <button
+            type="button"
+            className="mapa-control mapa-control-relieve"
+            disabled={Boolean(errorMapa) || !mapaListo || ubicando}
+            onClick={() => irAlMasCercano()}
+          >
+            <LuLocateFixed aria-hidden="true" />
+            {ubicando ? 'Buscando tu ubicación…' : 'El más cercano a mí'}
+          </button>
+        </ControlesMapa>
 
         <div className={`mapa-marco${pantalla ? ' mapa-marco-pantalla' : ''}`}>
           <div
             ref={contenedorRef}
             className="mapa-lienzo"
             role="region"
-            aria-label={`Mapa ${base === 'satelite' ? 'satelital' : 'de calles'}${relieve3D ? ' con relieve 3D' : ''}: ${titulo} de ${nombreEspecie}`}
+            aria-label={`Mapa ${base === 'satelite' ? 'satelital' : 'de calles'}${relieve3D ? ' con relieve 3D' : ''}: ${titulo}${general ? '' : ` de ${nombreEspecie}`}`}
           />
           {!mapaListo && !errorMapa && (
             <div className="mapa-cargando">
@@ -402,6 +501,20 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie, pedido
             </>
           )}
         </div>
+
+        {leyenda.length > 0 && (
+          <ul className="mapa-leyenda" aria-label="Especies en el mapa">
+            {leyenda.map(({ id, nombre, color, total: cuantos }) => (
+              <li key={id}>
+                <a href={`#/planta/${id}`}>
+                  <span className="mapa-leyenda-color" style={{ background: color }} aria-hidden="true" />
+                  {nombre}
+                  <span className="mapa-leyenda-total">{cuantos}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </SeccionFicha>
     </div>
   );
@@ -414,7 +527,10 @@ MapaIndividuos.propTypes = {
   pedido: PropTypes.shape({ id: PropTypes.string, vez: PropTypes.number, pantallaCompleta: PropTypes.bool }),
   /** Avisa qué individuo está seleccionado (o null). */
   onSeleccion: PropTypes.func,
-  nombreEspecie: PropTypes.string.isRequired,
+  /** Nombre de la especie (mapa de la ficha). */
+  nombreEspecie: PropTypes.string,
+  /** Mapa de todas las especies: el popup enlaza a la ficha de cada una. */
+  general: PropTypes.bool,
   /** Ref que recibe { camara(), avisar(texto), fijada(vista) } para fijar la vista de todos los mapas. */
   controlRef: PropTypes.shape({ current: PropTypes.any }),
 };
