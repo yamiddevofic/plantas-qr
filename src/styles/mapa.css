@@ -82,10 +82,11 @@
   height: clamp(280px, 62vw, 460px);
 }
 
-/* En escritorio el mapa ocupa las dos columnas: más alto para aprovechar el ancho. */
+/* En escritorio el mapa ocupa las dos columnas y casi toda la altura de la ventana. */
 @media (min-width: 1024px) {
   .mapa-marco {
-    height: clamp(420px, 48vh, 640px);
+    height: max(480px, 95vh);
+    height: max(480px, 95svh);
   }
 }
 
