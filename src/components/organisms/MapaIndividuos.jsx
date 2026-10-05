@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuLocateFixed, LuX } from 'react-icons/lu';
+import { LuChevronDown, LuLocateFixed, LuX } from 'react-icons/lu';
 import { useTema } from '../../tema.js';
 import { obtenerVistaMapa } from '../../api';
 import {
@@ -50,6 +50,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
   const [aviso, setAviso] = useState(null);
   const marcadorYoRef = useRef(null);
   const [ubicando, setUbicando] = useState(false);
+  // La leyenda del mapa general abre desplegada salvo en pantallas bajas.
+  const [leyendaAbierta, setLeyendaAbierta] = useState(() => !window.matchMedia?.('(max-height: 560px)').matches);
 
   // En el mapa general cada especie lleva su color (y la leyenda lo explica).
   const { coleccion: datos, leyenda } = useMemo(
@@ -506,6 +508,34 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
           )}
           {errorMapa && <p className="mapa-error" role="status">{errorMapa}</p>}
           {aviso && <p className="mapa-aviso" role="status">{aviso}</p>}
+          {leyenda.length > 0 && (
+            // Recuadro flotante con el color de cada especie; plegable para no tapar el mapa.
+            <div className={`mapa-leyenda${leyendaAbierta ? '' : ' mapa-leyenda-plegada'}`}>
+              <button
+                type="button"
+                className="mapa-leyenda-cabecera"
+                aria-expanded={leyendaAbierta}
+                aria-controls="mapa-leyenda-lista"
+                onClick={() => setLeyendaAbierta((v) => !v)}
+              >
+                Especies <span className="mapa-leyenda-cuenta">{leyenda.length}</span>
+                <LuChevronDown className="mapa-leyenda-flecha" aria-hidden="true" />
+              </button>
+              {leyendaAbierta && (
+                <ul id="mapa-leyenda-lista" className="mapa-leyenda-lista" aria-label="Especies en el mapa">
+                  {leyenda.map(({ id, nombre, color, total: cuantos }) => (
+                    <li key={id}>
+                      <a href={`#/planta/${id}`}>
+                        <span className="mapa-leyenda-color" style={{ background: color }} aria-hidden="true" />
+                        <span className="mapa-leyenda-nombre">{nombre}</span>
+                        <span className="mapa-leyenda-total">{cuantos}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
           {pantalla && (
             <>
               <button ref={cerrarRef} type="button" className="mapa-cerrar-pantalla" onClick={cerrarPantalla}>
@@ -523,19 +553,6 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
           )}
         </div>
 
-        {leyenda.length > 0 && (
-          <ul className="mapa-leyenda" aria-label="Especies en el mapa">
-            {leyenda.map(({ id, nombre, color, total: cuantos }) => (
-              <li key={id}>
-                <a href={`#/planta/${id}`}>
-                  <span className="mapa-leyenda-color" style={{ background: color }} aria-hidden="true" />
-                  {nombre}
-                  <span className="mapa-leyenda-total">{cuantos}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
       </SeccionFicha>
     </div>
   );

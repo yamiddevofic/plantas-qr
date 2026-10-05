@@ -412,9 +412,14 @@ html[data-tema="oscuro"] .mapa-marco .maplibregl-ctrl-scale {
 }
 
 @media (max-width: 767px) {
-  /* En el catálogo no se rompe el padding: la tarjeta queda alineada con la lista. */
-  .detalle-mapa.mapa-general {
-    margin-inline: 0;
+  /* En el catálogo el mapa ocupa todo el ancho y el alto de la pantalla (svh:
+     sin contar la barra del navegador); el texto sigue alineado con la lista. */
+  .mapa-general .mapa-marco {
+    height: 100vh;
+    height: 100svh;
+    margin-inline: -18px;
+    border-inline: 0;
+    border-radius: 0;
   }
 }
 
@@ -431,38 +436,102 @@ html[data-tema="oscuro"] .mapa-marco .maplibregl-ctrl-scale {
 }
 
 
-/* Leyenda del mapa general: una pastilla por especie, con su color y su total;
-   cada una lleva a la ficha. */
+/* Leyenda del mapa general: recuadro flotante arriba a la izquierda, dentro del
+   mapa, con el color y el total de cada especie; cada una lleva a su ficha. */
 .mapa-leyenda {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 14px 0 0;
-  padding: 0;
-  list-style: none;
+  flex-direction: column;
+  width: max-content;
+  max-width: min(240px, calc(100% - 80px));
+  max-height: calc(100% - 60px);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 28px -10px rgba(15, 30, 22, 0.45), 0 2px 6px rgba(15, 30, 22, 0.15);
+  overflow: hidden;
 }
 
-.mapa-leyenda a {
-  display: inline-flex;
+.mapa-leyenda-cabecera {
+  display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 36px;
+  min-height: 40px;
   padding: 0 12px;
-  border: 1px solid var(--line-200);
-  border-radius: var(--radius-pill);
-  background: var(--surface);
-  color: var(--ink-700);
+  border: 0;
+  background: transparent;
+  color: var(--ink-900);
+  font: inherit;
   font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: border-color 150ms ease-out, color 150ms ease-out;
+  font-weight: 800;
+  cursor: pointer;
 }
 
-.mapa-leyenda a:hover { border-color: var(--forest-600); color: var(--forest-700); }
-
-.mapa-leyenda a:focus-visible {
+.mapa-leyenda-cabecera:focus-visible {
   outline: 3px solid var(--focus);
-  outline-offset: 2px;
+  outline-offset: -3px;
+}
+
+.mapa-leyenda-cuenta {
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--mint-50);
+  color: var(--forest-700);
+  font-size: 0.72rem;
+}
+
+.mapa-leyenda-flecha {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  transform: rotate(180deg);
+  transition: transform 200ms ease-out;
+}
+
+.mapa-leyenda-plegada .mapa-leyenda-flecha { transform: none; }
+
+.mapa-leyenda-lista {
+  margin: 0;
+  padding: 0 6px 6px;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-top: 1px solid var(--line-200);
+  animation: leyendaAbre 200ms ease-out;
+}
+
+@keyframes leyendaAbre {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mapa-leyenda-lista { animation: none; }
+}
+
+.mapa-leyenda-lista a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 8px;
+  border-radius: 8px;
+  color: var(--ink-700);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 150ms ease-out, color 150ms ease-out;
+}
+
+.mapa-leyenda-lista a:hover { background: var(--mint-50); color: var(--forest-700); }
+
+.mapa-leyenda-lista a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: -3px;
 }
 
 .mapa-leyenda-color {
@@ -470,10 +539,20 @@ html[data-tema="oscuro"] .mapa-marco .maplibregl-ctrl-scale {
   height: 12px;
   flex-shrink: 0;
   border-radius: 50%;
-  border: 2px solid #173f2f;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px rgba(23, 63, 47, 0.45);
+}
+
+.mapa-leyenda-nombre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .mapa-leyenda-total {
+  margin-left: auto;
+  padding-left: 8px;
   font-size: 0.75rem;
   color: var(--ink-500);
+  font-variant-numeric: tabular-nums;
 }
