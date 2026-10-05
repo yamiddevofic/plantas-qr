@@ -421,6 +421,15 @@ html[data-tema="oscuro"] .mapa-marco .maplibregl-ctrl-scale {
     border-inline: 0;
     border-radius: 0;
   }
+
+  /* El mapa de la ficha mide lo mismo que el general. */
+  .detalle-mapa:not(.mapa-general) .mapa-marco {
+    height: 100vh;
+    height: 100svh;
+    margin-inline: -18px;
+    border-inline: 0;
+    border-radius: 0;
+  }
 }
 
 
