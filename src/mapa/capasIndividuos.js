@@ -129,14 +129,6 @@ function armarPopup(foto, alt, clase) {
   return { raiz, cuerpo };
 }
 
-function agregarPastillas(cuerpo, pastillas) {
-  const lista = pastillas.filter(Boolean);
-  if (!lista.length) return;
-  const fila = crearNodo('div', 'mapa-popup-pastillas');
-  for (const { texto, clase = '' } of lista) fila.append(crearNodo('span', `mapa-popup-pastilla ${clase}`.trim(), texto));
-  cuerpo.append(fila);
-}
-
 function agregarEnlace(cuerpo, enlace) {
   const ir = crearNodo('a', 'mapa-popup-enlace', 'Ver ficha de la especie');
   ir.href = enlace;
@@ -156,24 +148,27 @@ export function contenidoPopup(props, nombreEspecie, { enlace = null } = {}) {
 }
 
 /**
- * Popup del mapa general: presenta la especie (foto, nombres, familia) para
- * entrar a su ficha; el árbol tocado queda como dato secundario.
+ * Popup del mapa general: el individuo tocado (su foto y su código o, si no
+ * tiene, el nombre de la especie) y el botón a la ficha de su especie.
  */
 export function contenidoPopupEspecie(props, especie, { enlace = null } = {}) {
   const nombre = especie?.nombre?.comun || 'Especie sin nombre';
-  const { raiz, cuerpo } = armarPopup(especie?.imagen || props.imagen, `Fotografía de ${nombre}`, 'mapa-popup-de-especie');
+  const codigo = props.codigoArbol;
+  const { raiz, cuerpo } = armarPopup(
+    props.imagen || especie?.imagen,
+    codigo ? `Fotografía del árbol ${codigo}` : `Fotografía de ${nombre}`,
+    'mapa-popup-de-especie',
+  );
   const titulo = crearNodo('p', 'mapa-popup-titulo');
   if (props.color) {
     const punto = crearNodo('span', 'mapa-popup-color');
     punto.style.background = props.color;
     titulo.append(punto);
   }
-  titulo.append(document.createTextNode(nombre));
+  titulo.append(document.createTextNode(codigo || nombre));
   cuerpo.append(titulo);
+  if (codigo) cuerpo.append(crearNodo('p', 'mapa-popup-subtitulo', nombre));
   if (especie?.nombre?.cientifico) cuerpo.append(crearNodo('p', 'mapa-popup-cientifico', especie.nombre.cientifico));
-  const clasificacion = [especie?.familia, especie?.tipo].filter(Boolean).join(' · ');
-  if (clasificacion) cuerpo.append(crearNodo('p', 'mapa-popup-detalle', clasificacion));
-  agregarPastillas(cuerpo, [{ texto: `Árbol ${props.codigoArbol}` }]);
   if (enlace) agregarEnlace(cuerpo, enlace);
   return raiz;
 }
