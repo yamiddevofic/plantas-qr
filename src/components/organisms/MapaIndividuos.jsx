@@ -6,13 +6,13 @@ import { obtenerVistaMapa } from '../../api';
 import {
   CAMARA_3D,
   VISTA_INICIAL,
-  POSICION_SELECCION_Y,
   agregarCapas,
   animarPuntos,
   aplicarRelieve,
   colorearPorEspecie,
   contenidoPopup,
   contenidoPopupEspecie,
+  desplazamientoSeleccion,
   individuoEn,
   mapaEnPantallaCompleta,
   marcar,
@@ -227,9 +227,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
     if (centrar && !mapaEnPantallaCompleta(map)) {
       map.easeTo({
         center: coordenadas,
-        // Un offset positivo hacia abajo coloca el punto más bajo en pantalla
-        // (la cámara desplaza el mapa hacia arriba) y reserva espacio para el popup.
-        offset: [0, map.getContainer().clientHeight * POSICION_SELECCION_Y],
+        // El punto baja lo justo para que punto y popup queden centrados juntos.
+        offset: [0, desplazamientoSeleccion(map, popupRef.current)],
         zoom: Math.max(map.getZoom(), 18.5),
         duration: prefiereMenosMovimiento() ? 0 : 600,
       });
@@ -381,10 +380,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
       map.resize();
       map.easeTo({
         center: feature.geometry.coordinates,
-        // El punto un poco por debajo del centro: la ficha cabe encima de él. Con la
-        // ventana entera sobra espacio, así que no hace falta bajarlo tanto como en
-        // el mapa pequeño de la página.
-        offset: [0, map.getContainer().clientHeight * 0.1],
+        // Punto y popup centrados juntos en la ventana.
+        offset: [0, desplazamientoSeleccion(map, popupRef.current)],
         zoom: Math.max(map.getZoom(), 18.5),
         duration: prefiereMenosMovimiento() ? 0 : 700,
       });

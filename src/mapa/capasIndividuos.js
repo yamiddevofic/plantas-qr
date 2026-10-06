@@ -12,7 +12,15 @@ const CAPA_ETIQUETAS = 'individuos-etiquetas';
 // (bearing 90), inclinada (pitch 55) para ver el parque en perspectiva, y un zoom
 // en el que la escala marca 20 m en unos 65 px.
 export const VISTA_INICIAL = { center: [-72.6645375, 7.1384873], zoom: 18, bearing: 90, pitch: 55 };
-export const POSICION_SELECCION_Y = 0.45;
+
+// Desplazamiento vertical (px) para centrar en pantalla el bloque punto + popup:
+// el popup se abre por encima del punto (anchor bottom), así que el punto baja la
+// mitad de ese bloque. Se limita para que el popup no se salga por arriba.
+export function desplazamientoSeleccion(map, popup, separacion = 18) {
+  const alto = map.getContainer().clientHeight;
+  const altoPopup = popup?.getElement()?.offsetHeight ?? 0;
+  return Math.max(0, Math.min((altoPopup + separacion) / 2, alto / 2 - 24));
+}
 
 // Cámara al activar el relieve: algo más lejos e inclinada para que entren las
 // laderas que rodean el casco urbano.
