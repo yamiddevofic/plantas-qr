@@ -65,8 +65,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
   // Abre en satélite: se ven los árboles sobre el terreno real, y además funciona sin
   // conexión (el mapa de calles no: sus teselas vectoriales no se guardan). La
   // persona puede pasar a calles con el interruptor del mapa.
-  // El mapa general abre en calles; el de la ficha, en satélite.
-  const [base, setBase] = useState(general ? 'mapa' : 'satelite');
+  const [base, setBase] = useState('satelite');
   const [relieve3D, setRelieve3D] = useState(false);
   // Pantalla completa pedida desde "Ver en el mapa". Se usa el modo pseudo de
   // MapLibre (la API de pantalla completa del navegador exige un gesto reciente
