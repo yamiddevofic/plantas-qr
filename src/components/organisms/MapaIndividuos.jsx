@@ -444,7 +444,7 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
       >
         <p className="detalle-parrafo detalle-parrafo-suave">
           {general
-            ? `${titulo}. Toca un punto para ver el árbol y abrir la ficha de su especie,.`
+            ? `${titulo}. Toca un punto para ver el árbol y abrir la ficha de su especie.`
             : 'Toca un punto para ver el árbol; con relieve 3D ves las montañas que rodean el pueblo.'}
         </p>
 
