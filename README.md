@@ -185,15 +185,13 @@ Los valores estáticos del `<head>` viven en `index.html` y apuntan a
 `https://plantas-qr.vercel.app`. `src/seo.js` los reescribe al cambiar de vista:
 título, descripción, canónica, Open Graph y un bloque JSON-LD por especie.
 
-Dos límites que conviene tener presentes:
-
-- Los rastreadores de WhatsApp, Facebook y X **no ejecutan JavaScript**, así que
-  para ellos siempre valen los valores estáticos de `index.html`. Compartir el
-  enlace de una especie concreta muestra la vista previa genérica del sitio.
-- La app enruta por hash (`/#/planta/:id`) y los buscadores descartan el
-  fragmento, así que las 12 fichas son una sola URL para ellos. Por eso
-  `sitemap.xml` solo lista la raíz. Resolver ambas cosas pasa por servir rutas
-  reales (`/planta/:id`) y prerenderizarlas.
+Los rastreadores de WhatsApp, Facebook y X **no ejecutan JavaScript** y los buscadores
+descartan el fragmento de la URL, así que `/#/planta/:id` no sirve para compartir ni
+indexar. Por eso existe `/planta/:id` (`server/routes/compartir.js`): devuelve, para cada
+especie, un HTML con sus etiquetas Open Graph y JSON-LD y, en un navegador, lleva a la
+ficha real. `vercel.json` la reenvía al servidor, igual que `/sitemap.xml`, que ahora se
+genera con una entrada por especie. El botón «Copiar enlace» de la ficha entrega esa URL.
+Los QR ya impresos (`/#/planta/:id`) siguen funcionando sin cambios.
 
 La imagen de vista previa (`public/og.jpg`) es un pantallazo del hero de la
 landing, generado por `npm run capturar-og` con el Chrome o Edge del sistema —no

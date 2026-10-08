@@ -15,6 +15,7 @@ import adminImagenesRoutes from './routes/adminImagenes.js';
 import individuoRoutes from './routes/individuoRoutes.js';
 import imagenRoutes from './routes/imagenRoutes.js';
 import configuracionRoutes from './routes/configuracionRoutes.js';
+import compartirRoutes from './routes/compartir.js';
 
 dotenv.config();
 
@@ -133,6 +134,7 @@ app.use('/api/imagenes', imagenRoutes);
 app.use('/api/qr', qrRoutes);
 app.use('/api/configuracion', configuracionRoutes);
 app.use(adminImagenesRoutes);
+app.use(compartirRoutes);
 
 const indexFile = path.join(distPath, 'index.html');
 

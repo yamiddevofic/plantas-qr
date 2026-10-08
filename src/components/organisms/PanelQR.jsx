@@ -4,7 +4,7 @@ import { IconoQr } from '../atoms/IconosInicio';
 import useRevelar from '../../hooks/useRevelar';
 
 /** Código QR de la especie: vista previa, descarga e ID copiable. */
-export default function PanelQR({ planta, qr, copiado, onCopiar, descargando, onDescargar, error, exito }) {
+export default function PanelQR({ planta, qr, copiado, onCopiar, enlaceCopiado, onCopiarEnlace, descargando, onDescargar, error, exito }) {
   const [ref, visible] = useRevelar({ umbral: 0.2 });
   return (
     <section
@@ -33,6 +33,9 @@ export default function PanelQR({ planta, qr, copiado, onCopiar, descargando, on
           </Boton>
           <button type="button" className="detalle-id-copiar" onClick={onCopiar} title="Copiar el ID de la especie">
             {copiado ? '✓ ID copiado' : 'Copiar ID'}
+          </button>
+          <button type="button" className="detalle-id-copiar" onClick={onCopiarEnlace} title="Copiar el enlace para compartir esta ficha">
+            {enlaceCopiado ? '✓ Enlace copiado' : 'Copiar enlace'}
           </button>
         </div>
         <p className="detalle-qr-id">ID <code>{planta._id}</code></p>

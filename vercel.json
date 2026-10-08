@@ -6,6 +6,14 @@
       "destination": "https://plantas-qr.onrender.com/api/:ruta*"
     },
     {
+      "source": "/planta/:id",
+      "destination": "https://plantas-qr.onrender.com/planta/:id"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://plantas-qr.onrender.com/sitemap.xml"
+    },
+    {
       "source": "/depurar-verificar",
       "destination": "https://plantas-qr.onrender.com/depurar-verificar"
     },

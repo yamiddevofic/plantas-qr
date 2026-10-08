@@ -21,6 +21,7 @@ import DialogoPassword from '../molecules/DialogoPassword';
 import { listaImagenes } from '../../constantes';
 import { generarQR, guardarVistaMapa } from '../../api';
 import { useTema } from '../../tema.js';
+import { SITIO } from '../../seo';
 
 // Fecha de la foto, que va en su URL (?v=<ms>); las antiguas sin fecha cuentan como primeras.
 const fechaFoto = (url) => Number(/[?&]v=(\d+)/.exec(url)?.[1] ?? 0);
@@ -46,6 +47,7 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, coleccio
   const [protegiendo, setProtegiendo] = useState(false);
   const [errorPassword, setErrorPassword] = useState(null);
   const [copiado, setCopiado] = useState(false);
+  const [enlaceCopiado, setEnlaceCopiado] = useState(false);
   // Cámara del mapa capturada al elegir «Fijar vista del mapa», pendiente de la contraseña.
   const controlMapaRef = useRef(null);
   const [vistaPendiente, setVistaPendiente] = useState(null);
@@ -61,6 +63,18 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, coleccio
       setTimeout(() => setCopiado(false), 2000);
     } catch {
       setCopiado(false);
+    }
+  }
+
+  // Enlace que sí muestra vista previa al compartirlo (ver server/routes/compartir.js).
+  async function copiarEnlace() {
+    if (!planta?._id) return;
+    try {
+      await navigator.clipboard.writeText(`${SITIO}/planta/${planta._id}`);
+      setEnlaceCopiado(true);
+      setTimeout(() => setEnlaceCopiado(false), 2000);
+    } catch {
+      setEnlaceCopiado(false);
     }
   }
 
@@ -288,6 +302,8 @@ export default function PlantillaDetalle({ cargando, error, planta, qr, coleccio
                     qr={qr}
                     copiado={copiado}
                     onCopiar={copiarId}
+                    enlaceCopiado={enlaceCopiado}
+                    onCopiarEnlace={copiarEnlace}
                     descargando={descargando}
                     onDescargar={descargarQR}
                     error={errorQR}

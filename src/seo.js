@@ -112,7 +112,7 @@ export function seoDePlanta(planta) {
   return {
     titulo,
     descripcion,
-    ruta: `/#/planta/${planta._id}`,
+    ruta: `/planta/${planta._id}`,
     imagen,
     tipo: 'article',
     datos: {
@@ -122,7 +122,7 @@ export function seoDePlanta(planta) {
       alternateName: cientifico,
       description: descripcion,
       image: absoluta(imagen),
-      url: `${SITIO}/#/planta/${planta._id}`,
+      url: `${SITIO}/planta/${planta._id}`,
       additionalProperty: [
         { '@type': 'PropertyValue', name: 'Nombre científico', value: cientifico },
         { '@type': 'PropertyValue', name: 'Familia', value: planta.familia },
