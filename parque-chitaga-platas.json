@@ -1052,32 +1052,6 @@
   },
   {
     "nombre": {
-      "comun": "Arbusto de hoja gris-verde (sin confirmar)",
-      "cientifico": "No determinado (posible Berberis sp. o Cotoneaster sp.)"
-    },
-    "descripcion": {
-      "general": "Arbusto bajo y extendido, de ramas delgadas y follaje denso; se usa como cubresuelo o borde de jardín. No fue posible confirmar el género solo con la fotografía.",
-      "hojas": "Pequeñas, ovaladas, de color verde grisáceo, con brotes nuevos de tono rosado-cobrizo"
-    },
-    "ubicacion": {
-      "latitud": 0,
-      "longitud": 0,
-      "descripcion": "Borde de jardín, arbusto bajo cubresuelo"
-    },
-    "imagen": "uploads/39_Arbusto_de_hoja_gris_verde_sin_confirmar.jpg",
-    "familia": "No determinada (posiblemente Berberidaceae o Rosaceae)",
-    "origen": "No determinado; probablemente introducida como ornamental",
-    "tipo": "arbusto bajo",
-    "altura": "0.4 – 0.8 m",
-    "usos": [
-      "Ornamental",
-      "Borde de jardín"
-    ],
-    "impacto": "Aporte estético; poco valor de hábitat por tratarse de un ejemplar cultivado",
-    "estadoConservacion": "no determinado"
-  },
-  {
-    "nombre": {
       "comun": "Arrayán / Mirto andino",
       "cientifico": "Myrcianthes leucoxyla"
     },
