@@ -384,11 +384,10 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
           <section className="form-seccion" aria-label="Fotografías">
             <h3 className="form-seccion-titulo">Fotografías (opcional)</h3>
             <p className="form-ayuda">
-              Toma cada foto con su encuadre: la de móvil en vertical y la de escritorio en horizontal
-              (las dos de día). La de noche, también vertical, solo se ve en la galería cuando la
-              página está en modo noche.
-              La primera foto tomada de la especie es la que se muestra en su ficha. Sin conexión
-              quedan guardadas en este dispositivo y se suben solas cuando vuelva internet.
+              Cada foto se toma con su encuadre. Móvil y escritorio son de día; la de noche solo se ve
+              en la galería cuando la página está en modo noche. La primera foto tomada de la especie
+              es la que se muestra en su ficha. Sin conexión quedan en este dispositivo y se suben
+              solas cuando vuelva internet.
             </p>
             <div className="fotos-variantes">
               {VARIANTES.map((variante) => (

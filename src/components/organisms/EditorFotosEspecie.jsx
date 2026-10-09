@@ -1,39 +1,33 @@
 import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuCamera, LuCherry, LuImage, LuLeaf, LuMoon, LuStar, LuTrash2, LuX } from 'react-icons/lu';
+import { LuCamera, LuCherry, LuImage, LuLeaf, LuMoon, LuStar, LuTrash2, LuTreeDeciduous, LuUndo2, LuX } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
 import { listaImagenes } from '../../constantes';
 import { comprimirFoto } from '../../offline/fotos';
 import Boton from '../atoms/Boton';
+import CasillaFoto from '../molecules/CasillaFoto';
 
 let contador = 0;
 
 /* Fotos de un solo uso: cada una tiene un sitio fijo en la app (no entran al
-   carrusel). La de día es la «Principal» de arriba. */
+   carrusel). La de día es la «Principal» del carrusel. Se previsualizan en
+   cuadrado para que las cuatro casillas queden parejas; no se recortan al
+   guardar (cada sitio las encuadra con object-fit). */
 const UNICAS = [
-  {
-    clave: 'noche', campo: 'imagenNoche', titulo: 'Portada de noche', Icono: LuMoon, proporcion: 3 / 4,
-    ayuda: 'Se ve en la galería cuando la página está en modo noche. De día se usa la «Principal».',
-  },
-  {
-    clave: 'hoja', campo: 'imagenHoja', titulo: 'Hoja', Icono: LuLeaf, proporcion: 1,
-    ayuda: 'Se ve en la ficha, junto a la descripción de las hojas.',
-  },
-  {
-    clave: 'fruto', campo: 'imagenFruto', titulo: 'Fruto', Icono: LuCherry, proporcion: 1,
-    ayuda: 'Se ve en la ficha, junto a los frutos. Si la sacas de internet, anota de dónde y verifica que se pueda usar.',
-  },
+  { clave: 'noche', campo: 'imagenNoche', titulo: 'Noche', Icono: LuMoon, ayuda: 'Portada en la galería en modo noche.' },
+  { clave: 'hoja', campo: 'imagenHoja', titulo: 'Hoja', Icono: LuLeaf, ayuda: 'En la ficha, junto a las hojas.' },
+  { clave: 'tallo', campo: 'imagenTallo', titulo: 'Tallo', Icono: LuTreeDeciduous, ayuda: 'En la ficha, junto al tronco.' },
+  { clave: 'fruto', campo: 'imagenFruto', titulo: 'Fruto', Icono: LuCherry, ayuda: 'En la ficha, junto a los frutos.' },
 ];
 
 /**
- * Una foto de un solo uso: vista previa, tomarla con la cámara del celular,
- * elegirla de la galería o quitarla. `nueva` es un Blob (sin guardar), null (se
- * quitará al guardar) o undefined (sin cambios: se ve `actual`).
+ * Una foto de un solo uso: tomarla con la cámara del celular, elegirla de la
+ * galería, quitarla o deshacer el cambio. `nueva` es un Blob (sin guardar), null
+ * (se quitará al guardar) o undefined (sin cambios: se ve `actual`).
  */
-function FotoUnica({ titulo, ayuda, Icono, proporcion, actual, nueva, procesando, onArchivo, onQuitar, onDeshacer }) {
+function FotoUnica({ titulo, ayuda, Icono, actual, nueva, procesando, onArchivo, onQuitar, onDeshacer }) {
   const previa = useMemo(() => (nueva ? URL.createObjectURL(nueva) : ''), [nueva]);
   useEffect(() => () => { if (previa) URL.revokeObjectURL(previa); }, [previa]);
-  const imagen = nueva === null ? '' : previa || actual;
   const cambio = nueva !== undefined;
 
   const elegir = (e) => {
@@ -42,43 +36,43 @@ function FotoUnica({ titulo, ayuda, Icono, proporcion, actual, nueva, procesando
     if (archivo) onArchivo(archivo);
   };
 
+  let esquina = null;
+  if (cambio) {
+    esquina = (
+      <button type="button" className="casilla-foto-esquina" onClick={onDeshacer} aria-label={`Deshacer el cambio: ${titulo}`} title="Deshacer">
+        <LuUndo2 aria-hidden="true" />
+      </button>
+    );
+  } else if (actual) {
+    esquina = (
+      <button type="button" className="casilla-foto-esquina es-peligro" onClick={onQuitar} aria-label={`Quitar la foto: ${titulo}`} title="Quitar">
+        <LuTrash2 aria-hidden="true" />
+      </button>
+    );
+  }
+
   return (
-    <div className="foto-variante">
-      <div className="foto-variante-cabecera">
-        <Icono aria-hidden="true" />
-        <strong>{titulo}</strong>
-        {nueva && <span className="foto-variante-nueva">Nueva</span>}
-        {nueva === null && <span className="foto-variante-nueva">Se quitará</span>}
-      </div>
-      <p className="foto-variante-ayuda">{ayuda}</p>
-      <div className="foto-variante-previa" style={{ aspectRatio: proporcion }}>
-        {imagen ? (
-          <img src={imagen} alt={`${titulo}: foto ${previa ? 'nueva' : 'actual'}`} />
-        ) : (
-          <span className="foto-variante-vacia" aria-hidden="true">
-            <Icono />
-            Sin foto
-          </span>
-        )}
-      </div>
-      <div className="foto-variante-acciones">
-        <label className="btn btn-ghost form-archivo">
-          <LuCamera aria-hidden="true" className="btn-lupa-icono" />
-          {procesando ? 'Procesando…' : 'Tomar foto'}
-          <input type="file" accept="image/*" capture="environment" onChange={elegir} disabled={procesando} aria-label={`Tomar foto: ${titulo}`} />
-        </label>
-        <label className="btn btn-ghost form-archivo">
-          <LuImage aria-hidden="true" className="btn-lupa-icono" />
-          Galería
-          <input type="file" accept="image/*" onChange={elegir} disabled={procesando} aria-label={`Elegir de la galería: ${titulo}`} />
-        </label>
-        {cambio ? (
-          <button type="button" className="btn btn-ghost" onClick={onDeshacer}>Deshacer</button>
-        ) : (
-          actual && <button type="button" className="btn btn-ghost" onClick={onQuitar}>Quitar</button>
-        )}
-      </div>
-    </div>
+    <CasillaFoto
+      titulo={titulo}
+      Icono={Icono}
+      ayuda={ayuda}
+      proporcion={1}
+      imagen={previa || actual}
+      alt={`${titulo}: foto ${previa ? 'nueva' : 'actual'}`}
+      estado={nueva ? 'nueva' : nueva === null ? 'quitar' : null}
+      esquina={esquina}
+    >
+      <label className={`casilla-foto-boton es-principal${procesando ? ' inactivo' : ''}`}>
+        <LuCamera aria-hidden="true" />
+        <span>{procesando ? 'Procesando…' : 'Cámara'}</span>
+        <input type="file" accept="image/*" capture="environment" onChange={elegir} disabled={procesando} aria-label={`Tomar foto: ${titulo}`} />
+      </label>
+      <label className={`casilla-foto-boton${procesando ? ' inactivo' : ''}`}>
+        <LuImage aria-hidden="true" />
+        <span>Galería</span>
+        <input type="file" accept="image/*" onChange={elegir} disabled={procesando} aria-label={`Elegir de la galería: ${titulo}`} />
+      </label>
+    </CasillaFoto>
   );
 }
 
@@ -86,7 +80,6 @@ FotoUnica.propTypes = {
   titulo: PropTypes.string.isRequired,
   ayuda: PropTypes.string.isRequired,
   Icono: PropTypes.elementType.isRequired,
-  proporcion: PropTypes.number.isRequired,
   actual: PropTypes.string,
   nueva: PropTypes.instanceOf(Blob),
   procesando: PropTypes.bool,
@@ -108,7 +101,7 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
   // Cada elemento: { clave, ref } para fotos que ya tenía o { clave, archivo } para nuevas.
   const [fotos, setFotos] = useState(() => iniciales ?? listaImagenes(planta).map((ref) => ({ clave: ref, ref })));
   const [procesando, setProcesando] = useState(false);
-  // Fotos de un solo uso que cambian: { noche|hoja|fruto: Blob (nueva) | null (quitar) }.
+  // Fotos de un solo uso que cambian: { noche|hoja|tallo|fruto: Blob (nueva) | null (quitar) }.
   const [unicas, setUnicas] = useState(() => unicasIniciales ?? {});
   const [procesandoUnica, setProcesandoUnica] = useState(null);
   const [enviando, setEnviando] = useState(false);
@@ -171,11 +164,14 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
     }
   }
 
+  const nuevasEnCarrusel = fotos.filter((f) => f.archivo).length;
+
   return (
     <div className="overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="fotos-titulo" ref={dialogoRef} tabIndex={-1}>
+      <div className="modal modal-fotos" role="dialog" aria-modal="true" aria-labelledby="fotos-titulo" ref={dialogoRef} tabIndex={-1}>
         <header className="modal-header">
           <div>
+            <p className="fotos-antetitulo">Fotos de la especie</p>
             <h2 id="fotos-titulo" className="modal-titulo">{planta.nombre.comun}</h2>
             <p className="fotos-subtitulo">{planta.nombre.cientifico}</p>
           </div>
@@ -184,69 +180,93 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
           </Boton>
         </header>
 
-        <p className="form-ayuda">La foto destacada (la marcada «Principal») aparece en la galería y como portada de la ficha. Toca «Destacar» en otra para cambiarla.</p>
+        <section className="fotos-seccion" aria-labelledby="fotos-carrusel-titulo">
+          <div className="fotos-seccion-cabecera">
+            <div>
+              <h3 id="fotos-carrusel-titulo" className="fotos-seccion-titulo">
+                Carrusel
+                <span className="fotos-seccion-cuenta">
+                  {fotos.length} {fotos.length === 1 ? 'foto' : 'fotos'}
+                  {nuevasEnCarrusel > 0 && ` · ${nuevasEnCarrusel} ${nuevasEnCarrusel === 1 ? 'nueva' : 'nuevas'}`}
+                </span>
+              </h3>
+              <p className="fotos-seccion-ayuda">La «Principal» es la portada de la ficha y de la galería de día.</p>
+            </div>
+            <div className="fotos-agregar">
+              <label className={`casilla-foto-boton es-principal${procesando ? ' inactivo' : ''}`}>
+                <LuCamera aria-hidden="true" />
+                <span>{procesando ? 'Procesando…' : 'Cámara'}</span>
+                <input type="file" accept="image/*" capture="environment" onChange={agregar} disabled={procesando} aria-label="Tomar foto para el carrusel" />
+              </label>
+              <label className={`casilla-foto-boton${procesando ? ' inactivo' : ''}`}>
+                <LuImage aria-hidden="true" />
+                <span>Galería</span>
+                <input type="file" accept="image/*" multiple onChange={agregar} disabled={procesando} aria-label="Elegir fotos de la galería para el carrusel" />
+              </label>
+            </div>
+          </div>
 
-        {fotos.length === 0 ? (
-          <p className="fotos-vacio">Esta especie no tiene fotos.</p>
-        ) : (
-          <ul className="fotos-rejilla">
-            {fotos.map((f, i) => (
-              <li key={f.clave} className={`fotos-item${i === 0 ? ' es-principal' : ''}`}>
-                <div className="fotos-item-foto">
+          {fotos.length === 0 ? (
+            <p className="fotos-vacio">Esta especie aún no tiene fotos en el carrusel.</p>
+          ) : (
+            <ul className="fotos-rejilla">
+              {fotos.map((f, i) => (
+                <li key={f.clave} className={`fotos-item${i === 0 ? ' es-principal' : ''}`}>
                   <img src={f.archivo ? previas[f.clave] : f.ref} alt={`Foto ${i + 1} de ${planta.nombre.comun}`} />
-                  {f.archivo && <span className="fotos-nueva">Nueva</span>}
-                </div>
-                <div className="fotos-item-acciones">
+                  {f.archivo && <span className="casilla-foto-estado es-nueva fotos-item-nueva">Nueva</span>}
+                  <button
+                    type="button"
+                    className="casilla-foto-esquina es-peligro"
+                    onClick={() => quitar(f.clave)}
+                    aria-label={`Quitar la foto ${i + 1}`}
+                    title="Quitar"
+                  >
+                    <LuTrash2 aria-hidden="true" />
+                  </button>
                   {i === 0 ? (
-                    <span className="fotos-estado-principal">
+                    <span className="fotos-item-principal">
                       <LuStar aria-hidden="true" />
-                      Principal
+                      <span className="fotos-item-texto">Principal</span>
                     </span>
                   ) : (
-                    <button type="button" className="fotos-accion" onClick={() => hacerPrincipal(f.clave)} aria-label={`Destacar la foto ${i + 1}: usarla como principal`}>
+                    <button
+                      type="button"
+                      className="fotos-item-destacar"
+                      onClick={() => hacerPrincipal(f.clave)}
+                      aria-label={`Destacar la foto ${i + 1}: usarla como principal`}
+                    >
                       <LuStar aria-hidden="true" />
-                      Destacar
+                      <span className="fotos-item-texto">Destacar</span>
                     </button>
                   )}
-                  <button type="button" className="fotos-accion fotos-accion-quitar" onClick={() => quitar(f.clave)} aria-label={`Quitar la foto ${i + 1}`}>
-                    <LuTrash2 aria-hidden="true" />
-                    Quitar
-                  </button>
-                </div>
-              </li>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section className="fotos-seccion" aria-labelledby="fotos-fijas-titulo">
+          <div className="fotos-seccion-cabecera">
+            <div>
+              <h3 id="fotos-fijas-titulo" className="fotos-seccion-titulo">Fotos con un lugar fijo</h3>
+              <p className="fotos-seccion-ayuda">Cada una se ve en un solo sitio y no entra al carrusel.</p>
+            </div>
+          </div>
+          <div className="fotos-fijas">
+            {UNICAS.map(({ clave, campo, ...textos }) => (
+              <FotoUnica
+                key={clave}
+                {...textos}
+                actual={planta[campo] || ''}
+                nueva={unicas[clave]}
+                procesando={procesandoUnica === clave}
+                onArchivo={(archivo) => ponerUnica(clave, archivo)}
+                onQuitar={() => quitarUnica(clave)}
+                onDeshacer={() => deshacerUnica(clave)}
+              />
             ))}
-          </ul>
-        )}
-
-        <div className="form-acciones-linea">
-          <label className="btn btn-ghost form-archivo">
-            <LuCamera aria-hidden="true" className="btn-lupa-icono" />
-            {procesando ? 'Procesando…' : 'Tomar foto'}
-            <input type="file" accept="image/*" capture="environment" onChange={agregar} disabled={procesando} />
-          </label>
-          <label className="btn btn-ghost form-archivo">
-            <LuImage aria-hidden="true" className="btn-lupa-icono" />
-            Elegir de la galería
-            <input type="file" accept="image/*" multiple onChange={agregar} disabled={procesando} />
-          </label>
-        </div>
-
-        <h3 className="fotos-unicas-titulo">Fotos con un lugar fijo</h3>
-        <p className="form-ayuda">Cada una va en un solo sitio de la app, no en el carrusel.</p>
-        <div className="fotos-unicas">
-          {UNICAS.map(({ clave, campo, ...textos }) => (
-            <FotoUnica
-              key={clave}
-              {...textos}
-              actual={planta[campo] || ''}
-              nueva={unicas[clave]}
-              procesando={procesandoUnica === clave}
-              onArchivo={(archivo) => ponerUnica(clave, archivo)}
-              onQuitar={() => quitarUnica(clave)}
-              onDeshacer={() => deshacerUnica(clave)}
-            />
-          ))}
-        </div>
+          </div>
+        </section>
 
         {!enLinea && (
           <p className="form-ayuda" role="status">
@@ -256,7 +276,7 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
         )}
         {error && <p className="form-error form-error-bloque" role="alert">{error}</p>}
 
-        <footer className="form-acciones">
+        <footer className="form-acciones fotos-pie">
           <Boton variante="ghost" onClick={onClose} disabled={enviando}>Cancelar</Boton>
           <Boton variante="primary" onClick={guardar} disabled={enviando || procesando || Boolean(procesandoUnica) || !cambios}>
             {enviando ? 'Guardando…' : (enLinea ? 'Guardar fotos' : 'Guardar en este dispositivo')}

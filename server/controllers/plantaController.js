@@ -88,6 +88,7 @@ async function resolverImagenes(datos, archivos, actuales = []) {
 export const FOTOS_UNICAS = [
   { clave: 'noche', campo: 'imagenNoche', archivo: 'fotoNoche' },
   { clave: 'hoja', campo: 'imagenHoja', archivo: 'fotoHoja' },
+  { clave: 'tallo', campo: 'imagenTallo', archivo: 'fotoTallo' },
   { clave: 'fruto', campo: 'imagenFruto', archivo: 'fotoFruto' },
 ];
 

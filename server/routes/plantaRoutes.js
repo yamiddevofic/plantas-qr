@@ -267,8 +267,9 @@ router.get('/:id', obtenerPlantaPorId);
  *               fotos: { type: array, items: { type: string, format: binary } }
  *               fotoNoche: { type: string, format: binary, description: Portada de la galería en modo noche }
  *               fotoHoja: { type: string, format: binary, description: Foto de la hoja (ficha) }
+ *               fotoTallo: { type: string, format: binary, description: Foto del tallo o tronco (ficha) }
  *               fotoFruto: { type: string, format: binary, description: Foto del fruto (ficha) }
- *               quitar: { type: string, description: 'Lista JSON de fotos únicas a quitar: noche, hoja o fruto' }
+ *               quitar: { type: string, description: 'Lista JSON de fotos únicas a quitar: noche, hoja, tallo o fruto' }
  *               password: { type: string }
  *     responses:
  *       200: { description: Especie actualizada }
@@ -281,6 +282,7 @@ router.put(
     { name: 'fotos', maxCount: 10 },
     { name: 'fotoNoche', maxCount: 1 },
     { name: 'fotoHoja', maxCount: 1 },
+    { name: 'fotoTallo', maxCount: 1 },
     { name: 'fotoFruto', maxCount: 1 },
   ]),
   qrAuth,

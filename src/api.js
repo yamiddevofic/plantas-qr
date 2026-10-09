@@ -96,12 +96,12 @@ export function eliminarIndividuo(id, password) {
 }
 
 /** Fotos de un solo uso de la especie y su campo en el formulario de envío. */
-export const FOTOS_UNICAS = { noche: 'fotoNoche', hoja: 'fotoHoja', fruto: 'fotoFruto' };
+export const FOTOS_UNICAS = { noche: 'fotoNoche', hoja: 'fotoHoja', tallo: 'fotoTallo', fruto: 'fotoFruto' };
 
 /**
  * Fotos de una especie. `orden` es la lista final: referencias existentes y
  * `nueva:<n>` para la n-ésima de `fotos`; la primera queda como principal.
- * `unicas` cambia las fotos de un solo uso ({ noche, hoja, fruto }): un archivo
+ * `unicas` cambia las fotos de un solo uso ({ noche, hoja, tallo, fruto }): un archivo
  * la reemplaza, `null` la quita y si falta la clave queda como estaba.
  */
 export function actualizarFotosPlanta(id, orden, fotos, password, unicas = {}) {

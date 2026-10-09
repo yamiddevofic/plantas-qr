@@ -186,7 +186,7 @@ export default function PaginaEspecies() {
 
   // ── Fotos ──────────────────────────────────────────────────────
 
-  // `unicas`: fotos de un solo uso que cambian ({ noche|hoja|fruto: Blob | null }).
+  // `unicas`: fotos de un solo uso que cambian ({ noche|hoja|tallo|fruto: Blob | null }).
   const guardarFotos = useCallback(async (orden, archivos, unicas = {}) => {
     const { planta } = abierto;
     const nombre = planta.nombre.comun;

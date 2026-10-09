@@ -10,6 +10,7 @@ const ESTADO_PENDIENTE = { crear: 'Nueva', editar: 'Sin enviar', fotos: 'Sin env
 const FOTOS_FIJAS = [
   { campo: 'imagenNoche', nombre: 'noche' },
   { campo: 'imagenHoja', nombre: 'hoja' },
+  { campo: 'imagenTallo', nombre: 'tallo' },
   { campo: 'imagenFruto', nombre: 'fruto' },
 ];
 
@@ -23,7 +24,7 @@ Foto.propTypes = { src: PropTypes.string, alt: PropTypes.string.isRequired };
 
 /**
  * Tarjeta de una especie en Gestión de especies: foto principal, nombres,
- * cuántas fotos tiene, cuáles de las fijas (noche, hoja, fruto) faltan y las
+ * cuántas fotos tiene, cuáles de las fijas (noche, hoja, tallo, fruto) faltan y las
  * acciones (editar datos, fotos, eliminar).
  */
 export default function TarjetaEspecie({ planta, onEditar, onFotos, onEliminar, indice = 0 }) {
