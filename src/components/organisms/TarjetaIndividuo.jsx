@@ -9,7 +9,7 @@ const numero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 });
  * móvil es una fila compacta; desde tableta, una tarjeta con la foto arriba.
  */
 export default function TarjetaIndividuo({ feature, onEditar, onEliminar, indice = 0 }) {
-  const { codigoArbol, imagen, especie, pendiente, altitudMsnm } = feature.properties;
+  const { codigoArbol, imagen, especie, pendiente, altitudMsnm, cantidad = 1 } = feature.properties;
   const [longitud, latitud] = feature.geometry.coordinates;
   const [fotoRota, setFotoRota] = useState(false);
 
@@ -33,7 +33,10 @@ export default function TarjetaIndividuo({ feature, onEditar, onEliminar, indice
       </div>
 
       <div className="gestion-tarjeta-cuerpo">
-        <p className="gestion-tarjeta-titulo">{codigoArbol}</p>
+        <p className="gestion-tarjeta-titulo">
+          {codigoArbol}
+          {cantidad > 1 && <span className="gestion-grupo" title="Este punto representa varios árboles">{cantidad} árboles</span>}
+        </p>
         <p className="gestion-tarjeta-especie">
           {especie ? <a href={`#/planta/${especie._id}`}>{especie.nombre?.comun}</a> : 'Especie no disponible'}
         </p>

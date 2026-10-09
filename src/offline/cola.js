@@ -106,6 +106,7 @@ export function aplicarCola(features, cola, plantas) {
         ...base?.properties,
         id: op.id,
         codigoArbol: datos.codigoArbol,
+        cantidad: datos.cantidad ?? base?.properties.cantidad ?? 1,
         parque: datos.parque,
         altitudMsnm: datos.altitudMsnm ?? null,
         precisionGpsM: datos.precisionGpsM ?? null,

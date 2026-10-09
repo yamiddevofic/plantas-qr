@@ -8,6 +8,7 @@ const FUENTE_SOMBRA = 'terreno-sombra';
 const CAPA_SOMBRA = 'terreno-sombreado';
 export const CAPA_PUNTOS = 'individuos-puntos';
 const CAPA_ETIQUETAS = 'individuos-etiquetas';
+const CAPA_CANTIDAD = 'individuos-cantidad';
 // Vista con la que abre el mapa de la ficha: sobre el parque, con el este hacia arriba
 // (bearing 90), inclinada (pitch 55) para ver el parque en perspectiva, y un zoom
 // en el que la escala marca 20 m en unos 65 px.
@@ -66,8 +67,10 @@ export function colorearPorEspecie(coleccion) {
     const especie = f.properties.especie;
     if (!especie?._id) continue;
     const previa = especies.get(especie._id);
-    if (previa) previa.total += 1;
-    else especies.set(especie._id, { id: especie._id, nombre: especie.nombre?.comun || 'Especie sin nombre', total: 1 });
+    // La leyenda cuenta árboles: un punto de grupo suma su cantidad.
+    const cantidad = f.properties.cantidad ?? 1;
+    if (previa) previa.total += cantidad;
+    else especies.set(especie._id, { id: especie._id, nombre: especie.nombre?.comun || 'Especie sin nombre', total: cantidad });
   }
   const leyenda = [...especies.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
   leyenda.forEach((e) => { e.color = colorDeEspecie(e.id); });
@@ -95,6 +98,12 @@ export function detalleIndividuo({ altitudMsnm, precisionGpsM }) {
   if (altitudMsnm != null) partes.push(`${numero.format(altitudMsnm)} msnm`);
   if (precisionGpsM != null) partes.push(`precisión GPS ±${numero.format(precisionGpsM)} m`);
   return partes.join(' · ');
+}
+
+/** «Grupo de 12 árboles» para un punto que agrupa varios; '' si es un solo árbol. */
+export function textoGrupo(cantidad) {
+  const n = Number(cantidad) || 1;
+  return n > 1 ? `Grupo de ${n} árboles` : '';
 }
 
 // Contenido de los popups con nodos DOM (textContent), nunca HTML interpolado.
@@ -140,6 +149,7 @@ function agregarEnlace(cuerpo, enlace) {
 export function contenidoPopup(props, nombreEspecie, { enlace = null } = {}) {
   const { raiz, cuerpo } = armarPopup(props.imagen, `Fotografía del árbol ${props.codigoArbol}`, '');
   cuerpo.append(crearNodo('p', 'mapa-popup-titulo', props.codigoArbol));
+  if (textoGrupo(props.cantidad)) cuerpo.append(crearNodo('p', 'mapa-popup-grupo', textoGrupo(props.cantidad)));
   if (nombreEspecie) cuerpo.append(crearNodo('p', 'mapa-popup-subtitulo', nombreEspecie));
   const detalle = detalleIndividuo(props);
   if (detalle) cuerpo.append(crearNodo('p', 'mapa-popup-detalle', detalle));
@@ -167,6 +177,7 @@ export function contenidoPopupEspecie(props, especie, { enlace = null } = {}) {
   }
   titulo.append(document.createTextNode(codigo || nombre));
   cuerpo.append(titulo);
+  if (textoGrupo(props.cantidad)) cuerpo.append(crearNodo('p', 'mapa-popup-grupo', textoGrupo(props.cantidad)));
   if (codigo) cuerpo.append(crearNodo('p', 'mapa-popup-subtitulo', nombre));
   if (especie?.nombre?.cientifico) cuerpo.append(crearNodo('p', 'mapa-popup-cientifico', especie.nombre.cientifico));
   if (enlace) agregarEnlace(cuerpo, enlace);
@@ -212,10 +223,19 @@ export function mapaEnPantallaCompleta(map) {
 const RADIO = { z14: 4.5, z19: 11, z14Sel: 7, z19Sel: 15 };
 const CAPA_HALO = 'individuos-halo';
 
+// Un punto que agrupa varios árboles se dibuja más grande (crece despacio: 2
+// árboles ×1,25; 10 ×1,5; 50 o más ×1,8) para que quepa el número.
+const FACTOR_GRUPO = [
+  'interpolate', ['linear'], ['coalesce', ['get', 'cantidad'], 1],
+  1, 1, 2, 1.25, 10, 1.5, 50, 1.8,
+];
+
 function radioPuntos(factor = 1, extra = 0) {
   const sel = ['boolean', ['feature-state', 'seleccionado'], false];
   const hover = ['boolean', ['feature-state', 'hover'], false];
-  const en = (normal, seleccionado) => ['*', factor, ['+', extra, ['case', sel, seleccionado, hover, normal * 1.3, normal]]];
+  const en = (normal, seleccionado) => [
+    '*', factor, ['+', extra, ['*', FACTOR_GRUPO, ['case', sel, seleccionado, hover, normal * 1.3, normal]]],
+  ];
   return ['interpolate', ['linear'], ['zoom'], 14, en(RADIO.z14, RADIO.z14Sel), 19, en(RADIO.z19, RADIO.z19Sel)];
 }
 
@@ -260,6 +280,25 @@ export function agregarCapas(map, datos, base) {
       // Con la cámara inclinada los puntos se ven como discos sobre el suelo.
       'circle-pitch-alignment': 'map',
     },
+  });
+  // Número de árboles dentro del punto, solo en los grupos.
+  map.addLayer({
+    id: CAPA_CANTIDAD,
+    type: 'symbol',
+    source: FUENTE,
+    minzoom: 15.5,
+    filter: ['>', ['coalesce', ['get', 'cantidad'], 1], 1],
+    layout: {
+      'text-field': ['to-string', ['get', 'cantidad']],
+      'text-font': ['Noto Sans Regular'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 15.5, 10, 19, 14],
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
+      // De frente aunque el mapa esté inclinado: el número debe leerse.
+      'text-pitch-alignment': 'viewport',
+      'text-rotation-alignment': 'viewport',
+    },
+    paint: { 'text-color': '#ffffff', 'text-halo-color': 'rgba(15, 22, 18, 0.9)', 'text-halo-width': 1.6 },
   });
   map.addLayer({
     id: CAPA_ETIQUETAS,

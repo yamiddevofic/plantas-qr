@@ -7,8 +7,9 @@ import { useTema } from '../../tema.js';
 
 const numero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 });
 
-function detalle({ altitudMsnm, precisionGpsM }) {
+function detalle({ cantidad, altitudMsnm, precisionGpsM }) {
   return [
+    cantidad > 1 && `Grupo de ${cantidad} árboles`,
     altitudMsnm != null && `${numero.format(altitudMsnm)} msnm`,
     precisionGpsM != null && `GPS ±${numero.format(precisionGpsM)} m`,
   ].filter(Boolean).join(' · ');

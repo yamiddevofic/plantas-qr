@@ -382,13 +382,16 @@ export default function PaginaIndividuos() {
   };
 
   const hayFiltros = Boolean(busqueda || filtroEspecie);
+  // Árboles que suman los individuos visibles (un punto de grupo cuenta varios).
+  const arbolesVisibles = visibles.reduce((suma, f) => suma + (f.properties.cantidad ?? 1), 0);
 
   // Conteo de campo por especie (ejemplaresEnParque) frente a los árboles ya registrados con GPS.
   const filasEjemplares = useMemo(() => {
     const registrados = new Map();
     for (const f of vista) {
       const grupo = grupoPorFicha.get(f.properties.especie?._id);
-      if (grupo) registrados.set(grupo, (registrados.get(grupo) ?? 0) + 1);
+      // Un punto de grupo registra varios árboles.
+      if (grupo) registrados.set(grupo, (registrados.get(grupo) ?? 0) + (f.properties.cantidad ?? 1));
     }
     return especies.map((e) => {
       const conteos = plantas
@@ -515,6 +518,9 @@ export default function PaginaIndividuos() {
           <div className="gestion-resumen" id="individuos-resultados">
             <p className="gestion-conteo" role="status" aria-live="polite">
               <strong>{visibles.length}</strong> de {vista.length} {vista.length === 1 ? 'individuo' : 'individuos'}
+              {arbolesVisibles !== visibles.length && (
+                <span className="gestion-conteo-arboles"> · {arbolesVisibles} {arbolesVisibles === 1 ? 'árbol' : 'árboles'}</span>
+              )}
             </p>
             {hayFiltros && (
               <button type="button" className="gestion-limpiar" onClick={() => { setBusqueda(''); setFiltroEspecie(''); }}>

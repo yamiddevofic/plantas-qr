@@ -89,7 +89,9 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
     vistaRef.current = { base, tema, relieve3D };
   }, [base, tema, relieve3D]);
 
+  // Puntos en el mapa y árboles que representan (un punto de grupo cuenta varios).
   const total = datos?.features?.length ?? 0;
+  const arboles = (datos?.features ?? []).reduce((suma, f) => suma + (f.properties.cantidad ?? 1), 0);
 
   useEffect(() => {
     let cancelado = false;
@@ -432,7 +434,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
 
   if (estado === 'vacio') return null;
 
-  const titulo = `${total} ${total === 1 ? 'individuo' : 'individuos'} en el parque`;
+  const titulo = `${arboles} ${arboles === 1 ? 'árbol' : 'árboles'} en el parque`
+    + (arboles !== total ? ` (${total} ${total === 1 ? 'punto' : 'puntos'})` : '');
 
   return (
     <div ref={seccionRef} className={`detalle-mapa${general ? ' mapa-general' : ''}`}>

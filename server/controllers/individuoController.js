@@ -53,6 +53,7 @@ function aFeature(individuo) {
     properties: {
       id: String(individuo._id),
       codigoArbol: individuo.codigoArbol,
+      cantidad: individuo.cantidad ?? 1,
       parque: individuo.parque,
       altitudMsnm: individuo.altitudMsnm ?? null,
       precisionGpsM: individuo.precisionGpsM ?? null,
@@ -110,6 +111,15 @@ async function leerCuerpo(body, { parcial }) {
       && latitud >= -90 && latitud <= 90 && longitud >= -180 && longitud <= 180;
     if (!validas) return { error: 'latitud (-90 a 90) y longitud (-180 a 180) son obligatorias y deben ser números' };
     cambios.ubicacion = { type: 'Point', coordinates: [longitud, latitud] };
+  }
+
+  // Cuántos árboles representa el punto: entero de 1 a 1000 (vacío = 1).
+  if (body.cantidad !== undefined) {
+    const cantidad = body.cantidad === '' || body.cantidad === null ? 1 : Number(body.cantidad);
+    if (!Number.isInteger(cantidad) || cantidad < 1 || cantidad > 1000) {
+      return { error: 'cantidad debe ser un número entero de 1 a 1000' };
+    }
+    cambios.cantidad = cantidad;
   }
 
   for (const [campo, etiqueta] of [['altitudMsnm', 'altitudMsnm'], ['precisionGpsM', 'precisionGpsM']]) {

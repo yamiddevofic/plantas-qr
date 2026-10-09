@@ -304,6 +304,19 @@
 
 .mapa-popup-cientifico { font-style: italic; }
 
+/* «Grupo de 12 árboles»: un punto que representa varios. */
+.mapa-popup-grupo {
+  display: inline-block;
+  align-self: flex-start;
+  margin: 4px 0 2px;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--mint-100);
+  color: var(--forest-700);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
 .mapa-popup-detalle {
   margin: 6px 0 0;
   font-size: 0.78rem;

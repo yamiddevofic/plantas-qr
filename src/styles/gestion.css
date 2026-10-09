@@ -455,6 +455,32 @@
   text-transform: uppercase;
 }
 
+/* Punto que agrupa varios árboles: «12 árboles» junto al código. */
+.gestion-grupo {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--mint-100);
+  color: var(--forest-700);
+  font-size: 0.72rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.gestion-conteo-arboles {
+  color: var(--ink-500);
+}
+
+/* Campo «Árboles en este punto» del formulario de individuos. */
+.form-campo-cantidad {
+  margin-top: 14px;
+}
+
+.form-campo-cantidad .ejemplar-contador input {
+  width: 88px;
+}
+
 /* Fotos fijas pendientes (noche, hoja, fruto): un recordatorio discreto. */
 .gestion-tarjeta-faltan {
   color: var(--ink-500);

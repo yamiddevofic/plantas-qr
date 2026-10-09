@@ -21,6 +21,7 @@ function valorInicial(feature, parquePorDefecto) {
   return {
     especieId: p?.especie?._id ?? '',
     codigoArbol: p?.codigoArbol ?? '',
+    cantidad: String(p?.cantidad ?? 1),
     parque: p?.parque ?? parquePorDefecto,
     latitud,
     longitud,
@@ -65,6 +66,12 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
   const [camaraSistema, setCamaraSistema] = useState({ movil: 0, escritorio: 0, noche: 0 });
 
   const ponerFoto = (variante, blob) => setFotos((prev) => ({ ...prev, [variante]: blob }));
+
+  // − / + del número de árboles del punto (entre 1 y 1000).
+  const cambiarCantidad = (paso) => {
+    const actual = Number.isInteger(Number(estado.cantidad)) ? Number(estado.cantidad) : 1;
+    set('cantidad', String(Math.min(1000, Math.max(1, actual + paso))));
+  };
 
   // De la galería o la cámara del sistema: se recorta al centro con su proporción.
   async function elegirArchivo(variante, archivo) {
@@ -179,6 +186,10 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
       nuevos.codigoArbol = 'Ya existe un individuo con ese código.';
     }
     if (!estado.parque.trim()) nuevos.parque = 'El parque es obligatorio.';
+    const cantidad = Number(estado.cantidad);
+    if (!Number.isInteger(cantidad) || cantidad < 1 || cantidad > 1000) {
+      nuevos.cantidad = 'Escribe un número entero de 1 a 1000.';
+    }
     const lat = estado.latitud === '' ? NaN : Number(estado.latitud);
     const lng = estado.longitud === '' ? NaN : Number(estado.longitud);
     if (!Number.isFinite(lat) || lat < -90 || lat > 90) nuevos.latitud = 'Latitud entre -90 y 90.';
@@ -200,6 +211,7 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
       await onGuardar({
         especieId: estado.especieId,
         codigoArbol: estado.codigoArbol.trim().toUpperCase(),
+        cantidad: Number(estado.cantidad),
         parque: estado.parque.trim(),
         latitud: Number(estado.latitud),
         longitud: Number(estado.longitud),
@@ -267,6 +279,46 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
                   onChange={(e) => set('parque', e.target.value)}
                 />
               </CampoFormulario>
+            </div>
+
+            {/* Un punto puede representar varios árboles de la misma especie. */}
+            <div className={`form-campo form-campo-cantidad${errores.cantidad ? ' form-campo-error' : ''}`}>
+              <label className="form-etiqueta" htmlFor="ind-cantidad">Árboles en este punto</label>
+              <div className="ejemplar-contador">
+                <button
+                  type="button"
+                  onClick={() => cambiarCantidad(-1)}
+                  disabled={!(Number(estado.cantidad) > 1)}
+                  aria-label="Un árbol menos"
+                >
+                  −
+                </button>
+                <input
+                  id="ind-cantidad"
+                  type="number"
+                  inputMode="numeric"
+                  min="1"
+                  max="1000"
+                  step="1"
+                  value={estado.cantidad}
+                  onChange={(e) => set('cantidad', e.target.value)}
+                  aria-describedby={`ind-cantidad-ayuda${errores.cantidad ? ' ind-cantidad-error' : ''}`}
+                  aria-invalid={Boolean(errores.cantidad)}
+                />
+                <button
+                  type="button"
+                  onClick={() => cambiarCantidad(1)}
+                  disabled={Number(estado.cantidad) >= 1000}
+                  aria-label="Un árbol más"
+                >
+                  +
+                </button>
+              </div>
+              <p id="ind-cantidad-ayuda" className="form-ayuda">
+                Si en este sitio hay un grupo de árboles de la misma especie (un seto, una hilera),
+                regístralos con un solo punto y escribe cuántos son. El código y las fotos son del grupo.
+              </p>
+              {errores.cantidad && <p className="form-error" id="ind-cantidad-error" role="alert">{errores.cantidad}</p>}
             </div>
           </section>
 

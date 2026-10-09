@@ -30,6 +30,15 @@ const individuoSchema = new mongoose.Schema(
         },
       },
     },
+    // Árboles de la misma especie que representa este punto: un grupo (un
+    // seto, una hilera) se registra una sola vez con su cantidad.
+    cantidad: {
+      type: Number,
+      default: 1,
+      min: 1,
+      max: 1000,
+      validate: { validator: Number.isInteger, message: 'cantidad debe ser un número entero' },
+    },
     altitudMsnm: { type: Number, min: 0 },
     precisionGpsM: { type: Number, min: 0 },
     imagen: { type: String, trim: true, default: '' },

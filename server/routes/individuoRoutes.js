@@ -103,6 +103,7 @@ router.put('/:codigoArbol/imagen', qrAuth, actualizarImagenIndividuo);
  *               longitud: { type: number, example: -72.6666 }
  *               altitudMsnm: { type: number }
  *               precisionGpsM: { type: number }
+ *               cantidad: { type: integer, minimum: 1, maximum: 1000, default: 1, description: Árboles de la especie que representa este punto }
  *               imagen: { type: string, description: Ruta /uploads/... o URL HTTPS }
  *               password: { type: string }
  *     responses:
@@ -150,6 +151,7 @@ router.post('/', qrAuth, crearIndividuo);
  *               longitud: { type: number }
  *               altitudMsnm: { type: number, nullable: true }
  *               precisionGpsM: { type: number, nullable: true }
+ *               cantidad: { type: integer, minimum: 1, maximum: 1000 }
  *               imagen: { type: string }
  *               password: { type: string }
  *     responses:
