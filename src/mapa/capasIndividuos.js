@@ -220,14 +220,14 @@ export function mapaEnPantallaCompleta(map) {
 
 // Radio base de los puntos por zoom (normal y seleccionado). La animación lo
 // multiplica por un factor (entrada) y el halo lo usa para su pulso.
-const RADIO = { z14: 4.5, z19: 11, z14Sel: 7, z19Sel: 15 };
+const RADIO = { z14: 3.6, z19: 8.8, z14Sel: 5.6, z19Sel: 12 };
 const CAPA_HALO = 'individuos-halo';
 
 // Un punto que agrupa varios árboles se dibuja más grande (crece despacio: 2
-// árboles ×1,25; 10 ×1,5; 50 o más ×1,8) para que quepa el número.
+// árboles ×1,15; 10 ×1,3; 50 o más ×1,5) para que quepa el número.
 const FACTOR_GRUPO = [
   'interpolate', ['linear'], ['coalesce', ['get', 'cantidad'], 1],
-  1, 1, 2, 1.25, 10, 1.5, 50, 1.8,
+  1, 1, 2, 1.15, 10, 1.3, 50, 1.5,
 ];
 
 function radioPuntos(factor = 1, extra = 0) {
@@ -275,7 +275,7 @@ export function agregarCapas(map, datos, base) {
       // Borde blanco con una sombra oscura difusa debajo (circle-blur no aplica al
       // borde, así que la sombra la da el halo): se lee sobre foto y sobre calles.
       'circle-stroke-color': '#ffffff',
-      'circle-stroke-width': ['case', seleccionado, 3.5, 2.5],
+      'circle-stroke-width': ['case', seleccionado, 3, 2],
       'circle-stroke-opacity': 0.95,
       // Con la cámara inclinada los puntos se ven como discos sobre el suelo.
       'circle-pitch-alignment': 'map',
@@ -291,7 +291,7 @@ export function agregarCapas(map, datos, base) {
     layout: {
       'text-field': ['to-string', ['get', 'cantidad']],
       'text-font': ['Noto Sans Regular'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 15.5, 10, 19, 14],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 15.5, 9, 19, 12],
       'text-allow-overlap': true,
       'text-ignore-placement': true,
       // De frente aunque el mapa esté inclinado: el número debe leerse.
