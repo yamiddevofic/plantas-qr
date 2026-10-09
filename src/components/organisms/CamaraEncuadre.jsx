@@ -7,6 +7,7 @@ import { FORMATOS, recortarRegion, regionCentrada } from '../../offline/fotos';
 const TITULOS = {
   movil: 'Foto para móvil',
   escritorio: 'Foto para escritorio',
+  noche: 'Foto de noche',
 };
 
 /**
@@ -210,8 +211,8 @@ export default function CamaraEncuadre({ variante, onCapturar, onCerrar, onSinCa
 }
 
 CamaraEncuadre.propTypes = {
-  /** 'movil' (vertical 4:5) o 'escritorio' (horizontal 16:9). */
-  variante: PropTypes.oneOf(['movil', 'escritorio']).isRequired,
+  /** 'movil' o 'noche' (vertical 4:5) o 'escritorio' (horizontal 16:9). */
+  variante: PropTypes.oneOf(['movil', 'escritorio', 'noche']).isRequired,
   /** Recibe el JPEG recortado al aceptar la foto. */
   onCapturar: PropTypes.func.isRequired,
   onCerrar: PropTypes.func.isRequired,

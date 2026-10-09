@@ -455,6 +455,12 @@
   text-transform: uppercase;
 }
 
+/* Fotos fijas pendientes (noche, hoja, fruto): un recordatorio discreto. */
+.gestion-tarjeta-faltan {
+  color: var(--ink-500);
+  font-size: 0.8rem;
+}
+
 .gestion-tarjeta-meta {
   display: flex;
   flex-wrap: wrap;

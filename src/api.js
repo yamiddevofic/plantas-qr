@@ -70,13 +70,16 @@ function enviarIndividuo(url, metodo, cuerpo, fallback) {
   }, fallback);
 }
 
-/** Sube (o reemplaza) la foto de un individuo; devuelve su Feature actualizada. */
-/** Sube la foto vertical ('movil', 4:5) u horizontal ('escritorio', 16:9) de un individuo. */
+/**
+ * Sube (o reemplaza) una foto de un individuo y devuelve su Feature actualizada:
+ * 'movil' (vertical 4:5, la principal), 'escritorio' (horizontal 16:9) o 'noche'
+ * (vertical 4:5, miniatura en modo noche).
+ */
 export function subirFotoIndividuo(id, foto, password, variante = 'movil') {
   const fd = new FormData();
   fd.append('password', password);
   fd.append('foto', foto, foto.name || 'foto.jpg');
-  const consulta = variante === 'escritorio' ? '?variante=escritorio' : '';
+  const consulta = variante === 'movil' ? '' : `?variante=${encodeURIComponent(variante)}`;
   return pedirIndividuo(`${BASE}/individuos/${encodeURIComponent(id)}/foto${consulta}`, { method: 'POST', body: fd }, 'No se pudo subir la foto');
 }
 
@@ -92,15 +95,27 @@ export function eliminarIndividuo(id, password) {
   return enviarIndividuo(`${BASE}/individuos/${encodeURIComponent(id)}`, 'DELETE', { password }, 'No se pudo eliminar el individuo');
 }
 
+/** Fotos de un solo uso de la especie y su campo en el formulario de envío. */
+export const FOTOS_UNICAS = { noche: 'fotoNoche', hoja: 'fotoHoja', fruto: 'fotoFruto' };
+
 /**
  * Fotos de una especie. `orden` es la lista final: referencias existentes y
  * `nueva:<n>` para la n-ésima de `fotos`; la primera queda como principal.
+ * `unicas` cambia las fotos de un solo uso ({ noche, hoja, fruto }): un archivo
+ * la reemplaza, `null` la quita y si falta la clave queda como estaba.
  */
-export function actualizarFotosPlanta(id, orden, fotos, password) {
+export function actualizarFotosPlanta(id, orden, fotos, password, unicas = {}) {
   const fd = new FormData();
   fd.append('password', password);
   fd.append('orden', JSON.stringify(orden));
   fotos.forEach((foto, i) => fd.append('fotos', foto, foto.name || `foto-${i + 1}.jpg`));
+  const quitar = [];
+  for (const [clave, campo] of Object.entries(FOTOS_UNICAS)) {
+    if (!(clave in unicas)) continue;
+    if (unicas[clave]) fd.append(campo, unicas[clave], `${clave}.jpg`);
+    else quitar.push(clave);
+  }
+  if (quitar.length) fd.append('quitar', JSON.stringify(quitar));
   return pedirIndividuo(`${BASE}/plantas/${encodeURIComponent(id)}/fotos`, { method: 'PUT', body: fd }, 'No se pudieron guardar las fotos');
 }
 

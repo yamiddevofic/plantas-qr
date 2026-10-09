@@ -6,6 +6,13 @@ import { esIdLocal } from '../../offline/colaEspecies';
 
 const ESTADO_PENDIENTE = { crear: 'Nueva', editar: 'Sin enviar', fotos: 'Sin enviar' };
 
+/** Fotos de un solo uso que conviene tener, para saber cuáles faltan por tomar. */
+const FOTOS_FIJAS = [
+  { campo: 'imagenNoche', nombre: 'noche' },
+  { campo: 'imagenHoja', nombre: 'hoja' },
+  { campo: 'imagenFruto', nombre: 'fruto' },
+];
+
 function Foto({ src, alt }) {
   const [rota, setRota] = useState(false);
   if (!src || rota) return <span className="gestion-tarjeta-sin-foto" aria-hidden="true"><IconoHoja /></span>;
@@ -16,13 +23,15 @@ Foto.propTypes = { src: PropTypes.string, alt: PropTypes.string.isRequired };
 
 /**
  * Tarjeta de una especie en Gestión de especies: foto principal, nombres,
- * cuántas fotos tiene y las acciones (editar datos, fotos, eliminar).
+ * cuántas fotos tiene, cuáles de las fijas (noche, hoja, fruto) faltan y las
+ * acciones (editar datos, fotos, eliminar).
  */
 export default function TarjetaEspecie({ planta, onEditar, onFotos, onEliminar, indice = 0 }) {
   const fotos = listaImagenes(planta);
   const nombre = planta.nombre.comun;
   // Una especie creada sin conexión aún no tiene ficha en el servidor.
   const local = esIdLocal(planta._id);
+  const faltan = FOTOS_FIJAS.filter(({ campo }) => !planta[campo]).map(({ nombre: n }) => n);
 
   return (
     <li className="gestion-tarjeta especie-tarjeta" style={{ '--i': Math.min(indice, 12) }}>
@@ -45,6 +54,9 @@ export default function TarjetaEspecie({ planta, onEditar, onFotos, onEliminar, 
         </p>
         <p className="gestion-tarjeta-cientifico"><em>{planta.nombre.cientifico}</em></p>
         {planta.familia && <p className="gestion-tarjeta-familia">{planta.familia}</p>}
+        {faltan.length > 0 && (
+          <p className="gestion-tarjeta-faltan">Falta foto de {faltan.join(', ')}</p>
+        )}
       </div>
 
       <div className="gestion-tarjeta-acciones">

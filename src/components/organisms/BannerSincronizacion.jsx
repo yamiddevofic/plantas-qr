@@ -23,7 +23,8 @@ export default function BannerSincronizacion({
   if (enLinea && cola.length === 0) return null;
 
   const nombre = (op) => op.datos?.codigoArbol ?? op.codigoArbol ?? op.nombre ?? op.id;
-  const etiqueta = (op) => (op.tipo === 'foto' && op.variante === 'escritorio' ? 'Foto de escritorio' : etiquetas[op.tipo]);
+  const ETIQUETA_VARIANTE = { escritorio: 'Foto de escritorio', noche: 'Foto de noche' };
+  const etiqueta = (op) => (op.tipo === 'foto' && ETIQUETA_VARIANTE[op.variante]) || etiquetas[op.tipo];
   const clave = (op) => `${op.tipo}-${op.id}-${op.variante ?? ''}`;
 
   return (

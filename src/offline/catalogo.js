@@ -88,7 +88,9 @@ export async function descargarCatalogo(onProgreso) {
   const plantas = await datos('/api/plantas');
   const fotos = new Set();
   const sumarFotos = (...rutas) => rutas.flatMap(archivosDeFoto).forEach((r) => fotos.add(r));
-  plantas.forEach((p) => sumarFotos(p.imagen, ...(p.imagenes ?? [])));
+  // Todas las fotos de la especie: carrusel, portada de noche, hoja y fruto.
+  const fotosDe = (p) => [p.imagen, ...(p.imagenes ?? []), p.imagenNoche, p.imagenHoja, p.imagenFruto];
+  plantas.forEach((p) => sumarFotos(...fotosDe(p)));
   avanzar();
   await datos('/api/qr').catch(() => { fallidos += 1; });
   avanzar();
@@ -96,14 +98,14 @@ export async function descargarCatalogo(onProgreso) {
   const tareasDatos = plantas.flatMap((p) => [
     async () => {
       const ficha = await datos(`/api/plantas/${p._id}`);
-      sumarFotos(ficha.imagen, ...(ficha.imagenes ?? []));
+      sumarFotos(...fotosDe(ficha));
     },
     () => datos(`/api/qr/${p._id}`).catch((e) => {
       if (e.message !== '404') throw e; // una especie sin QR no es un fallo
     }),
     async () => {
       const coleccion = await datos(`/api/individuos?especieId=${p._id}`);
-      (coleccion.features ?? []).forEach((f) => sumarFotos(f.properties?.imagen, f.properties?.imagenEscritorio));
+      (coleccion.features ?? []).forEach((f) => sumarFotos(f.properties?.imagen, f.properties?.imagenEscritorio, f.properties?.imagenNoche));
     },
   ]);
   total += tareasDatos.length;

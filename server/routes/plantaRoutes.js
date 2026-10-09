@@ -265,13 +265,27 @@ router.get('/:id', obtenerPlantaPorId);
  *             properties:
  *               orden: { type: string, example: '["nueva:0", "/uploads/01_Arrayan.webp"]' }
  *               fotos: { type: array, items: { type: string, format: binary } }
+ *               fotoNoche: { type: string, format: binary, description: Portada de la galería en modo noche }
+ *               fotoHoja: { type: string, format: binary, description: Foto de la hoja (ficha) }
+ *               fotoFruto: { type: string, format: binary, description: Foto del fruto (ficha) }
+ *               quitar: { type: string, description: 'Lista JSON de fotos únicas a quitar: noche, hoja o fruto' }
  *               password: { type: string }
  *     responses:
  *       200: { description: Especie actualizada }
  *       401: { description: Contraseña inválida o faltante }
  *       404: { description: No existe }
  */
-router.put('/:id/fotos', upload.fields([{ name: 'fotos', maxCount: 10 }]), qrAuth, actualizarFotosPlanta);
+router.put(
+  '/:id/fotos',
+  upload.fields([
+    { name: 'fotos', maxCount: 10 },
+    { name: 'fotoNoche', maxCount: 1 },
+    { name: 'fotoHoja', maxCount: 1 },
+    { name: 'fotoFruto', maxCount: 1 },
+  ]),
+  qrAuth,
+  actualizarFotosPlanta,
+);
 
 /**
  * @swagger

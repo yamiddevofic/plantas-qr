@@ -197,7 +197,7 @@ router.delete('/:id', qrAuth, eliminarIndividuo);
  *         schema: { type: string }
  *       - in: query
  *         name: variante
- *         schema: { type: string, enum: [movil, escritorio], default: movil }
+ *         schema: { type: string, enum: [movil, escritorio, noche], default: movil }
  *     responses:
  *       200: { description: Imagen WebP }
  *       404: { description: Sin foto }
@@ -211,8 +211,8 @@ router.delete('/:id', qrAuth, eliminarIndividuo);
  *         schema: { type: string }
  *       - in: query
  *         name: variante
- *         description: movil (vertical 4:5, la foto principal) o escritorio (horizontal 16:9)
- *         schema: { type: string, enum: [movil, escritorio], default: movil }
+ *         description: movil (vertical 4:5, la foto principal), escritorio (horizontal 16:9) o noche (vertical 4:5, miniatura en modo noche)
+ *         schema: { type: string, enum: [movil, escritorio, noche], default: movil }
  *     requestBody:
  *       required: true
  *       content:

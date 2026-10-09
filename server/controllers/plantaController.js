@@ -81,6 +81,21 @@ async function resolverImagenes(datos, archivos, actuales = []) {
   return { imagen: lista[0] || '', imagenes: lista.slice(1) };
 }
 
+/**
+ * Fotos de un solo uso de la especie: `clave` es como las nombra la app (y la
+ * lista `quitar`), `campo` donde se guardan y `archivo` el campo del formulario.
+ */
+export const FOTOS_UNICAS = [
+  { clave: 'noche', campo: 'imagenNoche', archivo: 'fotoNoche' },
+  { clave: 'hoja', campo: 'imagenHoja', archivo: 'fotoHoja' },
+  { clave: 'fruto', campo: 'imagenFruto', archivo: 'fotoFruto' },
+];
+
+/** Estas fotos solo cambian desde «Fotos»: crear o editar los datos no las toca. */
+function quitarFotosUnicas(datos) {
+  for (const { campo } of FOTOS_UNICAS) delete datos[campo];
+}
+
 export const crearPlanta = async (req, res) => {
   try {
     const datos = parsearBody(req.body);
@@ -88,6 +103,7 @@ export const crearPlanta = async (req, res) => {
       Object.assign(datos, await resolverImagenes(datos, req.files));
     }
     delete datos.imagenesConservar;
+    quitarFotosUnicas(datos);
     datos.usos = limpiarUsos(datos.usos);
     const planta = new Planta(datos);
     const guardada = await planta.save();
@@ -180,6 +196,7 @@ export const actualizarPlanta = async (req, res) => {
       Object.assign(datos, await resolverImagenes(datos, req.files, actuales));
     }
     delete datos.imagenesConservar;
+    quitarFotosUnicas(datos);
     datos.usos = limpiarUsos(datos.usos);
     const planta = await Planta.findByIdAndUpdate(req.params.id, datos, { new: true, runValidators: true });
     if (!planta) return res.status(404).json({ mensaje: 'Planta no encontrada' });
@@ -221,7 +238,9 @@ export const eliminarPlanta = async (req, res) => {
     }
     await Planta.deleteOne({ _id: planta._id });
     await QR.deleteMany({ plantaId: planta._id });
-    await limpiarHuerfanas([planta.imagen, ...(planta.imagenes || [])].filter(Boolean));
+    await limpiarHuerfanas([
+      planta.imagen, ...(planta.imagenes || []), ...FOTOS_UNICAS.map(({ campo }) => planta[campo]),
+    ].filter(Boolean));
     res.json({ mensaje: 'Planta eliminada correctamente' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al eliminar planta', error: error.message });
@@ -233,7 +252,9 @@ async function limpiarHuerfanas(refs) {
   for (const ref of refs) {
     const id = idDeImagen(ref);
     if (!id) continue;
-    const enUso = await Planta.exists({ $or: [{ imagen: ref }, { imagenes: ref }] });
+    const enUso = await Planta.exists({
+      $or: [{ imagen: ref }, { imagenes: ref }, ...FOTOS_UNICAS.map(({ campo }) => ({ [campo]: ref }))],
+    });
     if (!enUso) await Imagen.deleteOne({ _id: id });
   }
 }
@@ -275,8 +296,25 @@ export const actualizarFotosPlanta = async (req, res) => {
 
     planta.imagen = lista[0] ?? '';
     planta.imagenes = lista.slice(1);
+
+    // Fotos de un solo uso: una nueva reemplaza la anterior; `quitar` la borra.
+    let quitar;
+    try {
+      quitar = JSON.parse(req.body?.quitar ?? '[]');
+    } catch {
+      quitar = [];
+    }
+    if (!Array.isArray(quitar)) quitar = [];
+    const reemplazadas = [];
+    for (const { clave, campo, archivo } of FOTOS_UNICAS) {
+      const subida = req.files?.[archivo]?.[0];
+      if (!subida && !quitar.includes(clave)) continue;
+      if (planta[campo]) reemplazadas.push(planta[campo]);
+      planta[campo] = subida ? (await guardarImagenes([subida]))[0] : '';
+    }
+
     await planta.save();
-    await limpiarHuerfanas(actuales.filter((ref) => !lista.includes(ref)));
+    await limpiarHuerfanas([...actuales.filter((ref) => !lista.includes(ref)), ...reemplazadas]);
     res.json(planta);
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al guardar las fotos', error: error.message });

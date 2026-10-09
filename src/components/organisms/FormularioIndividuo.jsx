@@ -5,12 +5,15 @@ import useModal from '../../hooks/useModal';
 import { altitudMasCercana, calidadPrecision, precisionDeMarcado, sugerirCodigo } from '../../individuos';
 import { altitudDelTerreno } from '../../mapa/altitud';
 import useMedicionGps from '../../hooks/useMedicionGps';
-import { recortarFoto } from '../../offline/fotos';
+import { VARIANTES, recortarFoto } from '../../offline/fotos';
 import Boton from '../atoms/Boton';
 import CampoFormulario from '../molecules/CampoFormulario';
 import CampoFotoVariante from '../molecules/CampoFotoVariante';
 import SelectorUbicacion from './SelectorUbicacion';
 import CamaraEncuadre from './CamaraEncuadre';
+
+/** Campo del individuo con la URL guardada de cada variante de foto. */
+const CAMPO_IMAGEN = { movil: 'imagen', escritorio: 'imagenEscritorio', noche: 'imagenNoche' };
 
 function valorInicial(feature, parquePorDefecto) {
   const p = feature?.properties;
@@ -25,6 +28,7 @@ function valorInicial(feature, parquePorDefecto) {
     precisionGpsM: p?.precisionGpsM ?? '',
     imagen: p?.imagen ?? '',
     imagenEscritorio: p?.imagenEscritorio ?? '',
+    imagenNoche: p?.imagenNoche ?? '',
   };
 }
 
@@ -53,11 +57,12 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
   const consultaAltitud = useRef(0);
   // La precisión viene del GPS (o ya venía guardada) y no de un toque en el mapa.
   const [medidoConGps, setMedidoConGps] = useState(() => esEdicion && Boolean(individuo?.properties.precisionGpsM));
-  // Dos fotos por individuo: móvil (vertical 4:5) y escritorio (horizontal 16:9).
-  const [fotos, setFotos] = useState({ movil: null, escritorio: null });
+  // Fotos por individuo: móvil (vertical 4:5), escritorio (horizontal 16:9) y
+  // noche (vertical 4:5, solo para la miniatura de la galería en modo noche).
+  const [fotos, setFotos] = useState({ movil: null, escritorio: null, noche: null });
   const [procesando, setProcesando] = useState(null);
   const [camara, setCamara] = useState(null);
-  const [camaraSistema, setCamaraSistema] = useState({ movil: 0, escritorio: 0 });
+  const [camaraSistema, setCamaraSistema] = useState({ movil: 0, escritorio: 0, noche: 0 });
 
   const ponerFoto = (variante, blob) => setFotos((prev) => ({ ...prev, [variante]: blob }));
 
@@ -379,16 +384,18 @@ export default function FormularioIndividuo({ individuo, especies, individuos, p
           <section className="form-seccion" aria-label="Fotografías">
             <h3 className="form-seccion-titulo">Fotografías (opcional)</h3>
             <p className="form-ayuda">
-              Toma cada foto con su encuadre: la de móvil en vertical y la de escritorio en horizontal.
+              Toma cada foto con su encuadre: la de móvil en vertical y la de escritorio en horizontal
+              (las dos de día). La de noche, también vertical, solo se ve en la galería cuando la
+              página está en modo noche.
               La primera foto tomada de la especie es la que se muestra en su ficha. Sin conexión
               quedan guardadas en este dispositivo y se suben solas cuando vuelva internet.
             </p>
             <div className="fotos-variantes">
-              {['movil', 'escritorio'].map((variante) => (
+              {VARIANTES.map((variante) => (
                 <CampoFotoVariante
                   key={variante}
                   variante={variante}
-                  actual={variante === 'movil' ? estado.imagen : estado.imagenEscritorio}
+                  actual={estado[CAMPO_IMAGEN[variante]]}
                   nueva={fotos[variante]}
                   procesando={procesando === variante}
                   pedirCamaraSistema={camaraSistema[variante]}

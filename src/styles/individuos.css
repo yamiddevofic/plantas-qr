@@ -522,3 +522,17 @@
 .mapa-offline-boton:hover {
   border-color: var(--ink-300);
 }
+
+/* Fotos de un solo uso de la especie (portada de noche, hoja, fruto). */
+.fotos-unicas-titulo {
+  margin: 20px 0 0;
+  color: var(--ink-900);
+  font-size: 1rem;
+}
+
+.fotos-unicas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 12px 0 16px;
+}

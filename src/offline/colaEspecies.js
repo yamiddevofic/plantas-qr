@@ -13,6 +13,8 @@
 //               cambian fotos desde el formulario: para eso está «Fotos».
 //   - fotos:    `orden` es la lista final (referencias que ya tenía y `nueva:<n>`);
 //               las `nuevas` fotos están en IndexedDB con claveFotoEspecie(id, n).
+//               `unicas` (opcional) cambia las fotos de un solo uso: { noche, hoja,
+//               fruto } con 'nueva' (en IndexedDB, claveFotoUnica(id, clave)) o 'quitar'.
 //   - eliminar: borra la especie del servidor.
 //   - `error` marca una operación que el servidor rechazó (409, 400…) para mostrarla.
 
@@ -45,10 +47,21 @@ export function guardarColaEspecies(cola) {
 /** Clave en IndexedDB de una foto de especie: 'principal' (alta) o el índice de las nuevas. */
 export const claveFotoEspecie = (id, sufijo) => `especie::${id}::${sufijo}`;
 
+/** Clave en IndexedDB de una foto de un solo uso (noche, hoja o fruto) pendiente. */
+export const claveFotoUnica = (id, clave) => claveFotoEspecie(id, `unica-${clave}`);
+
+/** Campo de la especie donde va cada foto de un solo uso. */
+export const CAMPOS_UNICAS = { noche: 'imagenNoche', hoja: 'imagenHoja', fruto: 'imagenFruto' };
+
 /** Claves de IndexedDB que usa una operación. */
 export function clavesDeFotos(op) {
   if (op.tipo === 'crear' && op.foto) return [claveFotoEspecie(op.id, 'principal')];
-  if (op.tipo === 'fotos') return Array.from({ length: op.nuevas ?? 0 }, (_, i) => claveFotoEspecie(op.id, i));
+  if (op.tipo === 'fotos') {
+    const unicas = Object.entries(op.unicas ?? {})
+      .filter(([, accion]) => accion === 'nueva')
+      .map(([clave]) => claveFotoUnica(op.id, clave));
+    return [...Array.from({ length: op.nuevas ?? 0 }, (_, i) => claveFotoEspecie(op.id, i)), ...unicas];
+  }
   return [];
 }
 
@@ -80,9 +93,13 @@ export function encolarEditar(cola, id, datos, foto) {
   return [...cola, { tipo: 'editar', id, nombre, datos }];
 }
 
-/** Fotos de una especie ya existente; solo vale la última lista guardada. */
-export function encolarFotos(cola, id, nombre, orden, nuevas) {
-  return [...cola.filter((op) => !(op.id === id && op.tipo === 'fotos')), { tipo: 'fotos', id, nombre, orden, nuevas }];
+/**
+ * Fotos de una especie ya existente; solo vale la última lista guardada.
+ * `unicas`: { noche|hoja|fruto: 'nueva' | 'quitar' } (las que no cambian no van).
+ */
+export function encolarFotos(cola, id, nombre, orden, nuevas, unicas = {}) {
+  const op = { tipo: 'fotos', id, nombre, orden, nuevas, ...(Object.keys(unicas).length ? { unicas } : {}) };
+  return [...cola.filter((o) => !(o.id === id && o.tipo === 'fotos')), op];
 }
 
 /** Elimina: si nunca llegó al servidor, basta con descartar sus operaciones. */
@@ -141,7 +158,11 @@ function fotosDeOperacion(op, locales) {
       return nueva ? locales[claveFotoEspecie(op.id, Number(nueva[1]))] : ref;
     })
     .filter(Boolean);
-  return { imagen: lista[0] ?? '', imagenes: lista.slice(1) };
+  const unicas = {};
+  for (const [clave, accion] of Object.entries(op.unicas ?? {})) {
+    unicas[CAMPOS_UNICAS[clave]] = accion === 'nueva' ? locales[claveFotoUnica(op.id, clave)] ?? '' : '';
+  }
+  return { imagen: lista[0] ?? '', imagenes: lista.slice(1), ...unicas };
 }
 
 /**

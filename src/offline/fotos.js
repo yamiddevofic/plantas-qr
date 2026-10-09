@@ -1,6 +1,7 @@
 // Fotos tomadas sin conexión, guardadas en IndexedDB (localStorage no admite
 // archivos y se queda corto). Clave: claveFoto(id, variante), donde id es el del
-// individuo (local-… o del servidor). La foto móvil usa el id solo, como antes.
+// individuo (local-… o del servidor). La foto móvil usa el id solo, como antes;
+// las demás variantes (escritorio, noche) llevan `::variante` detrás.
 
 const BD = 'plantaqr';
 const ALMACEN = 'fotos-individuos';
@@ -43,10 +44,10 @@ export const leerFoto = (id) => operar('readonly', (almacen) => almacen.get(id))
 
 export const borrarFoto = (id) => operar('readwrite', (almacen) => almacen.delete(id));
 
-export const VARIANTES = ['movil', 'escritorio'];
+export const VARIANTES = ['movil', 'escritorio', 'noche'];
 
 /** Clave en IndexedDB de la foto de un individuo según su variante. */
-export const claveFoto = (id, variante = 'movil') => (variante === 'escritorio' ? `${id}::escritorio` : id);
+export const claveFoto = (id, variante = 'movil') => (variante === 'movil' ? id : `${id}::${variante}`);
 
 async function moverClave(de, a) {
   const blob = await leerFoto(de);
@@ -55,12 +56,12 @@ async function moverClave(de, a) {
   await borrarFoto(de);
 }
 
-/** Cuando un individuo local recibe su id real, sus fotos (ambas variantes) lo siguen. */
+/** Cuando un individuo local recibe su id real, sus fotos (todas las variantes) lo siguen. */
 export async function moverFoto(de, a) {
   for (const variante of VARIANTES) await moverClave(claveFoto(de, variante), claveFoto(a, variante));
 }
 
-/** Borra las fotos guardadas de un individuo (ambas variantes). */
+/** Borra las fotos guardadas de un individuo (todas las variantes). */
 export async function borrarFotos(id) {
   for (const variante of VARIANTES) await borrarFoto(claveFoto(id, variante));
 }
@@ -71,6 +72,8 @@ const LADO_MAXIMO = 1600;
 export const FORMATOS = {
   movil: { proporcion: 4 / 5, etiqueta: '4:5', lado: 2000 },
   escritorio: { proporcion: 16 / 9, etiqueta: '16:9', lado: 2560 },
+  // De noche, vertical como la móvil: se ve en la miniatura de la galería.
+  noche: { proporcion: 4 / 5, etiqueta: '4:5', lado: 2000 },
 };
 
 /** Pasa un lienzo a JPEG; null si el navegador no pudo. */

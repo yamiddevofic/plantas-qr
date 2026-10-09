@@ -7,6 +7,7 @@ import {
   aplicarColaEspecies,
   borrarFotosDeOperacion,
   claveFotoEspecie,
+  claveFotoUnica,
   clavesDeFotos,
   descartar,
   descartarOperacion,
@@ -154,7 +155,7 @@ export default function PaginaEspecies() {
     setAviso(null);
     const op = cola.find((o) => o.tipo === 'fotos' && o.id === planta._id);
     if (!op) {
-      setAbierto({ modo: 'fotos', planta, iniciales: null });
+      setAbierto({ modo: 'fotos', planta, iniciales: null, unicasIniciales: null });
       return;
     }
     const iniciales = [];
@@ -167,7 +168,16 @@ export default function PaginaEspecies() {
       const blob = await leerFoto(claveFotoEspecie(op.id, Number(nueva[1]))).catch(() => null);
       if (blob) iniciales.push({ clave: `guardada-${op.id}-${nueva[1]}`, archivo: blob });
     }
-    setAbierto({ modo: 'fotos', planta, iniciales });
+    // Fotos de un solo uso pendientes: la nueva (del dispositivo) o null si se iba a quitar.
+    const unicasIniciales = {};
+    for (const [clave, accion] of Object.entries(op.unicas ?? {})) {
+      if (accion === 'quitar') unicasIniciales[clave] = null;
+      else {
+        const blob = await leerFoto(claveFotoUnica(op.id, clave)).catch(() => null);
+        if (blob) unicasIniciales[clave] = blob;
+      }
+    }
+    setAbierto({ modo: 'fotos', planta, iniciales, unicasIniciales });
   };
 
   const soltarFotosPendientes = (id) => {
@@ -176,7 +186,8 @@ export default function PaginaEspecies() {
 
   // ── Fotos ──────────────────────────────────────────────────────
 
-  const guardarFotos = useCallback(async (orden, archivos) => {
+  // `unicas`: fotos de un solo uso que cambian ({ noche|hoja|fruto: Blob | null }).
+  const guardarFotos = useCallback(async (orden, archivos, unicas = {}) => {
     const { planta } = abierto;
     const nombre = planta.nombre.comun;
 
@@ -185,7 +196,12 @@ export default function PaginaEspecies() {
       const previa = colaRef.current.find((op) => op.tipo === 'fotos' && op.id === planta._id);
       if (previa) await borrarFotosDeOperacion(previa);
       for (const [i, archivo] of archivos.entries()) await guardarFoto(claveFotoEspecie(planta._id, i), archivo);
-      setCola((c) => encolarFotos(c, planta._id, nombre, orden, archivos.length));
+      const acciones = {};
+      for (const [clave, blob] of Object.entries(unicas)) {
+        if (blob) await guardarFoto(claveFotoUnica(planta._id, clave), blob);
+        acciones[clave] = blob ? 'nueva' : 'quitar';
+      }
+      setCola((c) => encolarFotos(c, planta._id, nombre, orden, archivos.length, acciones));
       setAviso({ tipo: 'ok', texto: `Fotos de ${nombre} guardadas en este dispositivo; se enviarán cuando haya conexión.` });
       setAbierto(null);
     };
@@ -197,7 +213,7 @@ export default function PaginaEspecies() {
     let actualizada;
     try {
       actualizada = await ejecutar(
-        (password) => actualizarFotosPlanta(planta._id, orden, archivos, password),
+        (password) => actualizarFotosPlanta(planta._id, orden, archivos, password, unicas),
         `Para guardar las fotos de ${nombre} necesitas la contraseña de administrador.`,
       );
     } catch (e) {
@@ -320,7 +336,17 @@ export default function PaginaEspecies() {
                 if (!blob) throw new Error('Falta una foto guardada en este dispositivo.');
                 archivos.push(blob);
               }
-              reemplazar(await actualizarFotosPlanta(op.id, op.orden, archivos, password));
+              const unicas = {};
+              for (const [clave, accion] of Object.entries(op.unicas ?? {})) {
+                if (accion === 'quitar') {
+                  unicas[clave] = null;
+                  continue;
+                }
+                const blob = await leerFoto(claveFotoUnica(op.id, clave));
+                if (!blob) throw new Error('Falta una foto guardada en este dispositivo.');
+                unicas[clave] = blob;
+              }
+              reemplazar(await actualizarFotosPlanta(op.id, op.orden, archivos, password, unicas));
               restante = descartarOperacion(restante, op);
             } else {
               await eliminarPlanta(op.id, password);
@@ -412,6 +438,7 @@ export default function PaginaEspecies() {
             <EditorFotosEspecie
               planta={abierto.planta}
               iniciales={abierto.iniciales}
+              unicasIniciales={abierto.unicasIniciales}
               enLinea={enLinea}
               onClose={() => setAbierto(null)}
               onGuardar={guardarFotos}

@@ -53,6 +53,16 @@ const individuoSchema = new mongoose.Schema(
       ),
       select: false,
     },
+    // Foto vertical (4:5) de noche: solo para la miniatura de la galería de la
+    // ficha cuando la página está en modo noche.
+    imagenNoche: { type: String, trim: true, default: '' },
+    fotoNoche: {
+      type: new mongoose.Schema(
+        { datos: Buffer, tipo: String, actualizada: Date },
+        { _id: false }
+      ),
+      select: false,
+    },
   },
   { timestamps: true, versionKey: false }
 );

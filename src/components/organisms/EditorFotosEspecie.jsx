@@ -1,12 +1,99 @@
 import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuCamera, LuImage, LuStar, LuTrash2, LuX } from 'react-icons/lu';
+import { LuCamera, LuCherry, LuImage, LuLeaf, LuMoon, LuStar, LuTrash2, LuX } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
 import { listaImagenes } from '../../constantes';
 import { comprimirFoto } from '../../offline/fotos';
 import Boton from '../atoms/Boton';
 
 let contador = 0;
+
+/* Fotos de un solo uso: cada una tiene un sitio fijo en la app (no entran al
+   carrusel). La de día es la «Principal» de arriba. */
+const UNICAS = [
+  {
+    clave: 'noche', campo: 'imagenNoche', titulo: 'Portada de noche', Icono: LuMoon, proporcion: 3 / 4,
+    ayuda: 'Se ve en la galería cuando la página está en modo noche. De día se usa la «Principal».',
+  },
+  {
+    clave: 'hoja', campo: 'imagenHoja', titulo: 'Hoja', Icono: LuLeaf, proporcion: 1,
+    ayuda: 'Se ve en la ficha, junto a la descripción de las hojas.',
+  },
+  {
+    clave: 'fruto', campo: 'imagenFruto', titulo: 'Fruto', Icono: LuCherry, proporcion: 1,
+    ayuda: 'Se ve en la ficha, junto a los frutos. Si la sacas de internet, anota de dónde y verifica que se pueda usar.',
+  },
+];
+
+/**
+ * Una foto de un solo uso: vista previa, tomarla con la cámara del celular,
+ * elegirla de la galería o quitarla. `nueva` es un Blob (sin guardar), null (se
+ * quitará al guardar) o undefined (sin cambios: se ve `actual`).
+ */
+function FotoUnica({ titulo, ayuda, Icono, proporcion, actual, nueva, procesando, onArchivo, onQuitar, onDeshacer }) {
+  const previa = useMemo(() => (nueva ? URL.createObjectURL(nueva) : ''), [nueva]);
+  useEffect(() => () => { if (previa) URL.revokeObjectURL(previa); }, [previa]);
+  const imagen = nueva === null ? '' : previa || actual;
+  const cambio = nueva !== undefined;
+
+  const elegir = (e) => {
+    const archivo = e.target.files?.[0];
+    e.target.value = '';
+    if (archivo) onArchivo(archivo);
+  };
+
+  return (
+    <div className="foto-variante">
+      <div className="foto-variante-cabecera">
+        <Icono aria-hidden="true" />
+        <strong>{titulo}</strong>
+        {nueva && <span className="foto-variante-nueva">Nueva</span>}
+        {nueva === null && <span className="foto-variante-nueva">Se quitará</span>}
+      </div>
+      <p className="foto-variante-ayuda">{ayuda}</p>
+      <div className="foto-variante-previa" style={{ aspectRatio: proporcion }}>
+        {imagen ? (
+          <img src={imagen} alt={`${titulo}: foto ${previa ? 'nueva' : 'actual'}`} />
+        ) : (
+          <span className="foto-variante-vacia" aria-hidden="true">
+            <Icono />
+            Sin foto
+          </span>
+        )}
+      </div>
+      <div className="foto-variante-acciones">
+        <label className="btn btn-ghost form-archivo">
+          <LuCamera aria-hidden="true" className="btn-lupa-icono" />
+          {procesando ? 'Procesando…' : 'Tomar foto'}
+          <input type="file" accept="image/*" capture="environment" onChange={elegir} disabled={procesando} aria-label={`Tomar foto: ${titulo}`} />
+        </label>
+        <label className="btn btn-ghost form-archivo">
+          <LuImage aria-hidden="true" className="btn-lupa-icono" />
+          Galería
+          <input type="file" accept="image/*" onChange={elegir} disabled={procesando} aria-label={`Elegir de la galería: ${titulo}`} />
+        </label>
+        {cambio ? (
+          <button type="button" className="btn btn-ghost" onClick={onDeshacer}>Deshacer</button>
+        ) : (
+          actual && <button type="button" className="btn btn-ghost" onClick={onQuitar}>Quitar</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+FotoUnica.propTypes = {
+  titulo: PropTypes.string.isRequired,
+  ayuda: PropTypes.string.isRequired,
+  Icono: PropTypes.elementType.isRequired,
+  proporcion: PropTypes.number.isRequired,
+  actual: PropTypes.string,
+  nueva: PropTypes.instanceOf(Blob),
+  procesando: PropTypes.bool,
+  onArchivo: PropTypes.func.isRequired,
+  onQuitar: PropTypes.func.isRequired,
+  onDeshacer: PropTypes.func.isRequired,
+};
 
 /**
  * Modal para ordenar, quitar y agregar fotos de una especie. La primera foto es
@@ -16,11 +103,14 @@ let contador = 0;
  * `iniciales` (opcional) arranca el editor desde un cambio ya guardado sin enviar:
  * lista de { clave, ref } (foto que ya tenía) o { clave, archivo } (foto nueva).
  */
-export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar, iniciales = null }) {
+export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar, iniciales = null, unicasIniciales = null }) {
   const dialogoRef = useModal(onClose);
   // Cada elemento: { clave, ref } para fotos que ya tenía o { clave, archivo } para nuevas.
   const [fotos, setFotos] = useState(() => iniciales ?? listaImagenes(planta).map((ref) => ({ clave: ref, ref })));
   const [procesando, setProcesando] = useState(false);
+  // Fotos de un solo uso que cambian: { noche|hoja|fruto: Blob (nueva) | null (quitar) }.
+  const [unicas, setUnicas] = useState(() => unicasIniciales ?? {});
+  const [procesandoUnica, setProcesandoUnica] = useState(null);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState(null);
 
@@ -32,7 +122,21 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
   useEffect(() => () => Object.values(previas).forEach((u) => URL.revokeObjectURL(u)), [previas]);
 
   const base = iniciales ? iniciales.map((f) => f.ref) : listaImagenes(planta);
-  const cambios = fotos.length !== base.length || fotos.some((f, i) => f.archivo || f.ref !== base[i]);
+  const cambios = fotos.length !== base.length || fotos.some((f, i) => f.archivo || f.ref !== base[i])
+    || Object.keys(unicas).length > 0;
+
+  async function ponerUnica(clave, archivo) {
+    setProcesandoUnica(clave);
+    const blob = await comprimirFoto(archivo);
+    setUnicas((prev) => ({ ...prev, [clave]: blob }));
+    setProcesandoUnica(null);
+  }
+  const quitarUnica = (clave) => setUnicas((prev) => ({ ...prev, [clave]: null }));
+  const deshacerUnica = (clave) => setUnicas((prev) => {
+    const resto = { ...prev };
+    delete resto[clave];
+    return resto;
+  });
 
   async function agregar(e) {
     const archivos = [...(e.target.files || [])];
@@ -60,7 +164,7 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
     const nuevas = fotos.filter((f) => f.archivo);
     const orden = fotos.map((f) => (f.archivo ? `nueva:${nuevas.indexOf(f)}` : f.ref));
     try {
-      await onGuardar(orden, nuevas.map((f) => f.archivo));
+      await onGuardar(orden, nuevas.map((f) => f.archivo), unicas);
     } catch (e) {
       if (!e.cancelado) setError(e.sinRed ? 'Sin conexión. Las fotos de especies solo se guardan con internet.' : e.message);
       setEnviando(false);
@@ -127,6 +231,23 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
           </label>
         </div>
 
+        <h3 className="fotos-unicas-titulo">Fotos con un lugar fijo</h3>
+        <p className="form-ayuda">Cada una va en un solo sitio de la app, no en el carrusel.</p>
+        <div className="fotos-unicas">
+          {UNICAS.map(({ clave, campo, ...textos }) => (
+            <FotoUnica
+              key={clave}
+              {...textos}
+              actual={planta[campo] || ''}
+              nueva={unicas[clave]}
+              procesando={procesandoUnica === clave}
+              onArchivo={(archivo) => ponerUnica(clave, archivo)}
+              onQuitar={() => quitarUnica(clave)}
+              onDeshacer={() => deshacerUnica(clave)}
+            />
+          ))}
+        </div>
+
         {!enLinea && (
           <p className="form-ayuda" role="status">
             Sin conexión: los cambios de fotos se guardan en este dispositivo y se envían cuando vuelva
@@ -137,7 +258,7 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
 
         <footer className="form-acciones">
           <Boton variante="ghost" onClick={onClose} disabled={enviando}>Cancelar</Boton>
-          <Boton variante="primary" onClick={guardar} disabled={enviando || procesando || !cambios}>
+          <Boton variante="primary" onClick={guardar} disabled={enviando || procesando || Boolean(procesandoUnica) || !cambios}>
             {enviando ? 'Guardando…' : (enLinea ? 'Guardar fotos' : 'Guardar en este dispositivo')}
           </Boton>
         </footer>
@@ -157,4 +278,6 @@ EditorFotosEspecie.propTypes = {
     ref: PropTypes.string,
     archivo: PropTypes.object,
   })),
+  /** Fotos de un solo uso del cambio guardado sin enviar: Blob (nueva) o null (quitar). */
+  unicasIniciales: PropTypes.objectOf(PropTypes.instanceOf(Blob)),
 };

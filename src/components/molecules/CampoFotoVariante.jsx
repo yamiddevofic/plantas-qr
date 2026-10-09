@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { LuCamera, LuImage, LuMonitor, LuSmartphone } from 'react-icons/lu';
+import { LuCamera, LuImage, LuMonitor, LuMoon, LuSmartphone } from 'react-icons/lu';
 import { FORMATOS } from '../../offline/fotos';
 
 const TEXTOS = {
   movil: { titulo: 'Móvil', ayuda: 'Vertical · imagen principal en celulares', Icono: LuSmartphone },
   escritorio: { titulo: 'Escritorio', ayuda: 'Horizontal · imagen grande en computadores', Icono: LuMonitor },
+  noche: { titulo: 'Noche', ayuda: 'Vertical · miniatura de la galería en modo noche', Icono: LuMoon },
 };
 
 /**
- * Una de las dos fotos del individuo (móvil 4:5 o escritorio 16:9): vista previa
+ * Una de las fotos del individuo (móvil 4:5, escritorio 16:9 o noche 4:5): vista previa
  * en su proporción real, tomar con la cámara encuadrada o elegir de la galería
  * (se recorta al centro). `pedirCamaraSistema` es un contador: cada vez que
  * cambia abre la cámara del sistema, para cuando la de la página no está disponible.
@@ -87,7 +88,7 @@ export default function CampoFotoVariante({
 }
 
 CampoFotoVariante.propTypes = {
-  variante: PropTypes.oneOf(['movil', 'escritorio']).isRequired,
+  variante: PropTypes.oneOf(['movil', 'escritorio', 'noche']).isRequired,
   /** URL de la foto ya guardada en el servidor. */
   actual: PropTypes.string,
   /** Foto nueva aún sin guardar. */

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { LuChevronLeft, LuChevronRight, LuMapPin, LuX } from 'react-icons/lu';
 import { IconoArbol } from '../atoms/IconosInicio';
+import { useTema } from '../../tema.js';
 
 const numero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 });
 
@@ -124,6 +125,9 @@ const reducirMovimiento = () => window.matchMedia?.('(prefers-reduced-motion: re
  * sin foto va directo a su punto del mapa.
  */
 export default function GaleriaIndividuos({ individuos, seleccionado = null, onVer }) {
+  // En modo noche la miniatura usa la foto de noche si el árbol la tiene; la foto
+  // grande del visor sigue siendo la de día.
+  const deNoche = useTema().tema === 'oscuro';
   const conFoto = individuos.filter((f) => f.properties.imagen);
   const [visor, setVisor] = useState(null);
   const pistaRef = useRef(null);
@@ -212,7 +216,7 @@ export default function GaleriaIndividuos({ individuos, seleccionado = null, onV
         aria-label="Fotos de los individuos"
       >
         {individuos.map((feature, i) => {
-          const { id, codigoArbol, imagen } = feature.properties;
+          const { id, codigoArbol, imagen, imagenNoche } = feature.properties;
           const info = detalle(feature.properties);
           return (
             <li key={id} style={{ '--i': i }}>
@@ -224,7 +228,7 @@ export default function GaleriaIndividuos({ individuos, seleccionado = null, onV
                 onClick={() => abrir(feature)}
               >
                 <span className="galeria-individuo-foto">
-                  <Miniatura src={imagen} codigo={codigoArbol} />
+                  <Miniatura src={(deNoche && imagenNoche) || imagen} codigo={codigoArbol} />
                 </span>
                 <span className="galeria-individuo-pie">
                   <strong>{codigoArbol}</strong>

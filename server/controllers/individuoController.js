@@ -58,6 +58,7 @@ function aFeature(individuo) {
       precisionGpsM: individuo.precisionGpsM ?? null,
       imagen: imagenPublica(individuo),
       imagenEscritorio: individuo.imagenEscritorio || '',
+      imagenNoche: individuo.imagenNoche || '',
       especie: individuo.especieId,
     },
   };
@@ -249,14 +250,16 @@ export const eliminarIndividuo = async (req, res) => {
 };
 
 // Cada variante tiene su campo y su tamaño máximo: la vertical (móvil, 4:5)
-// hasta 1600 px de alto y la horizontal (escritorio, 16:9) hasta 2560 de ancho.
+// hasta 1600 px de alto, la horizontal (escritorio, 16:9) hasta 2560 de ancho y
+// la de noche (vertical, solo para la miniatura en modo noche) como la móvil.
 const VARIANTES_FOTO = {
   movil: { campo: 'foto', url: 'imagen', lado: 1600 },
   escritorio: { campo: 'fotoEscritorio', url: 'imagenEscritorio', lado: 2560 },
+  noche: { campo: 'fotoNoche', url: 'imagenNoche', lado: 1600 },
 };
 const CALIDAD_FOTO = 80;
 
-const varianteFoto = (req) => (req.query.variante === 'escritorio' ? 'escritorio' : 'movil');
+const varianteFoto = (req) => (Object.hasOwn(VARIANTES_FOTO, req.query.variante) ? req.query.variante : 'movil');
 
 export const subirFotoIndividuo = async (req, res) => {
   try {
@@ -280,7 +283,7 @@ export const subirFotoIndividuo = async (req, res) => {
     }
 
     const actualizada = new Date();
-    const consulta = variante === 'escritorio' ? 'variante=escritorio&' : '';
+    const consulta = variante === 'movil' ? '' : `variante=${variante}&`;
     const imagen = `/api/individuos/${req.params.id}/foto?${consulta}v=${actualizada.getTime()}`;
     const individuo = await Individuo.findByIdAndUpdate(
       req.params.id,

@@ -21,7 +21,7 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
   const {
     nombre, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion,
     estadoConservacionDetalle, nombresAlternos, caracteristicas, habitat, datosCuriosos,
-    cuidados, especiesSimilares,
+    cuidados, especiesSimilares, imagenHoja, imagenFruto,
   } = planta;
   // Las fichas de las notas de campo traen los usos como frases; las antiguas,
   // como etiquetas cortas separadas por comas.
@@ -31,12 +31,13 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
   const alternos = nombresAlternos ?? [];
   const similares = especiesSimilares ?? [];
   const curiosos = datosCuriosos ?? [];
+  // La hoja y el fruto pueden tener su foto (se cargan en «Fotos» de la especie).
   const rasgos = [
-    { Icono: IconoHoja, etiqueta: 'Hojas', texto: descripcion?.hojas },
+    { Icono: IconoHoja, etiqueta: 'Hojas', texto: descripcion?.hojas, foto: imagenHoja },
     { Icono: IconoFlor, etiqueta: 'Flores', texto: caracteristicas?.flores },
-    { Icono: IconoFruto, etiqueta: 'Frutos', texto: caracteristicas?.frutos },
+    { Icono: IconoFruto, etiqueta: 'Frutos', texto: caracteristicas?.frutos, foto: imagenFruto },
     { Icono: IconoArbol, etiqueta: 'Tronco', texto: caracteristicas?.tronco },
-  ].filter((r) => r.texto);
+  ].filter((r) => r.texto || r.foto);
   const clima = [
     { Icono: IconoGlobo, etiqueta: 'Distribución', texto: habitat?.distribucion },
     { Icono: IconoRegla, etiqueta: 'Altitud', texto: habitat?.altitud },
@@ -70,10 +71,22 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
                 <ul>{alternos.map((a) => <li key={a}>{a}</li>)}</ul>
               </div>
             )}
-            {rasgos.map(({ Icono, etiqueta, texto }) => (
+            {rasgos.map(({ Icono, etiqueta, texto, foto }) => (
               <div key={etiqueta} className="detalle-hojas">
                 <Icono />
-                <p><strong>{etiqueta}.</strong> {texto}</p>
+                <div className="detalle-rasgo">
+                  <p><strong>{etiqueta}.</strong> {texto}</p>
+                  {foto && (
+                    <a className="detalle-rasgo-foto" href={foto} target="_blank" rel="noopener noreferrer">
+                      <img
+                        src={foto}
+                        alt={`${etiqueta === 'Hojas' ? 'Hoja' : 'Fruto'} de ${nombre.comun}`}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </a>
+                  )}
+                </div>
               </div>
             ))}
             {impacto && (
