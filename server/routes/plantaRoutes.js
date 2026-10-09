@@ -270,6 +270,7 @@ router.get('/:id', obtenerPlantaPorId);
  *               fotoTallo: { type: string, format: binary, description: Foto del tallo o tronco (ficha) }
  *               fotoFruto: { type: string, format: binary, description: Foto del fruto (ficha) }
  *               quitar: { type: string, description: 'Lista JSON de fotos únicas a quitar: noche, hoja, tallo o fruto' }
+ *               creditos: { type: string, description: 'JSON { hoja|tallo|fruto: { texto, enlace } } con la fuente de fotos que no son propias; texto vacío lo quita. enlace debe ser https.' }
  *               password: { type: string }
  *     responses:
  *       200: { description: Especie actualizada }

@@ -92,9 +92,49 @@ export const FOTOS_UNICAS = [
   { clave: 'fruto', campo: 'imagenFruto', archivo: 'fotoFruto' },
 ];
 
-/** Estas fotos solo cambian desde «Fotos»: crear o editar los datos no las toca. */
+/** Fotos fijas que pueden llevar crédito (las que se muestran en la ficha). */
+export const CON_CREDITO = ['hoja', 'tallo', 'fruto'];
+
+/** Estas fotos (y sus créditos) solo cambian desde «Fotos»: crear o editar los datos no las toca. */
 function quitarFotosUnicas(datos) {
   for (const { campo } of FOTOS_UNICAS) delete datos[campo];
+  delete datos.creditos;
+}
+
+/**
+ * Lee `creditos` (JSON: { hoja|tallo|fruto: { texto, enlace } }) y lo valida.
+ * Devuelve { creditos } con solo las claves enviadas (null = sin crédito) o { error }.
+ */
+export function leerCreditos(crudo) {
+  if (crudo === undefined || crudo === '') return { creditos: {} };
+  let datos;
+  try {
+    datos = typeof crudo === 'string' ? JSON.parse(crudo) : crudo;
+  } catch {
+    return { error: 'creditos debe ser un objeto JSON' };
+  }
+  if (!datos || typeof datos !== 'object' || Array.isArray(datos)) return { error: 'creditos debe ser un objeto JSON' };
+  const creditos = {};
+  for (const clave of CON_CREDITO) {
+    if (!(clave in datos)) continue;
+    const texto = String(datos[clave]?.texto ?? '').trim();
+    const enlace = String(datos[clave]?.enlace ?? '').trim();
+    if (texto.length > 160) return { error: 'La fuente de la foto admite hasta 160 caracteres' };
+    if (enlace) {
+      let url;
+      try {
+        url = new URL(enlace);
+      } catch {
+        url = null;
+      }
+      if (url?.protocol !== 'https:' || enlace.length > 500) {
+        return { error: 'El enlace de la fuente debe ser una dirección https://' };
+      }
+    }
+    if (enlace && !texto) return { error: 'Escribe la fuente o el autor de la foto, no solo el enlace' };
+    creditos[clave] = texto ? { texto, ...(enlace ? { enlace } : {}) } : null;
+  }
+  return { creditos };
 }
 
 export const crearPlanta = async (req, res) => {
@@ -277,6 +317,9 @@ export const actualizarFotosPlanta = async (req, res) => {
       orden = null;
     }
     if (!Array.isArray(orden)) return res.status(400).json({ mensaje: 'orden debe ser una lista JSON' });
+    // Se valida antes de guardar fotos: un crédito mal escrito no deja imágenes sueltas.
+    const { creditos, error: errorCreditos } = leerCreditos(req.body?.creditos);
+    if (errorCreditos) return res.status(400).json({ mensaje: errorCreditos });
 
     const actuales = [planta.imagen, ...(planta.imagenes || [])].filter(Boolean);
     const subidas = req.files?.fotos || [];
@@ -312,6 +355,13 @@ export const actualizarFotosPlanta = async (req, res) => {
       if (!subida && !quitar.includes(clave)) continue;
       if (planta[campo]) reemplazadas.push(planta[campo]);
       planta[campo] = subida ? (await guardarImagenes([subida]))[0] : '';
+    }
+
+    // Créditos: los enviados se aplican; una foto que ya no está se queda sin crédito.
+    for (const clave of CON_CREDITO) {
+      const { campo } = FOTOS_UNICAS.find((f) => f.clave === clave);
+      if (clave in creditos) planta.set(`creditos.${clave}`, creditos[clave] ?? undefined);
+      if (!planta[campo]) planta.set(`creditos.${clave}`, undefined);
     }
 
     await planta.save();

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuCamera, LuCherry, LuImage, LuLeaf, LuMoon, LuStar, LuTrash2, LuTreeDeciduous, LuUndo2, LuX } from 'react-icons/lu';
+import { LuCamera, LuCherry, LuImage, LuLeaf, LuLink, LuMoon, LuStar, LuTrash2, LuTreeDeciduous, LuUndo2, LuX } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
 import { listaImagenes } from '../../constantes';
 import { comprimirFoto } from '../../offline/fotos';
@@ -15,17 +15,99 @@ let contador = 0;
    guardar (cada sitio las encuadra con object-fit). */
 const UNICAS = [
   { clave: 'noche', campo: 'imagenNoche', titulo: 'Noche', Icono: LuMoon, ayuda: 'Portada en la galería en modo noche.' },
-  { clave: 'hoja', campo: 'imagenHoja', titulo: 'Hoja', Icono: LuLeaf, ayuda: 'En la ficha, junto a las hojas.' },
-  { clave: 'tallo', campo: 'imagenTallo', titulo: 'Tallo', Icono: LuTreeDeciduous, ayuda: 'En la ficha, junto al tronco.' },
-  { clave: 'fruto', campo: 'imagenFruto', titulo: 'Fruto', Icono: LuCherry, ayuda: 'En la ficha, junto a los frutos.' },
+  { clave: 'hoja', campo: 'imagenHoja', titulo: 'Hoja', Icono: LuLeaf, ayuda: 'En la ficha, junto a las hojas.', conCredito: true },
+  { clave: 'tallo', campo: 'imagenTallo', titulo: 'Tallo', Icono: LuTreeDeciduous, ayuda: 'En la ficha, junto al tronco.', conCredito: true },
+  { clave: 'fruto', campo: 'imagenFruto', titulo: 'Fruto', Icono: LuCherry, ayuda: 'En la ficha, junto a los frutos.', conCredito: true },
 ];
+
+/** Fotos que llevan crédito: las de la ficha (pueden venir de internet). */
+const CON_CREDITO = UNICAS.filter((u) => u.conCredito).map((u) => u.clave);
+
+/** { hoja|tallo|fruto: { texto, enlace } } siempre completo, para editar y comparar. */
+function normalizarCreditos(creditos) {
+  return Object.fromEntries(CON_CREDITO.map((clave) => [clave, {
+    texto: creditos?.[clave]?.texto ?? '',
+    enlace: creditos?.[clave]?.enlace ?? '',
+  }]));
+}
+
+/** Mismo criterio que el servidor: el enlace, si va, es https:// y necesita la fuente escrita. */
+function errorDeCredito({ texto, enlace }) {
+  const t = texto.trim();
+  const e = enlace.trim();
+  if (!e) return null;
+  let url = null;
+  try {
+    url = new URL(e);
+  } catch {
+    // no es una URL
+  }
+  if (url?.protocol !== 'https:') return 'El enlace debe empezar por https://';
+  if (!t) return 'Escribe también la fuente o el autor.';
+  return null;
+}
+
+/**
+ * Fuente de una foto que no es del proyecto: quién la tomó o de dónde salió (con
+ * su licencia si la tiene) y el enlace a la original. Plegada si está vacía.
+ */
+function FuenteFoto({ titulo, credito, onCambiar }) {
+  const id = useId();
+  const [abierta, setAbierta] = useState(Boolean(credito.texto || credito.enlace));
+  const error = errorDeCredito(credito);
+
+  if (!abierta) {
+    return (
+      <div className="casilla-foto-fuente">
+        <button type="button" className="casilla-foto-fuente-abrir" onClick={() => setAbierta(true)}>
+          <LuLink aria-hidden="true" />
+          Agregar fuente <span>(si no es propia)</span>
+        </button>
+      </div>
+    );
+  }
+  return (
+    <div className="casilla-foto-fuente" role="group" aria-label={`Fuente de la foto: ${titulo}`}>
+      <label className="casilla-foto-campo" htmlFor={`${id}-texto`}>Fuente o autor</label>
+      <input
+        id={`${id}-texto`}
+        type="text"
+        value={credito.texto}
+        maxLength={160}
+        placeholder="Ej.: Ana Gómez · iNaturalist · CC BY"
+        onChange={(e) => onCambiar({ ...credito, texto: e.target.value })}
+      />
+      <label className="casilla-foto-campo" htmlFor={`${id}-enlace`}>Enlace a la original <span>(opcional)</span></label>
+      <input
+        id={`${id}-enlace`}
+        type="url"
+        inputMode="url"
+        value={credito.enlace}
+        maxLength={500}
+        placeholder="https://…"
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? `${id}-error` : undefined}
+        onChange={(e) => onCambiar({ ...credito, enlace: e.target.value })}
+      />
+      {error && <p id={`${id}-error`} className="casilla-foto-fuente-error">{error}</p>}
+    </div>
+  );
+}
+
+FuenteFoto.propTypes = {
+  titulo: PropTypes.string.isRequired,
+  credito: PropTypes.shape({ texto: PropTypes.string, enlace: PropTypes.string }).isRequired,
+  onCambiar: PropTypes.func.isRequired,
+};
 
 /**
  * Una foto de un solo uso: tomarla con la cámara del celular, elegirla de la
  * galería, quitarla o deshacer el cambio. `nueva` es un Blob (sin guardar), null
  * (se quitará al guardar) o undefined (sin cambios: se ve `actual`).
  */
-function FotoUnica({ titulo, ayuda, Icono, actual, nueva, procesando, onArchivo, onQuitar, onDeshacer }) {
+function FotoUnica({
+  titulo, ayuda, Icono, actual, nueva, procesando, credito = null, onCredito, onArchivo, onQuitar, onDeshacer,
+}) {
   const previa = useMemo(() => (nueva ? URL.createObjectURL(nueva) : ''), [nueva]);
   useEffect(() => () => { if (previa) URL.revokeObjectURL(previa); }, [previa]);
   const cambio = nueva !== undefined;
@@ -61,6 +143,10 @@ function FotoUnica({ titulo, ayuda, Icono, actual, nueva, procesando, onArchivo,
       alt={`${titulo}: foto ${previa ? 'nueva' : 'actual'}`}
       estado={nueva ? 'nueva' : nueva === null ? 'quitar' : null}
       esquina={esquina}
+      // La fuente solo tiene sentido si hay foto (y no se va a quitar).
+      pie={credito && nueva !== null && (previa || actual)
+        ? <FuenteFoto titulo={titulo} credito={credito} onCambiar={onCredito} />
+        : null}
     >
       <label className={`casilla-foto-boton es-principal${procesando ? ' inactivo' : ''}`}>
         <LuCamera aria-hidden="true" />
@@ -83,6 +169,9 @@ FotoUnica.propTypes = {
   actual: PropTypes.string,
   nueva: PropTypes.instanceOf(Blob),
   procesando: PropTypes.bool,
+  /** Fuente de la foto (solo hoja, tallo y fruto). */
+  credito: PropTypes.shape({ texto: PropTypes.string, enlace: PropTypes.string }),
+  onCredito: PropTypes.func,
   onArchivo: PropTypes.func.isRequired,
   onQuitar: PropTypes.func.isRequired,
   onDeshacer: PropTypes.func.isRequired,
@@ -96,7 +185,9 @@ FotoUnica.propTypes = {
  * `iniciales` (opcional) arranca el editor desde un cambio ya guardado sin enviar:
  * lista de { clave, ref } (foto que ya tenía) o { clave, archivo } (foto nueva).
  */
-export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar, iniciales = null, unicasIniciales = null }) {
+export default function EditorFotosEspecie({
+  planta, enLinea, onClose, onGuardar, iniciales = null, unicasIniciales = null, creditosIniciales = null,
+}) {
   const dialogoRef = useModal(onClose);
   // Cada elemento: { clave, ref } para fotos que ya tenía o { clave, archivo } para nuevas.
   const [fotos, setFotos] = useState(() => iniciales ?? listaImagenes(planta).map((ref) => ({ clave: ref, ref })));
@@ -104,6 +195,8 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
   // Fotos de un solo uso que cambian: { noche|hoja|tallo|fruto: Blob (nueva) | null (quitar) }.
   const [unicas, setUnicas] = useState(() => unicasIniciales ?? {});
   const [procesandoUnica, setProcesandoUnica] = useState(null);
+  // Fuente de las fotos de hoja, tallo y fruto.
+  const [creditos, setCreditos] = useState(() => normalizarCreditos(creditosIniciales ?? planta.creditos));
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState(null);
 
@@ -115,8 +208,11 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
   useEffect(() => () => Object.values(previas).forEach((u) => URL.revokeObjectURL(u)), [previas]);
 
   const base = iniciales ? iniciales.map((f) => f.ref) : listaImagenes(planta);
+  // Al seguir un cambio guardado sin enviar, los créditos se vuelven a mandar siempre.
+  const cambiaCreditos = Boolean(creditosIniciales)
+    || JSON.stringify(creditos) !== JSON.stringify(normalizarCreditos(planta.creditos));
   const cambios = fotos.length !== base.length || fotos.some((f, i) => f.archivo || f.ref !== base[i])
-    || Object.keys(unicas).length > 0;
+    || Object.keys(unicas).length > 0 || cambiaCreditos;
 
   async function ponerUnica(clave, archivo) {
     setProcesandoUnica(clave);
@@ -153,11 +249,20 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
 
   async function guardar() {
     setError(null);
+    const invalido = CON_CREDITO.find((clave) => errorDeCredito(creditos[clave]));
+    if (invalido) {
+      setError(`Revisa la fuente de la foto de ${invalido}: ${errorDeCredito(creditos[invalido])}`);
+      return;
+    }
     setEnviando(true);
     const nuevas = fotos.filter((f) => f.archivo);
     const orden = fotos.map((f) => (f.archivo ? `nueva:${nuevas.indexOf(f)}` : f.ref));
     try {
-      await onGuardar(orden, nuevas.map((f) => f.archivo), unicas);
+      const limpios = Object.fromEntries(CON_CREDITO.map((clave) => [clave, {
+        texto: creditos[clave].texto.trim(),
+        enlace: creditos[clave].enlace.trim(),
+      }]));
+      await onGuardar(orden, nuevas.map((f) => f.archivo), unicas, cambiaCreditos ? limpios : null);
     } catch (e) {
       if (!e.cancelado) setError(e.sinRed ? 'Sin conexión. Las fotos de especies solo se guardan con internet.' : e.message);
       setEnviando(false);
@@ -249,14 +354,19 @@ export default function EditorFotosEspecie({ planta, enLinea, onClose, onGuardar
           <div className="fotos-seccion-cabecera">
             <div>
               <h3 id="fotos-fijas-titulo" className="fotos-seccion-titulo">Fotos con un lugar fijo</h3>
-              <p className="fotos-seccion-ayuda">Cada una se ve en un solo sitio y no entra al carrusel.</p>
+              <p className="fotos-seccion-ayuda">
+                Cada una se ve en un solo sitio y no entra al carrusel. Si una foto no es del
+                proyecto (por ejemplo, de internet), anota su fuente: se muestra en la ficha.
+              </p>
             </div>
           </div>
           <div className="fotos-fijas">
-            {UNICAS.map(({ clave, campo, ...textos }) => (
+            {UNICAS.map(({ clave, campo, conCredito, ...textos }) => (
               <FotoUnica
                 key={clave}
                 {...textos}
+                credito={conCredito ? creditos[clave] : null}
+                onCredito={(valor) => setCreditos((prev) => ({ ...prev, [clave]: valor }))}
                 actual={planta[campo] || ''}
                 nueva={unicas[clave]}
                 procesando={procesandoUnica === clave}
@@ -300,4 +410,6 @@ EditorFotosEspecie.propTypes = {
   })),
   /** Fotos de un solo uso del cambio guardado sin enviar: Blob (nueva) o null (quitar). */
   unicasIniciales: PropTypes.objectOf(PropTypes.instanceOf(Blob)),
+  /** Créditos del cambio guardado sin enviar. */
+  creditosIniciales: PropTypes.object,
 };

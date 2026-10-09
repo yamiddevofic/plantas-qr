@@ -409,11 +409,30 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
   margin: 0;
 }
 
-/* Foto de la hoja o del fruto: cuadrada, se abre en grande al tocarla. */
+/* Foto de la hoja, el tallo o el fruto: cuadrada, se abre en grande al tocarla.
+   Debajo, si no es del proyecto, su fuente. */
+.detalle-rasgo-figura {
+  width: min(220px, 100%);
+  margin: 12px 0 0;
+}
+
+.detalle-rasgo-credito {
+  margin-top: 6px;
+  color: var(--ink-500);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.detalle-rasgo-credito a {
+  color: var(--forest-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .detalle-rasgo-foto {
   display: block;
-  width: min(220px, 100%);
-  margin-top: 12px;
+  width: 100%;
   overflow: hidden;
   border-radius: 14px;
   border: 1px solid var(--line-100);

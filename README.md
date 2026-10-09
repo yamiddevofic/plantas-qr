@@ -18,7 +18,7 @@ Proyecto desarrollado como trabajo de formación SENA.
 - **Gestión de códigos QR** — generar/regenerar por especie, **regenerar todos** en un clic, descargar como PNG y eliminar especies desde las tarjetas.
 - **Catálogo gestionable desde la UI** — crear, editar y eliminar especies desde un modal de formulario; soporta **múltiples imágenes por especie** (galería y carrusel en la ficha).
 - **Fotos de día y de noche** — cada especie puede tener una portada de noche y cada árbol una foto de noche (vertical 4:5); en modo oscuro las usan solo las vistas previas (tarjetas del catálogo y miniaturas de la galería de árboles). Lo demás muestra la foto de día.
-- **Foto de la hoja, del tallo y del fruto** — se cargan en «Fotos» de cada especie (con la cámara del celular o desde la galería, comprimidas antes de subir) y aparecen en la ficha junto a su descripción. Gestión de especies indica qué fotos fijas faltan por tomar.
+- **Foto de la hoja, del tallo y del fruto** — se cargan en «Fotos» de cada especie (con la cámara del celular o desde la galería, comprimidas antes de subir) y aparecen en la ficha junto a su descripción. Gestión de especies indica qué fotos fijas faltan por tomar. Si una de estas fotos no es del proyecto (por ejemplo, de internet), se anota su **fuente** (autor, sitio, licencia y enlace https a la original) y la ficha la muestra debajo de la foto.
 - **Modo claro/oscuro** — tema persistente en `localStorage`, con menú lateral de navegación.
 - **Imágenes optimizadas** — las subidas se convierten a **WebP** (máx. 1600px, calidad 80) con `sharp`, y se sirven con caché inmutable.
 - **Acceso administrativo con contraseña** — las acciones sensibles (crear/editar plantas, generar QRs) requieren `ADMIN_PASSWORD`.

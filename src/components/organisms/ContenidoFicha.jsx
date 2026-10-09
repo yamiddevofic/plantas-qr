@@ -21,7 +21,7 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
   const {
     nombre, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion,
     estadoConservacionDetalle, nombresAlternos, caracteristicas, habitat, datosCuriosos,
-    cuidados, especiesSimilares, imagenHoja, imagenTallo, imagenFruto,
+    cuidados, especiesSimilares, imagenHoja, imagenTallo, imagenFruto, creditos,
   } = planta;
   // Las fichas de las notas de campo traen los usos como frases; las antiguas,
   // como etiquetas cortas separadas por comas.
@@ -33,10 +33,10 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
   const curiosos = datosCuriosos ?? [];
   // La hoja, el tallo y el fruto pueden tener su foto (se cargan en «Fotos» de la especie).
   const rasgos = [
-    { Icono: IconoHoja, etiqueta: 'Hojas', texto: descripcion?.hojas, foto: imagenHoja, alt: 'Hoja' },
+    { Icono: IconoHoja, etiqueta: 'Hojas', texto: descripcion?.hojas, foto: imagenHoja, alt: 'Hoja', credito: creditos?.hoja },
     { Icono: IconoFlor, etiqueta: 'Flores', texto: caracteristicas?.flores },
-    { Icono: IconoFruto, etiqueta: 'Frutos', texto: caracteristicas?.frutos, foto: imagenFruto, alt: 'Fruto' },
-    { Icono: IconoArbol, etiqueta: 'Tronco', texto: caracteristicas?.tronco, foto: imagenTallo, alt: 'Tallo' },
+    { Icono: IconoFruto, etiqueta: 'Frutos', texto: caracteristicas?.frutos, foto: imagenFruto, alt: 'Fruto', credito: creditos?.fruto },
+    { Icono: IconoArbol, etiqueta: 'Tronco', texto: caracteristicas?.tronco, foto: imagenTallo, alt: 'Tallo', credito: creditos?.tallo },
   ].filter((r) => r.texto || r.foto);
   const clima = [
     { Icono: IconoGlobo, etiqueta: 'Distribución', texto: habitat?.distribucion },
@@ -71,20 +71,30 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
                 <ul>{alternos.map((a) => <li key={a}>{a}</li>)}</ul>
               </div>
             )}
-            {rasgos.map(({ Icono, etiqueta, texto, foto, alt }) => (
+            {rasgos.map(({ Icono, etiqueta, texto, foto, alt, credito }) => (
               <div key={etiqueta} className="detalle-hojas">
                 <Icono />
                 <div className="detalle-rasgo">
                   <p><strong>{etiqueta}.</strong> {texto}</p>
                   {foto && (
-                    <a className="detalle-rasgo-foto" href={foto} target="_blank" rel="noopener noreferrer">
-                      <img
-                        src={foto}
-                        alt={`${alt} de ${nombre.comun}`}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </a>
+                    <figure className="detalle-rasgo-figura">
+                      <a className="detalle-rasgo-foto" href={foto} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={foto}
+                          alt={`${alt} de ${nombre.comun}`}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </a>
+                      {credito?.texto && (
+                        <figcaption className="detalle-rasgo-credito">
+                          Foto:{' '}
+                          {credito.enlace
+                            ? <a href={credito.enlace} target="_blank" rel="noopener noreferrer">{credito.texto}</a>
+                            : credito.texto}
+                        </figcaption>
+                      )}
+                    </figure>
                   )}
                 </div>
               </div>

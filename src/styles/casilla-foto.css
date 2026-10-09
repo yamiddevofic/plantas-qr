@@ -265,6 +265,102 @@
   }
 }
 
+/* ── Fuente de la foto (hoja, tallo, fruto) ───────────────────── */
+
+.casilla-foto-fuente {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 10px 12px;
+  border-top: 1px solid var(--line-100);
+  background: var(--mint-50);
+}
+
+.casilla-foto-fuente-abrir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--forest-700);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.casilla-foto-fuente-abrir span {
+  color: var(--ink-500);
+  font-weight: 500;
+}
+
+.casilla-foto-fuente-abrir svg {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+}
+
+.casilla-foto-fuente-abrir:hover {
+  background: var(--mint-100);
+}
+
+.casilla-foto-fuente-abrir:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
+}
+
+.casilla-foto-campo {
+  margin-top: 4px;
+  color: var(--ink-700);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.casilla-foto-campo span {
+  color: var(--ink-500);
+  font-weight: 500;
+}
+
+.casilla-foto-fuente input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line-200);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+/* En pantallas táctiles, 16 px: con menos, el iPhone hace zoom al escribir. */
+@media (pointer: coarse) {
+  .casilla-foto-fuente input {
+    font-size: 16px;
+  }
+}
+
+.casilla-foto-fuente input:focus-visible {
+  border-color: var(--forest-600);
+  outline: 3px solid color-mix(in srgb, var(--leaf-500) 45%, transparent);
+  outline-offset: 0;
+}
+
+.casilla-foto-fuente input[aria-invalid='true'] {
+  border-color: var(--danger-700);
+}
+
+.casilla-foto-fuente-error {
+  margin: 2px 0 0;
+  color: var(--danger-700);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
 /* Cámara del sistema del individuo: solo se abre por código. */
 .foto-variante-sistema {
   position: absolute;
@@ -502,11 +598,25 @@
   }
 }
 
-/* Fotos de lugar fijo: dos por fila en celular, las cuatro en una fila en computador. */
+/* Fotos de lugar fijo: dos por fila en celular, las cuatro en una fila en computador.
+   No se estiran entre sí: abrir la fuente de una no empuja los botones de las otras. */
 .fotos-fijas {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 12px;
+}
+
+/* En celular, la casilla con la fuente abierta toma el ancho completo (los campos
+   no caben en media pantalla) y su foto se acorta para no ocupar toda la vista. */
+@media (max-width: 759px) {
+  .fotos-fijas .casilla-foto:has(.casilla-foto-fuente input) {
+    grid-column: 1 / -1;
+  }
+
+  .fotos-fijas .casilla-foto:has(.casilla-foto-fuente input) .casilla-foto-previa {
+    max-height: 200px;
+  }
 }
 
 @media (min-width: 760px) {

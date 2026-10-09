@@ -103,8 +103,10 @@ export const FOTOS_UNICAS = { noche: 'fotoNoche', hoja: 'fotoHoja', tallo: 'foto
  * `nueva:<n>` para la n-ésima de `fotos`; la primera queda como principal.
  * `unicas` cambia las fotos de un solo uso ({ noche, hoja, tallo, fruto }): un archivo
  * la reemplaza, `null` la quita y si falta la clave queda como estaba.
+ * `creditos` ({ hoja|tallo|fruto: { texto, enlace } }, opcional) fija la fuente de
+ * esas fotos; texto vacío la quita.
  */
-export function actualizarFotosPlanta(id, orden, fotos, password, unicas = {}) {
+export function actualizarFotosPlanta(id, orden, fotos, password, unicas = {}, creditos = null) {
   const fd = new FormData();
   fd.append('password', password);
   fd.append('orden', JSON.stringify(orden));
@@ -116,6 +118,7 @@ export function actualizarFotosPlanta(id, orden, fotos, password, unicas = {}) {
     else quitar.push(clave);
   }
   if (quitar.length) fd.append('quitar', JSON.stringify(quitar));
+  if (creditos) fd.append('creditos', JSON.stringify(creditos));
   return pedirIndividuo(`${BASE}/plantas/${encodeURIComponent(id)}/fotos`, { method: 'PUT', body: fd }, 'No se pudieron guardar las fotos');
 }
 

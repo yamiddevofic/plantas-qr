@@ -1,5 +1,15 @@
 import mongoose from 'mongoose';
 
+// Crédito de una foto que no es propia (p. ej. sacada de internet): quién la
+// tomó o de dónde salió, con su licencia, y el enlace a la original.
+const creditoSchema = new mongoose.Schema(
+  {
+    texto: { type: String, trim: true, maxlength: 160 },
+    enlace: { type: String, trim: true, maxlength: 500 },
+  },
+  { _id: false }
+);
+
 const plantaSchema = new mongoose.Schema(
   {
     nombre: {
@@ -39,6 +49,12 @@ const plantaSchema = new mongoose.Schema(
     imagenNoche: { type: String, trim: true, default: '' },
     imagenHoja: { type: String, trim: true, default: '' },
     imagenTallo: { type: String, trim: true, default: '' },
+    // Crédito de las fotos fijas de la ficha (solo si no son del proyecto).
+    creditos: {
+      hoja: { type: creditoSchema, default: undefined },
+      tallo: { type: creditoSchema, default: undefined },
+      fruto: { type: creditoSchema, default: undefined },
+    },
     imagenFruto: { type: String, trim: true, default: '' },
     ubicaciones: { type: [String], default: [] },
     // ── Datos ampliados (fichas importadas de las notas de campo) ──

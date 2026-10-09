@@ -155,7 +155,7 @@ export default function PaginaEspecies() {
     setAviso(null);
     const op = cola.find((o) => o.tipo === 'fotos' && o.id === planta._id);
     if (!op) {
-      setAbierto({ modo: 'fotos', planta, iniciales: null, unicasIniciales: null });
+      setAbierto({ modo: 'fotos', planta, iniciales: null, unicasIniciales: null, creditosIniciales: null });
       return;
     }
     const iniciales = [];
@@ -177,7 +177,7 @@ export default function PaginaEspecies() {
         if (blob) unicasIniciales[clave] = blob;
       }
     }
-    setAbierto({ modo: 'fotos', planta, iniciales, unicasIniciales });
+    setAbierto({ modo: 'fotos', planta, iniciales, unicasIniciales, creditosIniciales: op.creditos ?? null });
   };
 
   const soltarFotosPendientes = (id) => {
@@ -187,7 +187,8 @@ export default function PaginaEspecies() {
   // ── Fotos ──────────────────────────────────────────────────────
 
   // `unicas`: fotos de un solo uso que cambian ({ noche|hoja|tallo|fruto: Blob | null }).
-  const guardarFotos = useCallback(async (orden, archivos, unicas = {}) => {
+  // `creditos`: fuente de las fotos de hoja, tallo y fruto (null si no cambió).
+  const guardarFotos = useCallback(async (orden, archivos, unicas = {}, creditos = null) => {
     const { planta } = abierto;
     const nombre = planta.nombre.comun;
 
@@ -201,7 +202,7 @@ export default function PaginaEspecies() {
         if (blob) await guardarFoto(claveFotoUnica(planta._id, clave), blob);
         acciones[clave] = blob ? 'nueva' : 'quitar';
       }
-      setCola((c) => encolarFotos(c, planta._id, nombre, orden, archivos.length, acciones));
+      setCola((c) => encolarFotos(c, planta._id, nombre, orden, archivos.length, acciones, creditos));
       setAviso({ tipo: 'ok', texto: `Fotos de ${nombre} guardadas en este dispositivo; se enviarán cuando haya conexión.` });
       setAbierto(null);
     };
@@ -213,7 +214,7 @@ export default function PaginaEspecies() {
     let actualizada;
     try {
       actualizada = await ejecutar(
-        (password) => actualizarFotosPlanta(planta._id, orden, archivos, password, unicas),
+        (password) => actualizarFotosPlanta(planta._id, orden, archivos, password, unicas, creditos),
         `Para guardar las fotos de ${nombre} necesitas la contraseña de administrador.`,
       );
     } catch (e) {
@@ -346,7 +347,7 @@ export default function PaginaEspecies() {
                 if (!blob) throw new Error('Falta una foto guardada en este dispositivo.');
                 unicas[clave] = blob;
               }
-              reemplazar(await actualizarFotosPlanta(op.id, op.orden, archivos, password, unicas));
+              reemplazar(await actualizarFotosPlanta(op.id, op.orden, archivos, password, unicas, op.creditos ?? null));
               restante = descartarOperacion(restante, op);
             } else {
               await eliminarPlanta(op.id, password);
@@ -439,6 +440,7 @@ export default function PaginaEspecies() {
               planta={abierto.planta}
               iniciales={abierto.iniciales}
               unicasIniciales={abierto.unicasIniciales}
+              creditosIniciales={abierto.creditosIniciales}
               enLinea={enLinea}
               onClose={() => setAbierto(null)}
               onGuardar={guardarFotos}

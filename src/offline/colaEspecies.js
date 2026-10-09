@@ -15,6 +15,7 @@
 //               las `nuevas` fotos están en IndexedDB con claveFotoEspecie(id, n).
 //               `unicas` (opcional) cambia las fotos de un solo uso: { noche, hoja,
 //               tallo, fruto } con 'nueva' (en IndexedDB, claveFotoUnica(id, clave)) o 'quitar'.
+//               `creditos` (opcional) es la fuente de las fotos de hoja, tallo y fruto.
 //   - eliminar: borra la especie del servidor.
 //   - `error` marca una operación que el servidor rechazó (409, 400…) para mostrarla.
 
@@ -97,8 +98,12 @@ export function encolarEditar(cola, id, datos, foto) {
  * Fotos de una especie ya existente; solo vale la última lista guardada.
  * `unicas`: { noche|hoja|tallo|fruto: 'nueva' | 'quitar' } (las que no cambian no van).
  */
-export function encolarFotos(cola, id, nombre, orden, nuevas, unicas = {}) {
-  const op = { tipo: 'fotos', id, nombre, orden, nuevas, ...(Object.keys(unicas).length ? { unicas } : {}) };
+export function encolarFotos(cola, id, nombre, orden, nuevas, unicas = {}, creditos = null) {
+  const op = {
+    tipo: 'fotos', id, nombre, orden, nuevas,
+    ...(Object.keys(unicas).length ? { unicas } : {}),
+    ...(creditos ? { creditos } : {}),
+  };
   return [...cola.filter((o) => !(o.id === id && o.tipo === 'fotos')), op];
 }
 
@@ -162,7 +167,8 @@ function fotosDeOperacion(op, locales) {
   for (const [clave, accion] of Object.entries(op.unicas ?? {})) {
     unicas[CAMPOS_UNICAS[clave]] = accion === 'nueva' ? locales[claveFotoUnica(op.id, clave)] ?? '' : '';
   }
-  return { imagen: lista[0] ?? '', imagenes: lista.slice(1), ...unicas };
+  const creditos = op.creditos ? { creditos: op.creditos } : {};
+  return { imagen: lista[0] ?? '', imagenes: lista.slice(1), ...unicas, ...creditos };
 }
 
 /**

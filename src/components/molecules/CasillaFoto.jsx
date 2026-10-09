@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
  * se ve atenuada para que se sepa cuál se va).
  */
 export default function CasillaFoto({
-  titulo, Icono, formato = '', ayuda = '', proporcion, imagen = '', alt, estado = null, esquina = null, clase = '', children,
+  titulo, Icono, formato = '', ayuda = '', proporcion, imagen = '', alt, estado = null, esquina = null, clase = '', pie = null, children,
 }) {
   return (
     <div className={`casilla-foto ${clase}`.trim()}>
@@ -37,6 +37,7 @@ export default function CasillaFoto({
         {ayuda && <p className="casilla-foto-ayuda">{ayuda}</p>}
       </div>
       <div className="casilla-foto-acciones">{children}</div>
+      {pie}
     </div>
   );
 }
@@ -55,6 +56,8 @@ CasillaFoto.propTypes = {
   /** Botón redondo sobre la esquina de la foto (quitar, deshacer). */
   esquina: PropTypes.node,
   clase: PropTypes.string,
+  /** Contenido bajo los botones (p. ej. la fuente de la foto). */
+  pie: PropTypes.node,
   /** Botones de abajo: usar las clases casilla-foto-boton. */
   children: PropTypes.node,
 };
