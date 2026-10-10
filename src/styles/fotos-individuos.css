@@ -77,7 +77,11 @@
 }
 
 .galeria-individuos-pista > li {
+  /* min-width: 0 evita que un texto largo ensanche su tarjeta; con display:flex
+     la tarjeta ocupa todo el alto de la fila: todas quedan del mismo tamaño. */
+  display: flex;
   flex: 0 0 68%;
+  min-width: 0;
   scroll-snap-align: start;
 }
 
@@ -145,6 +149,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 0;
+  height: 100%;
   padding: 0;
   overflow: hidden;
   border: 1px solid var(--line-100);
@@ -194,6 +200,21 @@
   font-weight: 600;
 }
 
+/* «14 árboles»: el punto agrupa varios. */
+.galeria-individuo-grupo {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  color: var(--forest-700);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(6px);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
 .galeria-individuo-vacia .icono-inicio {
   width: 32px;
   height: 32px;
@@ -201,6 +222,7 @@
 
 .galeria-individuo-pie {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 2px;
   padding: 10px 12px 12px;

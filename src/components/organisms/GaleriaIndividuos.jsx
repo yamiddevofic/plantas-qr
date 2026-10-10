@@ -218,7 +218,9 @@ export default function GaleriaIndividuos({ individuos, seleccionado = null, onV
       >
         {individuos.map((feature, i) => {
           const { id, codigoArbol, imagen, imagenNoche } = feature.properties;
-          const info = detalle(feature.properties);
+          // En la tarjeta el grupo va como etiqueta sobre la foto; abajo, solo altitud y GPS.
+          const info = detalle({ ...feature.properties, cantidad: 1 });
+          const cantidad = feature.properties.cantidad ?? 1;
           return (
             <li key={id} style={{ '--i': i }}>
               <button
@@ -230,6 +232,7 @@ export default function GaleriaIndividuos({ individuos, seleccionado = null, onV
               >
                 <span className="galeria-individuo-foto">
                   <Miniatura src={(deNoche && imagenNoche) || imagen} codigo={codigoArbol} />
+                  {cantidad > 1 && <span className="galeria-individuo-grupo">{cantidad} árboles</span>}
                 </span>
                 <span className="galeria-individuo-pie">
                   <strong>{codigoArbol}</strong>

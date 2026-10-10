@@ -23,22 +23,17 @@ import { generarQR, guardarVistaMapa } from '../../api';
 import { useTema } from '../../tema.js';
 import { SITIO } from '../../seo';
 
-// Fecha de la foto, que va en su URL (?v=<ms>); las antiguas sin fecha cuentan como primeras.
-const fechaFoto = (url) => Number(/[?&]v=(\d+)/.exec(url)?.[1] ?? 0);
-
-/** La primera foto tomada (la más antigua) entre los individuos, para ese campo. */
-function primeraFoto(coleccion, campo) {
-  const urls = (coleccion?.features ?? []).map((f) => f.properties[campo]).filter(Boolean);
-  return urls.sort((a, b) => fechaFoto(a) - fechaFoto(b))[0] ?? null;
-}
-
-export default function PlantillaDetalle({ cargando, error, planta, qr, coleccion = null, onQrGenerado, onVerEstados }) {
+export default function PlantillaDetalle({
+  cargando, error, planta, qr, coleccion = null, arbolId = null, onQrGenerado, onVerEstados,
+}) {
   const { nombre, imagen } = planta || {};
-  // El hero usa la primera foto tomada de los individuos: la vertical en móvil y
-  // la horizontal en escritorio. Sin ellas, las fotos del catálogo.
-  const fotoMovil = primeraFoto(coleccion, 'imagen');
-  const fotoEscritorio = primeraFoto(coleccion, 'imagenEscritorio');
-  const imagenes = fotoMovil ? [fotoMovil] : listaImagenes({ imagen, imagenes: planta?.imagenes });
+  // Portada: si se llegó desde un árbol del mapa general (?arbol=), su foto (la
+  // vertical en móvil y la horizontal en escritorio, si la tiene). Si no, o si ese
+  // árbol no tiene foto, las fotos de la especie con la «Principal» primero.
+  const arbol = arbolId ? coleccion?.features?.find((f) => f.properties.id === arbolId) : null;
+  const fotoArbol = arbol?.properties.imagen || null;
+  const fotoEscritorio = fotoArbol ? arbol.properties.imagenEscritorio || null : null;
+  const imagenes = fotoArbol ? [fotoArbol] : listaImagenes({ imagen, imagenes: planta?.imagenes });
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [descargando, setDescargando] = useState(false);
   const [errorQR, setErrorQR] = useState(null);

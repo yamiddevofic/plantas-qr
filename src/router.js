@@ -9,9 +9,11 @@ export function useHashRoute() {
     return () => window.removeEventListener('hashchange', onChange);
   }, []);
 
-  const match = hash.match(/^#\/planta\/([^/?]+)/);
+  // `?arbol=<id>`: se llegó desde un árbol del mapa general; la ficha usa su foto.
+  const match = hash.match(/^#\/planta\/([^/?]+)(?:\?(.*))?/);
   if (match) {
-    return { nombre: 'detalle', id: decodeURIComponent(match[1]) };
+    const arbol = new URLSearchParams(match[2] ?? '').get('arbol');
+    return { nombre: 'detalle', id: decodeURIComponent(match[1]), arbol: arbol || null };
   }
   // #/especies-fotos era la ruta anterior del módulo; se conserva por los enlaces guardados.
   if (hash.startsWith('#/especies')) {

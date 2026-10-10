@@ -210,7 +210,8 @@ export default function MapaIndividuos({ coleccion = null, nombreEspecie = '', g
     const feature = datos?.features?.find((f) => f.properties.id === id) ?? elegido;
     const coordenadas = feature.geometry.coordinates;
     const especie = feature.properties.especie;
-    const enlace = general && especie?._id ? `#/planta/${especie._id}` : null;
+    // Desde el mapa general la ficha abre con la foto de este árbol como portada.
+    const enlace = general && especie?._id ? `#/planta/${especie._id}?arbol=${encodeURIComponent(id)}` : null;
     const contenido = general
       ? contenidoPopupEspecie(feature.properties, especie, { enlace })
       : contenidoPopup(feature.properties, nombreEspecie, { enlace });

@@ -29,7 +29,7 @@ export default function App() {
 
   let pagina = <PaginaInicio />;
   if (route.nombre === 'detalle') {
-    pagina = <PaginaDetalle key={route.id} plantaId={route.id} />;
+    pagina = <PaginaDetalle key={route.id} plantaId={route.id} arbolId={route.arbol} />;
   } else if (route.nombre === 'galeria') {
     pagina = <PaginaGaleria />;
   } else if (route.nombre === 'especies') {

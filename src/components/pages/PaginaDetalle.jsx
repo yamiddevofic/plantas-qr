@@ -4,7 +4,7 @@ import { aplicarSeo, seoDePlanta, SEO_INICIO } from '../../seo';
 import PlantillaDetalle from '../templates/PlantillaDetalle';
 import LeyendaEstados from '../molecules/LeyendaEstados';
 
-export default function PaginaDetalle({ plantaId }) {
+export default function PaginaDetalle({ plantaId, arbolId = null }) {
   const [planta, setPlanta] = useState(null);
   const [qr, setQr] = useState(null);
   const [cargando, setCargando] = useState(true);
@@ -53,6 +53,7 @@ export default function PaginaDetalle({ plantaId }) {
         planta={planta}
         qr={qr}
         coleccion={coleccion}
+        arbolId={arbolId}
         onQrGenerado={setQr}
         onVerEstados={() => setLeyendaAbierta(true)}
       />
