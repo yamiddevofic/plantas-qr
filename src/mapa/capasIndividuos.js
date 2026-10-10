@@ -164,11 +164,15 @@ export function contenidoPopup(props, nombreEspecie, { enlace = null } = {}) {
 export function contenidoPopupEspecie(props, especie, { enlace = null } = {}) {
   const nombre = especie?.nombre?.comun || 'Especie sin nombre';
   const codigo = props.codigoArbol;
+  // La foto es la de este árbol. Si aún no tiene, se usa la de la especie y se
+  // dice sobre la foto, para no hacerla pasar por la del árbol.
+  const deEspecie = !props.imagen && Boolean(especie?.imagen);
   const { raiz, cuerpo } = armarPopup(
     props.imagen || especie?.imagen,
-    codigo ? `Fotografía del árbol ${codigo}` : `Fotografía de ${nombre}`,
+    deEspecie || !codigo ? `Fotografía de ${nombre}` : `Fotografía del árbol ${codigo}`,
     'mapa-popup-de-especie',
   );
+  if (deEspecie) raiz.querySelector('.mapa-popup-imagen')?.after(crearNodo('span', 'mapa-popup-aviso-foto', 'Foto de la especie'));
   const titulo = crearNodo('p', 'mapa-popup-titulo');
   if (props.color) {
     const punto = crearNodo('span', 'mapa-popup-color');

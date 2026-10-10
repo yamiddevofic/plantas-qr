@@ -249,6 +249,7 @@
 }
 
 .mapa-popup {
+  position: relative;
   width: 240px;
   max-width: 100%;
 }
@@ -303,6 +304,20 @@
 }
 
 .mapa-popup-cientifico { font-style: italic; }
+
+/* Sobre la foto cuando el árbol aún no tiene la suya y se muestra la de la especie. */
+.mapa-popup-aviso-foto {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(15, 22, 18, 0.72);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+}
 
 /* «Grupo de 12 árboles»: un punto que representa varios. */
 .mapa-popup-grupo {
