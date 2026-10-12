@@ -110,19 +110,28 @@ export default function PaginaMapa({ especieId = null, arbolId = null }) {
           <LuArrowLeft aria-hidden="true" />
         </a>
         <div className="mapa-pagina-titulo">
-          <p className="mapa-pagina-antetitulo">Mapa del parque</p>
           <h1>{entrada ? entrada.nombre : 'Árboles del parque'}</h1>
           {listo && (
             <p className="mapa-pagina-resumen">
               {plural(arboles, 'árbol', 'árboles')}
               {puntos !== arboles && ` · ${plural(puntos, 'punto', 'puntos')}`}
-              {entrada?.cientifico && <em> · {entrada.cientifico}</em>}
             </p>
           )}
         </div>
+        {leyenda.length > 0 && (
+          <label className="mapa-pagina-filtro">
+            <span className="sr-only">Especie que se muestra</span>
+            <select value={filtro ?? ''} onChange={(e) => elegir(e.target.value || null)}>
+              <option value="">Todas las especies ({leyenda.reduce((s, e) => s + e.total, 0)})</option>
+              {leyenda.map((e) => (
+                <option key={e.id} value={e.cientifico}>{e.nombre} ({e.total})</option>
+              ))}
+            </select>
+          </label>
+        )}
         <div className="mapa-pagina-acciones">
           {entrada && (
-            <a className="mapa-pagina-boton" href={`#/planta/${entrada.id}`}>
+            <a className="mapa-pagina-boton" href={`#/planta/${entrada.id}`} title="Ver ficha de la especie">
               <LuBookOpen aria-hidden="true" />
               <span>Ver ficha</span>
             </a>
@@ -139,17 +148,6 @@ export default function PaginaMapa({ especieId = null, arbolId = null }) {
           </button>
           <BotonTema />
         </div>
-        {leyenda.length > 0 && (
-          <label className="mapa-pagina-filtro">
-            <span className="sr-only">Especie que se muestra</span>
-            <select value={filtro ?? ''} onChange={(e) => elegir(e.target.value || null)}>
-              <option value="">Todas las especies ({leyenda.reduce((s, e) => s + e.total, 0)})</option>
-              {leyenda.map((e) => (
-                <option key={e.id} value={e.cientifico}>{e.nombre} ({e.total})</option>
-              ))}
-            </select>
-          </label>
-        )}
       </header>
 
       <main className="mapa-pagina-mapa" id="app-main">

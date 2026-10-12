@@ -13,38 +13,29 @@
 }
 
 .mapa-pagina-barra {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas:
-    'volver titulo acciones'
-    'filtro filtro filtro';
+  display: flex;
   align-items: center;
-  gap: 10px 12px;
-  padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
-  border-bottom: 1px solid var(--line-200);
+  gap: 8px;
+  padding: calc(6px + env(safe-area-inset-top, 0px)) 10px 6px;
+  border-bottom: 1px solid var(--line-100);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
   z-index: 2;
 }
 
-/* En pantallas anchas, todo en una fila: volver · título · especie · acciones. */
 @media (min-width: 900px) {
   .mapa-pagina-barra {
-    grid-template-columns: auto minmax(0, 1fr) minmax(220px, 320px) auto;
-    grid-template-areas: 'volver titulo filtro acciones';
-    padding-inline: 20px;
+    gap: 12px;
+    padding-inline: 16px;
   }
 }
 
 .mapa-pagina-volver {
-  grid-area: volver;
   display: grid;
+  flex-shrink: 0;
   place-items: center;
-  width: var(--hit);
-  height: var(--hit);
-  border: 1px solid var(--line-200);
-  border-radius: 14px;
-  background: var(--surface);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   color: var(--forest-700);
 }
 
@@ -57,114 +48,64 @@
   background: var(--mint-100);
 }
 
+/* Título y total en una sola línea; en celular se ocultan (el selector ya dice
+   la especie y su total) pero siguen para los lectores de pantalla. */
 .mapa-pagina-titulo {
-  grid-area: titulo;
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: 10px;
   min-width: 0;
-}
-
-.mapa-pagina-antetitulo {
-  margin: 0;
-  color: var(--forest-700);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .mapa-pagina-titulo h1 {
   overflow: hidden;
-  margin: 1px 0 0;
+  margin: 0;
   color: var(--ink-900);
-  font-size: 1.1rem;
-  line-height: 1.25;
+  font-size: 1rem;
+  font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .mapa-pagina-resumen {
+  margin: 0;
   overflow: hidden;
-  margin: 1px 0 0;
   color: var(--ink-500);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.mapa-pagina-acciones {
-  grid-area: acciones;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.mapa-pagina-boton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-height: var(--hit);
-  padding: 0 14px;
-  border: 1px solid var(--line-200);
-  border-radius: 14px;
-  background: var(--surface);
-  color: var(--forest-700);
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.mapa-pagina-boton svg {
-  width: 18px;
-  height: 18px;
-}
-
-.mapa-pagina-boton.solo-icono {
-  width: var(--hit);
-  padding: 0;
-}
-
-.mapa-pagina-boton:hover:not(:disabled) {
-  border-color: var(--forest-600);
-  background: var(--mint-100);
-}
-
-.mapa-pagina-boton:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-/* En celular «Ver ficha» queda solo con el ícono para no apretar el título. */
-@media (max-width: 520px) {
-  .mapa-pagina-boton span {
+@media (max-width: 899px) {
+  .mapa-pagina-titulo {
     position: absolute;
     width: 1px;
     height: 1px;
     overflow: hidden;
     clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .mapa-pagina-boton {
-    width: var(--hit);
-    padding: 0;
   }
 }
 
 .mapa-pagina-filtro {
-  grid-area: filtro;
+  flex: 1;
   min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .mapa-pagina-filtro {
+    flex: 0 0 260px;
+  }
 }
 
 .mapa-pagina-filtro select {
   width: 100%;
-  min-height: var(--hit);
-  padding: 0 38px 0 14px;
+  min-height: 40px;
+  padding: 0 34px 0 12px;
   border: 1px solid var(--line-200);
-  border-radius: 14px;
-  background: var(--mint-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232d6a4f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
+  border-radius: 12px;
+  background: var(--mint-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232d6a4f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
   color: var(--ink-900);
   font: inherit;
   font-size: 16px; /* 16 px: sin zoom al tocarlo en iPhone */
@@ -174,6 +115,56 @@
 }
 
 .mapa-pagina-filtro select:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
+}
+
+.mapa-pagina-acciones {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Botones de la barra: solo ícono, discretos. */
+.mapa-pagina-boton {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--forest-700);
+  cursor: pointer;
+}
+
+.mapa-pagina-boton svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mapa-pagina-boton span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.mapa-pagina-boton:hover:not(:disabled) {
+  background: var(--mint-100);
+}
+
+.mapa-pagina-boton:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.mapa-pagina-boton:focus-visible,
+.mapa-pagina-volver:focus-visible {
   outline: 3px solid var(--leaf-500);
   outline-offset: 2px;
 }
