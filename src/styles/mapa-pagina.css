@@ -231,6 +231,11 @@
   margin: 8px 0 32px;
 }
 
+/* Junto a un título de sección el botón no necesita margen propio. */
+.detalle-seccion-accion .boton-mapa-fila {
+  margin: 0;
+}
+
 .boton-mapa {
   display: inline-flex;
   align-items: center;

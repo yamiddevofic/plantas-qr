@@ -5,7 +5,7 @@ import useRevelar from '../../hooks/useRevelar';
  * Sección de la ficha con el mismo encabezado del inicio (raya + antetítulo)
  * y un icono que se dibuja cuando la sección entra en pantalla.
  */
-export default function SeccionFicha({ id, titulo, antetitulo, icono: Icono, clase = '', children }) {
+export default function SeccionFicha({ id, titulo, antetitulo, icono: Icono, clase = '', accion = null, children }) {
   const [ref, visible] = useRevelar({ umbral: 0.1 });
 
   return (
@@ -24,6 +24,7 @@ export default function SeccionFicha({ id, titulo, antetitulo, icono: Icono, cla
           {antetitulo && <p className="inicio-eyebrow">{antetitulo}</p>}
           <h2 id={id} className="detalle-seccion-titulo">{titulo}</h2>
         </div>
+        {accion && <div className="detalle-seccion-accion">{accion}</div>}
       </header>
       {children}
     </section>
@@ -39,5 +40,7 @@ SeccionFicha.propTypes = {
   icono: PropTypes.elementType,
   /** Clase extra para ubicar la sección en la rejilla de la ficha. */
   clase: PropTypes.string,
+  /** Botón junto al título: a la derecha en pantallas anchas y debajo en celular. */
+  accion: PropTypes.node,
   children: PropTypes.node,
 };

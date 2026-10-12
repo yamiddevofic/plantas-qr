@@ -123,13 +123,18 @@ export default function PlantillaGaleria({
               </p>
             )}
 
-            {/* Acceso a la página del mapa: todos los árboles del parque. */}
-            {individuos?.features?.length > 0 && (
-              <TarjetaMapa id="galeria-mapa" href="#/mapa" descripcion={textoArboles(individuos)} />
-            )}
-
             <section id="catalogo" aria-labelledby="catalogo-titulo">
-              <SeccionFicha id="catalogo-titulo" antetitulo="Catálogo" titulo="Galería de especies" icono={IconoArbol} clase="catalogo-cabecera" />
+              <SeccionFicha
+                id="catalogo-titulo"
+                antetitulo="Catálogo"
+                titulo="Galería de especies"
+                icono={IconoArbol}
+                clase="catalogo-cabecera"
+                // Acceso a la página del mapa: todos los árboles del parque.
+                accion={individuos?.features?.length > 0
+                  ? <TarjetaMapa id="galeria-mapa" href="#/mapa" descripcion={textoArboles(individuos)} />
+                  : null}
+              />
               <div className="catalogo-contenido">
               <CatalogoSinConexion />
               {plantas.length === 0 ? (

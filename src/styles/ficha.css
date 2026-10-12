@@ -322,6 +322,29 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
   margin-bottom: 18px;
 }
 
+/* Botón junto al título (p. ej. «Ver mapa»): a la derecha; en celular, debajo. */
+.detalle-seccion-accion {
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .detalle-seccion-cabecera:has(.detalle-seccion-accion) {
+    flex-wrap: wrap;
+  }
+
+  .detalle-seccion-accion {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+
+  /* El botón ocupa todo el ancho. */
+  .detalle-seccion-accion .boton-mapa {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 .detalle-seccion-icono {
   display: grid;
   place-items: center;
