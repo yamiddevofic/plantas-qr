@@ -742,7 +742,7 @@ html[data-tema="oscuro"] .hero-inicio-cta.btn {
 
 /* Las fotos se apilan y la activa aparece con un fundido; mientras se ve, se
    acerca despacio (efecto Ken Burns). Al salir, el zoom se reinicia solo
-   cuando ya terminó de desvanecerse. */
+   cuando ya terminó de desvanecerse. En móvil hay una sola foto, siempre activa. */
 .hero-foto {
   opacity: 0;
   transition: opacity 1.6s ease;
@@ -764,13 +764,7 @@ html[data-tema="oscuro"] .hero-inicio-cta.btn {
   transition: transform 9s ease-out;
 }
 
-@media (max-width: 767px) and (orientation: portrait) {
-  .hero-foto img {
-    object-position: var(--encuadre-movil, var(--encuadre, 50% 50%));
-  }
-}
-
-/* Indicador del carrusel: barras finas; la activa se alarga. */
+/* Indicador del carrusel (solo pantallas anchas): barras finas; la activa se alarga. */
 .hero-fotos-puntos {
   position: absolute;
   left: 50%;
