@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════════════
    Página de inicio
-   Hero con paisaje SVG, emblema animado, "Cómo funciona", parque y
+   Hero con fotos del parque, emblema animado, "Cómo funciona", parque y
    proyecto. Mobile First; los colores del dibujo son tokens que cambian
    con html[data-tema="oscuro"].
    ══════════════════════════════════════════════════════════════ */
@@ -713,6 +713,221 @@ html[data-tema="oscuro"] .hero-inicio-cta.btn {
   .hero-inicio-acciones {
     justify-content: flex-start;
     margin-top: 6px;
+  }
+}
+
+/* ── Hero con fotos del parque (solo el inicio) ─────────────────
+   Las fotos cubren todo el hero y un velo oscuro asegura el contraste:
+   el texto pasa a blanco y los controles a vidrio oscuro. El velo es más
+   denso donde va el texto (centro en móvil, izquierda en escritorio). */
+
+.hero-con-fotos {
+  --velo: 5, 14, 10;
+  --acento-foto: #a9e6c2;
+  --vidrio-foto: rgba(8, 20, 14, 0.42);
+  --vidrio-foto-borde: rgba(255, 255, 255, 0.22);
+  background: #0d1f16;
+  color: #ffffff;
+}
+
+.hero-fotos {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-fotos::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 55%, rgba(var(--velo), 0.5), transparent 75%),
+    linear-gradient(180deg,
+      rgba(var(--velo), 0.65) 0%,
+      rgba(var(--velo), 0.4) 28%,
+      rgba(var(--velo), 0.5) 62%,
+      rgba(var(--velo), 0.88) 100%);
+}
+
+.hero-foto,
+.hero-foto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Las fotos se apilan y la activa aparece con un fundido; mientras se ve, se
+   acerca despacio (efecto Ken Burns). Al salir, el zoom se reinicia solo
+   cuando ya terminó de desvanecerse. */
+.hero-foto {
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+
+.hero-foto.activa {
+  opacity: 1;
+}
+
+.hero-foto img {
+  object-fit: cover;
+  object-position: var(--encuadre, 50% 50%);
+  transform: scale(1.08);
+  transition: transform 0s linear 1.6s;
+}
+
+.hero-foto.activa img {
+  transform: scale(1);
+  transition: transform 9s ease-out;
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+  .hero-foto img {
+    object-position: var(--encuadre-movil, var(--encuadre, 50% 50%));
+  }
+}
+
+/* Indicador del carrusel: barras finas; la activa se alarga. */
+.hero-fotos-puntos {
+  position: absolute;
+  left: 50%;
+  bottom: 70px;
+  z-index: 1;
+  display: flex;
+  gap: 2px;
+  transform: translateX(-50%);
+  animation: inicioAparece 0.8s ease 1.2s both;
+}
+
+.hero-fotos-punto {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.hero-fotos-punto::before {
+  content: '';
+  width: 8px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.45);
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+.hero-fotos-punto.activa::before {
+  width: 22px;
+  background: #ffffff;
+}
+
+@media (hover: hover) {
+  .hero-fotos-punto:hover::before {
+    background: rgba(255, 255, 255, 0.8);
+  }
+}
+
+@media (max-height: 640px) {
+  .hero-fotos-puntos {
+    bottom: 14px;
+  }
+}
+
+html[data-tema="oscuro"] .hero-con-fotos {
+  --velo: 3, 9, 6;
+}
+
+html[data-tema="oscuro"] .hero-fotos img {
+  filter: saturate(0.85) brightness(0.85);
+}
+
+/* Sin el prado del dibujo, el contenido no necesita tanto aire abajo. */
+.hero-con-fotos .hero-inicio-contenido {
+  padding-bottom: 88px;
+}
+
+.hero-con-fotos .hero-inicio-titulo {
+  color: #ffffff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+}
+
+.hero-con-fotos .hero-inicio-acento {
+  color: var(--acento-foto);
+}
+
+.hero-con-fotos .hero-inicio-texto {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
+.hero-con-fotos :is(.hero-inicio-ubicacion, .hero-inicio-bajar) {
+  border-color: var(--vidrio-foto-borde);
+  background: var(--vidrio-foto);
+  color: #ffffff;
+}
+
+.hero-con-fotos .hero-inicio-ubicacion .icono-inicio {
+  color: var(--acento-foto);
+}
+
+.hero-con-fotos .hero-inicio-altitud {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.hero-con-fotos .hero-inicio-altitud::before {
+  background: var(--acento-foto);
+}
+
+.hero-con-fotos .hero-inicio-cta.btn {
+  box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.6);
+}
+
+.hero-con-fotos .hero-inicio-secundario {
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+@media (hover: hover) {
+  .hero-con-fotos .hero-inicio-secundario:hover {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* El emblema pasa a vidrio claro sobre la foto. */
+.hero-con-fotos .emblema {
+  --emb-halo: rgba(255, 255, 255, 0.14);
+  --emb-halo-borde: rgba(255, 255, 255, 0.32);
+  --emb-orbita: rgba(255, 255, 255, 0.6);
+  --emb-suelo: rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  .hero-con-fotos .hero-inicio-contenido {
+    padding-bottom: 110px;
+  }
+}
+
+/* Escritorio: el texto va a la izquierda, así que el velo se oscurece hacia ese lado. */
+@media (min-width: 1024px) {
+  .hero-fotos::after {
+    background:
+      linear-gradient(90deg,
+        rgba(var(--velo), 0.88) 0%,
+        rgba(var(--velo), 0.72) 40%,
+        rgba(var(--velo), 0.35) 75%,
+        rgba(var(--velo), 0.25) 100%),
+      linear-gradient(180deg,
+        rgba(var(--velo), 0.45) 0%,
+        transparent 25%,
+        transparent 70%,
+        rgba(var(--velo), 0.7) 100%);
   }
 }
 

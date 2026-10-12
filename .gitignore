@@ -28,3 +28,6 @@ server/uploads/*
 
 # Respaldos y salidas de scripts
 tmp/
+
+# Exportaciones de Google Keep (pesan >100 MB; GitHub no las acepta)
+keep-notes/*.zip

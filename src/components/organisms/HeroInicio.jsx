@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Boton from '../atoms/Boton';
 import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import { IconoBajar, IconoFlecha, IconoUbicacion } from '../atoms/IconosInicio';
-import PaisajeHero from './PaisajeHero';
+import FotosHero from './FotosHero';
 import BuscadorInicio from './BuscadorInicio';
 
 /* El titular entra palabra por palabra; la segunda línea va en cursiva serif. */
@@ -11,14 +11,14 @@ const LINEA_1 = ['Cada', 'árbol,'];
 const LINEA_2 = ['una', 'historia'];
 
 /**
- * Hero de la página de inicio: paisaje andino del parque dibujado en SVG (se
- * adapta al modo claro/oscuro), el emblema animado del árbol con su QR, el
+ * Hero de la página de inicio: fotos del parque de fondo (con un velo oscuro
+ * para que el texto contraste), el emblema animado del árbol con su QR, el
  * mensaje del proyecto y los llamados a la acción.
  */
 export default function HeroInicio({ onConocerProyecto, plantas = null }) {
   return (
-    <header className="hero-inicio">
-      <PaisajeHero />
+    <header className="hero-inicio hero-con-fotos">
+      <FotosHero />
 
       <div className="hero-inicio-contenido">
         <div className="hero-inicio-emblema">
