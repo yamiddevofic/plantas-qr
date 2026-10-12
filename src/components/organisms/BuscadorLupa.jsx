@@ -3,16 +3,8 @@ import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { LuSearch, LuX } from 'react-icons/lu';
 import { fetchPlantas } from '../../api';
+import { buscarPlantas } from '../../buscarPlantas';
 import ImagenPlanta from '../atoms/ImagenPlanta';
-
-const LIMITE = 8;
-
-function normalizar(texto) {
-  return String(texto || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-}
 
 /**
  * Buscador en lupa: botón junto al menú que despliega un panel de
@@ -45,22 +37,7 @@ export default function BuscadorLupa({ plantas }) {
 
   const catalogo = plantas || plantasLocal;
 
-  const resultados = useMemo(() => {
-    const q = normalizar(texto).trim();
-    if (!q || !catalogo) return [];
-    return catalogo
-      .filter((p) => {
-        const campos = [
-          normalizar(p.nombre?.comun),
-          normalizar(p.nombre?.cientifico),
-          normalizar(p.familia),
-          normalizar(p.tipo),
-          normalizar((p.nombresAlternos ?? []).join(' ')),
-        ].join(' ');
-        return campos.includes(q);
-      })
-      .slice(0, LIMITE);
-  }, [catalogo, texto]);
+  const resultados = useMemo(() => buscarPlantas(catalogo, texto), [catalogo, texto]);
 
   const seleccionar = useCallback((planta) => {
     window.location.hash = `/planta/${planta._id}`;

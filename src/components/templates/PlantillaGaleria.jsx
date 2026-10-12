@@ -4,12 +4,11 @@ import ListaPlantas from '../organisms/ListaPlantas';
 import TarjetaMapa from '../organisms/TarjetaMapa';
 import SeccionFicha from '../molecules/SeccionFicha';
 import { IconoArbol } from '../atoms/IconosInicio';
-import BuscadorLupa from '../organisms/BuscadorLupa';
+import BuscadorBarra from '../organisms/BuscadorBarra';
 import EstadoBox from '../atoms/EstadoBox';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
 import BotonTema from '../atoms/BotonTema';
-import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import PiePagina from '../molecules/PiePagina';
 import CatalogoSinConexion from '../molecules/CatalogoSinConexion';
@@ -72,20 +71,10 @@ export default function PlantillaGaleria({
         Saltar al contenido
       </a>
 
-      <header
-        className={`galeria-header ${headerOculto ? 'galeria-header-oculto' : ''}`.trim()}
-      >
-        <a className="home-marca" href="#/" aria-label="PlantaQR, ir al inicio">
-          <EmblemaArbolQr clase="home-marca-icono" />
-          <span>PlantaQR</span>
-        </a>
-        <div className="hero-acciones-grupo">
-          <div className="galeria-header-herramientas">
-            <BuscadorLupa plantas={todasLasPlantas} />
-            <BotonTema />
-          </div>
-          <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
-        </div>
+      <header className={`catalogo-barra${headerOculto ? ' catalogo-barra-oculta' : ''}`}>
+        <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
+        <BuscadorBarra plantas={todasLasPlantas} />
+        <BotonTema />
       </header>
 
       <main id="app-main" className="app-main">
