@@ -9,7 +9,6 @@ import SeccionContacto from '../molecules/SeccionContacto';
 import PopoverContacto from '../molecules/PopoverContacto';
 import BotonMenu from '../atoms/BotonMenu';
 import BotonTema from '../atoms/BotonTema';
-import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import ItemInstalarApp from '../molecules/ItemInstalarApp';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
@@ -62,7 +61,6 @@ export default function PaginaInicio() {
       </div>
 
       <a className="home-marca" href="#/" aria-label="PlantaQR, inicio">
-        <EmblemaArbolQr clase="home-marca-icono" />
         <span>PlantaQR</span>
       </a>
 

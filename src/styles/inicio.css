@@ -111,7 +111,7 @@ html[data-tema="oscuro"] .emblema {
   align-items: center;
   gap: 8px;
   height: var(--hit);
-  padding: 0 16px 0 6px;
+  padding: 0 18px;
   border: 1px solid var(--vidrio-borde);
   border-radius: var(--radius-pill);
   background: var(--vidrio);
