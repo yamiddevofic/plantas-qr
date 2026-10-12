@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════════════
    Página de inicio
-   Hero con fotos del parque, emblema animado, "Cómo funciona", parque y
+   Hero con fotos del parque, emblema (marca y carga), "Cómo funciona", parque y
    proyecto. Mobile First; los colores del dibujo son tokens que cambian
    con html[data-tema="oscuro"].
    ══════════════════════════════════════════════════════════════ */
@@ -412,11 +412,6 @@ html[data-tema="oscuro"] .paisaje-luciernagas circle {
   text-align: center;
 }
 
-.hero-inicio-emblema {
-  width: 100px;
-  animation: inicioAparece 0.8s ease both;
-}
-
 .hero-inicio-texto-bloque {
   display: flex;
   flex-direction: column;
@@ -664,10 +659,6 @@ html[data-tema="oscuro"] .hero-inicio-cta.btn {
   .hero-inicio-bajar {
     display: none;
   }
-
-  .hero-inicio-emblema {
-    width: 88px;
-  }
 }
 
 @media (min-width: 768px) {
@@ -680,16 +671,12 @@ html[data-tema="oscuro"] .hero-inicio-cta.btn {
     padding: 110px 40px calc(var(--alto-paisaje) * 0.55);
   }
 
-  .hero-inicio-emblema {
-    width: 136px;
-  }
-
   .hero-inicio-texto {
     font-size: 1.12rem;
   }
 }
 
-/* Escritorio: texto a la izquierda y el emblema grande a la derecha. */
+/* Escritorio: texto a la izquierda; a la derecha se ve la foto. */
 @media (min-width: 1024px) {
   .hero-inicio-contenido {
     display: grid;
@@ -702,12 +689,6 @@ html[data-tema="oscuro"] .hero-inicio-cta.btn {
   .hero-inicio-texto-bloque {
     align-items: flex-start;
     gap: 22px;
-  }
-
-  .hero-inicio-emblema {
-    order: 2;
-    justify-self: center;
-    width: min(100%, 340px);
   }
 
   .hero-inicio-acciones {
@@ -898,14 +879,6 @@ html[data-tema="oscuro"] .hero-fotos img {
     border-color: #ffffff;
     background: rgba(255, 255, 255, 0.2);
   }
-}
-
-/* El emblema pasa a vidrio claro sobre la foto. */
-.hero-con-fotos .emblema {
-  --emb-halo: rgba(255, 255, 255, 0.14);
-  --emb-halo-borde: rgba(255, 255, 255, 0.32);
-  --emb-orbita: rgba(255, 255, 255, 0.6);
-  --emb-suelo: rgba(0, 0, 0, 0.3);
 }
 
 @media (min-width: 768px) {
