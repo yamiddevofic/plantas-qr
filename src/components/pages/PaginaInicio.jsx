@@ -60,10 +60,6 @@ export default function PaginaInicio() {
         <BuscadorInicio plantas={plantas} />
       </div>
 
-      <a className="home-marca" href="#/" aria-label="PlantaQR, inicio">
-        <span>PlantaQR</span>
-      </a>
-
       <div className="home-acciones">
         <div className="hero-acciones-grupo">
           <BotonTema />
