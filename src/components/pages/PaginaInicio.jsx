@@ -8,7 +8,6 @@ import BuscadorInicio from '../organisms/BuscadorInicio';
 import SeccionContacto from '../molecules/SeccionContacto';
 import PopoverContacto from '../molecules/PopoverContacto';
 import BotonMenu from '../atoms/BotonMenu';
-import BotonTema from '../atoms/BotonTema';
 import ItemInstalarApp from '../molecules/ItemInstalarApp';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
@@ -62,7 +61,6 @@ export default function PaginaInicio() {
 
       <div className="home-acciones">
         <div className="hero-acciones-grupo">
-          <BotonTema />
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
         </div>
       </div>

@@ -4,7 +4,6 @@ import EstadoBox from '../atoms/EstadoBox';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
-import BotonTema from '../atoms/BotonTema';
 import { IconoVolver } from '../atoms/IconosInicio';
 import GaleriaFotos from '../organisms/GaleriaFotos';
 import Hero from '../organisms/Hero';
@@ -147,7 +146,6 @@ export default function PlantillaDetalle({
             <IconoVolver />
           </a>
           <BuscadorBarra />
-          <BotonTema />
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
         </div>
       </div>

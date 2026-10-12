@@ -5,7 +5,6 @@ import { fetchIndividuos, guardarVistaMapa, obtenerPlanta } from '../../api';
 import { colorearPorEspecie } from '../../mapa/capasIndividuos';
 import { aplicarSeo } from '../../seo';
 import useAccionProtegida from '../../hooks/useAccionProtegida';
-import BotonTema from '../atoms/BotonTema';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import BuscadorBarra from '../organisms/BuscadorBarra';
 import MapaParque from '../organisms/MapaParque';
@@ -148,7 +147,6 @@ export default function PaginaMapa({ especieId = null, arbolId = null }) {
           >
             <LuPin aria-hidden="true" />
           </button>
-          <BotonTema />
         </div>
       </header>
 

@@ -8,7 +8,6 @@ import BuscadorBarra from '../organisms/BuscadorBarra';
 import EstadoBox from '../atoms/EstadoBox';
 import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
-import BotonTema from '../atoms/BotonTema';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import PiePagina from '../molecules/PiePagina';
 import CatalogoSinConexion from '../molecules/CatalogoSinConexion';
@@ -74,7 +73,6 @@ export default function PlantillaGaleria({
       <header className={`catalogo-barra${headerOculto ? ' catalogo-barra-oculta' : ''}`}>
         <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
         <BuscadorBarra plantas={todasLasPlantas} />
-        <BotonTema />
       </header>
 
       <main id="app-main" className="app-main">

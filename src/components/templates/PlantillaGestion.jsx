@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import BotonTema from '../atoms/BotonTema';
 import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import { IconoVolver } from '../atoms/IconosInicio';
 import PiePagina from '../molecules/PiePagina';
@@ -27,7 +26,6 @@ export default function PlantillaGestion({ hero, children, extras = null }) {
             <IconoVolver />
             <span>Catálogo</span>
           </a>
-          <BotonTema />
         </div>
       </header>
 
