@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { actualizarFotosPlanta, actualizarPlanta, crearPlanta, eliminarPlanta, fetchPlantas } from '../../api';
 import useAccionProtegida from '../../hooks/useAccionProtegida';
 import useEnLinea from '../../hooks/useEnLinea';
-import { listaImagenes } from '../../constantes';
 import {
   aplicarColaEspecies,
   borrarFotosDeOperacion,
@@ -27,7 +26,7 @@ import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
-import { IconoCamara, IconoFicha, IconoHoja, IconoLupa, IconoMas } from '../atoms/IconosInicio';
+import { IconoLupa, IconoMas } from '../atoms/IconosInicio';
 import PestanasGestion from '../molecules/PestanasGestion';
 import BannerSincronizacion from '../organisms/BannerSincronizacion';
 import EditorFotosEspecie from '../organisms/EditorFotosEspecie';
@@ -403,36 +402,9 @@ export default function PaginaEspecies() {
     setCola((c) => descartar(c, id));
   };
 
-  const cifras = useMemo(() => {
-    if (cargando || error || !vista.length) return null;
-    const conteos = vista.map((p) => listaImagenes(p).length);
-    const total = conteos.reduce((a, n) => a + n, 0);
-    const sinFoto = conteos.filter((n) => n === 0).length;
-    // El catálogo antiguo tiene varias fichas por especie: se cuentan especies distintas.
-    const especies = new Set(vista.map((p) => sinTildes(p.nombre.cientifico).trim())).size;
-    return [
-      { Icono: IconoHoja, valor: especies, etiqueta: especies === 1 ? 'especie' : 'especies' },
-      { Icono: IconoCamara, valor: total, etiqueta: total === 1 ? 'foto' : 'fotos' },
-      ...(sinFoto ? [{ Icono: IconoFicha, valor: sinFoto, etiqueta: 'sin foto' }] : []),
-    ];
-  }, [vista, cargando, error]);
-
   return (
     <PlantillaGestion
-      hero={{
-        id: 'especies-titulo',
-        titulo: 'Gestión de',
-        acento: 'especies',
-        texto: 'Agrega, edita o elimina las especies del catálogo y organiza sus fotos.',
-        cifras,
-        bajar: true,
-        accion: !cargando && !error && (
-          <Boton variante="primary" clase="gestion-agregar" onClick={() => abrir('datos')}>
-            <IconoMas />
-            Agregar especie
-          </Boton>
-        ),
-      }}
+      etiqueta="Gestión de especies"
       extras={(
         <>
           {abierto?.modo === 'fotos' && (
@@ -497,6 +469,10 @@ export default function PaginaEspecies() {
             <p className="gestion-conteo" role="status" aria-live="polite">
               <strong>{visibles.length}</strong> de {vista.length} {vista.length === 1 ? 'ficha' : 'fichas'}
             </p>
+            <Boton variante="primary" clase="gestion-agregar-barra" onClick={() => abrir('datos')}>
+              <IconoMas />
+              Agregar especie
+            </Boton>
           </div>
 
           {aviso && (

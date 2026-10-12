@@ -8,10 +8,10 @@ import HeroGestion from '../organisms/HeroGestion';
 /**
  * Estructura común de las páginas de administración (individuos y fotos de
  * especies): barra de vidrio con la marca, volver al catálogo y el tema; hero
- * con el paisaje; contenido y pie. `extras` va fuera del main (formularios y
- * diálogos que se abren encima).
+ * con el paisaje (opcional); contenido y pie. `extras` va fuera del main
+ * (formularios y diálogos que se abren encima).
  */
-export default function PlantillaGestion({ hero, children, extras = null }) {
+export default function PlantillaGestion({ hero = null, etiqueta = '', children, extras = null }) {
   return (
     <div className="app">
       <a className="skip-link" href="#app-main">Saltar al contenido</a>
@@ -29,9 +29,14 @@ export default function PlantillaGestion({ hero, children, extras = null }) {
         </div>
       </header>
 
-      <HeroGestion {...hero} />
+      {hero && <HeroGestion {...hero} />}
 
-      <main id="app-main" className="app-main gestion-main" aria-labelledby={hero.id}>
+      <main
+        id="app-main"
+        className={`app-main gestion-main${hero ? '' : ' gestion-main-sin-hero'}`}
+        aria-labelledby={hero ? hero.id : undefined}
+        aria-label={hero ? undefined : etiqueta}
+      >
         {children}
       </main>
 
@@ -42,8 +47,10 @@ export default function PlantillaGestion({ hero, children, extras = null }) {
 }
 
 PlantillaGestion.propTypes = {
-  /** Props de HeroGestion. */
-  hero: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
+  /** Props de HeroGestion; sin ellas la página no lleva hero. */
+  hero: PropTypes.shape({ id: PropTypes.string.isRequired }),
+  /** Nombre accesible del contenido cuando no hay hero. */
+  etiqueta: PropTypes.string,
   children: PropTypes.node,
   extras: PropTypes.node,
 };
