@@ -16,13 +16,13 @@ import PiePagina from '../molecules/PiePagina';
 import CatalogoSinConexion from '../molecules/CatalogoSinConexion';
 import DialogoPassword from '../molecules/DialogoPassword';
 
-/** «26 árboles en 13 puntos, de 4 especies» para la tarjeta del mapa. */
+/** «26 árboles registrados de 4 especies» para lectores de pantalla. */
 function textoArboles(coleccion) {
   const features = coleccion.features.filter((f) => f.properties.especie?._id);
   const arboles = features.reduce((s, f) => s + (f.properties.cantidad ?? 1), 0);
   const especies = new Set(features.map((f) => f.properties.especie._id)).size;
   const n = (k, uno, varios) => `${k} ${k === 1 ? uno : varios}`;
-  return `${n(arboles, 'árbol registrado', 'árboles registrados')} de ${n(especies, 'especie', 'especies')}, cada uno en su lugar del parque.`;
+  return `${n(arboles, 'árbol registrado', 'árboles registrados')} de ${n(especies, 'especie', 'especies')}.`;
 }
 
 export default function PlantillaGaleria({
@@ -128,14 +128,7 @@ export default function PlantillaGaleria({
 
             {/* Acceso a la página del mapa: todos los árboles del parque. */}
             {individuos?.features?.length > 0 && (
-              <TarjetaMapa
-                id="galeria-mapa"
-                antetitulo="Mapa del parque"
-                titulo="Explora los árboles en el mapa"
-                texto={textoArboles(individuos)}
-                href="#/mapa"
-                coleccion={individuos}
-              />
+              <TarjetaMapa id="galeria-mapa" href="#/mapa" descripcion={textoArboles(individuos)} />
             )}
 
             <section id="catalogo" aria-labelledby="catalogo-titulo">

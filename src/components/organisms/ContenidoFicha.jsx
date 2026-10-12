@@ -171,11 +171,8 @@ export default function ContenidoFicha({ planta, coleccion = null, arbolId = nul
         {individuos.length > 0 && (
           <TarjetaMapa
             id="ficha-mapa"
-            antetitulo="Mapa"
-            titulo="Encuéntralo en el mapa"
-            texto={`${arbolesRegistrados} ${arbolesRegistrados === 1 ? 'árbol registrado' : 'árboles registrados'} de ${nombre.comun} en el parque.`}
             href={`#/mapa?especie=${planta._id}`}
-            coleccion={coleccion}
+            descripcion={`${arbolesRegistrados} ${arbolesRegistrados === 1 ? 'árbol registrado' : 'árboles registrados'} de ${nombre.comun}`}
           />
         )}
       </div>
