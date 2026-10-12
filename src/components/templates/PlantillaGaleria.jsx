@@ -10,7 +10,6 @@ import Boton from '../atoms/Boton';
 import BotonMenu from '../atoms/BotonMenu';
 import BotonTema from '../atoms/BotonTema';
 import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
-import HeroGaleria from '../organisms/HeroGaleria';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import PiePagina from '../molecules/PiePagina';
 import CatalogoSinConexion from '../molecules/CatalogoSinConexion';
@@ -88,8 +87,6 @@ export default function PlantillaGaleria({
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
         </div>
       </header>
-
-      <HeroGaleria plantas={todasLasPlantas} cargando={cargando || Boolean(error)} />
 
       <main id="app-main" className="app-main">
         {cargando ? (
