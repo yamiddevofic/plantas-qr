@@ -1,0 +1,348 @@
+/* ══════════════════════════════════════════════════════════════
+   Página del mapa (#/mapa) y tarjeta «Ver mapa» del catálogo y la ficha
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Página: barra arriba y el mapa en todo el resto de la pantalla ── */
+
+.mapa-pagina {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--page-bg);
+}
+
+.mapa-pagina-barra {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'volver titulo acciones'
+    'filtro filtro filtro';
+  align-items: center;
+  gap: 10px 12px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
+  border-bottom: 1px solid var(--line-200);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+}
+
+/* En pantallas anchas, todo en una fila: volver · título · especie · acciones. */
+@media (min-width: 900px) {
+  .mapa-pagina-barra {
+    grid-template-columns: auto minmax(0, 1fr) minmax(220px, 320px) auto;
+    grid-template-areas: 'volver titulo filtro acciones';
+    padding-inline: 20px;
+  }
+}
+
+.mapa-pagina-volver {
+  grid-area: volver;
+  display: grid;
+  place-items: center;
+  width: var(--hit);
+  height: var(--hit);
+  border: 1px solid var(--line-200);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--forest-700);
+}
+
+.mapa-pagina-volver svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mapa-pagina-volver:hover {
+  background: var(--mint-100);
+}
+
+.mapa-pagina-titulo {
+  grid-area: titulo;
+  min-width: 0;
+}
+
+.mapa-pagina-antetitulo {
+  margin: 0;
+  color: var(--forest-700);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mapa-pagina-titulo h1 {
+  overflow: hidden;
+  margin: 1px 0 0;
+  color: var(--ink-900);
+  font-size: 1.1rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-pagina-resumen {
+  overflow: hidden;
+  margin: 1px 0 0;
+  color: var(--ink-500);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-pagina-acciones {
+  grid-area: acciones;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-pagina-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--hit);
+  padding: 0 14px;
+  border: 1px solid var(--line-200);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--forest-700);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mapa-pagina-boton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mapa-pagina-boton.solo-icono {
+  width: var(--hit);
+  padding: 0;
+}
+
+.mapa-pagina-boton:hover:not(:disabled) {
+  border-color: var(--forest-600);
+  background: var(--mint-100);
+}
+
+.mapa-pagina-boton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* En celular «Ver ficha» queda solo con el ícono para no apretar el título. */
+@media (max-width: 520px) {
+  .mapa-pagina-boton span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .mapa-pagina-boton {
+    width: var(--hit);
+    padding: 0;
+  }
+}
+
+.mapa-pagina-filtro {
+  grid-area: filtro;
+  min-width: 0;
+}
+
+.mapa-pagina-filtro select {
+  width: 100%;
+  min-height: var(--hit);
+  padding: 0 38px 0 14px;
+  border: 1px solid var(--line-200);
+  border-radius: 14px;
+  background: var(--mint-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232d6a4f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 16px; /* 16 px: sin zoom al tocarlo en iPhone */
+  font-weight: 600;
+  appearance: none;
+  cursor: pointer;
+}
+
+.mapa-pagina-filtro select:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 2px;
+}
+
+.mapa-pagina-mapa {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+/* El mapa ocupa todo el espacio de la página, sin marco ni esquinas. */
+.mapa-marco.mapa-marco-pagina {
+  height: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+/* El interruptor Satélite / Mapa y Relieve 3D flota abajo, centrado, por encima
+   de la escala y la atribución. */
+.mapa-controles-flotantes {
+  position: absolute;
+  left: 50%;
+  bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  z-index: 3;
+  flex-wrap: nowrap;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+.mapa-controles-flotantes .mapa-segmentado,
+.mapa-controles-flotantes .mapa-control-relieve {
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+/* En celular la atribución de las imágenes ocupa dos líneas: los controles suben
+   y se compactan para caber en una fila. */
+@media (max-width: 600px) {
+  .mapa-controles-flotantes {
+    bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+    gap: 6px;
+  }
+
+  .mapa-controles-flotantes .mapa-control {
+    gap: 6px;
+    padding: 0 12px;
+    white-space: nowrap;
+  }
+}
+
+/* ── Tarjeta «Ver mapa» (catálogo y ficha) ──────────────────── */
+
+.tarjeta-mapa {
+  margin: 8px 0 48px;
+}
+
+.tarjeta-mapa-enlace {
+  display: grid;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+  border: 1px solid var(--line-200);
+  border-radius: 22px;
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+@media (min-width: 720px) {
+  .tarjeta-mapa-enlace {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+@media (hover: hover) {
+  .tarjeta-mapa-enlace:hover {
+    transform: translateY(-3px);
+    border-color: var(--sage-300);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.tarjeta-mapa-enlace:focus-visible {
+  outline: 3px solid var(--leaf-500);
+  outline-offset: 3px;
+}
+
+/* Miniatura: los puntos en su posición sobre un fondo de cuadrícula. */
+.tarjeta-mapa-vista {
+  display: block;
+  aspect-ratio: 5 / 3;
+  background:
+    linear-gradient(var(--line-100) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, var(--line-100) 1px, transparent 1px) 0 0 / 22px 22px,
+    radial-gradient(circle at 30% 40%, var(--mint-100), var(--mint-50) 70%);
+}
+
+.tarjeta-mapa-vista svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tarjeta-mapa-texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px 22px 22px;
+}
+
+.tarjeta-mapa-antetitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--forest-700);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tarjeta-mapa-antetitulo svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tarjeta-mapa-titulo {
+  color: var(--ink-900);
+  font-size: var(--step-3);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.tarjeta-mapa-descripcion {
+  color: var(--ink-500);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.tarjeta-mapa-boton {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  min-height: var(--hit);
+  margin-top: 8px;
+  padding: 0 20px;
+  border-radius: var(--radius-pill);
+  background: var(--forest-700);
+  color: var(--surface);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.tarjeta-mapa-boton svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.tarjeta-mapa-enlace:hover .tarjeta-mapa-boton svg {
+  transform: translateX(3px);
+}
+
+/* En la ficha va dentro de la columna principal, que ya separa sus secciones. */
+.ficha-principal > .tarjeta-mapa {
+  margin: 0;
+}

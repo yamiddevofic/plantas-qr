@@ -17,6 +17,7 @@ Proyecto desarrollado como trabajo de formación SENA.
 - **Escala termómetro de conservación** — cada estado (extinto → preocupación menor) tiene su propio color, tipo categorías IUCN, con ventana de leyenda explicativa.
 - **Gestión de códigos QR** — generar/regenerar por especie, **regenerar todos** en un clic, descargar como PNG y eliminar especies desde las tarjetas.
 - **Catálogo gestionable desde la UI** — crear, editar y eliminar especies desde un modal de formulario; soporta **múltiples imágenes por especie** (galería y carrusel en la ficha).
+- **Mapa del parque como página propia** (`#/mapa`) — todos los árboles con el color de su especie, satélite/calles y relieve 3D. Se filtra por especie con el selector o tocando la leyenda (`#/mapa?especie=<id>`); `&arbol=<id>` abre ese árbol. El catálogo y la ficha muestran una tarjeta «Ver mapa» con una miniatura de los puntos; desde la ficha abre filtrado por su especie. «Fijar esta vista como inicial» (administrador) está en la barra del mapa.
 - **Puntos que agrupan varios árboles** — un individuo tiene «Árboles en este punto» (1 por defecto, hasta 1000): un seto o una hilera de la misma especie se registra una vez con su cantidad. En el mapa el punto se ve más grande con el número dentro; la leyenda, los títulos y el avance de registro suman árboles, no puntos.
 - **Fotos de día y de noche** — cada especie puede tener una portada de noche y cada árbol una foto de noche (vertical 4:5); en modo oscuro las usan solo las vistas previas (tarjetas del catálogo y miniaturas de la galería de árboles). Lo demás muestra la foto de día.
 - **Foto de la hoja, del tallo y del fruto** — se cargan en «Fotos» de cada especie (con la cámara del celular o desde la galería, comprimidas antes de subir) y aparecen en la ficha junto a su descripción. Gestión de especies indica qué fotos fijas faltan por tomar. Si una de estas fotos no es del proyecto (por ejemplo, de internet), se anota su **fuente** (autor, sitio, licencia y enlace https a la original) y la ficha la muestra debajo de la foto.
@@ -49,7 +50,7 @@ Proyecto desarrollado como trabajo de formación SENA.
 plantas-qr/
 ├── src/                      # Frontend React
 │   ├── App.jsx               # Enrutador de páginas (hash)
-│   ├── router.js             # Rutas hash: #/planta/:id, #/galeria, #/individuos
+│   ├── router.js             # Rutas hash: #/planta/:id, #/galeria, #/mapa, #/individuos
 │   ├── api.js                # Cliente de la API
 │   ├── constantes.js         # Estados de conservación y placeholder
 │   ├── tema.js               # Tema claro/oscuro (contexto + localStorage)

@@ -93,6 +93,8 @@ export async function descargarCatalogo(onProgreso) {
   plantas.forEach((p) => sumarFotos(...fotosDe(p)));
   avanzar();
   await datos('/api/qr').catch(() => { fallidos += 1; });
+  // Todos los árboles juntos: los usa la página del mapa del parque.
+  await datos('/api/individuos?').catch(() => { fallidos += 1; });
   avanzar();
 
   const tareasDatos = plantas.flatMap((p) => [

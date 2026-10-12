@@ -27,7 +27,6 @@ export function desplazamientoSeleccion(map, popup, separacion = 18) {
 // laderas que rodean el casco urbano.
 export const CAMARA_3D = { pitch: 65, bearing: -25, zoomMax: 16.2 };
 
-const numero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 });
 
 export function prefiereMenosMovimiento() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
@@ -70,7 +69,14 @@ export function colorearPorEspecie(coleccion) {
     // La leyenda cuenta árboles: un punto de grupo suma su cantidad.
     const cantidad = f.properties.cantidad ?? 1;
     if (previa) previa.total += cantidad;
-    else especies.set(especie._id, { id: especie._id, nombre: especie.nombre?.comun || 'Especie sin nombre', total: cantidad });
+    else {
+      especies.set(especie._id, {
+        id: especie._id,
+        nombre: especie.nombre?.comun || 'Especie sin nombre',
+        cientifico: especie.nombre?.cientifico || '',
+        total: cantidad,
+      });
+    }
   }
   const leyenda = [...especies.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
   leyenda.forEach((e) => { e.color = colorDeEspecie(e.id); });
@@ -91,13 +97,6 @@ export function colorearPorEspecie(coleccion) {
 // que los puntos sigan la paleta del tema activo.
 function token(nombre, alternativo) {
   return getComputedStyle(document.documentElement).getPropertyValue(nombre).trim() || alternativo;
-}
-
-export function detalleIndividuo({ altitudMsnm, precisionGpsM }) {
-  const partes = [];
-  if (altitudMsnm != null) partes.push(`${numero.format(altitudMsnm)} msnm`);
-  if (precisionGpsM != null) partes.push(`precisión GPS ±${numero.format(precisionGpsM)} m`);
-  return partes.join(' · ');
 }
 
 /** «Grupo de 12 árboles» para un punto que agrupa varios; '' si es un solo árbol. */
@@ -143,18 +142,6 @@ function agregarEnlace(cuerpo, enlace) {
   ir.href = enlace;
   ir.append(crearNodo('span', 'mapa-popup-enlace-flecha', '→'));
   cuerpo.append(ir);
-}
-
-/** Popup de la ficha: el individuo (su foto, código y datos del GPS). */
-export function contenidoPopup(props, nombreEspecie, { enlace = null } = {}) {
-  const { raiz, cuerpo } = armarPopup(props.imagen, `Fotografía del árbol ${props.codigoArbol}`, '');
-  cuerpo.append(crearNodo('p', 'mapa-popup-titulo', props.codigoArbol));
-  if (textoGrupo(props.cantidad)) cuerpo.append(crearNodo('p', 'mapa-popup-grupo', textoGrupo(props.cantidad)));
-  if (nombreEspecie) cuerpo.append(crearNodo('p', 'mapa-popup-subtitulo', nombreEspecie));
-  const detalle = detalleIndividuo(props);
-  if (detalle) cuerpo.append(crearNodo('p', 'mapa-popup-detalle', detalle));
-  if (enlace) agregarEnlace(cuerpo, enlace);
-  return raiz;
 }
 
 /**
@@ -214,12 +201,6 @@ export function marcar(map, id, seleccionado) {
 /** Resalta (o no) el individuo bajo el cursor. */
 export function resaltar(map, id, activo) {
   if (id && map?.getSource(FUENTE)) map.setFeatureState({ source: FUENTE, id }, { hover: activo });
-}
-
-export function mapaEnPantallaCompleta(map) {
-  const elementoPantallaCompleta = document.fullscreenElement || document.webkitFullscreenElement;
-  return elementoPantallaCompleta === map.getContainer()
-    || map.getContainer().classList.contains('maplibregl-pseudo-fullscreen');
 }
 
 // Radio base de los puntos por zoom (normal y seleccionado). La animación lo

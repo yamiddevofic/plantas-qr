@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import MenuHerramientas from '../organisms/MenuHerramientas';
 import ListaPlantas from '../organisms/ListaPlantas';
-import MapaIndividuos from '../organisms/MapaIndividuos';
+import TarjetaMapa from '../organisms/TarjetaMapa';
 import SeccionFicha from '../molecules/SeccionFicha';
 import { IconoArbol } from '../atoms/IconosInicio';
 import BuscadorLupa from '../organisms/BuscadorLupa';
@@ -15,6 +15,15 @@ import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import PiePagina from '../molecules/PiePagina';
 import CatalogoSinConexion from '../molecules/CatalogoSinConexion';
 import DialogoPassword from '../molecules/DialogoPassword';
+
+/** «26 árboles en 13 puntos, de 4 especies» para la tarjeta del mapa. */
+function textoArboles(coleccion) {
+  const features = coleccion.features.filter((f) => f.properties.especie?._id);
+  const arboles = features.reduce((s, f) => s + (f.properties.cantidad ?? 1), 0);
+  const especies = new Set(features.map((f) => f.properties.especie._id)).size;
+  const n = (k, uno, varios) => `${k} ${k === 1 ? uno : varios}`;
+  return `${n(arboles, 'árbol registrado', 'árboles registrados')} de ${n(especies, 'especie', 'especies')}, cada uno en su lugar del parque.`;
+}
 
 export default function PlantillaGaleria({
   cargando,
@@ -117,8 +126,17 @@ export default function PlantillaGaleria({
               </p>
             )}
 
-            {/* Mapa general: todos los árboles del parque, enlazados a su ficha. */}
-            <MapaIndividuos coleccion={individuos} general />
+            {/* Acceso a la página del mapa: todos los árboles del parque. */}
+            {individuos?.features?.length > 0 && (
+              <TarjetaMapa
+                id="galeria-mapa"
+                antetitulo="Mapa del parque"
+                titulo="Explora los árboles en el mapa"
+                texto={textoArboles(individuos)}
+                href="#/mapa"
+                coleccion={individuos}
+              />
+            )}
 
             <section id="catalogo" aria-labelledby="catalogo-titulo">
               <SeccionFicha id="catalogo-titulo" antetitulo="Catálogo" titulo="Galería de especies" icono={IconoArbol} clase="catalogo-cabecera" />

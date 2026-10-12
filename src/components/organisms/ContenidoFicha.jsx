@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { normalizarUsos } from '../../constantes';
 import EstadoConservacion from '../molecules/EstadoConservacion';
@@ -8,7 +7,7 @@ import {
   IconoArbol, IconoChispa, IconoCorazonHoja, IconoFlor, IconoFruto, IconoGlobo, IconoHoja,
   IconoLibro, IconoNube, IconoRegadera, IconoRegla, IconoUbicacion, IconoUsos,
 } from '../atoms/IconosInicio';
-import MapaIndividuos from './MapaIndividuos';
+import TarjetaMapa from './TarjetaMapa';
 import GaleriaIndividuos from './GaleriaIndividuos';
 import DatosFicha from './DatosFicha';
 
@@ -17,7 +16,7 @@ import DatosFicha from './DatosFicha';
  * usos, ubicación y mapa) y la lateral (datos rápidos, estado y `lateral`, el
  * panel del QR). En móvil ambas se intercalan: primero los datos y el estado.
  */
-export default function ContenidoFicha({ planta, coleccion = null, onVerEstados, lateral = null, controlMapaRef = null }) {
+export default function ContenidoFicha({ planta, coleccion = null, arbolId = null, onVerEstados, lateral = null }) {
   const {
     nombre, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion,
     estadoConservacionDetalle, nombresAlternos, caracteristicas, habitat, datosCuriosos,
@@ -46,15 +45,13 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
   const sitios = Array.isArray(ubicaciones) ? ubicaciones : [];
 
   // Individuos registrados (árboles con GPS): su galería de fotos va en "Dónde
-  // verlo" y cada uno se ubica en el mapa.
-  const [seleccionado, setSeleccionado] = useState(null);
-  const [pedido, setPedido] = useState(null);
-
+  // verlo" y cada uno se ubica en la página del mapa.
   const individuos = coleccion?.features ?? [];
+  const arbolesRegistrados = individuos.reduce((suma, f) => suma + (f.properties.cantidad ?? 1), 0);
 
-  // "Ver en el mapa" abre el mapa en pantalla completa, centrado en ese árbol.
+  // "Ver en el mapa" abre la página del mapa con esta especie y ese árbol abierto.
   const verEnMapa = (feature) => {
-    setPedido({ id: feature.properties.id, vez: Date.now(), pantallaCompleta: true });
+    window.location.hash = `#/mapa?especie=${encodeURIComponent(planta._id)}&arbol=${encodeURIComponent(feature.properties.id)}`;
   };
 
   const hayUbicacion = Boolean(ubicacion?.descripcion) || individuos.length > 0 || sitios.length > 0;
@@ -158,7 +155,7 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
             {individuos.length > 0 ? (
               <GaleriaIndividuos
                 individuos={individuos}
-                seleccionado={seleccionado}
+                seleccionado={arbolId}
                 onVer={verEnMapa}
               />
             ) : sitios.length > 0 && (
@@ -168,6 +165,18 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
               </ul>
             )}
           </SeccionFicha>
+        )}
+
+        {/* Abre la página del mapa con solo los árboles de esta especie. */}
+        {individuos.length > 0 && (
+          <TarjetaMapa
+            id="ficha-mapa"
+            antetitulo="Mapa"
+            titulo="Encuéntralo en el mapa"
+            texto={`${arbolesRegistrados} ${arbolesRegistrados === 1 ? 'árbol registrado' : 'árboles registrados'} de ${nombre.comun} en el parque.`}
+            href={`#/mapa?especie=${planta._id}`}
+            coleccion={coleccion}
+          />
         )}
       </div>
 
@@ -186,14 +195,6 @@ export default function ContenidoFicha({ planta, coleccion = null, onVerEstados,
         {lateral}
       </div>
 
-      {/* Fuera de las columnas: en escritorio el mapa ocupa el ancho de las dos. */}
-      <MapaIndividuos
-        coleccion={coleccion}
-        nombreEspecie={nombre.comun}
-        pedido={pedido}
-        onSeleccion={setSeleccionado}
-        controlRef={controlMapaRef}
-      />
     </div>
   );
 }
@@ -206,6 +207,6 @@ ContenidoFicha.propTypes = {
   onVerEstados: PropTypes.func,
   /** Contenido extra al final de la columna lateral (el panel del QR). */
   lateral: PropTypes.node,
-  /** Ref para leer la cámara del mapa (fijar la vista de todos los mapas). */
-  controlMapaRef: PropTypes.shape({ current: PropTypes.any }),
+  /** Árbol con el que se abrió la ficha (desde el mapa): se marca en la galería. */
+  arbolId: PropTypes.string,
 };

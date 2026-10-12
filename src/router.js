@@ -15,6 +15,12 @@ export function useHashRoute() {
     const arbol = new URLSearchParams(match[2] ?? '').get('arbol');
     return { nombre: 'detalle', id: decodeURIComponent(match[1]), arbol: arbol || null };
   }
+  // Mapa del parque: ?especie=<id> muestra solo esa especie y &arbol=<id> abre ese árbol.
+  const mapa = hash.match(/^#\/mapa(?:\?(.*))?$/);
+  if (mapa) {
+    const q = new URLSearchParams(mapa[1] ?? '');
+    return { nombre: 'mapa', especie: q.get('especie') || null, arbol: q.get('arbol') || null };
+  }
   // #/especies-fotos era la ruta anterior del módulo; se conserva por los enlaces guardados.
   if (hash.startsWith('#/especies')) {
     return { nombre: 'especies' };

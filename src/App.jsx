@@ -5,6 +5,7 @@ import PaginaDetalle from './components/pages/PaginaDetalle';
 import PaginaEspecies from './components/pages/PaginaEspecies';
 import PaginaIndividuos from './components/pages/PaginaIndividuos';
 import PaginaInicio from './components/pages/PaginaInicio';
+import PaginaMapa from './components/pages/PaginaMapa';
 import BarraTitulo from './components/atoms/BarraTitulo';
 import AvisoSinConexion from './components/molecules/AvisoSinConexion';
 import PuertaAdmin from './components/organisms/PuertaAdmin';
@@ -30,6 +31,8 @@ export default function App() {
   let pagina = <PaginaInicio />;
   if (route.nombre === 'detalle') {
     pagina = <PaginaDetalle key={route.id} plantaId={route.id} arbolId={route.arbol} />;
+  } else if (route.nombre === 'mapa') {
+    pagina = <PaginaMapa key={`${route.especie}-${route.arbol}`} especieId={route.especie} arbolId={route.arbol} />;
   } else if (route.nombre === 'galeria') {
     pagina = <PaginaGaleria />;
   } else if (route.nombre === 'especies') {
