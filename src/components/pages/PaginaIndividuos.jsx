@@ -32,7 +32,7 @@ import { aplicarSeo } from '../../seo';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
 import Boton from '../atoms/Boton';
 import EstadoBox from '../atoms/EstadoBox';
-import { IconoArbol, IconoArbolPlaca, IconoHoja, IconoLupa, IconoMas } from '../atoms/IconosInicio';
+import { IconoLupa, IconoMas } from '../atoms/IconosInicio';
 import MapaSinConexion from '../molecules/MapaSinConexion';
 import PestanasGestion from '../molecules/PestanasGestion';
 import BannerSincronizacion from '../organisms/BannerSincronizacion';
@@ -422,33 +422,9 @@ export default function PaginaIndividuos() {
     if (id) document.getElementById('individuos-resultados')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const cifras = useMemo(() => {
-    if (cargando || error || !especies.length) return null;
-    const conEspecie = new Set(vista.map((f) => grupoPorFicha.get(f.properties.especie?._id)).filter(Boolean)).size;
-    const enParque = filasEjemplares.reduce((suma, f) => suma + (f.ejemplares ?? f.registrados), 0);
-    return [
-      { Icono: IconoArbol, valor: vista.length, etiqueta: vista.length === 1 ? 'registrado' : 'registrados' },
-      { Icono: IconoArbolPlaca, valor: enParque, etiqueta: 'en el parque' },
-      { Icono: IconoHoja, valor: conEspecie, etiqueta: conEspecie === 1 ? 'especie' : 'especies' },
-    ];
-  }, [vista, grupoPorFicha, cargando, error, especies, filasEjemplares]);
-
   return (
     <PlantillaGestion
-      hero={{
-        id: 'individuos-titulo',
-        titulo: 'Gestión de',
-        acento: 'individuos',
-        texto: 'Registra cada árbol con su código, foto y ubicación GPS, también sin conexión.',
-        cifras,
-        bajar: true,
-        accion: !cargando && !error && (
-          <Boton variante="primary" clase="gestion-agregar" onClick={() => abrirFormulario()} disabled={especies.length === 0}>
-            <IconoMas />
-            Agregar individuo
-          </Boton>
-        ),
-      }}
+      etiqueta="Gestión de individuos"
       extras={(
         <>
           {formulario && (
@@ -527,6 +503,15 @@ export default function PaginaIndividuos() {
                 Limpiar filtros
               </button>
             )}
+            <Boton
+              variante="primary"
+              clase="gestion-agregar-barra"
+              onClick={() => abrirFormulario()}
+              disabled={especies.length === 0}
+            >
+              <IconoMas />
+              Agregar individuo
+            </Boton>
           </div>
 
           {aviso && (
