@@ -1,21 +1,38 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { LuSearch, LuX } from 'react-icons/lu';
+import { fetchPlantas } from '../../api';
 import { buscarPlantas } from '../../buscarPlantas';
 import ImagenPlanta from '../atoms/ImagenPlanta';
+
+let catalogoEnCurso = null;
+/** Catálogo para buscar cuando la página no lo tiene a mano (se pide una sola vez). */
+function cargarCatalogo() {
+  catalogoEnCurso ??= fetchPlantas().catch((e) => { catalogoEnCurso = null; throw e; });
+  return catalogoEnCurso;
+}
 
 /**
  * Barra de búsqueda abierta (campo largo, siempre visible) para el catálogo.
  * Escribir despliega debajo los resultados en vivo; Enter o un clic abre la
- * ficha. Flechas para recorrer, Esc para cerrar y limpiar.
+ * ficha. Flechas para recorrer, Esc para cerrar y limpiar. Si no recibe
+ * `plantas`, carga el catálogo al enfocarla (para usarla en cualquier página).
  */
-export default function BuscadorBarra({ plantas }) {
+export default function BuscadorBarra({ plantas: plantasProp }) {
   const id = useId();
   const [texto, setTexto] = useState('');
   const [activo, setActivo] = useState(0);
   const [abierto, setAbierto] = useState(false);
+  const [propias, setPropias] = useState(null);
   const raizRef = useRef(null);
   const inputRef = useRef(null);
+
+  const plantas = plantasProp || propias;
+
+  const alEnfocar = () => {
+    setAbierto(true);
+    if (!plantasProp && !propias) cargarCatalogo().then(setPropias, () => {});
+  };
 
   const resultados = useMemo(() => buscarPlantas(plantas, texto), [plantas, texto]);
   const hayTexto = texto.trim().length > 0;
@@ -62,12 +79,12 @@ export default function BuscadorBarra({ plantas }) {
         aria-controls={`${id}-lista`}
         aria-activedescendant={mostrar && resultados[activo] ? `${id}-${resultados[activo]._id}` : undefined}
         aria-label="Buscar especies del parque"
-        placeholder="Buscar por nombre, familia o tipo…"
+        placeholder="Buscar especies…"
         autoComplete="off"
         enterKeyHint="search"
         value={texto}
         onChange={(e) => { setTexto(e.target.value); setActivo(0); setAbierto(true); }}
-        onFocus={() => setAbierto(true)}
+        onFocus={alEnfocar}
         onKeyDown={alTeclear}
       />
       {hayTexto && (

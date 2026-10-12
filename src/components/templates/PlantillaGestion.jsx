@@ -3,6 +3,7 @@ import BotonTema from '../atoms/BotonTema';
 import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
 import { IconoVolver } from '../atoms/IconosInicio';
 import PiePagina from '../molecules/PiePagina';
+import BuscadorBarra from '../organisms/BuscadorBarra';
 import HeroGestion from '../organisms/HeroGestion';
 
 /**
@@ -17,10 +18,10 @@ export default function PlantillaGestion({ hero, children, extras = null }) {
       <a className="skip-link" href="#app-main">Saltar al contenido</a>
 
       <header className="galeria-header gestion-header">
-        <a className="home-marca" href="#/" aria-label="PlantaQR, ir al inicio">
+        <a className="gestion-inicio" href="#/" aria-label="PlantaQR, ir al inicio" title="Ir al inicio">
           <EmblemaArbolQr clase="home-marca-icono" />
-          <span>PlantaQR</span>
         </a>
+        <BuscadorBarra />
         <div className="gestion-header-acciones">
           <a className="gestion-volver" href="#/galeria" aria-label="Volver al catálogo">
             <IconoVolver />

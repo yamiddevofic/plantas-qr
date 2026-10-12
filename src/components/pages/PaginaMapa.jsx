@@ -7,6 +7,7 @@ import { aplicarSeo } from '../../seo';
 import useAccionProtegida from '../../hooks/useAccionProtegida';
 import BotonTema from '../atoms/BotonTema';
 import ArbolitoLoader from '../atoms/ArbolitoLoader';
+import BuscadorBarra from '../organisms/BuscadorBarra';
 import MapaParque from '../organisms/MapaParque';
 
 const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
@@ -118,6 +119,7 @@ export default function PaginaMapa({ especieId = null, arbolId = null }) {
             </p>
           )}
         </div>
+        <BuscadorBarra />
         {leyenda.length > 0 && (
           <label className="mapa-pagina-filtro">
             <span className="sr-only">Especie que se muestra</span>

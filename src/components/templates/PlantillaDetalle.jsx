@@ -12,7 +12,7 @@ import ContenidoFicha from '../organisms/ContenidoFicha';
 import PanelQR from '../organisms/PanelQR';
 import MenuLateral from '../organisms/MenuLateral';
 import SeccionContacto from '../molecules/SeccionContacto';
-import BuscadorLupa from '../organisms/BuscadorLupa';
+import BuscadorBarra from '../organisms/BuscadorBarra';
 import ItemInstalarApp from '../molecules/ItemInstalarApp';
 import GrupoMenu from '../molecules/GrupoMenu';
 import ItemMenu from '../atoms/ItemMenu';
@@ -146,7 +146,7 @@ export default function PlantillaDetalle({
           <a className="boton-volver" href="#/galeria" aria-label="Volver a las especies" title="Volver a las especies">
             <IconoVolver />
           </a>
-          <BuscadorLupa />
+          <BuscadorBarra />
           <BotonTema />
           <BotonMenu abierto={menuAbierto} onClick={() => setMenuAbierto((a) => !a)} />
         </div>

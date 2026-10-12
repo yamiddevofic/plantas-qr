@@ -58,7 +58,7 @@
 
 /* Pantallas angostas: la marca, la flecha sola y el tema (con "Catálogo"
    escrito, la marca y el botón se pisan por debajo de ~370 px). */
-@media (max-width: 369px) {
+@media (max-width: 479px) {
   .gestion-volver {
     width: var(--hit);
     padding: 0;

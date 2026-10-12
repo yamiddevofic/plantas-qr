@@ -359,13 +359,14 @@
   }
 }
 
-/* En móvil, al usar el buscador ocupa todo el ancho: se ocultan los botones. */
+/* En móvil, al usar el buscador ocupa todo el largo de la barra: se ocultan
+   los demás elementos. */
 @media (max-width: 767px) {
-  .catalogo-barra:has(.buscador-barra:focus-within) > :not(.buscador-barra) {
+  :is(.catalogo-barra, .hero-acciones-grupo, .gestion-header, .mapa-pagina-barra):has(> .buscador-barra:focus-within) > :not(.buscador-barra) {
     display: none;
   }
 
-  .catalogo-barra:has(.buscador-barra:focus-within) .buscador-barra {
+  :is(.catalogo-barra, .hero-acciones-grupo, .gestion-header, .mapa-pagina-barra) > .buscador-barra:focus-within {
     max-width: none;
   }
 }
@@ -392,7 +393,7 @@
 .buscador-barra-input {
   width: 100%;
   min-height: var(--hit);
-  padding: 0 42px 0 42px;
+  padding: 0 12px 0 42px;
   border: 1px solid var(--line-200);
   border-radius: var(--radius-pill);
   background: var(--surface);
@@ -401,6 +402,10 @@
   font-size: 16px; /* 16 px: sin zoom al enfocarlo en iPhone */
   box-shadow: var(--shadow-sm);
   appearance: none;
+}
+
+.buscador-barra-input:not(:placeholder-shown) {
+  padding-right: 42px;
 }
 
 .buscador-barra-input::placeholder {
@@ -461,4 +466,63 @@
   border-radius: 20px;
   background: var(--surface);
   box-shadow: var(--shadow-lg);
+}
+
+/* ── Buscador en las demás pantallas ─────────────────────────── */
+
+/* Ficha: [volver] [buscador] [tema] [menú]; el buscador ocupa el hueco. */
+.detalle-root .hero-acciones .boton-volver {
+  margin-right: 0;
+}
+
+.detalle-root .hero-acciones .buscador-barra {
+  min-width: 0;
+}
+
+/* Gestión: [inicio] [buscador] [Catálogo] [tema]. */
+.gestion-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-inline: 0;
+}
+
+.gestion-header > .buscador-barra {
+  min-width: 0;
+}
+
+.gestion-inicio {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--hit);
+  height: var(--hit);
+  border: 1px solid var(--vidrio-borde);
+  border-radius: var(--radius-md);
+  background: var(--vidrio);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.gestion-inicio .emblema {
+  width: 34px;
+  height: 34px;
+}
+
+.gestion-header-acciones {
+  flex: none;
+}
+
+/* Mapa: la barra delgada comparte espacio con el título y el selector. */
+.mapa-pagina-barra > .buscador-barra {
+  min-width: 0;
+}
+
+.mapa-pagina-barra .buscador-barra-input {
+  min-height: 40px;
+  box-shadow: none;
+}
+
+.mapa-pagina-barra .buscador-barra-lista {
+  top: calc(100% + 6px);
 }
