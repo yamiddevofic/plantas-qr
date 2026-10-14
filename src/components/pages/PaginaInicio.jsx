@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LuHouse, LuInfo, LuMapPin, LuMoon, LuSun } from 'react-icons/lu';
 import { fetchPlantas } from '../../api';
+import { contarTaxones } from '../../taxonomia';
 import SeccionParque from '../organisms/SeccionParque';
 import HeroInicio from '../organisms/HeroInicio';
 import ComoFunciona from '../organisms/ComoFunciona';
@@ -28,9 +29,8 @@ export default function PaginaInicio() {
       .then((lista) => {
         if (cancelado) return;
         setPlantas(lista);
-        const especies = lista.length;
-        const familias = new Set(lista.map((p) => p.familia).filter(Boolean)).size;
-        setDatos({ especies, familias });
+        // Especies distintas, no fichas: hay varias fichas por especie (una por QR impreso).
+        setDatos(contarTaxones(lista));
       })
       .catch(() => { if (!cancelado) setDatos({ especies: 0, familias: 0 }); });
     return () => { cancelado = true; };
