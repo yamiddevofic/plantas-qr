@@ -1,10 +1,10 @@
 # PlantaQR · Estado actual del proyecto
 
-> Corte: **14 de octubre de 2026** · rama `main` · último commit `b322542`
+> Corte: **15 de octubre de 2026** · rama `main` · último commit de código `227d563`
 >
 > Documento en dos partes: **A) estado técnico** de la aplicación y **B) caracterización e identificación** de la flora del Parque Principal de Chitagá.
 >
-> **Fuente de las cifras.** El catálogo y los árboles salen de la **API pública de producción** (`/api/plantas` y `/api/individuos`, consultadas el 14/10/2026); la parte técnica, del código y de `git log`. Los archivos de datos del repositorio (`parque-chitaga-platas.json`, `server/datos/especies-keep.json`) son la **historia** de cómo se armó el catálogo, no su estado actual.
+> **Fuente de las cifras.** El catálogo y los árboles salen de la **API pública de producción** (`/api/plantas` y `/api/individuos`, consultadas el 14 y el 15/10/2026); la parte técnica, del código y de `git log`. Los archivos de datos del repositorio (`parque-chitaga-platas.json`, `server/datos/especies-keep.json`) son la **historia** de cómo se armó el catálogo, no su estado actual.
 
 ---
 
@@ -117,6 +117,7 @@ Rutas del servidor fuera de la SPA: `/planta/:id` (HTML con Open Graph y JSON-LD
 
 | Script | Función |
 |---|---|
+| `completar-especies` | Completa la palma de cera, la palma canaria y el ciprés con `server/datos/especies-complementos.json` (datos bibliográficos con sus fuentes): llena solo campos vacíos, usa la categoría UICN como estado y deja respaldo en `tmp/` (`--aplicar` para escribir) |
 | `importar-keep` | Integra las especies de las notas de campo (Google Keep): actualiza o crea fichas, agrega fotos y registra individuos con GPS; idempotente (`--aplicar` para escribir) |
 | `cargar-individuos-cipres` | Carga/actualiza los 10 cipreses geolocalizados |
 | `optimizar-imagenes`, `normalizar-imagenes`, `generar-variantes`, `verificar-imagenes` | Cadena de imágenes: WebP, rutas en Mongo, `srcset`, comprobación de 404 |
@@ -130,6 +131,9 @@ Rutas del servidor fuera de la SPA: `/planta/:id` (HTML con Open Graph y JSON-LD
 - Integración de las especies de las notas de campo; módulo de gestión de especies con pestaña de individuos; fotos de hoja, tallo y fruto con créditos; enlaces compartibles por especie.
 - Se corrigió el nombre visible a «PlantasQR» en algunos textos (commit `d831425`).
 - **Conteo del inicio** («Especies registradas»): antes contaba fichas; ahora cuenta especies distintas por binomio (`src/taxonomia.js`), ver §B.3.
+- **Scroll suave** con Lenis (commit `adacbbd`).
+- **Fichas de la palma de cera, la palma canaria y el ciprés completadas** (15/10): flores, frutos, tronco, hábitat, datos curiosos, cuidados, especies similares, nombres alternos e identificación, a partir de fuentes bibliográficas (`npm run completar-especies`). Ver §B.2 y §B.4.
+- **Fichas técnicas en PDF** (`docs/Fichas_tecnicas_registro_especies.pdf`, 60 páginas): por especie, una tabla con todos sus datos y una página de registro fotográfico (porte y copa, hoja, tallo); cierra con las fuentes consultadas.
 
 ## A.9 Deuda técnica y riesgos
 
@@ -182,11 +186,14 @@ npm run lint
 
 | Confianza | Fichas | Cuáles |
 |---|--:|---|
-| Alta | 24 | Las 25 especies de las notas de campo, menos una |
-| Medio-alta | 1 | Guanaminí (*Syzygium cumini*) |
-| Sin registro | 3 | Palma de cera, palma canaria y ciprés (vienen del catálogo inicial) |
+| Alta | 25 | Las 25 especies de las notas de campo, menos el guanaminí, y la palma canaria |
+| Medio-alta | 2 | Guanaminí (*Syzygium cumini*) y palma de cera del Quindío |
+| Media | 1 | Ciprés |
 
-El ciprés está identificado solo **hasta género** (*Cupressus* sp., «probablemente *C. lusitanica*»).
+Las tres fichas del catálogo inicial (palma de cera, palma canaria y ciprés) no tenían confianza ni observaciones; se redactaron el 15/10 a partir de sus fotos de campo, y sus demás datos se completaron con fuentes bibliográficas citadas en `server/datos/especies-complementos.json`.
+
+- **Palma de cera (medio-alta):** el género *Ceroxylon* es seguro (estípite blanco, ceroso y anillado); el estípite no engrosado descarta a *C. ventricosum*. Para confirmar *C. quindiuense* faltan la disposición de las pinnas y frutos maduros.
+- **Ciprés (media):** identificado solo **hasta género** (*Cupressus* sp., «probablemente *C. lusitanica*»). Lo confirmaría un cono maduro: 1–1,5 cm, verde-azulado y ceroso en *C. lusitanica*; 2,5–3,5 cm en *C. macrocarpa*.
 
 ## B.3 Criterio de conteo de especies
 
@@ -213,9 +220,9 @@ El inicio muestra «Especies registradas» y «Familias botánicas». Se cuentan
 | 7 | Fotinia glabra | *Photinia glabra* | Rosaceae | árbol / arbusto según poda | NE | alta | 1 | **0** |
 | 8 | Níspero | *Eriobotrya japonica* | Rosaceae | árbol | LC | alta | 1 | 1 / 1 |
 | 9 | Capulí | *Prunus serotina* var. *capuli* | Rosaceae | árbol | LC | alta | 1 | 1 / 1 |
-| 10 | Palma de cera del Quindío | *Ceroxylon quindiuense* | Arecaceae | palma | VU ² | — | 10 | 10 / 10 |
-| 11 | Palma canaria | *Phoenix canariensis* | Arecaceae | palma | no amenazada | — | — | 1 / 1 |
-| 12 | Ciprés | *Cupressus* sp. (prob. *C. lusitanica*) | Cupressaceae | árbol / arbusto según poda | no amenazada | — | 11 | 11 / 11 |
+| 10 | Palma de cera del Quindío | *Ceroxylon quindiuense* | Arecaceae | palma | VU ² | **medio-alta** | 10 | 10 / 10 |
+| 11 | Palma canaria | *Phoenix canariensis* | Arecaceae | palma | LC | alta | — | 1 / 1 |
+| 12 | Ciprés | *Cupressus* sp. (prob. *C. lusitanica*) | Cupressaceae | árbol / arbusto según poda | LC | **media** | 11 | 11 / 11 |
 | 13 | Tuya | *Platycladus orientalis* | Cupressaceae | árbol (conífera) | NT ¹ | alta | 1 | 1 / 1 |
 | 14 | Araucaria excelsa | *Araucaria heterophylla* | Araucariaceae | árbol (conífera) | VU ¹ | alta | 1 | 1 / 1 |
 | 15 | Pino pátula | *Pinus patula* | Pinaceae | árbol (conífera) | LC | alta | 1 | 1 / 1 |
@@ -236,7 +243,7 @@ El inicio muestra «Especies registradas» y «Familias botánicas». Se cuentan
 Abreviaturas UICN: **LC** preocupación menor · **NT** casi amenazado · **VU** vulnerable · **EN** en peligro · **NE** no evaluado (en la base figura como «no determinado»).
 
 ¹ Estado de la especie **en su hábitat silvestre de origen** (Australia, isla Norfolk, Asia), no en Chitagá; son ornamentales muy cultivadas.
-² La ficha lo marca «vulnerable (según catálogo PlantaQR del parque)», sin fuente UICN citada. La palma de cera es árbol nacional de Colombia.
+² Vulnerable (VU) en la Lista Roja de la UICN (evaluación de 1998, sin actualizar) y En Peligro (EN) en el Libro Rojo de Plantas de Colombia. Es el árbol nacional de Colombia (Ley 61 de 1985).
 ³ Según su ficha, con protección local en ecosistemas andinos o reservas colombianas.
 
 «Conteo de campo» es `ejemplaresEnParque` (árboles contados en el recorrido). «En el mapa» suma la `cantidad` de los puntos registrados: un seto o una hilera de la misma especie es **un punto con varios árboles** (por eso la eugenia tiene 34 árboles en 1 punto).
@@ -247,9 +254,8 @@ Abreviaturas UICN: **LC** preocupación menor · **NT** casi amenazado · **VU**
 
 | Estado | Fichas |
 |---|--:|
-| Preocupación menor (LC) | 18 |
+| Preocupación menor (LC) | 20 |
 | No evaluado / no determinado (NE) | 4 |
-| No amenazada (sin categoría UICN) | 2 |
 | Vulnerable (VU) | 2 |
 | En peligro (EN) | 1 |
 | Casi amenazado (NT) | 1 |
@@ -280,8 +286,8 @@ Abreviaturas UICN: **LC** preocupación menor · **NT** casi amenazado · **VU**
 |---|---|---|
 | Especies sin punto en el mapa | Velero, guanaminí y fotinia glabra (1 árbol cada una) | Ubicarlas con GPS desde `#/individuos` |
 | Conteo de campo ≠ mapa | 229 contados vs. 210 ubicados. Faltan 11 eugenias, 3 arrayanes, 3 cajetos, 1 arrayán guayabito y los 3 árboles de arriba; la fotinia tiene 1 más en el mapa y la palma canaria no tiene conteo | Revisar el seto de eugenia y completar los demás; anotar el conteo de la palma canaria |
-| Identificación incompleta | Ciprés solo a género; guanaminí con confianza medio-alta; palma de cera, palma canaria y ciprés sin registro de confianza | Validar con botánico o herbario regional y completar `identificacion` |
-| Estado de la palma de cera | «Vulnerable» sin fuente UICN citada | Verificar la categoría vigente y citar la fuente |
+| Identificación incompleta | Ciprés solo a género (confianza media); guanaminí y palma de cera con confianza medio-alta | Fotografiar un cono maduro del ciprés y frutos de la palma de cera; validar con botánico o herbario regional |
+| Evaluación UICN desactualizada | La palma de cera figura como VU en la UICN desde 1998, mientras el Libro Rojo de Colombia la clasifica EN | Revisar si la UICN publica una evaluación nueva y actualizar la ficha |
 | Estados globales vs. locales | EN, VU y NT se refieren al hábitat de origen | Aclararlo en la ficha para no confundir al visitante |
 | Fotos | 26 puntos sin foto; 21 fichas sin foto de fruto; ninguna portada de noche | Completar en campo (la app indica qué falta) |
 | Arrayán y arrayán guayabito | Dos fichas para una misma especie | Decidir si la forma de hoja redonda merece ficha propia o se fusiona |
@@ -289,7 +295,7 @@ Abreviaturas UICN: **LC** preocupación menor · **NT** casi amenazado · **VU**
 ## B.7 Recomendaciones
 
 1. **Cerrar el censo**: ubicar las 3 especies sin punto y conciliar conteo de campo y mapa, empezando por la eugenia.
-2. **Validación botánica** de las identificaciones de confianza no alta, del ciprés (a nivel de especie) y del estado de la palma de cera.
+2. **Validación botánica** de las identificaciones de confianza no alta: el ciprés (a nivel de especie, con un cono maduro), la palma de cera y el guanaminí.
 3. **Verificar los QR** de las 28 fichas e imprimir los que falten.
 4. **Completar fotos**: fruto (21 fichas), noche (28) y puntos sin foto (26).
 5. **Agregar pruebas** a las utilidades críticas (conteo taxonómico, agrupación, cola sin conexión).
@@ -297,4 +303,4 @@ Abreviaturas UICN: **LC** preocupación menor · **NT** casi amenazado · **VU**
 
 ---
 
-*Actualizado el 14/10/2026 con datos de producción (`/api/plantas`, `/api/individuos`). Para refrescar las cifras basta volver a consultar esos dos endpoints.*
+*Actualizado el 15/10/2026 con datos de producción (`/api/plantas`, `/api/individuos`). Para refrescar las cifras basta volver a consultar esos dos endpoints.*
