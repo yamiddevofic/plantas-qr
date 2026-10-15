@@ -89,7 +89,7 @@ export async function descargarCatalogo(onProgreso) {
   const fotos = new Set();
   const sumarFotos = (...rutas) => rutas.flatMap(archivosDeFoto).forEach((r) => fotos.add(r));
   // Todas las fotos de la especie: carrusel, portada de noche, hoja, tallo y fruto.
-  const fotosDe = (p) => [p.imagen, ...(p.imagenes ?? []), p.imagenNoche, p.imagenHoja, p.imagenTallo, p.imagenFruto];
+  const fotosDe = (p) => [p.imagen, ...(p.imagenes ?? []), p.imagenNoche, p.imagenHoja, p.imagenTallo, p.imagenFruto, p.imagenFlor];
   plantas.forEach((p) => sumarFotos(...fotosDe(p)));
   avanzar();
   await datos('/api/qr').catch(() => { fallidos += 1; });

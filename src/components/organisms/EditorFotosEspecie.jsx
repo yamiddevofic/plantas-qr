@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LuCamera, LuCherry, LuImage, LuLeaf, LuLink, LuMoon, LuStar, LuTrash2, LuTreeDeciduous, LuUndo2, LuX } from 'react-icons/lu';
+import { LuCamera, LuCherry, LuFlower2, LuImage, LuLeaf, LuLink, LuMoon, LuStar, LuTrash2, LuTreeDeciduous, LuUndo2, LuX } from 'react-icons/lu';
 import useModal from '../../hooks/useModal';
 import { listaImagenes } from '../../constantes';
 import { comprimirFoto } from '../../offline/fotos';
@@ -11,19 +11,20 @@ let contador = 0;
 
 /* Fotos de un solo uso: cada una tiene un sitio fijo en la app (no entran al
    carrusel). La de día es la «Principal» del carrusel. Se previsualizan en
-   cuadrado para que las cuatro casillas queden parejas; no se recortan al
+   cuadrado para que las casillas queden parejas; no se recortan al
    guardar (cada sitio las encuadra con object-fit). */
 const UNICAS = [
   { clave: 'noche', campo: 'imagenNoche', titulo: 'Noche', Icono: LuMoon, ayuda: 'Portada en la galería en modo noche.' },
   { clave: 'hoja', campo: 'imagenHoja', titulo: 'Hoja', Icono: LuLeaf, ayuda: 'En la ficha, junto a las hojas.', conCredito: true },
   { clave: 'tallo', campo: 'imagenTallo', titulo: 'Tallo', Icono: LuTreeDeciduous, ayuda: 'En la ficha, junto al tronco.', conCredito: true },
+  { clave: 'flor', campo: 'imagenFlor', titulo: 'Flor', Icono: LuFlower2, ayuda: 'En la ficha, junto a las flores.', conCredito: true },
   { clave: 'fruto', campo: 'imagenFruto', titulo: 'Fruto', Icono: LuCherry, ayuda: 'En la ficha, junto a los frutos.', conCredito: true },
 ];
 
 /** Fotos que llevan crédito: las de la ficha (pueden venir de internet). */
 const CON_CREDITO = UNICAS.filter((u) => u.conCredito).map((u) => u.clave);
 
-/** { hoja|tallo|fruto: { texto, enlace } } siempre completo, para editar y comparar. */
+/** { hoja|tallo|flor|fruto: { texto, enlace } } siempre completo, para editar y comparar. */
 function normalizarCreditos(creditos) {
   return Object.fromEntries(CON_CREDITO.map((clave) => [clave, {
     texto: creditos?.[clave]?.texto ?? '',
@@ -169,7 +170,7 @@ FotoUnica.propTypes = {
   actual: PropTypes.string,
   nueva: PropTypes.instanceOf(Blob),
   procesando: PropTypes.bool,
-  /** Fuente de la foto (solo hoja, tallo y fruto). */
+  /** Fuente de la foto (solo hoja, tallo, flor y fruto). */
   credito: PropTypes.shape({ texto: PropTypes.string, enlace: PropTypes.string }),
   onCredito: PropTypes.func,
   onArchivo: PropTypes.func.isRequired,
@@ -192,10 +193,10 @@ export default function EditorFotosEspecie({
   // Cada elemento: { clave, ref } para fotos que ya tenía o { clave, archivo } para nuevas.
   const [fotos, setFotos] = useState(() => iniciales ?? listaImagenes(planta).map((ref) => ({ clave: ref, ref })));
   const [procesando, setProcesando] = useState(false);
-  // Fotos de un solo uso que cambian: { noche|hoja|tallo|fruto: Blob (nueva) | null (quitar) }.
+  // Fotos de un solo uso que cambian: { noche|hoja|tallo|flor|fruto: Blob (nueva) | null (quitar) }.
   const [unicas, setUnicas] = useState(() => unicasIniciales ?? {});
   const [procesandoUnica, setProcesandoUnica] = useState(null);
-  // Fuente de las fotos de hoja, tallo y fruto.
+  // Fuente de las fotos de hoja, tallo, flor y fruto.
   const [creditos, setCreditos] = useState(() => normalizarCreditos(creditosIniciales ?? planta.creditos));
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState(null);

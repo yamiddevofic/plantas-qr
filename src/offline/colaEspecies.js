@@ -15,7 +15,7 @@
 //               las `nuevas` fotos están en IndexedDB con claveFotoEspecie(id, n).
 //               `unicas` (opcional) cambia las fotos de un solo uso: { noche, hoja,
 //               tallo, fruto } con 'nueva' (en IndexedDB, claveFotoUnica(id, clave)) o 'quitar'.
-//               `creditos` (opcional) es la fuente de las fotos de hoja, tallo y fruto.
+//               `creditos` (opcional) es la fuente de las fotos de hoja, tallo, fruto y flor.
 //   - eliminar: borra la especie del servidor.
 //   - `error` marca una operación que el servidor rechazó (409, 400…) para mostrarla.
 
@@ -52,7 +52,7 @@ export const claveFotoEspecie = (id, sufijo) => `especie::${id}::${sufijo}`;
 export const claveFotoUnica = (id, clave) => claveFotoEspecie(id, `unica-${clave}`);
 
 /** Campo de la especie donde va cada foto de un solo uso. */
-export const CAMPOS_UNICAS = { noche: 'imagenNoche', hoja: 'imagenHoja', tallo: 'imagenTallo', fruto: 'imagenFruto' };
+export const CAMPOS_UNICAS = { noche: 'imagenNoche', hoja: 'imagenHoja', tallo: 'imagenTallo', fruto: 'imagenFruto', flor: 'imagenFlor' };
 
 /** Claves de IndexedDB que usa una operación. */
 export function clavesDeFotos(op) {
@@ -96,7 +96,7 @@ export function encolarEditar(cola, id, datos, foto) {
 
 /**
  * Fotos de una especie ya existente; solo vale la última lista guardada.
- * `unicas`: { noche|hoja|tallo|fruto: 'nueva' | 'quitar' } (las que no cambian no van).
+ * `unicas`: { noche|hoja|tallo|fruto|flor: 'nueva' | 'quitar' } (las que no cambian no van).
  */
 export function encolarFotos(cola, id, nombre, orden, nuevas, unicas = {}, creditos = null) {
   const op = {

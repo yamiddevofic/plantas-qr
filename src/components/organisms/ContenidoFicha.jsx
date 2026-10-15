@@ -20,7 +20,7 @@ export default function ContenidoFicha({ planta, coleccion = null, arbolId = nul
   const {
     nombre, descripcion, usos, impacto, ubicacion, ubicaciones, estadoConservacion,
     estadoConservacionDetalle, nombresAlternos, caracteristicas, habitat, datosCuriosos,
-    cuidados, especiesSimilares, imagenHoja, imagenTallo, imagenFruto, creditos,
+    cuidados, especiesSimilares, imagenHoja, imagenTallo, imagenFruto, imagenFlor, creditos,
   } = planta;
   // Las fichas de las notas de campo traen los usos como frases; las antiguas,
   // como etiquetas cortas separadas por comas.
@@ -30,10 +30,10 @@ export default function ContenidoFicha({ planta, coleccion = null, arbolId = nul
   const alternos = nombresAlternos ?? [];
   const similares = especiesSimilares ?? [];
   const curiosos = datosCuriosos ?? [];
-  // La hoja, el tallo y el fruto pueden tener su foto (se cargan en «Fotos» de la especie).
+  // La hoja, la flor, el tallo y el fruto pueden tener su foto (se cargan en «Fotos» de la especie).
   const rasgos = [
     { Icono: IconoHoja, etiqueta: 'Hojas', texto: descripcion?.hojas, foto: imagenHoja, alt: 'Hoja', credito: creditos?.hoja },
-    { Icono: IconoFlor, etiqueta: 'Flores', texto: caracteristicas?.flores },
+    { Icono: IconoFlor, etiqueta: 'Flores', texto: caracteristicas?.flores, foto: imagenFlor, alt: 'Flor', credito: creditos?.flor },
     { Icono: IconoFruto, etiqueta: 'Frutos', texto: caracteristicas?.frutos, foto: imagenFruto, alt: 'Fruto', credito: creditos?.fruto },
     { Icono: IconoArbol, etiqueta: 'Tronco', texto: caracteristicas?.tronco, foto: imagenTallo, alt: 'Tallo', credito: creditos?.tallo },
   ].filter((r) => r.texto || r.foto);

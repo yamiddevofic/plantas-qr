@@ -90,10 +90,11 @@ export const FOTOS_UNICAS = [
   { clave: 'hoja', campo: 'imagenHoja', archivo: 'fotoHoja' },
   { clave: 'tallo', campo: 'imagenTallo', archivo: 'fotoTallo' },
   { clave: 'fruto', campo: 'imagenFruto', archivo: 'fotoFruto' },
+  { clave: 'flor', campo: 'imagenFlor', archivo: 'fotoFlor' },
 ];
 
 /** Fotos fijas que pueden llevar crédito (las que se muestran en la ficha). */
-export const CON_CREDITO = ['hoja', 'tallo', 'fruto'];
+export const CON_CREDITO = ['hoja', 'tallo', 'fruto', 'flor'];
 
 /** Estas fotos (y sus créditos) solo cambian desde «Fotos»: crear o editar los datos no las toca. */
 function quitarFotosUnicas(datos) {
@@ -102,7 +103,7 @@ function quitarFotosUnicas(datos) {
 }
 
 /**
- * Lee `creditos` (JSON: { hoja|tallo|fruto: { texto, enlace } }) y lo valida.
+ * Lee `creditos` (JSON: { hoja|tallo|fruto|flor: { texto, enlace } }) y lo valida.
  * Devuelve { creditos } con solo las claves enviadas (null = sin crédito) o { error }.
  */
 export function leerCreditos(crudo) {

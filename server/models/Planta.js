@@ -45,7 +45,7 @@ const plantaSchema = new mongoose.Schema(
     imagen: { type: String, trim: true, default: '' },
     imagenes: { type: [String], default: [] },
     // Fotos con un solo uso, que se gestionan en «Fotos» (PUT /api/plantas/:id/fotos):
-    // la portada de la galería en modo noche y las de la hoja, el tallo y el fruto en la ficha.
+    // la portada de la galería en modo noche y las de la hoja, la flor, el tallo y el fruto en la ficha.
     imagenNoche: { type: String, trim: true, default: '' },
     imagenHoja: { type: String, trim: true, default: '' },
     imagenTallo: { type: String, trim: true, default: '' },
@@ -54,8 +54,10 @@ const plantaSchema = new mongoose.Schema(
       hoja: { type: creditoSchema, default: undefined },
       tallo: { type: creditoSchema, default: undefined },
       fruto: { type: creditoSchema, default: undefined },
+      flor: { type: creditoSchema, default: undefined },
     },
     imagenFruto: { type: String, trim: true, default: '' },
+    imagenFlor: { type: String, trim: true, default: '' },
     ubicaciones: { type: [String], default: [] },
     // ── Datos ampliados (fichas importadas de las notas de campo) ──
     nombresAlternos: { type: [String], default: undefined },

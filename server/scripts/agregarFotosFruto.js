@@ -74,7 +74,7 @@ async function main() {
 
   if (APLICAR && pendientes.length) {
     fs.mkdirSync(RESPALDOS, { recursive: true });
-    const archivo = path.join(RESPALDOS, `respaldo-fotos-fruto-${new Date().toISOString().slice(0, 10)}.json`);
+    const archivo = path.join(RESPALDOS, `respaldo-fotos-fruto-${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
     fs.writeFileSync(archivo, JSON.stringify(pendientes.map(({ ficha }) => ({
       _id: ficha._id, imagenFruto: ficha.imagenFruto, creditos: ficha.creditos,
     })), null, 2));

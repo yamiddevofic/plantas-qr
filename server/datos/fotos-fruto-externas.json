@@ -1,5 +1,5 @@
 {
-  "_nota": "Fotos de fruto (o cono) con licencia libre para las especies que no tenían foto propia de fruto. Las aplica server/scripts/agregarFotosFruto.js; solo se usan si la especie aún no tiene foto de fruto. El crédito se muestra en la ficha bajo la foto.",
+  "_nota": "Fotos de fruto (o cono) de Wikimedia Commons e iNaturalist para las especies que no tenían foto propia de fruto. Todas con licencia Creative Commons (CC BY, CC BY-SA; la del arrayán es CC BY-NC, de uso no comercial). Las aplica server/scripts/agregarFotosFruto.js; solo se usan si la especie aún no tiene foto de fruto. El crédito se muestra en la ficha bajo la foto.",
   "fotos": [
     {
       "cientifico": "Phoenix canariensis",
@@ -190,6 +190,16 @@
         "enlace": "https://www.inaturalist.org/observations/299379449"
       },
       "archivoFuente": "iNaturalist 299379449"
+    },
+    {
+      "cientifico": "Myrcia popayanensis",
+      "nombre": "Arrayán",
+      "descarga": "https://inaturalist-open-data.s3.amazonaws.com/photos/411056913/original.jpg",
+      "credito": {
+        "texto": "Foto: quercushumboldtii · CC BY-NC 4.0 · iNaturalist",
+        "enlace": "https://www.inaturalist.org/observations/231439920"
+      },
+      "archivoFuente": "iNaturalist 231439920"
     }
   ]
 }
