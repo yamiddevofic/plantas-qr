@@ -1,6 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+// Scroll suave de la página.
+import './desplazamiento.js'
 import App from './App.jsx'
 import TemaProvider from './TemaProvider.jsx'
 import { aplicarTemaInicial } from './tema.js'

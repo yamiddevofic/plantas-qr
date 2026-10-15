@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useHashRoute } from './router';
+import { lenis } from './desplazamiento';
 import PaginaGaleria from './components/pages/PaginaGaleria';
 import PaginaDetalle from './components/pages/PaginaDetalle';
 import PaginaEspecies from './components/pages/PaginaEspecies';
@@ -23,7 +24,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // `force`: también si un modal dejó Lenis detenido.
+    lenis.scrollTo(0, { immediate: true, force: true });
     const temporizador = setTimeout(() => setTransicion(false), 1000);
     return () => clearTimeout(temporizador);
   }, [clavePagina]);

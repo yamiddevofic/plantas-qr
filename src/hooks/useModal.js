@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { lenis } from '../desplazamiento';
 
 /**
  * Comportamiento común de los modales de formulario: foco inicial en el
@@ -26,6 +27,7 @@ export default function useModal(onClose) {
       htmlOverflow: html.style.overflow,
     };
 
+    lenis.stop();
     body.style.position = 'fixed';
     body.style.top = `-${scrollY}px`;
     body.style.left = '0';
@@ -51,6 +53,9 @@ export default function useModal(onClose) {
       document.removeEventListener('wheel', bloquearFuera);
       document.removeEventListener('touchmove', bloquearFuera);
       window.scrollTo(0, scrollY);
+      // Lenis vuelve a medir la página y toma la posición restaurada.
+      lenis.resize();
+      lenis.start();
     };
   }, []);
 

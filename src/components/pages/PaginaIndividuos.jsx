@@ -8,6 +8,7 @@ import {
   fetchPlantas,
   subirFotoIndividuo,
 } from '../../api';
+import { irAElemento } from '../../desplazamiento';
 import useAccionProtegida from '../../hooks/useAccionProtegida';
 import useEnLinea from '../../hooks/useEnLinea';
 import { agruparEspecies, parqueMasUsado } from '../../individuos';
@@ -419,7 +420,7 @@ export default function PaginaIndividuos() {
 
   const filtrarEspecie = (id) => {
     setFiltroEspecie(id);
-    if (id) document.getElementById('individuos-resultados')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (id) irAElemento('individuos-resultados');
   };
 
   return (

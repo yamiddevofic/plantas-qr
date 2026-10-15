@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LuHouse, LuInfo, LuMapPin, LuMoon, LuSun } from 'react-icons/lu';
 import { fetchPlantas } from '../../api';
+import { irAElemento } from '../../desplazamiento';
 import { contarTaxones } from '../../taxonomia';
 import SeccionParque from '../organisms/SeccionParque';
 import HeroInicio from '../organisms/HeroInicio';
@@ -37,14 +38,12 @@ export default function PaginaInicio() {
   }, []);
 
   const irASeccion = (id) => () => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    irAElemento(id);
     setMenuAbierto(false);
   };
 
   const conocerProyecto = () => {
-    document
-      .getElementById('acordeon-proyecto')
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    irAElemento('acordeon-proyecto');
     setMenuAbierto(false);
   };
 

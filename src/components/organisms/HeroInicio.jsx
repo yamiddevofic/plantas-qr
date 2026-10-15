@@ -4,6 +4,7 @@ import Boton from '../atoms/Boton';
 import { IconoBajar, IconoFlecha, IconoUbicacion } from '../atoms/IconosInicio';
 import FotosHero from './FotosHero';
 import BuscadorInicio from './BuscadorInicio';
+import { irAElemento } from '../../desplazamiento';
 
 /* El titular entra palabra por palabra; la segunda línea va en cursiva serif. */
 const LINEA_1 = ['Cada', 'árbol,'];
@@ -71,9 +72,7 @@ export default function HeroInicio({ onConocerProyecto, plantas = null }) {
         type="button"
         className="hero-inicio-bajar"
         aria-label="Ir a cómo funciona"
-        onClick={() =>
-          document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
+        onClick={() => irAElemento('como-funciona')}
       >
         <IconoBajar />
       </button>
