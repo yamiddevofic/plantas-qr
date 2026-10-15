@@ -1,0 +1,195 @@
+{
+  "_nota": "Fotos de fruto (o cono) con licencia libre para las especies que no tenían foto propia de fruto. Las aplica server/scripts/agregarFotosFruto.js; solo se usan si la especie aún no tiene foto de fruto. El crédito se muestra en la ficha bajo la foto.",
+  "fotos": [
+    {
+      "cientifico": "Phoenix canariensis",
+      "nombre": "Palma canaria / Palma datilera",
+      "descarga": "https://upload.wikimedia.org/wikipedia/commons/0/08/Canary_Island_date_palm_-_Phoenix_canariensis_01.jpg",
+      "credito": {
+        "texto": "Foto: Zeynel Cebeci · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Canary_Island_date_palm_-_Phoenix_canariensis_01.jpg"
+      },
+      "archivoFuente": "File:Canary Island date palm - Phoenix canariensis 01.jpg"
+    },
+    {
+      "cientifico": "Araucaria heterophylla",
+      "nombre": "Araucaria excelsa",
+      "descarga": "https://upload.wikimedia.org/wikipedia/commons/6/60/Araucaria_heterophylla_cones.jpg",
+      "credito": {
+        "texto": "Foto: Tree-species at Flickr · CC BY 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Araucaria_heterophylla_cones.jpg"
+      },
+      "archivoFuente": "File:Araucaria heterophylla cones.jpg"
+    },
+    {
+      "cientifico": "Cupressus sp. (probablemente C. lusitanica)",
+      "nombre": "Ciprés",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Cupressus_lusitanica_06.jpg/1920px-Cupressus_lusitanica_06.jpg",
+      "credito": {
+        "texto": "Foto: Rohit Naniwadekar · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Cupressus_lusitanica_06.jpg"
+      },
+      "archivoFuente": "File:Cupressus lusitanica 06.jpg"
+    },
+    {
+      "cientifico": "Ficus benjamina",
+      "nombre": "Ficus benjamina",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Ficus-benjamina-fruits.JPG/1920px-Ficus-benjamina-fruits.JPG",
+      "credito": {
+        "texto": "Foto: Sten · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Ficus-benjamina-fruits.JPG"
+      },
+      "archivoFuente": "File:Ficus-benjamina-fruits.JPG"
+    },
+    {
+      "cientifico": "Photinia x fraseri",
+      "nombre": "Fotinia",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Photinia_%C3%97_fraseri_cultivar_1DS-II_4-5367.jpg/1920px-Photinia_%C3%97_fraseri_cultivar_1DS-II_4-5367.jpg",
+      "credito": {
+        "texto": "Foto: SAplants · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Photinia_%C3%97_fraseri_cultivar_1DS-II_4-5367.jpg"
+      },
+      "archivoFuente": "File:Photinia × fraseri cultivar 1DS-II 4-5367.jpg"
+    },
+    {
+      "cientifico": "Senna spectabilis",
+      "nombre": "Velero",
+      "descarga": "https://upload.wikimedia.org/wikipedia/commons/1/11/Sena_spectabilis_pods_%2824959290714%29.jpg",
+      "credito": {
+        "texto": "Foto: Dick Culbert · CC BY 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Sena_spectabilis_pods_(24959290714).jpg"
+      },
+      "archivoFuente": "File:Sena spectabilis pods (24959290714).jpg"
+    },
+    {
+      "cientifico": "Grevillea robusta",
+      "nombre": "Roble australiano",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Grevillea_robusta_unripe_seed_pods_01.jpg/1920px-Grevillea_robusta_unripe_seed_pods_01.jpg",
+      "credito": {
+        "texto": "Foto: RickP · CC BY 2.5 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Grevillea_robusta_unripe_seed_pods_01.jpg"
+      },
+      "archivoFuente": "File:Grevillea robusta unripe seed pods 01.jpg"
+    },
+    {
+      "cientifico": "Persea americana",
+      "nombre": "Aguacate",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Ugandan_avocado_fruit_on_the_tree_4.jpg/1920px-Ugandan_avocado_fruit_on_the_tree_4.jpg",
+      "credito": {
+        "texto": "Foto: Denis kasozi · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Ugandan_avocado_fruit_on_the_tree_4.jpg"
+      },
+      "archivoFuente": "File:Ugandan avocado fruit on the tree 4.jpg"
+    },
+    {
+      "cientifico": "Magnolia grandiflora",
+      "nombre": "Magnolio",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Magnolia_grandiflora_fruit_RHu_002.JPG/1920px-Magnolia_grandiflora_fruit_RHu_002.JPG",
+      "credito": {
+        "texto": "Foto: Meneerke bloem · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Magnolia_grandiflora_fruit_RHu_002.JPG"
+      },
+      "archivoFuente": "File:Magnolia grandiflora fruit RHu 002.JPG"
+    },
+    {
+      "cientifico": "Eriobotrya japonica",
+      "nombre": "Níspero",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Eriobotrya_japonica_-_Yenid%C3%BCnya.JPG/1920px-Eriobotrya_japonica_-_Yenid%C3%BCnya.JPG",
+      "credito": {
+        "texto": "Foto: Zeynel Cebeci · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Eriobotrya_japonica_-_Yenid%C3%BCnya.JPG"
+      },
+      "archivoFuente": "File:Eriobotrya japonica - Yenidünya.JPG"
+    },
+    {
+      "cientifico": "Syzygium cumini",
+      "nombre": "Guanaminí",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Syzygium_cumini_02.JPG/1920px-Syzygium_cumini_02.JPG",
+      "credito": {
+        "texto": "Foto: Vinayaraj · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Syzygium_cumini_02.JPG"
+      },
+      "archivoFuente": "File:Syzygium cumini 02.JPG"
+    },
+    {
+      "cientifico": "Tecoma stans",
+      "nombre": "Chicalá",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Tecoma_stans_%28L.%29_Juss._ex_Humb.%2C_Bonpl.%2C_et_Kunth_%28AM_AK354726-6%29.jpg/1920px-Tecoma_stans_%28L.%29_Juss._ex_Humb.%2C_Bonpl.%2C_et_Kunth_%28AM_AK354726-6%29.jpg",
+      "credito": {
+        "texto": "Foto: Ewen Cameron · CC BY 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Tecoma_stans_(L.)_Juss._ex_Humb.,_Bonpl.,_et_Kunth_(AM_AK354726-6).jpg"
+      },
+      "archivoFuente": "File:Tecoma stans (L.) Juss. ex Humb., Bonpl., et Kunth (AM AK354726-6).jpg"
+    },
+    {
+      "cientifico": "Liquidambar styraciflua",
+      "nombre": "Liquidámbar",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Amberboom_%28Liquidambar_styraciflua%29._Detail._31-03-2020_%28d.j.b.%29.jpg_03.jpg/1920px-Amberboom_%28Liquidambar_styraciflua%29._Detail._31-03-2020_%28d.j.b.%29.jpg_03.jpg",
+      "credito": {
+        "texto": "Foto: Dominicus Johannes Bergsma · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Amberboom_(Liquidambar_styraciflua)._Detail._31-03-2020_(d.j.b.).jpg_03.jpg"
+      },
+      "archivoFuente": "File:Amberboom (Liquidambar styraciflua). Detail. 31-03-2020 (d.j.b.).jpg 03.jpg"
+    },
+    {
+      "cientifico": "Pittosporum undulatum",
+      "nombre": "Pitosporo",
+      "descarga": "https://upload.wikimedia.org/wikipedia/commons/1/14/Pittosporum_undulatum_berries_%284579817225%29.jpg",
+      "credito": {
+        "texto": "Foto: Rexness · CC BY-SA 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Pittosporum_undulatum_berries_(4579817225).jpg"
+      },
+      "archivoFuente": "File:Pittosporum undulatum berries (4579817225).jpg"
+    },
+    {
+      "cientifico": "Prunus serotina var. capuli",
+      "nombre": "Capulí",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Capul%C3%AD.JPG/1920px-Capul%C3%AD.JPG",
+      "credito": {
+        "texto": "Foto: John PC · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Capul%C3%AD.JPG"
+      },
+      "archivoFuente": "File:Capulí.JPG"
+    },
+    {
+      "cientifico": "Pinus patula",
+      "nombre": "Pino pátula",
+      "descarga": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Pinus_patula%2C_UC_Berkeley_Botanical_Gardens_2.jpg",
+      "credito": {
+        "texto": "Foto: Dick Culbert · CC BY 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Pinus_patula,_UC_Berkeley_Botanical_Gardens_2.jpg"
+      },
+      "archivoFuente": "File:Pinus patula, UC Berkeley Botanical Gardens 2.jpg"
+    },
+    {
+      "cientifico": "Platycladus orientalis",
+      "nombre": "Tuya",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Platycladus_orientalis_foliage_and_cones%2C_India_1.jpg/1920px-Platycladus_orientalis_foliage_and_cones%2C_India_1.jpg",
+      "credito": {
+        "texto": "Foto: Vinayaraj · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Platycladus_orientalis_foliage_and_cones,_India_1.jpg"
+      },
+      "archivoFuente": "File:Platycladus orientalis foliage and cones, India 1.jpg"
+    },
+    {
+      "cientifico": "Citharexylum subflavescens",
+      "nombre": "Cajeto",
+      "descarga": "https://inaturalist-open-data.s3.amazonaws.com/photos/187803792/original.jpg",
+      "credito": {
+        "texto": "Foto: Nicolás Baresch Uribe · CC BY 4.0 · iNaturalist",
+        "enlace": "https://www.inaturalist.org/observations/111262375"
+      },
+      "archivoFuente": "iNaturalist 111262375"
+    },
+    {
+      "cientifico": "Retrophyllum rospigliosii",
+      "nombre": "Pino romerón",
+      "descarga": "https://inaturalist-open-data.s3.amazonaws.com/photos/539324467/original.jpg",
+      "credito": {
+        "texto": "Foto: Paúl Gonzáles · CC BY 4.0 · iNaturalist",
+        "enlace": "https://www.inaturalist.org/observations/299379449"
+      },
+      "archivoFuente": "iNaturalist 299379449"
+    }
+  ]
+}
