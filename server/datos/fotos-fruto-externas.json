@@ -1,5 +1,6 @@
 {
-  "_nota": "Fotos de fruto (o cono) de Wikimedia Commons e iNaturalist para las especies que no tenían foto propia de fruto. Todas con licencia Creative Commons (CC BY, CC BY-SA; la del arrayán es CC BY-NC, de uso no comercial). Las aplica server/scripts/agregarFotosFruto.js; solo se usan si la especie aún no tiene foto de fruto. El crédito se muestra en la ficha bajo la foto.",
+  "_nota": "Fotos de fruto (o cono) de Wikimedia Commons e iNaturalist para las especies que no tenían foto propia de fruto. Todas con licencia Creative Commons (CC BY, CC BY-SA; la del arrayán es CC BY-NC, de uso no comercial). Las aplica server/scripts/agregarFotosExternas.js; solo se usan si la especie aún no tiene foto de fruto. El crédito se muestra en la ficha bajo la foto.",
+  "clave": "fruto",
   "fotos": [
     {
       "cientifico": "Phoenix canariensis",

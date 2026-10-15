@@ -1,0 +1,226 @@
+{
+  "_nota": "Fotos de flor de Wikimedia Commons e iNaturalist (licencias Creative Commons o dominio público) para las especies que no tenían foto propia de flor. Las coníferas (araucaria, ciprés, pinos y tuya) y el ficus no llevan foto de flor: no tienen flores verdaderas o no son visibles. El arrayán guayabito usa la misma foto que el arrayán (misma especie). Las aplica server/scripts/agregarFotosExternas.js.",
+  "clave": "flor",
+  "fotos": [
+    {
+      "cientifico": "Phoenix canariensis",
+      "nombre": "Palma canaria / Palma datilera",
+      "descarga": "https://upload.wikimedia.org/wikipedia/commons/6/61/Phoenix_canariensis_B.jpg",
+      "credito": {
+        "texto": "Foto: Wouter Hagens · Dominio público · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Phoenix_canariensis_B.jpg"
+      },
+      "archivoFuente": "File:Phoenix canariensis B.jpg"
+    },
+    {
+      "cientifico": "Photinia x fraseri",
+      "nombre": "Fotinia",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/%E7%B4%85%E8%91%89%E7%9F%B3%E6%A5%A0_Photinia_%C3%97_fraseri_-%E6%AD%A6%E6%BC%A2%E6%9C%A8%E8%98%AD%E8%8A%B1%E6%B5%B7%E6%A8%82%E5%9C%92_Wuhan%2C_China-_%2833898673770%29.jpg/1920px-%E7%B4%85%E8%91%89%E7%9F%B3%E6%A5%A0_Photinia_%C3%97_fraseri_-%E6%AD%A6%E6%BC%A2%E6%9C%A8%E8%98%AD%E8%8A%B1%E6%B5%B7%E6%A8%82%E5%9C%92_Wuhan%2C_China-_%2833898673770%29.jpg",
+      "credito": {
+        "texto": "Foto: 阿橋 HQ · CC BY-SA 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:%E7%B4%85%E8%91%89%E7%9F%B3%E6%A5%A0_Photinia_%C3%97_fraseri_-%E6%AD%A6%E6%BC%A2%E6%9C%A8%E8%98%AD%E8%8A%B1%E6%B5%B7%E6%A8%82%E5%9C%92_Wuhan,_China-_(33898673770).jpg"
+      },
+      "archivoFuente": "File:紅葉石楠 Photinia × fraseri -武漢木蘭花海樂園 Wuhan, China- (33898673770).jpg"
+    },
+    {
+      "cientifico": "Citharexylum subflavescens",
+      "nombre": "Cajeto",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Citharexylum_subflavescens_02.jpg/1920px-Citharexylum_subflavescens_02.jpg",
+      "credito": {
+        "texto": "Foto: Storrespla · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Citharexylum_subflavescens_02.jpg"
+      },
+      "archivoFuente": "File:Citharexylum subflavescens 02.jpg"
+    },
+    {
+      "cientifico": "Melaleuca viminalis",
+      "nombre": "Calistemo llorón",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Melaleuca_viminalis_in_Jardin_botanique_de_Deshaies_%281%29.jpg/1920px-Melaleuca_viminalis_in_Jardin_botanique_de_Deshaies_%281%29.jpg",
+      "credito": {
+        "texto": "Foto: Tournasol7 · CC BY 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Melaleuca_viminalis_in_Jardin_botanique_de_Deshaies_(1).jpg"
+      },
+      "archivoFuente": "File:Melaleuca viminalis in Jardin botanique de Deshaies (1).jpg"
+    },
+    {
+      "cientifico": "Senna spectabilis",
+      "nombre": "Velero",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Senna_spectabilis_%28DC.%29_H.S.Irwin_%26_Barneby.jpg/1920px-Senna_spectabilis_%28DC.%29_H.S.Irwin_%26_Barneby.jpg",
+      "credito": {
+        "texto": "Foto: Dinesh Valke · CC BY-SA 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Senna_spectabilis_(DC.)_H.S.Irwin_%26_Barneby.jpg"
+      },
+      "archivoFuente": "File:Senna spectabilis (DC.) H.S.Irwin & Barneby.jpg"
+    },
+    {
+      "cientifico": "Syzygium paniculatum",
+      "nombre": "Eugenia",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/DSC_2628_flowers_of_magenta_lilly_pilly_%28Syzygium_paniculatum%29_%2816247701119%29.jpg/1920px-DSC_2628_flowers_of_magenta_lilly_pilly_%28Syzygium_paniculatum%29_%2816247701119%29.jpg",
+      "credito": {
+        "texto": "Foto: John Jennings · CC BY 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:DSC_2628_flowers_of_magenta_lilly_pilly_(Syzygium_paniculatum)_(16247701119).jpg"
+      },
+      "archivoFuente": "File:DSC 2628 flowers of magenta lilly pilly (Syzygium paniculatum) (16247701119).jpg"
+    },
+    {
+      "cientifico": "Grevillea robusta",
+      "nombre": "Roble australiano",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Grevillea_robusta_flowers%2C_Piccadilly_St_Geebung_DSCF0138.jpg/1920px-Grevillea_robusta_flowers%2C_Piccadilly_St_Geebung_DSCF0138.jpg",
+      "credito": {
+        "texto": "Foto: John Robert McPherson · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Grevillea_robusta_flowers,_Piccadilly_St_Geebung_DSCF0138.jpg"
+      },
+      "archivoFuente": "File:Grevillea robusta flowers, Piccadilly St Geebung DSCF0138.jpg"
+    },
+    {
+      "cientifico": "Persea americana",
+      "nombre": "Aguacate",
+      "descarga": "https://upload.wikimedia.org/wikipedia/commons/9/96/Persea_americana_flowers.jpg",
+      "credito": {
+        "texto": "Foto: B.navez · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Persea_americana_flowers.jpg"
+      },
+      "archivoFuente": "File:Persea americana flowers.jpg"
+    },
+    {
+      "cientifico": "Tibouchina mutabilis",
+      "nombre": "Siete cueros mutabilis",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Tibouchina_mutabilis_in_Ceret_S%C3%A3o_Paulo_001.jpg/1920px-Tibouchina_mutabilis_in_Ceret_S%C3%A3o_Paulo_001.jpg",
+      "credito": {
+        "texto": "Foto: mauroguanandi · CC BY 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Tibouchina_mutabilis_in_Ceret_S%C3%A3o_Paulo_001.jpg"
+      },
+      "archivoFuente": "File:Tibouchina mutabilis in Ceret São Paulo 001.jpg"
+    },
+    {
+      "cientifico": "Magnolia grandiflora",
+      "nombre": "Magnolio",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Magnolia_grandiflora_-_flower_2.jpg/1920px-Magnolia_grandiflora_-_flower_2.jpg",
+      "credito": {
+        "texto": "Foto: Ianaré Sévi · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Magnolia_grandiflora_-_flower_2.jpg"
+      },
+      "archivoFuente": "File:Magnolia grandiflora - flower 2.jpg"
+    },
+    {
+      "cientifico": "Hibiscus rosa-sinensis (Variedad variegada / de hoja roja)",
+      "nombre": "San Joaquín variegado",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Hibiscus_rosa-sinensis_%27Cooperi%271.jpg/1920px-Hibiscus_rosa-sinensis_%27Cooperi%271.jpg",
+      "credito": {
+        "texto": "Foto: KENPEI · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Hibiscus_rosa-sinensis_%27Cooperi%271.jpg"
+      },
+      "archivoFuente": "File:Hibiscus rosa-sinensis 'Cooperi'1.jpg"
+    },
+    {
+      "cientifico": "Eriobotrya japonica",
+      "nombre": "Níspero",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Eriobotrya_japonica_flowers.jpg/1920px-Eriobotrya_japonica_flowers.jpg",
+      "credito": {
+        "texto": "Foto: B.navez · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Eriobotrya_japonica_flowers.jpg"
+      },
+      "archivoFuente": "File:Eriobotrya japonica flowers.jpg"
+    },
+    {
+      "cientifico": "Syzygium cumini",
+      "nombre": "Guanaminí",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Syzygium_cumini%28L.%29Skeels..jpg/1920px-Syzygium_cumini%28L.%29Skeels..jpg",
+      "credito": {
+        "texto": "Foto: Lalithamba · CC BY 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Syzygium_cumini(L.)Skeels..jpg"
+      },
+      "archivoFuente": "File:Syzygium cumini(L.)Skeels..jpg"
+    },
+    {
+      "cientifico": "Tecoma stans",
+      "nombre": "Chicalá",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Yellow_trumpetbush_%28Tecoma_stans%29_Buton_Island_1.jpg/1920px-Yellow_trumpetbush_%28Tecoma_stans%29_Buton_Island_1.jpg",
+      "credito": {
+        "texto": "Foto: David E Mead · CC0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Yellow_trumpetbush_(Tecoma_stans)_Buton_Island_1.jpg"
+      },
+      "archivoFuente": "File:Yellow trumpetbush (Tecoma stans) Buton Island 1.jpg"
+    },
+    {
+      "cientifico": "Liquidambar styraciflua",
+      "nombre": "Liquidámbar",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Liquidambar_styraciflua_male_and_female_inflorescence_%28cropped%29.jpg/1920px-Liquidambar_styraciflua_male_and_female_inflorescence_%28cropped%29.jpg",
+      "credito": {
+        "texto": "Foto: Gmihail at Serbian Wikipedia · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Liquidambar_styraciflua_male_and_female_inflorescence_(cropped).jpg"
+      },
+      "archivoFuente": "File:Liquidambar styraciflua male and female inflorescence (cropped).jpg"
+    },
+    {
+      "cientifico": "Pittosporum undulatum",
+      "nombre": "Pitosporo",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Pittosporum_undulatum_1DS-II_3-8911.jpg/1920px-Pittosporum_undulatum_1DS-II_3-8911.jpg",
+      "credito": {
+        "texto": "Foto: SAplants · CC BY-SA 4.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Pittosporum_undulatum_1DS-II_3-8911.jpg"
+      },
+      "archivoFuente": "File:Pittosporum undulatum 1DS-II 3-8911.jpg"
+    },
+    {
+      "cientifico": "Prunus serotina var. capuli",
+      "nombre": "Capulí",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/%E6%9D%8E%E5%B1%AC_Prunus_salicifolia_-%E6%AF%94%E5%88%A9%E6%99%82_Ghent_University_Botanical_Garden%2C_Belgium-_%289227005739%29.jpg/1920px-%E6%9D%8E%E5%B1%AC_Prunus_salicifolia_-%E6%AF%94%E5%88%A9%E6%99%82_Ghent_University_Botanical_Garden%2C_Belgium-_%289227005739%29.jpg",
+      "credito": {
+        "texto": "Foto: 阿橋 HQ · CC BY-SA 2.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:%E6%9D%8E%E5%B1%AC_Prunus_salicifolia_-%E6%AF%94%E5%88%A9%E6%99%82_Ghent_University_Botanical_Garden,_Belgium-_(9227005739).jpg"
+      },
+      "archivoFuente": "File:李屬 Prunus salicifolia -比利時 Ghent University Botanical Garden, Belgium- (9227005739).jpg"
+    },
+    {
+      "cientifico": "Photinia glabra",
+      "nombre": "Fotinia glabra",
+      "descarga": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Photinia_glabra5.jpg/1920px-Photinia_glabra5.jpg",
+      "credito": {
+        "texto": "Foto: KENPEI · CC BY-SA 3.0 · Wikimedia Commons",
+        "enlace": "https://commons.wikimedia.org/wiki/File:Photinia_glabra5.jpg"
+      },
+      "archivoFuente": "File:Photinia glabra5.jpg"
+    },
+    {
+      "cientifico": "Ceroxylon quindiuense",
+      "nombre": "Palma de cera del Quindío",
+      "descarga": "https://inaturalist-open-data.s3.amazonaws.com/photos/337973229/original.jpeg",
+      "credito": {
+        "texto": "Foto: Jorge L. Peña · CC BY-NC 4.0 · iNaturalist",
+        "enlace": "https://www.inaturalist.org/observations/192515640"
+      },
+      "archivoFuente": "iNaturalist 192515640"
+    },
+    {
+      "cientifico": "Myrcia popayanensis",
+      "nombre": "Arrayán",
+      "descarga": "https://inaturalist-open-data.s3.amazonaws.com/photos/58530437/original.jpg",
+      "credito": {
+        "texto": "Foto: Danna Lizeth Guevara Prieto · CC BY 4.0 · iNaturalist",
+        "enlace": "https://www.inaturalist.org/observations/36971602"
+      },
+      "archivoFuente": "iNaturalist 36971602"
+    },
+    {
+      "cientifico": "Myrcia popayanensis (Variedad / Forma de hoja redonda)",
+      "nombre": "Arrayán guayabito",
+      "descarga": "https://inaturalist-open-data.s3.amazonaws.com/photos/58530437/original.jpg",
+      "credito": {
+        "texto": "Foto: Danna Lizeth Guevara Prieto · CC BY 4.0 · iNaturalist",
+        "enlace": "https://www.inaturalist.org/observations/36971602"
+      },
+      "archivoFuente": "iNaturalist 36971602"
+    },
+    {
+      "cientifico": "Rhamnus goudotiana",
+      "nombre": "Cajeto de monte",
+      "descarga": "https://inaturalist-open-data.s3.amazonaws.com/photos/122259665/original.jpg",
+      "credito": {
+        "texto": "Foto: Nicolás Baresch Uribe · CC BY 4.0 · iNaturalist",
+        "enlace": "https://www.inaturalist.org/observations/74778938"
+      },
+      "archivoFuente": "iNaturalist 74778938"
+    }
+  ]
+}
