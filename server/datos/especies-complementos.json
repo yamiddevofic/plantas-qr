@@ -1,0 +1,193 @@
+{
+  "_nota": "Datos que faltaban en las fichas del catálogo inicial, completados con fuentes bibliográficas (octubre de 2026). Los aplica server/scripts/completarEspecies.js. La confianza y las observaciones de identificación se redactaron a partir de las fotos de campo.",
+  "especies": {
+    "Ceroxylon quindiuense": {
+      "completar": {
+        "nombresAlternos": [
+          "Palma de cera",
+          "Palma de ramo",
+          "Chonta"
+        ],
+        "identificacion": {
+          "confianza": "medio-alto",
+          "observaciones": "El ejemplar (foto 1) es una palma solitaria muy alta, de estípite delgado, cilíndrico y no engrosado, con copa pequeña de hojas pinnadas; el tallo (foto 3) es blanquecino y ceroso, con anillos oscuros de las hojas caídas. Esto confirma el género Ceroxylon y descarta a C. ventricosum; la talla y su uso en los Andes colombianos apuntan a C. quindiuense. Para confirmarla, revisar las pinnas y los frutos maduros."
+        },
+        "caracteristicas": {
+          "flores": "Pequeñas y blanquecinas, agrupadas en inflorescencias interfoliares muy ramificadas, de hasta unos 2 m, sostenidas por un pedúnculo largo. Es una especie dioica: hay palmas con flores masculinas (estaminadas) y palmas con flores femeninas (pistiladas). Cada flor abre durante 2 a 3 días.",
+          "frutos": "Drupas globosas y lisas de 1,6 a 2 cm de diámetro, verdes y luego rojo-anaranjadas al madurar, con una sola semilla. Una infructescencia lleva en promedio unos 4.465 frutos, que maduran de 7 a 13 meses después de la floración.",
+          "tronco": "Estípite único, recto y cilíndrico, de hasta unos 36 cm de diámetro, liso y cubierto de una capa de cera blanquecina; las cicatrices de las hojas caídas forman anillos oscuros a lo largo del tronco. Puede superar los 45 m de altura y excepcionalmente los 60 m."
+        },
+        "habitat": {
+          "distribucion": "Andes de Colombia y Perú. En Colombia crece en bosques húmedos de montaña de las cordilleras, con las poblaciones más grandes en la Cordillera Central (Quindío, Tolima, Risaralda, Antioquia), y está registrada en 14 departamentos. Se cultiva como ornamental en parques y avenidas.",
+          "altitud": "Entre 2.000 y 3.100 m s. n. m. en su hábitat natural; registros en Colombia desde 1.550 m.",
+          "clima": "Frío y húmedo de montaña, con neblina frecuente. En la Cordillera Central las lluvias son bimodales: el periodo más lluvioso va de junio a noviembre y el más seco de febrero a marzo."
+        },
+        "estadoConservacionDetalle": "Vulnerable (VU) en la Lista Roja de la UICN (evaluación de 1998, sin actualizar) y En Peligro (EN) en el Libro Rojo de Plantas de Colombia. La amenazan la transformación de su hábitat por la ganadería y la agricultura y, históricamente, la extracción de hojas para el Domingo de Ramos.",
+        "datosCuriosos": [
+          "Es el árbol nacional de Colombia por la Ley 61 de 1985.",
+          "Es la palma más alta del mundo y la monocotiledónea de mayor altura registrada: puede alcanzar 60 m.",
+          "Su nombre viene de la cera del tronco, que en el siglo XIX se raspaba para fabricar velas.",
+          "Crece muy despacio (una hoja nueva cada 69 días) y puede tardar unos 70 años en llegar a la madurez. Sus frutos alimentan a tucanes, mirlas y al loro orejiamarillo, especie amenazada."
+        ],
+        "cuidados": "Se propaga solo por semilla, que tarda de 9 a 14 meses en germinar. De joven crece mejor con sombra parcial y humedad constante; adulta tolera pleno sol. Necesita suelos profundos, húmedos y bien drenados y clima frío de montaña. Es especie protegida: no se deben cortar sus hojas para ramos.",
+        "especiesSimilares": [
+          "Ceroxylon ventricosum — estípite engrosado (ventricoso) en la parte media, también cubierto de cera blanca.",
+          "Ceroxylon vogelianum — palma más pequeña (3–17 m), con las pinnas dispuestas de forma irregular en varios planos.",
+          "Ceroxylon alpinum — de 90 a 110 pinnas por lado, ordenadas en un solo plano, con la punta del raquis torcida que las deja en posición vertical."
+        ]
+      },
+      "reemplazar": {
+        "estadoConservacion": "vulnerable"
+      },
+      "fuentes": [
+        {
+          "titulo": "Wikipedia — Ceroxylon quindiuense",
+          "url": "https://en.wikipedia.org/wiki/Ceroxylon_quindiuense"
+        },
+        {
+          "titulo": "Catálogo de Plantas y Líquenes de Colombia (ColPlanta)",
+          "url": "https://colplanta.org/taxon/urn:lsid:ipni.org:names:665697-1/general-information"
+        },
+        {
+          "titulo": "Fenología de Ceroxylon quindiuense a lo largo de un gradiente altitudinal (Revista de Biología Tropical)",
+          "url": "https://www.redalyc.org/journal/449/44969403022/html/"
+        },
+        {
+          "titulo": "Wikipedia — género Ceroxylon",
+          "url": "https://en.wikipedia.org/wiki/Ceroxylon"
+        },
+        {
+          "titulo": "DAGMA Cali — Palma de cera y Semana Santa",
+          "url": "https://www.cali.gov.co/dagma/publicaciones/152827/la-palma-de-cera-esta-en-peligro-de-extincion-presentamos-otras-alternativas-para-semana-santa/"
+        }
+      ]
+    },
+    "Phoenix canariensis": {
+      "completar": {
+        "nombresAlternos": [
+          "Palmera canaria",
+          "Palma de Canarias",
+          "Palma fénix",
+          "Palma de dátil de las Canarias"
+        ],
+        "identificacion": {
+          "confianza": "alto",
+          "observaciones": "La foto del ejemplar (foto 1) muestra una palma de tronco único, muy grueso y recto, con una corona densa y casi esférica de numerosas hojas pinnadas arqueadas de color verde intenso; la foto del tallo (foto 3) muestra las cicatrices romboidales de las bases de las hojas caídas, y la de la hoja (foto 2) los foliolos rígidos y puntiagudos a ambos lados del raquis. La ausencia de hijuelos en la base y el tronco grueso la distinguen de la palmera datilera (Phoenix dactylifera)."
+        },
+        "caracteristicas": {
+          "flores": "Muy pequeñas, de color crema, agrupadas en inflorescencias ramificadas que nacen entre las hojas, protegidas por una espata. Es dioica: las palmas femeninas forman racimos abiertos de hasta 2 m y las masculinas racimos en forma de escoba. La polinización es por el viento.",
+          "frutos": "Dátiles pequeños, ovoides, de unos 2 cm de largo y 1 cm de diámetro, de color amarillo a anaranjado al madurar, con una sola semilla grande. La pulpa es comestible, pero poco apreciada; se usa como alimento para el ganado y la dispersan las aves.",
+          "tronco": "Tronco único, sin hijuelos, robusto y de 50 a 120 cm de diámetro, de color gris a marrón, cubierto por las cicatrices romboidales de las bases de las hojas caídas. Normalmente mide de 10 a 20 m de altura y en la base puede tener raíces aéreas."
+        },
+        "habitat": {
+          "distribucion": "Nativa de las Islas Canarias (España), donde forma palmerales en barrancos y laderas con agua subterránea temporal. Se cultiva como ornamental en todo el mundo; en Colombia está registrada en Antioquia, Bogotá, Boyacá y Cundinamarca.",
+          "altitud": "En Colombia se cultiva entre 1.500 y 2.600 m s. n. m.",
+          "clima": "Mediterráneo y subtropical; tolera bien la sequía y heladas ligeras (hasta unos −10 °C en ejemplares adultos). Prefiere pleno sol."
+        },
+        "estadoConservacionDetalle": "Preocupación menor (LC) según la UICN. En Canarias es una especie protegida, amenazada por la hibridación con la palmera datilera, el picudo rojo y los incendios.",
+        "datosCuriosos": [
+          "Es el símbolo vegetal de las Islas Canarias por la Ley 7/1991.",
+          "Puede mantener entre 75 y 125 hojas vivas al mismo tiempo, cada una de 4 a 6 m de largo; se registró un ejemplar con 443 hojas verdes.",
+          "En La Gomera se extrae la savia para preparar miel de palma (guarapo).",
+          "Es muy longeva: los ejemplares más altos pueden superar los 200 años.",
+          "Aunque a veces se le llama «palma datilera», la verdadera palmera datilera es Phoenix dactylifera."
+        ],
+        "cuidados": "Pleno sol y suelos bien drenados (se adapta a casi cualquier tipo). Riego moderado, menor en época fría, porque el exceso de agua pudre las raíces. Crece despacio, hasta unos 60 cm por año. Se poda solo la hoja seca de la base, desinfectando las herramientas entre una palma y otra para no transmitir la fusariosis (Fusarium oxysporum f. sp. canariensis). Vigilar el picudo de las palmas (Rhynchophorus palmarum en América y R. ferrugineus en otras regiones), que ataca la yema apical.",
+        "especiesSimilares": [
+          "Phoenix dactylifera (palmera datilera) — produce hijuelos en la base y a lo largo del tronco; hojas rígidas, ascendentes y de color verde grisáceo (glaucas).",
+          "Phoenix sylvestris (palmera de la India) — también de tronco solitario, pero más delgado (hasta unos 45 cm de diámetro), con hojas gris-azuladas y más numerosas."
+        ]
+      },
+      "reemplazar": {
+        "estadoConservacion": "preocupación menor (LC)"
+      },
+      "fuentes": [
+        {
+          "titulo": "Wikipedia — Phoenix canariensis",
+          "url": "https://en.wikipedia.org/wiki/Phoenix_canariensis"
+        },
+        {
+          "titulo": "Catálogo de Plantas y Líquenes de Colombia (ColPlanta)",
+          "url": "https://colplanta.org/taxon/urn:lsid:ipni.org:names:668909-1/general-information"
+        },
+        {
+          "titulo": "Lifeder — Palmera canaria",
+          "url": "https://www.lifeder.com/palmera-canaria/"
+        },
+        {
+          "titulo": "Ley 7/1991 de símbolos de Canarias",
+          "url": "https://en.wikipedia.org/wiki/List_of_animal_and_plant_symbols_of_the_Canary_Islands"
+        },
+        {
+          "titulo": "PalmTalk — Cómo distinguir P. canariensis de P. sylvestris",
+          "url": "https://www.palmtalk.org/forum/topic/14146-how-can-i-tell-phx-canariensis-from-phx-sylvestris"
+        }
+      ]
+    },
+    "Cupressus sp. (probablemente C. lusitanica)": {
+      "completar": {
+        "nombresAlternos": [
+          "Ciprés común",
+          "Ciprés mexicano",
+          "Pino",
+          "Pino ciprés",
+          "Pino común",
+          "Cedro blanco (México)",
+          "Cedro de Goa"
+        ],
+        "identificacion": {
+          "confianza": "medio",
+          "observaciones": "El ejemplar (foto 1) es una conífera de follaje muy denso podada en forma de campana; la hoja (foto 2) es escamiforme y diminuta, sobre ramillas finas, con estróbilos masculinos rojizos en las puntas; el tallo (foto 3) tiene corteza pardo-grisácea fisurada en tiras. Esto indica el género Cupressus. Se asigna a C. lusitanica por ser el ciprés más plantado en las zonas altas de Colombia, pero hace falta ver conos maduros para confirmarlo (1–1,5 cm y cerosos en C. lusitanica; 2,5–3,5 cm en C. macrocarpa)."
+        },
+        "caracteristicas": {
+          "flores": "No tiene flores verdaderas: es una conífera monoica. Los estróbilos masculinos miden unos 5 mm, son numerosos, verde-amarillentos a rojizos y se forman en las puntas de las ramillas.",
+          "frutos": "Conos femeninos (gálbulas) casi esféricos, de 1 a 1,5 cm, con 6 a 8 escamas leñosas; verde-azulados y cerosos al principio, pardo oscuros y duros al madurar (unos 25 meses después de la polinización). Cada uno guarda de 75 a 120 semillas pardas de 3–4 mm.",
+          "tronco": "Tronco recto, acanalado en la base y de hasta 100–120 cm de diámetro en árboles libres. Corteza pardo-rojiza a pardo-grisácea, fibrosa y fisurada en tiras longitudinales, blanquecina por dentro. En el parque se mantiene bajo por la poda."
+        },
+        "habitat": {
+          "distribucion": "Nativa de las montañas de México y Centroamérica (Guatemala, El Salvador, Honduras). Introducida y muy plantada en las zonas altas de Colombia (Antioquia, Cundinamarca, Boyacá y otras) para madera, cercas vivas, cortinas rompevientos y control de la erosión.",
+          "altitud": "Entre 1.200 y 3.000 m s. n. m. en su área natural; en Colombia se planta hasta unos 3.300 m.",
+          "clima": "Templado a frío de montaña, con temperaturas de 0 a 33 °C y lluvias de 1.500 a 2.500 mm al año. Tolera bien la sequía y los vientos."
+        },
+        "estadoConservacionDetalle": "Preocupación menor (LC) según la UICN, por su amplia distribución y abundancia. En Colombia es una especie introducida, sin categoría de amenaza.",
+        "datosCuriosos": [
+          "Su nombre «lusitanica» (de Portugal) es un error histórico: hacia 1634 se llevaron árboles de México al convento de Buçaco (Portugal) y en 1768 se describió la especie a partir de ellos, creyéndola portuguesa.",
+          "Algunos botánicos la clasifican hoy en otro género, como Hesperocyparis lusitanica.",
+          "Del follaje, la corteza y los conos se extrae un aceite esencial usado en cosmética.",
+          "Su follaje denso y fino tolera podas fuertes, por eso se usa en topiaria, como el ejemplar del parque."
+        ],
+        "cuidados": "Pleno sol; suelos de textura media, profundos, bien drenados y de reacción neutra a ácida. Tolera la sequía una vez establecido. Admite podas de formación frecuentes (topiaria) gracias a su follaje denso y fino. Riego moderado y vigilancia de hongos en climas muy húmedos.",
+        "especiesSimilares": [
+          "Cupressus macrocarpa (ciprés de Monterrey) — conos más grandes, de 2,5 a 3,5 cm, y follaje con olor a limón al estrujarlo.",
+          "Cupressus sempervirens (ciprés de Italia) — copa estrecha y columnar en sus formas cultivadas, y conos de 2 a 3 cm con 8 a 14 escamas.",
+          "Platycladus orientalis (tuya, presente en el parque) — ramillas aplanadas dispuestas en planos verticales, como abanicos, y conos con escamas en forma de gancho."
+        ]
+      },
+      "reemplazar": {
+        "estadoConservacion": "preocupación menor (LC)"
+      },
+      "fuentes": [
+        {
+          "titulo": "INAB Guatemala — Paquete tecnológico forestal: Ciprés común (Cupressus lusitanica), 2017",
+          "url": "https://www.itto.int/files/itto_project_db_input/2802/technical/CIPRES.pdf"
+        },
+        {
+          "titulo": "Wikipedia — Hesperocyparis lusitanica",
+          "url": "https://en.wikipedia.org/wiki/Hesperocyparis_lusitanica"
+        },
+        {
+          "titulo": "Trees and Shrubs Online — Cupressus lusitanica",
+          "url": "https://treesandshrubsonline.org/articles/cupressus/cupressus-lusitanica/"
+        },
+        {
+          "titulo": "Wikipedia — Hesperocyparis macrocarpa",
+          "url": "https://en.wikipedia.org/wiki/Hesperocyparis_macrocarpa"
+        },
+        {
+          "titulo": "Oregon State University — Cupressus sempervirens",
+          "url": "https://landscapeplants.oregonstate.edu/plants/cupressus-sempervirens"
+        }
+      ]
+    }
+  }
+}

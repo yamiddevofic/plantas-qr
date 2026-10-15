@@ -14,6 +14,7 @@
     "generar-iconos": "node server/scripts/generarIconos.js",
     "cargar-individuos-cipres": "node server/scripts/cargarIndividuosCipres.js",
     "importar-keep": "node server/scripts/importarKeep.js",
+    "completar-especies": "node server/scripts/completarEspecies.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
