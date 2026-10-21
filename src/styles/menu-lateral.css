@@ -143,12 +143,10 @@
   min-width: 0;
 }
 
-.emblema.menu-marca-icono {
+.logo-plantaqr.menu-marca-icono {
   flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  background: var(--mint-50);
+  width: 48px;
+  height: 48px;
 }
 
 .menu-marca-texto {

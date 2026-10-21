@@ -10,14 +10,20 @@ const ejecutar = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RAIZ = path.join(__dirname, '..', '..');
 const DESTINO = path.join(RAIZ, 'public', 'og.jpg');
+/* El hero no lleva logo; en la vista previa se pone arriba al centro, entre el
+   menú y el buscador, para que la marca se reconozca al compartir el enlace. */
+const LOGO = path.join(RAIZ, 'server', 'datos', 'logo-plantaqr.png');
+const LADO_LOGO = 132;
+const MARGEN_LOGO = 14;
 
 const URL_POR_DEFECTO = 'http://localhost:3001/';
 const ANCHO = 1200;
 const ALTO = 630;
-/* Se captura una ventana holgada y luego se recorta el hero midiéndolo sobre
-   la imagen: cuadrar el alto de la ventana a mano dejaba franja blanca o
-   cortaba el botón, porque el hero no siempre arranca en y=0. */
-const ALTO_CAPTURA = 760;
+/* El hero del inicio ocupa la pantalla completa (100svh): se captura la
+   ventana justo a 1200×630 y sale entero, con la barra de arriba y los botones.
+   Si algún día vuelve a ser una banda más baja que la ventana, medirHero la
+   recorta en el borde blanco. */
+const ALTO_CAPTURA = ALTO;
 /* Open Graph pide 1200x630. Se captura al doble para que el texto no salga
    pixelado y se reduce después. */
 const ESCALA = 2;
@@ -74,10 +80,10 @@ async function variacionHorizontal(captura) {
   return filas ? total / filas : 0;
 }
 
-/* El hero es la banda de foto de arriba; debajo empieza el cuerpo blanco de la
-   página. Se baja hasta encontrar la primera fila con contenido (puede haber
-   margen blanco arriba) y desde ahí hasta la primera fila blanca de lado a
-   lado: eso es el borde inferior del hero. */
+/* El hero es la banda de foto de arriba; si no llena la ventana, debajo empieza
+   el cuerpo blanco de la página. Se baja hasta encontrar la primera fila con
+   contenido (puede haber margen blanco arriba) y desde ahí hasta la primera
+   fila blanca de lado a lado: eso es el borde inferior del hero. */
 async function medirHero(captura, width, height) {
   const { data, info } = await sharp(captura).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const canales = info.channels;
@@ -99,7 +105,7 @@ async function medirHero(captura, width, height) {
   /* Sin banda distinguible la página no pintó (error de red, servidor caído).
      Antes se seguía adelante y se sobrescribía og.jpg con la pantalla de error;
      mejor abortar y dejar la imagen buena en su sitio. */
-  if (alto < height * 0.15 || alto > height * 0.95) {
+  if (alto < height * 0.15) {
     throw new Error(`No se distingue el hero en la captura (banda de ${alto}px sobre ${height}px). No se toca og.jpg.`);
   }
   return { top: inicio, alto };
@@ -138,6 +144,8 @@ async function main() {
       '--hide-scrollbars',
       // Espera a que el compositor termine: sin esto la captura sale a medio pintar.
       '--run-all-compositor-stages-before-draw',
+      // Sin animaciones de entrada: el titular sale nítido y no a medio aparecer.
+      '--force-prefers-reduced-motion',
       '--force-device-scale-factor=' + ESCALA,
       `--window-size=${ANCHO},${ALTO_CAPTURA}`,
       `--virtual-time-budget=${presupuesto}`,
@@ -162,11 +170,16 @@ async function main() {
   const { top, alto } = await medirHero(captura, width, height);
   console.log(`Hero detectado: ${width}x${alto} desde y=${top}`);
   const recortada = await sharp(captura).extract({ left: 0, top, width, height: alto }).toBuffer();
+  const base = await sharp(recortada).resize(ANCHO, ALTO, { fit: 'cover', position: 'centre' }).toBuffer();
+  const logo = await sharp(LOGO).resize(LADO_LOGO, LADO_LOGO).toBuffer();
+  const conLogo = await sharp(base)
+    .composite([{ input: logo, left: Math.round((ANCHO - LADO_LOGO) / 2), top: MARGEN_LOGO }])
+    .toBuffer();
 
   let calidad = 88;
   let salida;
   do {
-    salida = await sharp(recortada).resize(ANCHO, ALTO, { fit: 'cover', position: 'centre' }).jpeg({ quality: calidad, mozjpeg: true }).toBuffer();
+    salida = await sharp(conLogo).jpeg({ quality: calidad, mozjpeg: true }).toBuffer();
     if (salida.length <= LIMITE_BYTES) break;
     calidad -= 8;
   } while (calidad >= 50);

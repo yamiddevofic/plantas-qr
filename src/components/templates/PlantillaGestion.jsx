@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
+import LogoPlantaQr from '../atoms/LogoPlantaQr';
 import { IconoVolver } from '../atoms/IconosInicio';
 import PiePagina from '../molecules/PiePagina';
 import BuscadorBarra from '../organisms/BuscadorBarra';
@@ -17,7 +17,7 @@ export default function PlantillaGestion({ etiqueta, children, extras = null }) 
 
       <header className="galeria-header gestion-header">
         <a className="gestion-inicio" href="#/" aria-label="PlantaQR, ir al inicio" title="Ir al inicio">
-          <EmblemaArbolQr clase="home-marca-icono" />
+          <LogoPlantaQr clase="gestion-logo" />
         </a>
         <BuscadorBarra />
         <div className="gestion-header-acciones">

@@ -1,15 +1,14 @@
 import PropTypes from 'prop-types';
-import EmblemaArbolQr from './EmblemaArbolQr';
+import LogoPlantaQr from './LogoPlantaQr';
 
 /**
- * Marca visual de PlantaQR: el emblema del inicio (árbol con su placa QR), el
- * mismo dibujo del ícono de la app. El tamaño lo pone el CSS mediante `clase`
- * (p. ej. .hero-brand-mark).
+ * Marca visual de PlantaQR: el logo oficial, el mismo del ícono de la app. El
+ * tamaño lo pone el CSS mediante `clase` (p. ej. .hero-brand-mark).
  */
 export default function BrandMark({ clase = 'hero-brand-mark' }) {
   return (
     <span className={clase} aria-hidden="true">
-      <EmblemaArbolQr />
+      <LogoPlantaQr />
     </span>
   );
 }

@@ -1,22 +1,17 @@
 import PropTypes from 'prop-types';
-import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
-import PaisajeHero from './PaisajeHero';
+import LogoPlantaQr from '../atoms/LogoPlantaQr';
 
 /**
- * Pantalla de carga entre páginas (ver App.jsx), con el mismo lenguaje del
- * inicio: cielo y paisaje del parque en SVG (claro u oscuro), el emblema del
- * árbol con su QR girando como cargador y la marca.
+ * Pantalla de carga entre páginas (ver App.jsx): fondo liso, el logo de
+ * PlantaQR respirando, una barra fina indeterminada y el texto.
  */
 export default function SplashCarga({ etiqueta = 'Cargando…' }) {
   const texto = etiqueta.replace(/(…|\.\.\.)$/, '');
   return (
     <div className="hero-splash" role="status" aria-live="polite">
-      <PaisajeHero />
       <div className="hero-splash-contenido">
-        <span className="hero-splash-emblema" aria-hidden="true">
-          <EmblemaArbolQr cargando />
-        </span>
-        <p className="hero-splash-titulo">Planta<em>QR</em></p>
+        <LogoPlantaQr clase="hero-splash-logo" />
+        <span className="carga-barra" aria-hidden="true" />
         <p className="arbolito-carga-texto">
           {texto}
           <span className="arbolito-carga-puntos" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span>
@@ -27,6 +22,6 @@ export default function SplashCarga({ etiqueta = 'Cargando…' }) {
 }
 
 SplashCarga.propTypes = {
-  /** Texto breve bajo la marca (p. ej. "Cargando catálogo"). */
+  /** Texto breve bajo el logo (p. ej. "Cargando catálogo"). */
   etiqueta: PropTypes.string,
 };

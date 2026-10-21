@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import EmblemaArbolQr from './EmblemaArbolQr';
+import LogoPlantaQr from './LogoPlantaQr';
 
 /**
- * Cargador de la app: el emblema del inicio (árbol con su placa QR y el haz de
- * escaneo) con un arco que gira alrededor y el texto con puntos animados. Úsalo
+ * Cargador de la app: el logo de PlantaQR respirando, una barra fina
+ * indeterminada y el texto con puntos animados. Úsalo
  * dentro de un contenedor (por defecto) o a pantalla completa con `pantallaCompleta`.
  *
  * El tamaño se delega al CSS (clases .arbolito-carga-*) y el color sale de los
@@ -20,9 +20,8 @@ export default function ArbolitoLoader({
 
   return (
     <div className={clase ? `${raiz} ${clase}`.trim() : raiz} role="status" aria-live="polite">
-      <span className="arbolito-carga-emblema" aria-hidden="true">
-        <EmblemaArbolQr cargando />
-      </span>
+      <LogoPlantaQr clase="arbolito-carga-logo" />
+      <span className="carga-barra" aria-hidden="true" />
       {texto && (
         <p className="arbolito-carga-texto">
           {texto}
@@ -34,7 +33,7 @@ export default function ArbolitoLoader({
 }
 
 ArbolitoLoader.propTypes = {
-  /** Texto breve bajo el emblema (p. ej. "Cargando catálogo"). Vacío lo oculta. */
+  /** Texto breve bajo el logo (p. ej. "Cargando catálogo"). Vacío lo oculta. */
   etiqueta: PropTypes.string,
   /** Muestra el cargador como capa fija a pantalla completa. */
   pantallaCompleta: PropTypes.bool,

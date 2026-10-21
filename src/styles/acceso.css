@@ -1,10 +1,20 @@
 /* ══════════════════════════════════════════════════════════════
    Cargador, pantalla de carga entre páginas y acceso de administración
-   Mismo lenguaje del inicio: emblema del árbol con su QR, paisaje SVG,
-   vidrio sobre el cielo y tokens que cambian en modo oscuro.
+   El cargador es minimalista: el logo de PlantaQR respirando sobre fondo
+   liso, una barra fina indeterminada y el texto. La puerta de acceso usa el
+   lenguaje del inicio (paisaje SVG, vidrio sobre el cielo).
    ══════════════════════════════════════════════════════════════ */
 
-/* ── Cargador (emblema con arco giratorio) ───────────────────── */
+/* ── Logo (ver LogoPlantaQr.jsx) ─────────────────────────────── */
+
+.logo-plantaqr {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+/* ── Cargador ────────────────────────────────────────────────── */
 
 .arbolito-carga {
   display: inline-flex;
@@ -13,36 +23,44 @@
   gap: 14px;
 }
 
-.arbolito-carga-emblema {
+.arbolito-carga-logo {
+  width: 76px;
+}
+
+.arbolito-carga-logo,
+.hero-splash-logo {
+  animation: logoRespira 1.8s ease-in-out infinite;
+}
+
+@keyframes logoRespira {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.94); opacity: 0.82; }
+}
+
+/* Barra fina indeterminada: un tramo que cruza de lado a lado. */
+.carga-barra {
+  position: relative;
   display: block;
-  width: 84px;
+  width: 72px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--forest-600) 16%, transparent);
 }
 
-/* Como cargador, el emblema aparece ya formado (sin la entrada del inicio, que
-   dura más que una carga corta) y sus bucles arrancan de inmediato. */
-:is(.arbolito-carga-emblema, .hero-splash-emblema) :is(.emblema-halo, .emblema-arbol, .emblema-cordel,
-.emblema-hoja-1, .emblema-hoja-2, .emblema-hoja-3, .emblema-hoja-4) {
-  animation: none;
+.carga-barra::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  border-radius: inherit;
+  background: var(--forest-600);
+  animation: cargaBarra 1.1s ease-in-out infinite;
 }
 
-:is(.arbolito-carga-emblema, .hero-splash-emblema) .emblema-etiqueta {
-  animation: etiquetaBalanceo 5s ease-in-out infinite alternate;
-}
-
-:is(.arbolito-carga-emblema, .hero-splash-emblema) :is(.emblema-copa, .emblema-haz, .emblema-visor) {
-  animation-delay: 0s;
-}
-
-/* El arco que recorre la órbita: la señal de "cargando". */
-.emblema-arco {
-  fill: none;
-  stroke: var(--emb-copa-a);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 18 82;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: orbita 1.1s linear infinite;
+@keyframes cargaBarra {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
 }
 
 .arbolito-carga-texto {
@@ -79,61 +97,26 @@
 /* ── Pantalla de carga entre páginas ─────────────────────────── */
 
 .hero-splash {
-  --alto-paisaje: clamp(170px, 26svh, 300px);
   position: fixed;
   inset: 0;
   z-index: 80;
   display: grid;
   place-items: center;
-  overflow: hidden;
-  isolation: isolate;
-  background:
-    radial-gradient(ellipse 70% 45% at 58% 78%, color-mix(in srgb, var(--resplandor) 22%, transparent), transparent 70%),
-    linear-gradient(180deg, var(--cielo-1) 0%, var(--cielo-2) 52%, var(--cielo-3) 100%);
+  background-color: var(--page-bg);
   animation: inicioAparece 0.25s ease both;
 }
 
-@media (min-width: 768px) {
-  .hero-splash {
-    --alto-paisaje: clamp(240px, 25vw, 440px);
-  }
-}
-
 .hero-splash-contenido {
-  position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 24px 24px calc(var(--alto-paisaje) * 0.45);
+  gap: 16px;
+  padding: 24px;
   text-align: center;
 }
 
-.hero-splash-emblema {
-  display: block;
-  width: 120px;
-  margin-bottom: 8px;
-}
-
-.hero-splash-titulo {
-  margin: 0;
-  color: var(--ink-900);
-  font-size: clamp(2.1rem, 1.5rem + 2.4vw, 2.9rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  /* Entrada corta y sin desenfoque: esta pantalla dura apenas un segundo. */
-  animation: inicioSube 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.hero-splash-titulo em {
-  margin-left: 2px;
-  color: var(--forest-700);
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+.hero-splash-logo {
+  width: clamp(112px, 28vw, 144px);
 }
 
 /* ── Acceso de administración (puerta) ───────────────────────── */
@@ -482,11 +465,11 @@ html[data-tema="oscuro"] .puerta {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .emblema-arco,
+  .arbolito-carga-logo,
+  .hero-splash-logo,
   .arbolito-carga-puntos span,
   .puerta-tarjeta,
-  .hero-splash,
-  .hero-splash-titulo {
+  .hero-splash {
     animation: none !important;
   }
 

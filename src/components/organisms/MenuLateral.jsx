@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { LuX } from 'react-icons/lu';
-import EmblemaArbolQr from '../atoms/EmblemaArbolQr';
+import LogoPlantaQr from '../atoms/LogoPlantaQr';
 
 /**
  * Drawer lateral del menú hamburguesa: panel fijo desde la derecha con
@@ -44,7 +44,7 @@ export default function MenuLateral({ abierto, onCerrar, children }) {
       >
         <div className="menu-cabecera">
           <div className="menu-marca">
-            <EmblemaArbolQr clase="home-marca-icono menu-marca-icono" />
+            <LogoPlantaQr clase="menu-marca-icono" />
             <div className="menu-marca-texto">
               <p className="menu-cabecera-titulo">PlantaQR</p>
               <p className="menu-marca-lema">Árboles del Parque de Chitagá</p>

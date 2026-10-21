@@ -14,7 +14,7 @@ const router = express.Router();
 
 const SITIO = (process.env.SITIO_URL || 'https://plantas-qr.vercel.app').replace(/\/+$/, '');
 const NOMBRE_SITIO = 'PlantaQR';
-const IMAGEN_BASE = `${SITIO}/og.jpg?v=2`;
+const IMAGEN_BASE = `${SITIO}/og.jpg?v=3`;
 
 const absoluta = (ruta) => {
   if (!ruta) return IMAGEN_BASE;
