@@ -98,11 +98,11 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
   max-height: 88svh;
 }
 
-/* En celular la foto ocupa casi toda la pantalla (85 % del alto visible). */
+/* En celular la foto ocupa casi toda la pantalla (75 % del alto visible). */
 @media (max-width: 767px) {
   .detalle-hero-full .detalle-image {
     aspect-ratio: auto;
-    height: 85svh;
+    height: 75svh;
     max-height: none;
   }
 }
