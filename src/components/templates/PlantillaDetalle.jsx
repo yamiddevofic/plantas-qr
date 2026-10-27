@@ -244,7 +244,7 @@ export default function PlantillaDetalle({
                   alt={`Fotografía de ${nombre.comun} (${nombre.cientifico})`}
                 />
               }
-              corchete="Parque Principal de Chitagá"
+              corchete=""
               titulo={nombre.comun}
               subtitulo={nombre.cientifico}
               badge={
