@@ -98,6 +98,15 @@ html[data-tema="oscuro"] .detalle-root .hero-acciones {
   max-height: 88svh;
 }
 
+/* En celular la foto ocupa casi toda la pantalla (85 % del alto visible). */
+@media (max-width: 767px) {
+  .detalle-hero-full .detalle-image {
+    aspect-ratio: auto;
+    height: 85svh;
+    max-height: none;
+  }
+}
+
 /* Con foto de escritorio la imagen va dentro de un <picture>: sin esto, en móvil
    y tablet el <picture> no tiene alto, la foto queda con su alto natural y, si
    no es justo 4:5, asoma el fondo (una franja blanca) debajo o a los lados. */
