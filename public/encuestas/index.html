@@ -1,0 +1,1549 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Encuestas sin conexión</title>
+<meta name="description" content="Convierte un documento de encuesta en formulario, recoge respuestas y las analiza en tiempo real sin internet.">
+<meta name="theme-color" content="#1f4d3a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d6a4f'/%3E%3Cpath d='M9 10h14M9 16h14M9 22h8' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<!--
+  Encuestas sin conexión — un solo archivo, sin librerías ni internet.
+  · Lee un .docx (o .txt / .md / texto pegado) y arma el formulario.
+  · Guarda las respuestas en este navegador (localStorage) y las analiza al instante.
+  · Exporta CSV (Excel), copia de seguridad .json (para unir varios equipos) e informe impreso/PDF.
+  Se abre con doble clic (file://) o desde el sitio (/encuestas/).
+-->
+<style>
+:root {
+  --verde-900: #173f2f; --verde-800: #1f4d3a; --verde-700: #2d6a4f; --verde-500: #45906c;
+  --menta-200: #d3eeda; --menta-100: #e7f2ea; --menta-50: #f4f9f5;
+  --arcilla: #c2653c;
+  --fondo: #f4f9f5; --superficie: #ffffff; --superficie-2: #f4f9f5;
+  --texto: #1f2a24; --texto-2: #4a5b51; --texto-3: #6b7b72;
+  --linea: #dfe8e2; --linea-fuerte: #c7d6cc;
+  --acento: #2d6a4f; --acento-texto: #ffffff; --acento-suave: #e7f2ea;
+  --barra: #45906c; --pista: #e7efe9;
+  --peligro: #9f2b30; --peligro-suave: #fdecec; --aviso: #8f5a09; --aviso-suave: #fdf3e0;
+  --sombra: 0 1px 2px rgba(23,63,47,.06), 0 4px 16px rgba(23,63,47,.06);
+  --r-sm: 9px; --r-md: 14px; --r-lg: 20px;
+  --toque: 44px;
+  --fuente: 'Inter', 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #0e1612; --superficie: #15201a; --superficie-2: #1a2820;
+    --texto: #e8f0eb; --texto-2: #b5c5bb; --texto-3: #8fa298;
+    --linea: #263a2f; --linea-fuerte: #34503f;
+    --acento: #6cc495; --acento-texto: #0e1612; --acento-suave: #1d3328;
+    --barra: #5fb487; --pista: #22342a;
+    --peligro: #f08a8a; --peligro-suave: #3a1b1d; --aviso: #f0c26b; --aviso-suave: #352a14;
+    --sombra: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #0e1612; --superficie: #15201a; --superficie-2: #1a2820;
+  --texto: #e8f0eb; --texto-2: #b5c5bb; --texto-3: #8fa298;
+  --linea: #263a2f; --linea-fuerte: #34503f;
+  --acento: #6cc495; --acento-texto: #0e1612; --acento-suave: #1d3328;
+  --barra: #5fb487; --pista: #22342a;
+  --peligro: #f08a8a; --peligro-suave: #3a1b1d; --aviso: #f0c26b; --aviso-suave: #352a14;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--fondo); color: var(--texto); font: 16px/1.5 var(--fuente); }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, h4 { line-height: 1.25; margin: 0; }
+p { margin: 0; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+.oculto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Cabecera */
+.cabecera { position: sticky; top: 0; z-index: 10; background: var(--verde-800); color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+.cab-fila { max-width: 960px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; min-height: 56px; }
+.marca { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; color: #fff; font-weight: 700; font-size: 1.05rem; cursor: pointer; padding: 6px 4px; min-height: var(--toque); }
+.marca svg { flex: none; }
+.cab-titulo { flex: 1; min-width: 0; font-size: .92rem; opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chip-local { flex: none; font-size: .75rem; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.14); white-space: nowrap; }
+.pestanas { max-width: 960px; margin: 0 auto; padding: 0 8px; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.pestanas::-webkit-scrollbar { display: none; }
+.pestana { flex: none; background: none; border: 0; color: rgba(255,255,255,.78); padding: 10px 14px 12px; min-height: var(--toque); cursor: pointer; font-weight: 600; font-size: .95rem; border-bottom: 3px solid transparent; }
+.pestana[aria-current="page"] { color: #fff; border-bottom-color: #b7e4c7; }
+.pestana .cuenta { display: inline-block; min-width: 22px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: rgba(255,255,255,.18); font-size: .78rem; text-align: center; }
+
+main { max-width: 960px; margin: 0 auto; padding: 20px 16px 120px; }
+.pila > * + * { margin-top: 16px; }
+
+/* Tarjetas y botones */
+.tarjeta { background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--r-lg); padding: 20px; box-shadow: var(--sombra); }
+.tarjeta h2 { font-size: 1.2rem; }
+.tarjeta h3 { font-size: 1.05rem; }
+.sutil { color: var(--texto-2); }
+.mini { font-size: .85rem; color: var(--texto-3); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--toque); padding: 0 18px; border-radius: 999px; border: 1px solid var(--linea-fuerte); background: var(--superficie); color: var(--texto); font-weight: 600; cursor: pointer; text-decoration: none; white-space: nowrap; }
+.btn:hover { background: var(--superficie-2); }
+.btn.primario { background: var(--acento); border-color: var(--acento); color: var(--acento-texto); }
+.btn.primario:hover { filter: brightness(1.08); }
+.btn.peligro { color: var(--peligro); border-color: color-mix(in srgb, var(--peligro) 40%, transparent); }
+.btn.chico { min-height: 36px; padding: 0 12px; font-size: .88rem; }
+.btn.icono { width: 36px; min-height: 36px; padding: 0; }
+.botones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.separa { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+
+/* Inicio */
+.zona { display: block; border: 2px dashed var(--linea-fuerte); border-radius: var(--r-lg); padding: 28px 20px; text-align: center; cursor: pointer; background: var(--superficie-2); transition: border-color .15s, background .15s; }
+.zona:hover, .zona.encima { border-color: var(--acento); background: var(--acento-suave); }
+.zona strong { display: block; font-size: 1.1rem; margin: 8px 0 4px; }
+.zona svg { color: var(--acento); }
+.lista-enc { display: grid; gap: 12px; }
+.enc-item { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 16px; border: 1px solid var(--linea); border-radius: var(--r-md); background: var(--superficie); }
+.enc-item h3 { font-size: 1rem; }
+.enc-item .num-grande { font-size: 1.5rem; font-weight: 800; color: var(--acento); line-height: 1; }
+details.ayuda-doc summary { cursor: pointer; font-weight: 600; min-height: var(--toque); display: flex; align-items: center; }
+details.ayuda-doc ul { padding-left: 20px; margin: 8px 0 0; color: var(--texto-2); }
+details.ayuda-doc li + li { margin-top: 6px; }
+code { background: var(--superficie-2); border: 1px solid var(--linea); border-radius: 6px; padding: 0 5px; font-size: .9em; }
+textarea.pegar { width: 100%; min-height: 160px; margin: 10px 0; }
+
+/* Formulario */
+.hoja-cab { text-align: center; padding: 8px 0 4px; }
+.hoja-cab h1 { font-size: clamp(1.3rem, 1.1rem + 1vw, 1.7rem); }
+.hoja-cab .sub { color: var(--texto-2); margin-top: 4px; white-space: pre-line; }
+.hoja-cab .desc { margin-top: 12px; font-size: .92rem; color: var(--texto-2); text-align: left; background: var(--superficie-2); border-radius: var(--r-md); padding: 12px 14px; white-space: pre-line; }
+.seccion { margin: 0; min-width: 0; }
+.seccion > legend { float: left; width: 100%; padding: 0; font-weight: 800; font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; color: var(--acento); margin-bottom: 4px; }
+.seccion > legend + * { clear: both; }
+.seccion .desc-sec { color: var(--texto-2); font-size: .92rem; margin-bottom: 12px; white-space: pre-line; }
+.campos-datos { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.campo + .campo { margin-top: 22px; }
+.campos-datos .campo + .campo { margin-top: 0; }
+.campo-et { display: block; font-weight: 600; margin-bottom: 8px; }
+.campo-et .num { color: var(--acento); margin-right: 4px; }
+.campo-et .req { color: var(--peligro); }
+.campo .ayuda { font-size: .88rem; color: var(--texto-3); margin: -4px 0 8px; }
+.campo.grupo .campo-et { font-weight: 700; }
+.campo.error .campo-et { color: var(--peligro); }
+input[type=text], input[type=number], input[type=date], select, textarea { width: 100%; min-height: var(--toque); padding: 10px 12px; border: 1px solid var(--linea-fuerte); border-radius: var(--r-sm); background: var(--superficie); }
+textarea { resize: vertical; min-height: 96px; line-height: 1.45; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--acento); box-shadow: 0 0 0 3px color-mix(in srgb, var(--acento) 30%, transparent); }
+.opciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { position: relative; display: inline-flex; }
+.chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.chip span { display: inline-flex; align-items: center; gap: 8px; min-height: var(--toque); min-width: 72px; justify-content: center; padding: 8px 18px; border: 1.5px solid var(--linea-fuerte); border-radius: 999px; background: var(--superficie); font-weight: 600; cursor: pointer; user-select: none; }
+.chip input:checked + span { background: var(--acento); border-color: var(--acento); color: var(--acento-texto); }
+.chip input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.chip input[type=checkbox] + span::before { content: ''; width: 14px; height: 14px; border: 2px solid currentColor; border-radius: 4px; opacity: .7; }
+.chip input[type=checkbox]:checked + span::before { background: currentColor; box-shadow: inset 0 0 0 2px var(--acento); }
+.opciones.escala .chip span { min-width: 52px; padding: 8px 12px; }
+.barra-envio { position: sticky; bottom: 0; margin: 20px -16px -120px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--fondo) 88%, transparent); backdrop-filter: blur(8px); border-top: 1px solid var(--linea); display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.progreso { font-size: .9rem; color: var(--texto-2); }
+.progreso b { color: var(--texto); }
+.pie-hoja { font-size: .82rem; color: var(--texto-3); text-align: center; white-space: pre-line; }
+.nota { padding: 10px 14px; border-radius: var(--r-md); background: var(--aviso-suave); color: var(--aviso); font-size: .9rem; }
+
+/* Resultados */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.kpi { background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--r-md); padding: 14px 16px; }
+.kpi .v { font-size: 1.8rem; font-weight: 800; line-height: 1.1; color: var(--texto); font-variant-numeric: tabular-nums; }
+.kpi .e { font-size: .82rem; color: var(--texto-3); }
+.vivo { display: inline-flex; align-items: center; gap: 6px; font-size: .82rem; color: var(--texto-2); }
+.vivo::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--barra); box-shadow: 0 0 0 0 var(--barra); animation: pulso 2s infinite; }
+@keyframes pulso { 70% { box-shadow: 0 0 0 7px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+@media (prefers-reduced-motion: reduce) { .vivo::before { animation: none; } }
+.sec-res { font-weight: 800; font-size: .85rem; letter-spacing: .04em; text-transform: uppercase; color: var(--acento); margin: 28px 0 -4px; }
+.res-cab { display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; }
+.res-cab h3 { font-size: 1rem; }
+.res-cab .num { color: var(--acento); }
+.res-meta { font-size: .82rem; color: var(--texto-3); margin: 4px 0 14px; }
+.barras { display: grid; gap: 8px; }
+.b-fila { display: grid; grid-template-columns: minmax(80px, 34%) 1fr auto; gap: 10px; align-items: center; font-size: .9rem; }
+.b-et { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.b-pista { height: 14px; background: var(--pista); border-radius: 999px; overflow: hidden; }
+.b-relleno { display: block; height: 100%; width: var(--p); background: var(--barra); border-radius: 999px; transition: width .4s ease; }
+.b-val { font-variant-numeric: tabular-nums; color: var(--texto-2); white-space: nowrap; text-align: right; min-width: 74px; }
+.b-val b { color: var(--texto); }
+.res-sub { font-size: .82rem; font-weight: 700; color: var(--texto-2); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: .03em; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: .92rem; }
+.stats b { font-variant-numeric: tabular-nums; }
+.lista-resp { margin: 8px 0 0; padding-left: 22px; max-height: 320px; overflow: auto; font-size: .92rem; color: var(--texto-2); }
+.lista-resp li + li { margin-top: 6px; }
+.lista-resp .quien { color: var(--texto-3); font-size: .8rem; }
+details.ver summary { cursor: pointer; font-weight: 600; color: var(--acento); margin-top: 14px; min-height: 36px; display: flex; align-items: center; }
+.tabla-env { overflow-x: auto; }
+table.tabla { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.tabla th, .tabla td { padding: 8px 10px; border-bottom: 1px solid var(--linea); text-align: left; vertical-align: top; }
+.tabla th { font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--texto-3); background: var(--superficie-2); }
+.tabla td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tabla tr.detalle td { background: var(--superficie-2); }
+.detalle dl { margin: 0; display: grid; gap: 8px; }
+.detalle dt { font-weight: 600; font-size: .85rem; }
+.detalle dd { margin: 0; color: var(--texto-2); white-space: pre-line; }
+.vacio { text-align: center; padding: 40px 20px; }
+.vacio p { margin: 8px 0 16px; color: var(--texto-2); }
+
+/* Editor */
+.ed-campo { border: 1px solid var(--linea); border-radius: var(--r-md); padding: 12px; background: var(--superficie-2); }
+.ed-campo + .ed-campo { margin-top: 10px; }
+.ed-fila { display: grid; grid-template-columns: 1fr; gap: 8px; }
+@media (min-width: 640px) { .ed-fila { grid-template-columns: 70px 1fr 190px; } }
+.ed-campo textarea { min-height: 70px; margin-top: 8px; }
+.ed-pie { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; margin-top: 8px; }
+.ed-pie label { display: inline-flex; align-items: center; gap: 6px; font-size: .88rem; min-height: 36px; }
+.ed-sec + .ed-sec { margin-top: 18px; }
+.ed-sec-cab { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.ed-sec-cab input { font-weight: 700; }
+.etiqueta-tipo { font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--acento-suave); color: var(--acento); }
+.resumen-det { display: flex; flex-wrap: wrap; gap: 8px; }
+
+#aviso { position: fixed; left: 50%; bottom: 84px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 50; max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 12px; background: var(--verde-900); color: #fff; font-weight: 600; box-shadow: 0 8px 30px rgba(0,0,0,.25); transition: opacity .2s, transform .2s; }
+#aviso.visible { opacity: 1; transform: translate(-50%, 0); }
+#aviso.error { background: #9f2b30; }
+
+@media print {
+  .cabecera, .no-imprimir, .barra-envio, #aviso, details.ver { display: none !important; }
+  body { background: #fff; color: #000; }
+  main { padding: 0; max-width: none; }
+  .tarjeta { box-shadow: none; break-inside: avoid; border-color: #ccc; }
+  .b-relleno { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .b-pista { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<header class="cabecera" id="cabecera"></header>
+<main id="app" class="pila"></main>
+<input type="file" id="archivo" class="oculto" accept=".docx,.txt,.md,.json,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/json">
+<div id="aviso" role="status" aria-live="polite"></div>
+
+<!-- Motor: lectura de documentos, armado del formulario y análisis. No toca el DOM. -->
+<script id="motor">
+const Motor = (() => {
+  'use strict';
+  const dec = new TextDecoder();
+
+  /* ── Utilidades de texto ─────────────────────────────── */
+  const sinTildes = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const norm = (s) => sinTildes(s).toLowerCase().replace(/\s+/g, ' ').trim();
+  const limpiar = (s) => String(s ?? '').replace(/ /g, ' ').replace(/[ \t]+$/gm, '').replace(/^[ ]+/gm, '').trim();
+  const unicos = (lista) => {
+    const vistos = new Set();
+    return lista.filter((x) => { const k = norm(x); if (!k || vistos.has(k)) return false; vistos.add(k); return true; });
+  };
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const ENTIDADES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
+  const desescapar = (s) => s.replace(/&(#x[0-9a-f]+|#\d+|\w+);/gi, (m, c) => (
+    c[0] === '#' ? String.fromCodePoint(c[1].toLowerCase() === 'x' ? parseInt(c.slice(2), 16) : parseInt(c.slice(1), 10)) : (ENTIDADES[c] ?? m)
+  ));
+
+  /* ── ZIP (.docx) con DecompressionStream, sin librerías ── */
+  async function leerZip(buffer) {
+    const dv = new DataView(buffer);
+    let fin = buffer.byteLength - 22;
+    while (fin >= 0 && dv.getUint32(fin, true) !== 0x06054b50) fin -= 1;
+    if (fin < 0) throw new Error('El archivo no es un .docx válido.');
+    const total = dv.getUint16(fin + 10, true);
+    let p = dv.getUint32(fin + 16, true);
+    const entradas = {};
+    for (let i = 0; i < total && dv.getUint32(p, true) === 0x02014b50; i += 1) {
+      const largoNombre = dv.getUint16(p + 28, true);
+      entradas[dec.decode(new Uint8Array(buffer, p + 46, largoNombre))] = {
+        metodo: dv.getUint16(p + 10, true), tam: dv.getUint32(p + 20, true), local: dv.getUint32(p + 42, true),
+      };
+      p += 46 + largoNombre + dv.getUint16(p + 30, true) + dv.getUint16(p + 32, true);
+    }
+    return {
+      nombres: Object.keys(entradas),
+      async texto(nombre) {
+        const e = entradas[nombre];
+        if (!e) return null;
+        const inicio = e.local + 30 + dv.getUint16(e.local + 26, true) + dv.getUint16(e.local + 28, true);
+        const datos = new Uint8Array(buffer, inicio, e.tam);
+        if (e.metodo === 0) return dec.decode(datos);
+        if (e.metodo !== 8) throw new Error('El .docx usa una compresión no soportada.');
+        if (typeof DecompressionStream === 'undefined') {
+          throw new Error('Este navegador es muy antiguo para leer .docx. Actualícelo o pegue el texto de la encuesta.');
+        }
+        const flujo = new Blob([datos]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+        return dec.decode(await new Response(flujo).arrayBuffer());
+      },
+    };
+  }
+
+  /* ── Documento → bloques (párrafos y tablas en orden) ── */
+  function textoParrafo(xml) {
+    let t = '';
+    const re = /<w:t(?:\s[^>]*)?>([\s\S]*?)<\/w:t>|<w:tab\/>|<w:br\/>|<w:cr\/>|<w:sym\b[^>]*\/>/g;
+    let m;
+    while ((m = re.exec(xml))) {
+      if (m[1] !== undefined) t += desescapar(m[1]);
+      else if (m[0].startsWith('<w:tab')) t += '\t';
+      else if (m[0].startsWith('<w:sym')) t += '☐';
+      else t += '\n';
+    }
+    return t;
+  }
+
+  function bloquesDocx(xml) {
+    const cuerpo = (xml.match(/<w:body>([\s\S]*)<\/w:body>/) || [null, xml])[1]
+      .replace(/<mc:Fallback>[\s\S]*?<\/mc:Fallback>/g, '')
+      .replace(/<w:txbxContent>[\s\S]*?<\/w:txbxContent>/g, '');
+    const re = /<w:tbl>|<w:tbl\s[^>]*>|<\/w:tbl>|<w:tr>|<w:tr\s[^>]*>|<w:tc>|<w:tc\s[^>]*>|<w:p(?:\s[^>]*?)?\/>|<w:p(?:\s[^>]*)?>[\s\S]*?<\/w:p>/g;
+    const bloques = [];
+    const pila = [];
+    let m;
+    while ((m = re.exec(cuerpo))) {
+      const tok = m[0];
+      if (/^<w:tbl[\s>]/.test(tok)) pila.push({ filas: [] });
+      else if (tok === '</w:tbl>') {
+        const tabla = pila.pop();
+        if (!tabla) continue;
+        const filas = tabla.filas.map((f) => f.map((c) => c.join('\n').trim()));
+        if (pila.length) {
+          const fila = pila[pila.length - 1].filas.at(-1);
+          fila?.at(-1)?.push(filas.map((f) => f.join(' ')).join('\n'));
+        } else bloques.push({ tipo: 'tabla', filas });
+      } else if (/^<w:tr[\s>]/.test(tok)) pila.at(-1)?.filas.push([]);
+      else if (/^<w:tc[\s>]/.test(tok)) pila.at(-1)?.filas.at(-1)?.push([]);
+      else if (tok.startsWith('<w:p')) {
+        const texto = tok.endsWith('/>') && !tok.includes('</w:p>') ? '' : textoParrafo(tok);
+        if (pila.length) pila.at(-1).filas.at(-1)?.at(-1)?.push(texto);
+        else {
+          const estilo = (tok.match(/<w:pStyle w:val="([^"]+)"/) || [])[1] || '';
+          bloques.push({
+            tipo: 'p', texto,
+            titulo: /heading|t[ií]tulo|titulo|ttulo|^title$|encabezado/i.test(estilo),
+            lista: tok.includes('<w:numPr>'),
+          });
+        }
+      }
+    }
+    return bloques;
+  }
+
+  function bloquesTexto(texto) {
+    const bloques = [];
+    let tabla = null;
+    for (const linea of String(texto).replace(/\r/g, '').split('\n')) {
+      const s = linea.trim();
+      if (/^\|.*\|$/.test(s)) {
+        if (/^\|[\s:|-]+\|$/.test(s)) continue;
+        (tabla ||= { tipo: 'tabla', filas: [] }).filas.push(s.slice(1, -1).split('|').map((c) => c.trim()));
+        continue;
+      }
+      if (tabla) { bloques.push(tabla); tabla = null; }
+      const titulo = /^#{1,6}\s/.test(s);
+      bloques.push({ tipo: 'p', texto: s.replace(/^#{1,6}\s+/, '').replace(/\*\*/g, ''), titulo, lista: false });
+    }
+    if (tabla) bloques.push(tabla);
+    return bloques;
+  }
+
+  /* ── Bloques → plantilla (secciones y campos) ──────────── */
+  const RE_MARCA = /\(\s*[xX✓]?\s*\)|\[\s*[xX✓]?\s*\]|[☐□○◯❍⬜❑▢◻]/g;
+  const RE_OPCION = /^(?:[a-hA-H][).]\s+|[-•*·▪◦–]\s+|(?:\(\s*[xX✓]?\s*\)|\[\s*[xX✓]?\s*\]|[☐□○◯❍⬜❑▢◻])\s*)(.+)$/;
+  const RE_NUMERO = /^(\d{1,3})\s*[.)\-–:]\s*(\S.*)$/;
+
+  const esInstruccion = (t) => /^(objetivo|instrucci[oó]n|instrucciones|nota\b|responda|marque|seleccione|lea\b|indique|por favor|recuerde|tenga en cuenta|encierre)/i.test(t);
+
+  function pistaDe(t) {
+    const n = norm(t);
+    if (/abierta|propias palabras|describa|explique/.test(n)) return 'abierta';
+    if (/cerrad|marque|seleccione|elija|encierre|con una x/.test(n)) return 'cerrada';
+    return '';
+  }
+
+  function esEncabezado(t, b) {
+    if (b.titulo) return true;
+    if (t.includes('?') || t.length > 120) return false;
+    if (/^(secci[oó]n|parte|bloque|m[oó]dulo|cap[ií]tulo|componente)\s+\S{1,12}/i.test(t)) return true;
+    if (/^(datos|informaci[oó]n)\b[^:?_]{0,60}:?$/i.test(t)) return true;
+    if (/^[IVX]{1,4}[.)]\s+\S/.test(t)) return true;
+    const letras = t.replace(/[^A-Za-zÁÉÍÓÚÑÜáéíóúñü]/g, '');
+    return letras.length >= 4 && !/_{2,}/.test(t) && !/:\s*$/.test(t) && letras === letras.toUpperCase();
+  }
+
+  /** "Nombre: ____   Edad: ___" → ['Nombre:', 'Edad:'] (o null si no es una línea de campos). */
+  function etiquetas(t) {
+    if (t.includes('?') || t.length > 160) return null;
+    const s = t.replace(/[_…]{2,}|\.{3,}/g, '\t');
+    const partes = s.split(/\t+|\s{2,}/).flatMap((p) => p.split(/(?<=:)\s+/)).map((p) => p.trim()).filter(Boolean);
+    if (!partes.length || !partes.every((p) => /^[^:]{2,60}:$/.test(p))) return null;
+    return partes;
+  }
+
+  function opcionesEnLinea(s) {
+    const marcas = s.match(RE_MARCA);
+    if (marcas && marcas.length >= 2) {
+      const ops = s.split(RE_MARCA).map((x) => x.replace(/^[\s,;:|/-]+|[\s,;:|/-]+$/g, '')).filter(Boolean);
+      if (ops.length >= 2) return ops;
+    }
+    if (/(^|\s)[a-hA-H]\)\s*\S/.test(s)) {
+      const ops = s.split(/(?:^|\s+)[a-hA-H]\)\s*/).map((x) => x.trim()).filter(Boolean);
+      if (ops.length >= 2) return ops;
+    }
+    return null;
+  }
+
+  const esSiNo = (ops) => ops.length === 2 && ops.map((o) => norm(o).replace(/[^a-z]/g, '')).sort().join() === 'no,si';
+
+  function construirPlantilla(bloques, origen = '') {
+    const pl = { id: 'p' + uid(), titulo: '', subtitulo: '', descripcion: '', pie: '', origen, creada: new Date().toISOString(), secciones: [] };
+    let sec = null;
+    let pend = null;
+    let buffer = [];
+    let hayCampos = false;
+    let pistaGlobal = '';
+    let contador = 0;
+    const nuevoId = () => 'c' + (++contador);
+    const unir = (a, b) => [a, b].filter(Boolean).join('\n');
+
+    const flush = (destino) => {
+      if (!buffer.length) return;
+      const t = buffer.join('\n');
+      buffer = [];
+      if (destino) destino.descripcion = unir(destino.descripcion, t);
+      else pl.descripcion = unir(pl.descripcion, t);
+    };
+    const nuevaSeccion = (titulo) => {
+      sec = { id: 's' + (pl.secciones.length + 1), titulo, descripcion: '', pista: pistaDe(titulo), campos: [] };
+      pl.secciones.push(sec);
+    };
+    const agregar = (campo) => {
+      if (!sec) nuevaSeccion('');
+      flush(sec);
+      sec.campos.push(campo);
+      hayCampos = true;
+      return campo;
+    };
+    const textoLibre = (t) => {
+      if (/^objetivo\b/i.test(t)) { pl.descripcion = unir(pl.descripcion, t); return; }
+      if (esInstruccion(t)) {
+        const p = pistaDe(t);
+        if (p) { if (sec) sec.pista = p; else pistaGlobal = p; }
+      }
+      buffer.push(t);
+    };
+
+    const campoDato = (et) => {
+      const etiqueta = et.replace(/^\d{1,3}\s*[.)]\s*/, '').replace(/[:\s]+$/, '').trim();
+      const n = norm(etiqueta);
+      const c = { id: nuevoId(), tipo: 'texto', etiqueta, numero: '', ayuda: '', opciones: [] };
+      if (/fecha/.test(n)) { c.tipo = 'fecha'; if (!/nacimiento/.test(n)) c.auto = 'hoy'; }
+      else if (/^(n|no|nro|num|numero|#|codigo)\s*[.°º]*\s*(de\s+)?(la\s+)?(encuesta|formulario|registro|ficha|cuestionario|entrevista)|(encuesta|formulario|ficha|cuestionario)\s*(n|no|nro|num)\b/.test(n)) {
+        c.tipo = 'numero'; c.auto = 'consecutivo';
+      } else if (/\bedad\b|cantidad|numero de|cuantos|cuantas/.test(n)) c.tipo = 'numero';
+      if (/encuestador|entrevistador|aplicad[oa] por|responsable/.test(n)) c.recordar = true;
+      return c;
+    };
+
+    const cerrar = () => {
+      if (!pend) return;
+      const c = pend;
+      pend = null;
+      const { _pista: pista, _multiple: multiple, _lineas: lineas, _grupo: grupo } = c;
+      delete c._pista; delete c._multiple; delete c._lineas; delete c._grupo;
+      if (grupo) { c.tipo = 'grupo'; c.opciones = []; return; }
+      c.opciones = unicos(c.opciones.map((o) => o.replace(RE_MARCA, '').replace(/\s+/g, ' ').trim()));
+      if (c.opciones.length >= 2) {
+        if (esSiNo(c.opciones)) c.tipo = 'sino';
+        else if (multiple) c.tipo = 'multiple';
+        else if (c.opciones.every((o) => /^\d{1,2}$/.test(o))) c.tipo = 'escala';
+        else c.tipo = 'unica';
+      } else if (c.tipo !== 'sino') c.tipo = pista === 'cerrada' && !lineas ? 'sino' : 'parrafo';
+      if (c.tipo === 'sino') c.opciones = ['Sí', 'No'];
+      if (c.tipo === 'parrafo') c.opciones = [];
+    };
+
+    const esPregunta = (t, b) => {
+      const m = t.match(RE_NUMERO);
+      if (m && m[2].length >= 6) return true;
+      return t.includes('¿') || /\?\s*$/.test(t) || (b.lista && t.length >= 12);
+    };
+
+    const nuevaPregunta = (t) => {
+      let texto = t;
+      let numero = '';
+      const m = t.match(RE_NUMERO);
+      if (m) { numero = m[1]; texto = m[2]; }
+      let etiqueta = texto;
+      let resto = '';
+      const i = texto.lastIndexOf('?');
+      if (i > 0 && i < texto.length - 1) { etiqueta = texto.slice(0, i + 1).trim(); resto = texto.slice(i + 1).trim(); }
+      const c = { id: nuevoId(), tipo: 'parrafo', etiqueta, numero, ayuda: '', opciones: [], _pista: sec?.pista || pistaGlobal };
+      if (resto) {
+        const ops = opcionesEnLinea(resto);
+        if (ops) c.opciones = ops;
+        else if (/^\(?\s*s[ií]\s*[/|-]\s*no\s*\)?\.?$/i.test(resto)) c.tipo = 'sino';
+        else c.ayuda = resto;
+      }
+      if (/varias|m[aá]s de una|todas las que|selecci[oó]n m[uú]ltiple|puede marcar/i.test(t)) c._multiple = true;
+      agregar(c);
+      pend = c;
+    };
+
+    const intentarOpciones = (t) => {
+      if (!pend || pend._lineas) return false;
+      if (t.includes('¿') || (RE_NUMERO.test(t) && t.includes('?'))) return false;
+      const enLinea = opcionesEnLinea(t);
+      if (enLinea) { pend.opciones.push(...enLinea); return true; }
+      const m = t.match(RE_OPCION);
+      if (m && m[1].length <= 120 && !m[1].includes('?')) { pend.opciones.push(m[1].trim()); return true; }
+      if (!/[?:]/.test(t) && t.length <= 90 && !/^(secci|parte|bloque)/i.test(t)) {
+        const partes = t.split(/\s*[/|]\s*|\t+|\s{2,}/).map((x) => x.trim()).filter(Boolean);
+        if (partes.length >= 2 && partes.every((x) => x.length <= 30)) { pend.opciones.push(...partes); return true; }
+      }
+      if (/^s[ií]\s+no$/i.test(t)) { pend.opciones.push('Sí', 'No'); return true; }
+      return false;
+    };
+
+    const procesarTabla = (filas0) => {
+      const T = filas0.map((f) => f.map(limpiar));
+      const F = T.filter((f) => f.some(Boolean));
+      if (!F.length) return;
+      const esMarca = (c) => !c || /^[xX✓✔•\s☐□○◯_.]*$/.test(c);
+      const corta = (c, max) => c.length <= max && !c.includes('?') && !/:$/.test(c);
+      // 1) Opciones de la pregunta anterior: | Sí | No | con casillas vacías debajo, o una opción por fila.
+      if (pend && !pend._lineas && !pend.opciones.length) {
+        const cab = F[0].filter(Boolean);
+        if (cab.length >= 2 && cab.every((c) => corta(c, 40)) && F.slice(1).every((f) => f.every(esMarca))) {
+          pend.opciones = cab;
+          cerrar();
+          return;
+        }
+        const vert = F.map((f) => f.filter((c) => !esMarca(c)));
+        if (F.length >= 2 && vert.every((v) => v.length === 1 && corta(v[0], 60))) {
+          pend.opciones = vert.map((v) => v[0]);
+          cerrar();
+          return;
+        }
+      }
+      // 2) Matriz: opciones en la primera fila y afirmaciones en la primera columna.
+      const cabM = F[0].slice(1).filter(Boolean);
+      const filasM = F.slice(1).filter((f) => f[0] && !esMarca(f[0]));
+      if (cabM.length >= 2 && filasM.length && cabM.every((c) => corta(c, 40)) && F.slice(1).every((f) => f.slice(1).every(esMarca))) {
+        if (pend && !pend._lineas && !pend.opciones.length) pend._grupo = true;
+        cerrar();
+        const escala = cabM.every((o) => /^\d{1,2}$/.test(o));
+        for (const f of filasM) {
+          const m = f[0].match(RE_NUMERO);
+          agregar({ id: nuevoId(), tipo: escala ? 'escala' : 'unica', etiqueta: m ? m[2] : f[0], numero: m ? m[1] : '', ayuda: '', opciones: cabM.slice() });
+        }
+        return;
+      }
+      // 3) Tabla de datos: celdas "Etiqueta:" (o encabezados con la celda de abajo vacía).
+      cerrar();
+      const nuevos = [];
+      T.forEach((f, r) => f.forEach((c, k) => {
+        if (!c) return;
+        const primera = c.split('\n')[0].trim();
+        const antes = primera.split(':')[0].trim();
+        const e = etiquetas(primera) || (primera.includes(':') && antes.length >= 2 && antes.length <= 45 && !antes.includes('?') ? [antes + ':'] : null);
+        if (e) nuevos.push(...e);
+        else if (!c.includes(':') && T[r + 1] && !T[r + 1][k] && c.length <= 45 && !c.includes('?')) nuevos.push(c);
+      }));
+      if (nuevos.length) nuevos.forEach((e) => agregar(campoDato(e)));
+      else F.forEach((f) => textoLibre(f.filter(Boolean).join(' · ')));
+    };
+
+    for (const b of bloques) {
+      if (b.tipo === 'tabla') { procesarTabla(b.filas); continue; }
+      const t = limpiar(b.texto).replace(/\n+/g, ' ');
+      if (!t || /^[\s_.\-…·=]+$/.test(t)) { if (pend && t) pend._lineas = true; continue; }
+      if (!pl.titulo && !hayCampos && !sec) { pl.titulo = t; continue; }
+      if (intentarOpciones(t)) continue;
+      if (esEncabezado(t, b)) { cerrar(); flush(sec); nuevaSeccion(t); continue; }
+      const etq = etiquetas(t);
+      if (!sec && !hayCampos && !esInstruccion(t) && !etq && !esPregunta(t, b) && t.length <= 140 && pl.subtitulo.split('\n').length < 3) {
+        pl.subtitulo = unir(pl.subtitulo, t);
+        continue;
+      }
+      if (esInstruccion(t)) { cerrar(); textoLibre(t); continue; }
+      if (etq) { cerrar(); etq.forEach((e) => agregar(campoDato(e))); continue; }
+      if (esPregunta(t, b)) { cerrar(); nuevaPregunta(t); continue; }
+      if (pend && !pend.opciones.length && !pend.ayuda && t.length <= 220) { pend.ayuda = t; continue; }
+      cerrar();
+      textoLibre(t);
+    }
+    cerrar();
+    if (buffer.length) pl.pie = buffer.join('\n');
+    pl.secciones = pl.secciones.filter((s) => s.campos.length || s.descripcion);
+    for (const s of pl.secciones) delete s.pista;
+    if (!pl.titulo) pl.titulo = origen.replace(/\.[^.]+$/, '') || 'Encuesta';
+    return pl;
+  }
+
+  async function plantillaDesdeArchivo(nombre, buffer) {
+    const ext = nombre.split('.').pop().toLowerCase();
+    let bloques;
+    if (ext === 'docx') {
+      const zip = await leerZip(buffer);
+      const xml = await zip.texto('word/document.xml');
+      if (!xml) throw new Error('No se encontró el contenido del documento dentro del .docx.');
+      bloques = bloquesDocx(xml);
+    } else if (ext === 'txt' || ext === 'md') {
+      bloques = bloquesTexto(dec.decode(buffer));
+    } else if (ext === 'doc') {
+      throw new Error('Los .doc antiguos no se pueden leer. En Word use Archivo › Guardar como › .docx.');
+    } else if (ext === 'pdf') {
+      throw new Error('Los PDF no se pueden leer sin internet. Abra el documento en Word o Google Docs y descárguelo como .docx, o copie y pegue el texto.');
+    } else {
+      throw new Error(`Formato .${ext} no soportado. Use .docx, .txt o .md.`);
+    }
+    return construirPlantilla(bloques, nombre);
+  }
+
+  const plantillaDesdeTexto = (texto, origen = 'Texto pegado') => construirPlantilla(bloquesTexto(texto), origen);
+
+  /* ── Análisis ─────────────────────────────────────────── */
+  const STOP = new Set(('a al algo algun alguna algunas alguno algunos ante antes aqui asi aun cada como con contra cual cuales cuando de del desde donde dos e el ella ellas ellos en entre era eran es esa esas ese eso esos esta estaba estan estas este esto estos fue fueron ha han hay hace hacen hacer la las le les lo los mas me mi mis mucho muchos muy nada ni no nos o otra otras otro otros para pero poco por porque pues que se sea segun ser si sin sobre solo son su sus tambien tan tanto te tiene tienen todo todos tu un una unas uno unos y ya yo bien cosas cosa creo considero etc mucha muchas puede pueden debe deben deberia seria hay ser estar sido tener porque ademas asi mismo cual quien quienes ellos ellas usted ustedes nosotros vez veces gente persona personas').split(' '));
+  const vacio = (v) => v == null || v === '' || (Array.isArray(v) && !v.length);
+  const pct = (a, b) => (b ? (a * 100) / b : 0);
+
+  function conteo(valores, orden = []) {
+    const mapa = new Map(orden.map((o) => [norm(o), { etiqueta: o, n: 0 }]));
+    for (const v of valores) {
+      const k = norm(v);
+      if (!mapa.has(k)) mapa.set(k, { etiqueta: String(v), n: 0 });
+      mapa.get(k).n += 1;
+    }
+    return [...mapa.values()];
+  }
+
+  function palabras(textos, excluir) {
+    const excluidas = new Set((norm(excluir).match(/[a-z]{3,}/g) || []).flatMap((w) => [w, w.replace(/e?s$/, '')]));
+    const conteos = new Map();
+    for (const texto of textos) {
+      const originales = String(texto).toLowerCase().match(/[a-záéíóúüñ]{3,}/g) || [];
+      const vistas = new Set();
+      for (const o of originales) {
+        const k = sinTildes(o);
+        if (STOP.has(k) || excluidas.has(k) || vistas.has(k)) continue;
+        vistas.add(k);
+        const e = conteos.get(k) || { n: 0, formas: new Map() };
+        e.n += 1;
+        e.formas.set(o, (e.formas.get(o) || 0) + 1);
+        conteos.set(k, e);
+      }
+    }
+    // Plurales: "arrayanes" se suma a "arrayan", "palmas" a "palma" (por persona, sin duplicar).
+    const claves = [...conteos.keys()];
+    for (const k of claves) {
+      const base = [k.slice(0, -2), k.slice(0, -1)].find((b) => b.length >= 3 && k.endsWith('s') && conteos.has(b) && b !== k);
+      if (!base) continue;
+      const a = conteos.get(base);
+      const b = conteos.get(k);
+      a.n += b.n;
+      b.formas.forEach((n, f) => a.formas.set(f, (a.formas.get(f) || 0) + n));
+      conteos.delete(k);
+    }
+    // El conteo de plurales unidos puede pasar del total de personas si alguien usó ambas formas.
+    const total = textos.length;
+    return [...conteos.values()]
+      .map((e) => ({ etiqueta: [...e.formas.entries()].sort((x, y) => y[1] - x[1])[0][0], n: Math.min(e.n, total) }))
+      .sort((x, y) => y.n - x.n || x.etiqueta.localeCompare(y.etiqueta));
+  }
+
+  function categorizar(textos, categorias) {
+    const normales = textos.map((t) => ` ${norm(t).replace(/[^a-z0-9ñ]+/g, ' ')} `);
+    const filas = categorias.map((c) => {
+      const claves = c.palabras.map((p) => norm(p)).filter(Boolean);
+      const n = normales.filter((t) => claves.some((k) => t.includes(' ' + k))).length;
+      return { etiqueta: c.nombre, n };
+    });
+    const sin = normales.filter((t) => !categorias.some((c) => c.palabras.some((p) => norm(p) && t.includes(' ' + norm(p))))).length;
+    return { filas, sin };
+  }
+
+  function analizar(campo, respuestas) {
+    const pares = respuestas.map((r) => ({ v: r.datos?.[campo.id], r })).filter((x) => !vacio(x.v));
+    const valores = pares.map((x) => x.v);
+    const base = { n: valores.length, total: respuestas.length, sin: respuestas.length - valores.length, tipo: campo.tipo };
+    const filas = (lista) => lista.map((x) => ({ ...x, p: pct(x.n, base.n) }));
+    switch (campo.tipo) {
+      case 'sino': case 'unica': case 'escala': {
+        const r = { ...base, barras: filas(conteo(valores, campo.opciones)) };
+        if (campo.tipo === 'escala') {
+          const nums = valores.map(Number).filter(Number.isFinite);
+          if (nums.length) r.media = nums.reduce((a, b) => a + b, 0) / nums.length;
+        }
+        return r;
+      }
+      case 'multiple':
+        return { ...base, barras: filas(conteo(valores.flat(), campo.opciones)) };
+      case 'numero': {
+        const nums = valores.map(Number).filter(Number.isFinite).sort((a, b) => a - b);
+        if (!nums.length) return base;
+        const mitad = Math.floor(nums.length / 2);
+        const r = {
+          ...base,
+          media: nums.reduce((a, b) => a + b, 0) / nums.length,
+          mediana: nums.length % 2 ? nums[mitad] : (nums[mitad - 1] + nums[mitad]) / 2,
+          min: nums[0], max: nums.at(-1),
+        };
+        if (new Set(nums).size <= 12) r.barras = filas(conteo(nums.map(String)).sort((a, b) => Number(a.etiqueta) - Number(b.etiqueta)));
+        return r;
+      }
+      case 'fecha':
+        return { ...base, barras: filas(conteo(valores).sort((a, b) => a.etiqueta.localeCompare(b.etiqueta))) };
+      case 'texto': {
+        const c = conteo(valores).sort((a, b) => b.n - a.n);
+        return { ...base, distintos: c.length, barras: c.length < base.n || base.n <= 3 ? filas(c.slice(0, 10)) : null, lista: pares };
+      }
+      case 'parrafo': {
+        const r = { ...base, palabras: filas(palabras(valores, campo.etiqueta + ' ' + (campo.ayuda || '')).slice(0, 12)), lista: pares };
+        if (campo.categorias?.length) {
+          const c = categorizar(valores, campo.categorias);
+          r.categorias = filas(c.filas.sort((a, b) => b.n - a.n));
+          r.sinCategoria = c.sin;
+        }
+        return r;
+      }
+      default:
+        return base;
+    }
+  }
+
+  /* ── Exportación CSV (Excel en español: separador ;) ── */
+  function csv(plantilla, respuestas) {
+    const campos = plantilla.secciones.flatMap((s) => s.campos).filter((c) => c.tipo !== 'grupo');
+    const celda = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const cab = ['N.º', 'Registrada', ...campos.map((c) => (c.numero ? `${c.numero}. ` : '') + c.etiqueta)];
+    const filas = respuestas.map((r) => [
+      r.n, new Date(r.creada).toLocaleString('es-CO'),
+      ...campos.map((c) => { const v = r.datos?.[c.id]; return Array.isArray(v) ? v.join(' | ') : v; }),
+    ]);
+    return '﻿' + [cab, ...filas].map((f) => f.map(celda).join(';')).join('\r\n');
+  }
+
+  return { leerZip, bloquesDocx, bloquesTexto, construirPlantilla, plantillaDesdeArchivo, plantillaDesdeTexto, analizar, csv, norm, uid, vacio };
+})();
+if (typeof module !== 'undefined') module.exports = Motor;
+</script>
+
+<!-- Interfaz -->
+<script>
+'use strict';
+const MODELO_DIAGNOSTICO = `ENCUESTA DE INVESTIGACIÓN
+Identificación y Caracterización de Especies Vegetales
+Parque Principal del Sector Urbano — Municipio de Chitagá
+DATOS DEL ENCUESTADO
+| Fecha: | Encuestador: | No. Encuesta: |
+| Nombre del encuestado: | Ocupación / Rol: | Tiempo en el municipio: |
+Objetivo: Recopilar información sobre el conocimiento, percepción y relación de la comunidad con las especies vegetales presentes en el parque principal del municipio de Chitagá, con el fin de contribuir a su identificación, caracterización y conservación.
+SECCIÓN A — PREGUNTAS ABIERTAS
+Responda con sus propias palabras de forma amplia y detallada.
+1. ¿Qué especies vegetales (árboles, arbustos, plantas ornamentales u otras) conoce o ha identificado en el parque principal de Chitagá? Descríbalas de la manera más detallada posible.
+2. Desde su perspectiva, ¿cuál considera que es la importancia ecológica y ambiental de las especies vegetales presentes en el parque? ¿Qué beneficios aportan a la comunidad y al ecosistema local?
+3. ¿Ha observado cambios o alteraciones en la vegetación del parque a lo largo del tiempo? Describa qué cambios ha notado, cuándo ocurrieron y a qué factores los atribuye.
+4. ¿Qué usos (medicinales, ornamentales, culturales, históricos u otros) le atribuye la comunidad a las plantas del parque? ¿Existe alguna especie de especial significado para los habitantes del municipio?
+5. En su opinión, ¿qué acciones o estrategias deberían implementarse para la conservación, mantenimiento y enriquecimiento de la flora del parque principal de Chitagá? ¿Qué papel debería asumir la comunidad?
+SECCIÓN B — PREGUNTAS CERRADAS
+Marque con una X según corresponda.
+6. ¿Visita usted con frecuencia el parque principal del municipio de Chitagá?
+| Sí | No |
+7. ¿Conoce usted el nombre de alguna especie vegetal presente en el parque principal de Chitagá?
+| Sí | No |
+8. ¿Considera que el estado de conservación actual de la vegetación en el parque principal de Chitagá es adecuado?
+| Sí | No |
+9. ¿Ha notado la presencia de especies vegetales nativas (propias de la región) en el parque principal de Chitagá?
+| Sí | No |
+10. ¿Estaría dispuesto/a a participar en actividades de siembra, cuidado y conservación de las especies vegetales del parque principal de Chitagá?
+| Sí | No |
+Proyecto: Identificación y Caracterización de Especies Vegetales — Parque Principal de Chitagá, Norte de Santander, Colombia
+La información recopilada es de carácter académico e investigativo. Se garantiza confidencialidad.`;
+
+const TIPOS = {
+  texto: 'Texto corto', parrafo: 'Pregunta abierta', numero: 'Número', fecha: 'Fecha',
+  sino: 'Sí / No', unica: 'Una opción', multiple: 'Varias opciones', escala: 'Escala', grupo: 'Título (sin respuesta)',
+};
+const CON_OPCIONES = new Set(['sino', 'unica', 'multiple', 'escala']);
+
+/* ── Utilidades ───────────────────────────────────────── */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const clonar = (o) => JSON.parse(JSON.stringify(o));
+const fmt = (n, d = 1) => Number(n).toLocaleString('es-CO', { maximumFractionDigits: d });
+const fmtPct = (p) => `${fmt(p)} %`;
+const hoy = () => { const d = new Date(); return new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+const fechaCorta = (iso) => new Date(iso).toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
+const fechaDia = (v) => (/^\d{4}-\d{2}-\d{2}$/.test(v) ? v.split('-').reverse().join('/') : v);
+const slug = (s) => Motor.norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'encuesta';
+const campos = (pl) => pl.secciones.flatMap((s) => s.campos);
+const respondibles = (pl) => campos(pl).filter((c) => c.tipo !== 'grupo');
+
+const PREFIJO = 'encuestas-offline:';
+const almacen = {
+  leer(k, defecto) {
+    try { const v = localStorage.getItem(PREFIJO + k); return v == null ? defecto : JSON.parse(v); } catch { return defecto; }
+  },
+  guardar(k, v) {
+    try { localStorage.setItem(PREFIJO + k, JSON.stringify(v)); return true; } catch (e) {
+      avisar('No se pudo guardar en este navegador: ' + e.message, true);
+      return false;
+    }
+  },
+  borrar(k) { try { localStorage.removeItem(PREFIJO + k); } catch { /* sin almacenamiento */ } },
+};
+
+let temporizadorAviso;
+function avisar(texto, error = false) {
+  const el = $('#aviso');
+  el.textContent = texto;
+  el.className = 'visible' + (error ? ' error' : '');
+  clearTimeout(temporizadorAviso);
+  temporizadorAviso = setTimeout(() => { el.className = ''; }, error ? 6000 : 3200);
+}
+
+function descargar(nombre, contenido, tipo) {
+  const url = URL.createObjectURL(new Blob([contenido], { type: tipo }));
+  const a = Object.assign(document.createElement('a'), { href: url, download: nombre });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+}
+
+/* ── Estado ───────────────────────────────────────────── */
+function modeloEjemplo() {
+  const pl = Motor.plantillaDesdeTexto(MODELO_DIAGNOSTICO, 'Modelo de diagnóstico (PlantaQR)');
+  pl.id = 'diagnostico-chitaga';
+  return pl;
+}
+
+let plantillas = almacen.leer('plantillas', null);
+if (!Array.isArray(plantillas)) { plantillas = [modeloEjemplo()]; almacen.guardar('plantillas', plantillas); }
+
+const estado = {
+  activaId: almacen.leer('activa', null),
+  vista: almacen.leer('vista', 'inicio'),
+  revision: null,   // plantilla recién leída, pendiente de confirmar
+  edicion: null,    // copia en edición (vista Diseño)
+  verResp: null,
+  categoriasDe: null,
+};
+if (!plantillas.some((p) => p.id === estado.activaId)) { estado.activaId = null; estado.vista = 'inicio'; }
+
+const activa = () => plantillas.find((p) => p.id === estado.activaId) || null;
+const respuestasDe = (id) => almacen.leer('resp:' + id, []);
+const guardarPlantillas = () => almacen.guardar('plantillas', plantillas);
+
+function ir(vista, id) {
+  if (id !== undefined) { estado.activaId = id; almacen.guardar('activa', id); }
+  if (vista === 'diseno') estado.edicion = clonar(activa());
+  estado.vista = vista;
+  if (vista !== 'revision') almacen.guardar('vista', vista);
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+/* ── Render general ───────────────────────────────────── */
+const ICONO = '<svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#b7e4c7"/><path d="M9 10h14M9 16h14M9 22h8" stroke="#1f4d3a" stroke-width="3" stroke-linecap="round"/></svg>';
+
+function renderCabecera() {
+  const pl = estado.vista === 'inicio' || estado.vista === 'revision' ? null : activa();
+  const n = pl ? respuestasDe(pl.id).length : 0;
+  const pestana = (v, t, extra = '') => `<button class="pestana" data-accion="ir" data-vista="${v}" ${estado.vista === v ? 'aria-current="page"' : ''}>${t}${extra}</button>`;
+  $('#cabecera').innerHTML = `
+    <div class="cab-fila">
+      <button class="marca" data-accion="ir" data-vista="inicio" aria-label="Inicio: mis encuestas">${ICONO}<span>Encuestas</span></button>
+      <span class="cab-titulo">${pl ? esc(pl.titulo) : ''}</span>
+      <span class="chip-local" title="Las respuestas se guardan en este navegador; no necesita internet">● Sin internet</span>
+    </div>
+    ${pl ? `<nav class="pestanas" aria-label="Secciones de la encuesta">
+      ${pestana('responder', 'Responder')}
+      ${pestana('resultados', 'Resultados')}
+      ${pestana('respuestas', 'Respuestas', `<span class="cuenta">${n}</span>`)}
+      ${pestana('diseno', 'Diseño')}
+    </nav>` : ''}`;
+}
+
+function render() {
+  renderCabecera();
+  const vistas = { inicio: vistaInicio, revision: vistaRevision, responder: vistaResponder, resultados: vistaResultados, respuestas: vistaRespuestas, diseno: vistaDiseno };
+  const vista = vistas[estado.vista] && (estado.vista === 'inicio' || estado.vista === 'revision' || activa()) ? estado.vista : 'inicio';
+  $('#app').innerHTML = vistas[vista]();
+  if (vista === 'responder') prepararFormulario();
+}
+
+/* ── Inicio ───────────────────────────────────────────── */
+function vistaInicio() {
+  const lista = plantillas.map((p) => {
+    const r = respuestasDe(p.id);
+    const nPreg = respondibles(p).length;
+    return `<div class="enc-item">
+      <div style="min-width:0;flex:1">
+        <h3>${esc(p.titulo)}</h3>
+        <p class="mini">${nPreg} campos · ${esc(p.origen || '')}${r.length ? ' · última: ' + fechaCorta(r.at(-1).creada) : ''}</p>
+      </div>
+      <div class="botones">
+        <span class="num-grande" title="Respuestas">${r.length}</span><span class="mini" style="margin-right:6px">resp.</span>
+        <button class="btn chico" data-accion="ir" data-vista="resultados" data-id="${esc(p.id)}">Resultados</button>
+        <button class="btn chico primario" data-accion="ir" data-vista="responder" data-id="${esc(p.id)}">Responder</button>
+      </div>
+    </div>`;
+  }).join('');
+  return `
+  <section class="tarjeta pila">
+    <div>
+      <h2>Crear un formulario desde su documento</h2>
+      <p class="sutil">La app lee la encuesta y arma los campos sola. Todo ocurre en este equipo: no se sube nada y no hace falta internet.</p>
+    </div>
+    <label class="zona" id="zona" for="archivo">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3-3 3 3"/></svg>
+      <strong>Elija o arrastre el documento</strong>
+      <span class="mini">Word (.docx), texto (.txt / .md) o una copia de respaldo (.json)</span>
+    </label>
+    <details class="ayuda-doc">
+      <summary>O pegue el texto de la encuesta</summary>
+      <textarea class="pegar" id="texto-pegado" placeholder="ENCUESTA DE…&#10;Nombre: ____&#10;1. ¿Pregunta abierta?&#10;2. ¿Pregunta cerrada?&#10;Sí / No"></textarea>
+      <button class="btn primario" data-accion="crear-texto">Crear formulario</button>
+    </details>
+    <details class="ayuda-doc">
+      <summary>¿Cómo debe estar escrito el documento?</summary>
+      <ul>
+        <li>La <b>primera línea</b> es el título; las siguientes líneas cortas, el subtítulo.</li>
+        <li>Los textos en <b>MAYÚSCULAS</b> o que empiezan por <code>Sección</code>, <code>Parte</code> o <code>Datos</code> crean secciones.</li>
+        <li><code>Nombre: ______</code> o una tabla con celdas <code>Fecha:</code>, <code>Encuestador:</code>… crean campos de datos. La fecha se llena con la de hoy y el número de encuesta se numera solo.</li>
+        <li>Las <b>preguntas</b> se reconocen por el número (<code>1.</code>, <code>2)</code>) o por los signos <code>¿…?</code>.</li>
+        <li>Las <b>opciones</b> pueden ir debajo como <code>a) …</code>, viñetas, <code>( ) …</code>, <code>☐ …</code>, en una línea <code>Sí / No</code> o en una tabla <code>| Sí | No |</code>. Si la pregunta dice “varias” o “todas las que”, admite varias respuestas.</li>
+        <li>Una pregunta sin opciones es <b>abierta</b>; en secciones de preguntas cerradas o con “Marque con una X” se toma como <b>Sí / No</b>.</li>
+        <li>Una tabla con opciones en la primera fila y afirmaciones en la primera columna crea una pregunta por fila (escala o matriz).</li>
+        <li>Antes de guardar puede revisar y corregir todo lo detectado.</li>
+      </ul>
+    </details>
+  </section>
+  <section class="pila">
+    <div class="separa"><h2 style="font-size:1.15rem">Mis encuestas</h2>
+      ${plantillas.some((p) => p.id === 'diagnostico-chitaga') ? '' : '<button class="btn chico" data-accion="modelo">Agregar el modelo de diagnóstico</button>'}</div>
+    ${lista ? `<div class="lista-enc">${lista}</div>` : '<p class="sutil">Aún no hay encuestas. Cargue un documento para empezar.</p>'}
+  </section>`;
+}
+
+async function importarArchivo(archivo) {
+  if (!archivo) return;
+  try {
+    const buffer = await archivo.arrayBuffer();
+    if (/\.json$/i.test(archivo.name)) { importarJson(JSON.parse(new TextDecoder().decode(buffer))); return; }
+    const pl = await Motor.plantillaDesdeArchivo(archivo.name, buffer);
+    abrirRevision(pl);
+  } catch (e) {
+    avisar(e.message || 'No se pudo leer el archivo.', true);
+  }
+}
+
+function abrirRevision(pl) {
+  if (!respondibles(pl).length) { avisar('No se encontraron preguntas ni campos en el documento. Revise el formato (ver “¿Cómo debe estar escrito?”).', true); return; }
+  estado.revision = pl;
+  estado.edicion = pl;
+  estado.vista = 'revision';
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+function importarJson(datos) {
+  if (!datos || typeof datos !== 'object') throw new Error('El archivo .json no es válido.');
+  const pl = datos.plantilla || (datos.secciones ? datos : null);
+  if (!pl?.id || !Array.isArray(pl.secciones)) throw new Error('El .json no contiene una encuesta de esta app.');
+  const existente = plantillas.find((p) => p.id === pl.id);
+  if (!existente) { plantillas.push(pl); guardarPlantillas(); }
+  const entrantes = Array.isArray(datos.respuestas) ? datos.respuestas : [];
+  const actuales = respuestasDe(pl.id);
+  const ids = new Set(actuales.map((r) => r.id));
+  const nuevas = entrantes.filter((r) => r?.id && !ids.has(r.id));
+  if (nuevas.length) {
+    const todas = [...actuales, ...nuevas].sort((a, b) => a.creada.localeCompare(b.creada));
+    todas.forEach((r, i) => { r.n = i + 1; });
+    almacen.guardar('resp:' + pl.id, todas);
+  }
+  avisar(`${existente ? 'Encuesta existente' : 'Encuesta agregada'}: ${nuevas.length} respuesta(s) nueva(s) unida(s)${entrantes.length - nuevas.length ? `, ${entrantes.length - nuevas.length} ya estaban` : ''}.`);
+  ir('resultados', pl.id);
+}
+
+/* ── Revisión y Diseño (mismo editor) ─────────────────── */
+function editor(pl) {
+  const opcionesTipo = (sel) => Object.entries(TIPOS).map(([v, t]) => `<option value="${v}" ${v === sel ? 'selected' : ''}>${t}</option>`).join('');
+  const secs = pl.secciones.map((s, si) => `
+    <div class="ed-sec">
+      <div class="ed-sec-cab">
+        <input type="text" data-e="${si}.titulo" value="${esc(s.titulo)}" placeholder="Título de la sección" aria-label="Título de la sección">
+        <button class="btn chico icono peligro" data-accion="sec-quitar" data-s="${si}" title="Quitar sección" aria-label="Quitar sección">✕</button>
+      </div>
+      <textarea data-e="${si}.descripcion" rows="2" placeholder="Instrucciones de la sección (opcional)" aria-label="Instrucciones de la sección" style="min-height:44px;margin-bottom:10px">${esc(s.descripcion)}</textarea>
+      ${s.campos.map((c, ci) => `
+        <div class="ed-campo">
+          <div class="ed-fila">
+            <input type="text" data-e="${si}.${ci}.numero" value="${esc(c.numero)}" placeholder="N.º" aria-label="Número">
+            <input type="text" data-e="${si}.${ci}.etiqueta" value="${esc(c.etiqueta)}" aria-label="Texto de la pregunta">
+            <select data-e="${si}.${ci}.tipo" aria-label="Tipo de respuesta">${opcionesTipo(c.tipo)}</select>
+          </div>
+          ${CON_OPCIONES.has(c.tipo) ? `<textarea data-e="${si}.${ci}.opciones" rows="2" placeholder="Una opción por línea" aria-label="Opciones">${esc(c.opciones.join('\n'))}</textarea>` : ''}
+          ${c.ayuda ? `<input type="text" data-e="${si}.${ci}.ayuda" value="${esc(c.ayuda)}" aria-label="Texto de ayuda" style="margin-top:8px">` : ''}
+          <div class="ed-pie">
+            <label><input type="checkbox" data-e="${si}.${ci}.requerido" ${c.requerido ? 'checked' : ''}> Obligatoria</label>
+            <div class="botones">
+              <button class="btn chico icono" data-accion="campo-mover" data-s="${si}" data-c="${ci}" data-d="-1" aria-label="Subir">↑</button>
+              <button class="btn chico icono" data-accion="campo-mover" data-s="${si}" data-c="${ci}" data-d="1" aria-label="Bajar">↓</button>
+              <button class="btn chico peligro" data-accion="campo-quitar" data-s="${si}" data-c="${ci}">Quitar</button>
+            </div>
+          </div>
+        </div>`).join('')}
+      <button class="btn chico" style="margin-top:10px" data-accion="campo-agregar" data-s="${si}">+ Agregar pregunta</button>
+    </div>`).join('');
+  return `
+    <div class="tarjeta pila">
+      <label class="campo-et" for="ed-titulo">Título</label>
+      <input type="text" id="ed-titulo" data-e="titulo" value="${esc(pl.titulo)}">
+      <label class="campo-et" for="ed-sub">Subtítulo</label>
+      <textarea id="ed-sub" data-e="subtitulo" rows="2" style="min-height:44px">${esc(pl.subtitulo)}</textarea>
+      <label class="campo-et" for="ed-desc">Objetivo o descripción</label>
+      <textarea id="ed-desc" data-e="descripcion" rows="3">${esc(pl.descripcion)}</textarea>
+    </div>
+    <div class="tarjeta">${secs}
+      <button class="btn" style="margin-top:18px" data-accion="sec-agregar">+ Agregar sección</button>
+    </div>
+    <div class="tarjeta">
+      <label class="campo-et" for="ed-pie">Nota al pie</label>
+      <textarea id="ed-pie" data-e="pie" rows="2" style="min-height:44px">${esc(pl.pie)}</textarea>
+    </div>`;
+}
+
+function resumenTipos(pl) {
+  const cuenta = {};
+  for (const c of campos(pl)) cuenta[c.tipo] = (cuenta[c.tipo] || 0) + 1;
+  return Object.entries(cuenta).map(([t, n]) => `<span class="etiqueta-tipo">${n} · ${TIPOS[t]}</span>`).join('');
+}
+
+function vistaRevision() {
+  const pl = estado.edicion;
+  if (!pl) return vistaInicio();
+  return `
+    <div class="tarjeta pila">
+      <div>
+        <h2>Revise el formulario detectado</h2>
+        <p class="sutil">De «${esc(pl.origen)}» se leyeron ${pl.secciones.length} secciones y ${respondibles(pl).length} campos. Corrija lo que haga falta y guarde.</p>
+      </div>
+      <div class="resumen-det">${resumenTipos(pl)}</div>
+      <div class="botones"><button class="btn primario" data-accion="revision-guardar">Guardar y empezar a responder</button><button class="btn" data-accion="ir" data-vista="inicio">Descartar</button></div>
+    </div>
+    ${editor(pl)}
+    <div class="botones no-imprimir"><button class="btn primario" data-accion="revision-guardar">Guardar y empezar a responder</button></div>`;
+}
+
+function vistaDiseno() {
+  const pl = estado.edicion || (estado.edicion = clonar(activa()));
+  const n = respuestasDe(pl.id).length;
+  return `
+    <div class="tarjeta pila">
+      <div class="separa"><h2>Diseño de la encuesta</h2><div class="resumen-det">${resumenTipos(pl)}</div></div>
+      ${n ? `<p class="nota">Ya hay ${n} respuesta(s). Puede corregir textos y opciones; si quita una pregunta, sus respuestas dejan de mostrarse.</p>` : ''}
+      <div class="botones"><button class="btn primario" data-accion="diseno-guardar">Guardar cambios</button><button class="btn" data-accion="diseno-descartar">Descartar cambios</button></div>
+    </div>
+    ${editor(pl)}
+    <div class="tarjeta pila">
+      <h3>Compartir y eliminar</h3>
+      <p class="sutil">Exporte solo el formulario (sin respuestas) para usarlo en otro equipo, o elimínelo de este.</p>
+      <div class="botones">
+        <button class="btn" data-accion="exportar-plantilla">Exportar formulario (.json)</button>
+        <button class="btn peligro" data-accion="plantilla-eliminar">Eliminar encuesta y respuestas</button>
+      </div>
+    </div>
+    <div class="botones"><button class="btn primario" data-accion="diseno-guardar">Guardar cambios</button></div>`;
+}
+
+function asignar(pl, ruta, el) {
+  const partes = ruta.split('.');
+  const clave = partes.pop();
+  const obj = partes.length === 0 ? pl : partes.length === 1 ? pl.secciones[partes[0]] : pl.secciones[partes[0]].campos[partes[1]];
+  if (!obj) return;
+  if (clave === 'opciones') obj.opciones = el.value.split('\n').map((x) => x.trim()).filter(Boolean);
+  else if (clave === 'requerido') obj.requerido = el.checked;
+  else if (clave === 'tipo') {
+    obj.tipo = el.value;
+    if (el.value === 'sino') obj.opciones = ['Sí', 'No'];
+    else if (el.value === 'escala' && !obj.opciones.length) obj.opciones = ['1', '2', '3', '4', '5'];
+    else if (!CON_OPCIONES.has(el.value)) obj.opciones = [];
+  } else obj[clave] = el.value;
+}
+
+/* ── Responder ────────────────────────────────────────── */
+function controlCampo(c) {
+  const id = 'f_' + c.id;
+  const nombre = esc(c.id);
+  switch (c.tipo) {
+    case 'parrafo': return `<textarea id="${id}" name="${nombre}" rows="3"></textarea>`;
+    case 'numero': return `<input type="number" id="${id}" name="${nombre}" inputmode="decimal" step="any">`;
+    case 'fecha': return `<input type="date" id="${id}" name="${nombre}">`;
+    case 'texto': return `<input type="text" id="${id}" name="${nombre}" autocomplete="off">`;
+    case 'sino': case 'unica': case 'escala': case 'multiple': {
+      const tipo = c.tipo === 'multiple' ? 'checkbox' : 'radio';
+      return `<div class="opciones${c.tipo === 'escala' ? ' escala' : ''}" role="${tipo === 'radio' ? 'radiogroup' : 'group'}" aria-labelledby="et_${esc(c.id)}">
+        ${c.opciones.map((o) => `<label class="chip"><input type="${tipo}" name="${nombre}" value="${esc(o)}"><span>${esc(o)}</span></label>`).join('')}
+      </div>`;
+    }
+    default: return '';
+  }
+}
+
+function htmlCampo(c) {
+  const etiquetaPara = ['sino', 'unica', 'escala', 'multiple', 'grupo'].includes(c.tipo) ? '' : ` for="f_${esc(c.id)}"`;
+  const tag = etiquetaPara ? 'label' : 'p';
+  return `<div class="campo ${c.tipo === 'grupo' ? 'grupo' : ''}" data-campo="${esc(c.id)}">
+    <${tag} class="campo-et" id="et_${esc(c.id)}"${etiquetaPara}>${c.numero ? `<span class="num">${esc(c.numero)}.</span>` : ''}${esc(c.etiqueta)}${c.requerido ? ' <span class="req" aria-label="obligatoria">*</span>' : ''}</${tag}>
+    ${c.ayuda ? `<p class="ayuda">${esc(c.ayuda)}</p>` : ''}
+    ${c.tipo === 'multiple' ? '<p class="ayuda">Puede marcar varias.</p>' : ''}
+    ${controlCampo(c)}
+  </div>`;
+}
+
+function vistaResponder() {
+  const pl = activa();
+  const n = respuestasDe(pl.id).length;
+  const secciones = pl.secciones.map((s) => {
+    const datos = s.campos.length > 1 && s.campos.every((c) => ['texto', 'numero', 'fecha'].includes(c.tipo));
+    return `<fieldset class="tarjeta seccion">
+      ${s.titulo ? `<legend>${esc(s.titulo)}</legend>` : ''}
+      ${s.descripcion ? `<p class="desc-sec">${esc(s.descripcion)}</p>` : ''}
+      <div class="${datos ? 'campos-datos' : ''}">${s.campos.map(htmlCampo).join('')}</div>
+    </fieldset>`;
+  }).join('');
+  return `
+  <form id="formulario" class="pila" novalidate autocomplete="off">
+    <div class="hoja-cab">
+      <h1>${esc(pl.titulo)}</h1>
+      ${pl.subtitulo ? `<p class="sub">${esc(pl.subtitulo)}</p>` : ''}
+      ${pl.descripcion ? `<p class="desc">${esc(pl.descripcion)}</p>` : ''}
+    </div>
+    <p class="nota" id="nota-borrador" hidden>Se recuperó una encuesta que estaba a medio llenar.</p>
+    ${secciones}
+    ${pl.pie ? `<p class="pie-hoja">${esc(pl.pie)}</p>` : ''}
+    <div class="barra-envio">
+      <span class="progreso" id="progreso" aria-live="polite"></span>
+      <div class="botones">
+        <button type="button" class="btn" data-accion="form-limpiar">Limpiar</button>
+        <button type="submit" class="btn primario">Guardar encuesta n.º ${n + 1}</button>
+      </div>
+    </div>
+  </form>`;
+}
+
+function valoresIniciales(pl) {
+  const resp = respuestasDe(pl.id);
+  const recordados = almacen.leer('recordar:' + pl.id, {});
+  const v = {};
+  for (const c of campos(pl)) {
+    if (c.auto === 'hoy') v[c.id] = hoy();
+    else if (c.auto === 'consecutivo') {
+      const usados = resp.map((r) => Number(r.datos?.[c.id])).filter(Number.isFinite);
+      v[c.id] = String(Math.max(resp.length, ...usados, 0) + 1);
+    } else if (c.recordar && recordados[c.id]) v[c.id] = recordados[c.id];
+  }
+  return v;
+}
+
+function aplicarValores(form, valores) {
+  for (const [k, v] of Object.entries(valores)) {
+    const lista = Array.isArray(v) ? v.map(String) : [String(v)];
+    form.querySelectorAll(`[name="${CSS.escape(k)}"]`).forEach((el) => {
+      if (el.type === 'radio' || el.type === 'checkbox') el.checked = lista.includes(el.value);
+      else el.value = lista[0] ?? '';
+    });
+  }
+}
+
+function leerFormulario(form, pl) {
+  const fd = new FormData(form);
+  const datos = {};
+  for (const c of respondibles(pl)) {
+    if (c.tipo === 'multiple') { const v = fd.getAll(c.id); if (v.length) datos[c.id] = v; continue; }
+    const v = String(fd.get(c.id) ?? '').trim();
+    if (v !== '') datos[c.id] = c.tipo === 'numero' && Number.isFinite(Number(v)) ? Number(v) : v;
+  }
+  return datos;
+}
+
+function actualizarProgreso() {
+  const pl = activa();
+  const form = $('#formulario');
+  if (!pl || !form) return;
+  const datos = leerFormulario(form, pl);
+  const total = respondibles(pl).filter((c) => !c.auto).length;
+  const hechas = respondibles(pl).filter((c) => !c.auto && !Motor.vacio(datos[c.id])).length;
+  $('#progreso').innerHTML = `<b>${hechas}</b> de ${total} respondidas`;
+}
+
+function prepararFormulario() {
+  const pl = activa();
+  const form = $('#formulario');
+  aplicarValores(form, valoresIniciales(pl));
+  const borrador = almacen.leer('borrador:' + pl.id, null);
+  if (borrador && Object.keys(borrador).length) {
+    aplicarValores(form, borrador);
+    $('#nota-borrador').hidden = false;
+  }
+  actualizarProgreso();
+}
+
+let temporizadorBorrador;
+function guardarBorrador() {
+  clearTimeout(temporizadorBorrador);
+  temporizadorBorrador = setTimeout(() => {
+    const pl = activa();
+    const form = $('#formulario');
+    if (!pl || !form) return;
+    const datos = leerFormulario(form, pl);
+    const iniciales = valoresIniciales(pl);
+    const propios = Object.keys(datos).some((k) => String(datos[k]) !== String(iniciales[k] ?? ''));
+    if (propios) almacen.guardar('borrador:' + pl.id, datos); else almacen.borrar('borrador:' + pl.id);
+  }, 400);
+}
+
+function enviarFormulario(form) {
+  const pl = activa();
+  const datos = leerFormulario(form, pl);
+  form.querySelectorAll('.campo.error').forEach((el) => el.classList.remove('error'));
+  const faltan = respondibles(pl).filter((c) => c.requerido && Motor.vacio(datos[c.id]));
+  if (faltan.length) {
+    faltan.forEach((c) => form.querySelector(`[data-campo="${CSS.escape(c.id)}"]`)?.classList.add('error'));
+    form.querySelector('.campo.error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    avisar(`Faltan ${faltan.length} pregunta(s) obligatoria(s).`, true);
+    return;
+  }
+  const propias = respondibles(pl).filter((c) => !c.auto && !Motor.vacio(datos[c.id]));
+  if (!propias.length) { avisar('La encuesta está vacía: responda al menos una pregunta.', true); return; }
+  const resp = respuestasDe(pl.id);
+  const n = Math.max(0, ...resp.map((r) => r.n || 0)) + 1;
+  resp.push({ id: Motor.uid(), n, creada: new Date().toISOString(), datos });
+  if (!almacen.guardar('resp:' + pl.id, resp)) return;
+  const recordar = {};
+  respondibles(pl).filter((c) => c.recordar && datos[c.id]).forEach((c) => { recordar[c.id] = datos[c.id]; });
+  if (Object.keys(recordar).length) almacen.guardar('recordar:' + pl.id, { ...almacen.leer('recordar:' + pl.id, {}), ...recordar });
+  almacen.borrar('borrador:' + pl.id);
+  clearTimeout(temporizadorBorrador);
+  render();
+  window.scrollTo({ top: 0 });
+  avisar(`Encuesta n.º ${n} guardada. Total: ${resp.length}.`);
+}
+
+/* ── Resultados ───────────────────────────────────────── */
+function barras(filas, base) {
+  if (!filas?.length) return '<p class="mini">Sin datos.</p>';
+  return `<div class="barras">${filas.map((f) => `
+    <div class="b-fila" title="${esc(f.etiqueta)}: ${f.n} de ${base}">
+      <span class="b-et">${esc(f.etiqueta)}</span>
+      <span class="b-pista" role="img" aria-label="${fmtPct(f.p)}"><span class="b-relleno" style="--p:${Math.min(100, f.p).toFixed(1)}%"></span></span>
+      <span class="b-val"><b>${f.n}</b> · ${fmtPct(f.p)}</span>
+    </div>`).join('')}</div>`;
+}
+
+function listaRespuestas(lista, titulo = 'Ver las respuestas') {
+  if (!lista?.length) return '';
+  return `<details class="ver"><summary>${titulo} (${lista.length})</summary>
+    <ol class="lista-resp">${lista.map(({ v, r }) => `<li>${esc(v)} <span class="quien">— n.º ${r.n}</span></li>`).join('')}</ol>
+  </details>`;
+}
+
+function tarjetaResultado(c, resp) {
+  const a = Motor.analizar(c, resp);
+  const meta = `${a.n} de ${a.total} respondieron${a.sin ? ` · ${a.sin} sin respuesta` : ''}`;
+  let cuerpo = '';
+  if (!a.n) cuerpo = '<p class="mini">Todavía nadie ha respondido esta pregunta.</p>';
+  else if (['sino', 'unica', 'escala'].includes(c.tipo)) {
+    cuerpo = barras(a.barras, a.n) + (a.media != null ? `<div class="stats" style="margin-top:12px"><span>Promedio: <b>${fmt(a.media, 2)}</b></span></div>` : '');
+  } else if (c.tipo === 'multiple') {
+    cuerpo = `<p class="mini" style="margin:-8px 0 10px">Porcentaje sobre quienes respondieron; puede sumar más de 100 %.</p>${barras(a.barras, a.n)}`;
+  } else if (c.tipo === 'numero') {
+    cuerpo = `<div class="stats"><span>Promedio: <b>${fmt(a.media, 2)}</b></span><span>Mediana: <b>${fmt(a.mediana, 2)}</b></span><span>Mínimo: <b>${fmt(a.min, 2)}</b></span><span>Máximo: <b>${fmt(a.max, 2)}</b></span></div>${a.barras ? `<div style="margin-top:14px">${barras(a.barras, a.n)}</div>` : ''}`;
+  } else if (c.tipo === 'fecha') {
+    cuerpo = barras(a.barras.map((f) => ({ ...f, etiqueta: fechaDia(f.etiqueta) })), a.n);
+  } else if (c.tipo === 'texto') {
+    cuerpo = (a.barras ? barras(a.barras, a.n) : `<p class="mini">${a.distintos} respuestas distintas.</p>`) + listaRespuestas(a.lista);
+  } else if (c.tipo === 'parrafo') {
+    const editando = estado.categoriasDe === c.id;
+    const textoCat = (c.categorias || []).map((k) => `${k.nombre}: ${k.palabras.join(', ')}`).join('\n');
+    cuerpo = `
+      ${a.categorias ? `<p class="res-sub">Categorías</p>${barras(a.categorias, a.n)}<p class="mini" style="margin-top:6px">Una persona puede caer en varias categorías.${a.sinCategoria ? ` Sin categoría: ${a.sinCategoria}.` : ''}</p>` : ''}
+      <p class="res-sub">Palabras más mencionadas <span class="mini" style="text-transform:none;letter-spacing:0;font-weight:400">· personas que la usan</span></p>
+      ${barras(a.palabras, a.n)}
+      ${editando ? `
+        <div class="no-imprimir" style="margin-top:14px">
+          <label class="campo-et" for="cat_${esc(c.id)}">Categorías (una por línea: <code>Nombre: palabra, palabra</code>)</label>
+          <textarea id="cat_${esc(c.id)}" rows="4" placeholder="Arrayán: arrayan&#10;Pino o ciprés: pino, cipres&#10;Palmas: palma">${esc(textoCat)}</textarea>
+          <div class="botones" style="margin-top:8px"><button class="btn chico primario" data-accion="cat-guardar" data-id="${esc(c.id)}">Aplicar</button><button class="btn chico" data-accion="cat-abrir" data-id="">Cerrar</button></div>
+        </div>` : `<div class="no-imprimir" style="margin-top:12px"><button class="btn chico" data-accion="cat-abrir" data-id="${esc(c.id)}">${c.categorias?.length ? 'Editar categorías' : 'Agrupar en categorías'}</button></div>`}
+      ${listaRespuestas(a.lista)}`;
+  }
+  return `<article class="tarjeta">
+    <div class="res-cab"><h3>${c.numero ? `<span class="num">${esc(c.numero)}.</span> ` : ''}${esc(c.etiqueta)}</h3><span class="etiqueta-tipo">${TIPOS[c.tipo]}</span></div>
+    <p class="res-meta">${meta}</p>
+    ${cuerpo}
+  </article>`;
+}
+
+function tablaSiNo(pl, resp) {
+  const filas = respondibles(pl).filter((c) => c.tipo === 'sino');
+  if (!filas.length || !resp.length) return '';
+  const total = resp.length;
+  return `<section class="tarjeta">
+    <div class="separa"><h3>Resumen de preguntas Sí / No (n = ${total})</h3>
+      <button class="btn chico no-imprimir" data-accion="copiar-tabla">Copiar tabla</button></div>
+    <div class="tabla-env" style="margin-top:12px"><table class="tabla" id="tabla-sino">
+      <thead><tr><th>Ítem</th><th>Sí</th><th>%</th><th>No</th><th>%</th></tr></thead>
+      <tbody>${filas.map((c) => {
+        const a = Motor.analizar(c, resp);
+        const si = a.barras?.find((b) => Motor.norm(b.etiqueta) === 'si')?.n || 0;
+        const no = a.barras?.find((b) => Motor.norm(b.etiqueta) === 'no')?.n || 0;
+        return `<tr><td>${c.numero ? esc(c.numero) + '. ' : ''}${esc(c.etiqueta)}</td><td class="n">${si}</td><td class="n">${fmt((si * 100) / total)}</td><td class="n">${no}</td><td class="n">${fmt((no * 100) / total)}</td></tr>`;
+      }).join('')}</tbody>
+    </table></div>
+    <p class="mini" style="margin-top:8px">Porcentajes sobre el total de encuestados (n = ${total}).</p>
+  </section>`;
+}
+
+function vistaResultados() {
+  const pl = activa();
+  const resp = respuestasDe(pl.id);
+  if (!resp.length) {
+    return `<div class="tarjeta vacio"><h2>Aún no hay respuestas</h2><p>Los resultados aparecen aquí al instante, a medida que se guardan las encuestas.</p>
+      <div class="botones" style="justify-content:center"><button class="btn primario" data-accion="ir" data-vista="responder">Responder la primera</button><label class="btn" for="archivo">Unir una copia (.json)</label></div></div>`;
+  }
+  const preguntas = respondibles(pl);
+  const llenado = resp.reduce((s, r) => s + preguntas.filter((c) => !Motor.vacio(r.datos?.[c.id])).length, 0) / (resp.length * preguntas.length || 1);
+  const secciones = pl.secciones.map((s) => {
+    const visibles = s.campos.filter((c) => c.tipo !== 'grupo' && c.auto !== 'consecutivo');
+    if (!visibles.length) return '';
+    return `${s.titulo ? `<h2 class="sec-res">${esc(s.titulo)}</h2>` : ''}${visibles.map((c) => tarjetaResultado(c, resp)).join('')}`;
+  }).join('');
+  return `
+    <div class="separa">
+      <div><h1 style="font-size:1.35rem">${esc(pl.titulo)}</h1><span class="vivo">Se actualiza en tiempo real</span></div>
+      <div class="botones no-imprimir">
+        <button class="btn chico" data-accion="exportar-csv">Excel (.csv)</button>
+        <button class="btn chico" data-accion="exportar-json">Copia de seguridad</button>
+        <button class="btn chico" data-accion="imprimir">Imprimir / PDF</button>
+      </div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="v">${resp.length}</div><div class="e">encuestas</div></div>
+      <div class="kpi"><div class="v">${fmtPct(llenado * 100)}</div><div class="e">de preguntas respondidas</div></div>
+      <div class="kpi"><div class="v">${preguntas.length}</div><div class="e">campos por encuesta</div></div>
+      <div class="kpi"><div class="v" style="font-size:1.1rem;padding-top:8px">${fechaCorta(resp.at(-1).creada)}</div><div class="e">última respuesta</div></div>
+    </div>
+    ${tablaSiNo(pl, resp)}
+    ${secciones}`;
+}
+
+/* ── Respuestas ───────────────────────────────────────── */
+function vistaRespuestas() {
+  const pl = activa();
+  const resp = respuestasDe(pl.id);
+  const cols = respondibles(pl).filter((c) => c.tipo !== 'parrafo').slice(0, 3);
+  const valor = (v) => (Array.isArray(v) ? v.join(', ') : v ?? '');
+  const filas = resp.slice().reverse().map((r) => `
+    <tr>
+      <td class="n">${r.n}</td>
+      <td>${fechaCorta(r.creada)}</td>
+      ${cols.map((c) => `<td>${esc(c.tipo === 'fecha' ? fechaDia(r.datos?.[c.id] ?? '') : valor(r.datos?.[c.id]))}</td>`).join('')}
+      <td><div class="botones" style="flex-wrap:nowrap">
+        <button class="btn chico" data-accion="resp-ver" data-id="${esc(r.id)}" aria-expanded="${estado.verResp === r.id}">${estado.verResp === r.id ? 'Ocultar' : 'Ver'}</button>
+        <button class="btn chico peligro" data-accion="resp-eliminar" data-id="${esc(r.id)}">Eliminar</button>
+      </div></td>
+    </tr>
+    ${estado.verResp === r.id ? `<tr class="detalle"><td colspan="${cols.length + 3}"><dl>${respondibles(pl).map((c) => `<dt>${c.numero ? esc(c.numero) + '. ' : ''}${esc(c.etiqueta)}</dt><dd>${esc(c.tipo === 'fecha' ? fechaDia(r.datos?.[c.id] ?? '') : valor(r.datos?.[c.id])) || '—'}</dd>`).join('')}</dl></td></tr>` : ''}`).join('');
+  return `
+    <div class="tarjeta pila">
+      <div class="separa"><h2>${resp.length} respuesta(s)</h2>
+        <div class="botones">
+          <button class="btn chico" data-accion="exportar-csv">Excel (.csv)</button>
+          <button class="btn chico" data-accion="exportar-json">Copia de seguridad</button>
+          <label class="btn chico" for="archivo">Unir copia de otro equipo</label>
+        </div>
+      </div>
+      <p class="mini">Las respuestas viven en este navegador. Al final de cada jornada descargue la copia de seguridad; si varias personas encuestan en distintos equipos, cada una descarga su copia y aquí se unen con «Unir copia» (no se duplican).</p>
+    </div>
+    ${resp.length ? `<div class="tarjeta" style="padding:0;overflow:hidden"><div class="tabla-env"><table class="tabla">
+      <thead><tr><th>N.º</th><th>Registrada</th>${cols.map((c) => `<th>${esc(c.etiqueta)}</th>`).join('')}<th><span class="oculto">Acciones</span></th></tr></thead>
+      <tbody>${filas}</tbody></table></div></div>` : '<div class="tarjeta vacio"><p>No hay respuestas todavía.</p></div>'}`;
+}
+
+/* ── Acciones ─────────────────────────────────────────── */
+function copiaSeguridad(pl) {
+  return JSON.stringify({ formato: 'encuestas-offline', version: 1, exportada: new Date().toISOString(), plantilla: pl, respuestas: respuestasDe(pl.id) }, null, 1);
+}
+
+const acciones = {
+  ir: (b) => ir(b.dataset.vista, b.dataset.id || undefined),
+  modelo: () => { plantillas.push(modeloEjemplo()); guardarPlantillas(); render(); avisar('Modelo de diagnóstico agregado.'); },
+  'crear-texto': () => {
+    const t = $('#texto-pegado').value.trim();
+    if (!t) { avisar('Pegue primero el texto de la encuesta.', true); return; }
+    abrirRevision(Motor.plantillaDesdeTexto(t));
+  },
+  'revision-guardar': () => {
+    const pl = estado.edicion;
+    plantillas.push(pl);
+    guardarPlantillas();
+    estado.revision = null;
+    estado.edicion = null;
+    avisar('Formulario guardado. Ya puede empezar a encuestar.');
+    ir('responder', pl.id);
+  },
+  'diseno-guardar': () => {
+    const i = plantillas.findIndex((p) => p.id === estado.edicion.id);
+    plantillas[i] = clonar(estado.edicion);
+    guardarPlantillas();
+    avisar('Cambios guardados.');
+    render();
+  },
+  'diseno-descartar': () => { estado.edicion = clonar(activa()); render(); avisar('Cambios descartados.'); },
+  'campo-agregar': (b) => {
+    estado.edicion.secciones[b.dataset.s].campos.push({ id: 'c' + Motor.uid(), tipo: 'parrafo', etiqueta: 'Nueva pregunta', numero: '', ayuda: '', opciones: [] });
+    render();
+  },
+  'campo-quitar': (b) => { estado.edicion.secciones[b.dataset.s].campos.splice(b.dataset.c, 1); render(); },
+  'campo-mover': (b) => {
+    const lista = estado.edicion.secciones[b.dataset.s].campos;
+    const i = Number(b.dataset.c);
+    const j = i + Number(b.dataset.d);
+    if (j < 0 || j >= lista.length) return;
+    [lista[i], lista[j]] = [lista[j], lista[i]];
+    render();
+  },
+  'sec-agregar': () => { estado.edicion.secciones.push({ id: 's' + Motor.uid(), titulo: 'Nueva sección', descripcion: '', campos: [] }); render(); },
+  'sec-quitar': (b) => {
+    const s = estado.edicion.secciones[b.dataset.s];
+    if (s.campos.length && !confirm(`¿Quitar la sección «${s.titulo || 'sin título'}» y sus ${s.campos.length} preguntas?`)) return;
+    estado.edicion.secciones.splice(b.dataset.s, 1);
+    render();
+  },
+  'exportar-plantilla': () => {
+    const pl = activa();
+    descargar(`${slug(pl.titulo)}-formulario.json`, JSON.stringify(pl, null, 1), 'application/json');
+  },
+  'plantilla-eliminar': () => {
+    const pl = activa();
+    const n = respuestasDe(pl.id).length;
+    if (!confirm(`¿Eliminar «${pl.titulo}»${n ? ` y sus ${n} respuestas` : ''} de este equipo? Esta acción no se puede deshacer.${n ? '\n\nSugerencia: cancele y descargue antes la copia de seguridad.' : ''}`)) return;
+    plantillas = plantillas.filter((p) => p.id !== pl.id);
+    guardarPlantillas();
+    ['resp:', 'borrador:', 'recordar:'].forEach((k) => almacen.borrar(k + pl.id));
+    estado.activaId = null;
+    ir('inicio');
+    avisar('Encuesta eliminada.');
+  },
+  'form-limpiar': () => {
+    const pl = activa();
+    if (!confirm('¿Borrar lo escrito en esta encuesta?')) return;
+    almacen.borrar('borrador:' + pl.id);
+    render();
+  },
+  'exportar-csv': () => {
+    const pl = activa();
+    descargar(`${slug(pl.titulo)}-respuestas-${hoy()}.csv`, Motor.csv(pl, respuestasDe(pl.id)), 'text/csv;charset=utf-8');
+  },
+  'exportar-json': () => {
+    const pl = activa();
+    descargar(`${slug(pl.titulo)}-copia-${hoy()}.json`, copiaSeguridad(pl), 'application/json');
+    avisar('Copia descargada. Guárdela en una memoria USB o envíela cuando tenga señal.');
+  },
+  imprimir: () => window.print(),
+  'copiar-tabla': () => {
+    const tabla = $('#tabla-sino');
+    const rango = document.createRange();
+    rango.selectNode(tabla);
+    const sel = getSelection();
+    sel.removeAllRanges();
+    sel.addRange(rango);
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch { ok = false; }
+    sel.removeAllRanges();
+    avisar(ok ? 'Tabla copiada: péguela en Word o Excel.' : 'No se pudo copiar; selecciónela y use Ctrl+C.', !ok);
+  },
+  'resp-ver': (b) => { estado.verResp = estado.verResp === b.dataset.id ? null : b.dataset.id; render(); },
+  'resp-eliminar': (b) => {
+    const pl = activa();
+    const resp = respuestasDe(pl.id);
+    const r = resp.find((x) => x.id === b.dataset.id);
+    if (!r || !confirm(`¿Eliminar la encuesta n.º ${r.n}? No se puede deshacer.`)) return;
+    almacen.guardar('resp:' + pl.id, resp.filter((x) => x.id !== r.id));
+    render();
+    avisar(`Encuesta n.º ${r.n} eliminada.`);
+  },
+  'cat-abrir': (b) => { estado.categoriasDe = b.dataset.id || null; render(); },
+  'cat-guardar': (b) => {
+    const pl = activa();
+    const c = campos(pl).find((x) => x.id === b.dataset.id);
+    const texto = $(`#cat_${CSS.escape(b.dataset.id)}`).value;
+    c.categorias = texto.split('\n').map((l) => {
+      const [nombre, resto] = l.includes(':') ? [l.slice(0, l.indexOf(':')), l.slice(l.indexOf(':') + 1)] : [l, l];
+      return { nombre: nombre.trim(), palabras: resto.split(',').map((p) => p.trim()).filter(Boolean) };
+    }).filter((k) => k.nombre && k.palabras.length);
+    guardarPlantillas();
+    estado.categoriasDe = null;
+    render();
+    avisar(c.categorias.length ? 'Categorías aplicadas.' : 'Categorías quitadas.');
+  },
+};
+
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-accion]');
+  if (b && acciones[b.dataset.accion]) { e.preventDefault(); acciones[b.dataset.accion](b, e); }
+});
+
+// Opción única: tocar de nuevo una opción marcada la desmarca.
+document.addEventListener('pointerdown', (e) => {
+  const input = e.target.closest('.chip')?.querySelector('input[type=radio]');
+  if (input) input.dataset.estaba = input.checked ? '1' : '';
+});
+document.addEventListener('click', (e) => {
+  const input = e.target.closest?.('input[type=radio]');
+  if (input?.dataset.estaba === '1') {
+    input.checked = false;
+    input.dataset.estaba = '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+});
+
+document.addEventListener('input', (e) => {
+  const el = e.target;
+  if (el.dataset?.e && estado.edicion) {
+    asignar(estado.edicion, el.dataset.e, el);
+    if (el.tagName === 'SELECT') render();
+    return;
+  }
+  if (el.closest('#formulario')) { actualizarProgreso(); guardarBorrador(); }
+});
+
+document.addEventListener('submit', (e) => {
+  if (e.target.id === 'formulario') { e.preventDefault(); enviarFormulario(e.target); }
+});
+
+$('#archivo').addEventListener('change', (e) => { importarArchivo(e.target.files[0]); e.target.value = ''; });
+document.addEventListener('dragover', (e) => { if ($('#zona')) { e.preventDefault(); $('#zona').classList.add('encima'); } });
+document.addEventListener('dragleave', (e) => { if (e.target.id === 'zona') e.target.classList.remove('encima'); });
+document.addEventListener('drop', (e) => {
+  if (!$('#zona')) return;
+  e.preventDefault();
+  $('#zona').classList.remove('encima');
+  importarArchivo(e.dataTransfer.files[0]);
+});
+
+// Tiempo real entre pestañas/ventanas: si otra pestaña guarda respuestas, esta se actualiza.
+window.addEventListener('storage', (e) => {
+  if (!e.key?.startsWith(PREFIJO)) return;
+  if (e.key === PREFIJO + 'plantillas') plantillas = almacen.leer('plantillas', plantillas);
+  if (['resultados', 'respuestas', 'inicio'].includes(estado.vista)) render();
+  else renderCabecera();
+});
+
+// En el sitio publicado, el service worker de PlantaQR guarda esta página para abrirla sin conexión.
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+render();
+</script>
+</body>
+</html>

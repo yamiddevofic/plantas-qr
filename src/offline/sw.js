@@ -110,12 +110,15 @@ function redPrimeroConLimite(request, nombreCache) {
 }
 
 async function navegacion(request) {
+  // /encuestas/ es una página aparte (public/encuestas): se guarda con su propia clave
+  // para no pisar el index.html de la SPA.
+  const pagina = new URL(request.url).pathname.startsWith('/encuestas') ? '/encuestas/index.html' : '/index.html';
   try {
     const respuesta = await fetch(request);
-    if (respuesta.ok) guardar(CACHE_APP, '/index.html', respuesta.clone());
+    if (respuesta.ok) guardar(CACHE_APP, pagina, respuesta.clone());
     return respuesta;
   } catch {
-    return (await caches.match('/index.html')) || Response.error();
+    return (await caches.match(pagina)) || Response.error();
   }
 }
 
